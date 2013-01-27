@@ -1,0 +1,46 @@
+# -*- org-pretty-entities-include-sub-superscripts: nil; -*-
+
+				Notes
+				
+* Instructions to compile and run the code
+** To get JavaCC grammar, syntax-tree-code classes, and default visitors
+   jtb minijava.jj
+** To generate a parser
+   javacc jtb.out.jj
+** Compile Main.java which calls the parser and the visitors
+   javac Main.java
+** Build a syntax tree and execute the visitors for Foo.java
+   java Main < Foo.java
+* Differences between Mini Java and Micro Java
+** Mini Java
+*** Summary
+**** Methods have return values
+**** CANNOT access an obj's data items
+*** array has .length field
+*** main() method contains just a print statement
+*** has MessageSend expression (NOT statement)
+*** Primary Expression can be Identifier but not VarRef
+** Micro Java
+*** Summary
+**** Methods don't have return values
+**** No main() method
+**** Can access an obj's data items
+**** You CAN'T call this.anything().
+***** You have to have foo = this; foo.anything()
+*** no length
+*** main() has an instantiation of a class and calling of a method.
+*** All methods have void as return type. Return value is stored in a variable.  e.g., ____1234ComputeFac4321____
+**** => No return statement
+*** Assignment statement must be "variable = "
+*** Array Assignment statement must be "arr[ expr ] ="
+*** Has Message send as a STATEMENT (id.id(expression list)) with lookahead "id.id("
+*** VarRef can be foo.bar or baz
+*** Primary Expression can be VarRef but not Identifier
+* Plan
+** Makefile
+** Add some features
+* Outline
+** Compare and contrast the two grammars
+** Trivial code
+** Unit test
+** Add features one by one
