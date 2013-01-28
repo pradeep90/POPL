@@ -324,7 +324,6 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
      */
     public R visit(AssignmentStatement n) {
         R _ret=null;
-        System.out.println("AssignmentStatement"); 
         n.f0.accept(this);
         n.f1.accept(this);
         n.f2.accept(this);
@@ -527,7 +526,6 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
      * f5 -> ")"
      */
     public R visit(MessageSend n) {
-        System.out.println("Function Call??"); 
         R _ret=null;
         n.f0.accept(this);
         n.f1.accept(this);

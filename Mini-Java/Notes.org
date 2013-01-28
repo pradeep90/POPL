@@ -36,11 +36,43 @@
 *** Has Message send as a STATEMENT (id.id(expression list)) with lookahead "id.id("
 *** VarRef can be foo.bar or baz
 *** Primary Expression can be VarRef but not Identifier
+* Node-by-node difference
+** Main
+*** print statement vs the New class generation (I think you'd need to store the new class' source string in memory and print it at the end...???) => Nah. You just do it in Goal(). Remember it perhaps in Main() and print it after all the Type declarations.
+** Method declaration
+*** Have a variable for return value
+*** Append "return_value = value" to the method body
+** Method call => Message send statement
+*** get all the args' values
+*** call the method
+*** return the return value if needed
+** TODO array.length
+* General notes
+** GJ* uses Java with Generics
+* GLINTs - PCQ|FCK|AIR|POV
+** Purpose - Use JTB and JavaCC to write a MiniJava to MicroJava translator for valid MiniJava programs.
+** CQ - (several ways + answer/opinion/>1 POV) => How to produce MicroJava code for each of the syntax tree nodes?
+*** How to transform a MiniJava parse tree to a MicroJava parse tree (and then convert that to MicroJava source code)?
+*** There exist Answers
+** Assumptions (justifiable?)
+*** By printing out stuff at each node, you can get the MicroJava equivalent. Seems to work cos MicroJava is a subset of MiniJava.
+** POV - (other POVs + Ss and Ws)
+** Information, Data, Evidence (for and against)
+** Key concepts and ideas - (CAPRDBLF)
+*** Testing:
+**** Code string (input stream) => MiniJavaParser => root node
+**** root.accept(Visitor) => Visitor will print stuff as well as accumulate the final string. You can use that for testing. 
+** Implications/Conclusions (in terms of Nec/Suff cond) -
+*** Clarity (SEEI your conclusion or solution as an answer to CQ and fulfill the Purpose)
+** What surprised me -
+** Relation to my life / Actions -
+** Next Actions - DRFMF / Chunk + Repetition + Feel
 * Plan
-** Makefile
-** Add some features
+** DONE Makefile
+** DONE Add some features
 * Outline
-** Compare and contrast the two grammars
-** Trivial code
-** Unit test
+** DONE Compare and contrast the two grammars
+** DONE Trivial code
+** TODO Unit test for some simple transformation code
+   CLOCK: [2013-01-28 Mon 17:20]
 ** Add features one by one
