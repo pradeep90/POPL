@@ -11,6 +11,7 @@ VERSION_NUMBER := 1.0
 SOURCE_DIR  := src
 OUTPUT_DIR  := class
 TEST_OUTPUT_DIR := class/tests
+MICRO_JAVA_PARSER_DIR	:= $(SOURCE_DIR)/microjavaparser
 
 # Unix tools
 AWK     := awk
@@ -80,6 +81,12 @@ jtb_stuff: minijava.jj
 
 javacc_stuff: jtb.out.jj
 	cd $(SOURCE_DIR) && $(JAVACC) $<
+
+micro_java_jtb_stuff:
+	cd $(MICRO_JAVA_PARSER_DIR) && $(JTB) -printer microjava.jj -p microjavaparser
+
+micro_java_javacc_stuff:
+	cd $(MICRO_JAVA_PARSER_DIR) && $(JAVACC) jtb.out.jj
 
 # compile - Compile the source
 .PHONY: compile

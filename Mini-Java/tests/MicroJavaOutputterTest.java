@@ -5,12 +5,16 @@ import org.junit.After;
  
 import visitor.*;
 import syntaxtree.*;
+import microjavaparser.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 // import java.io.InputStreamReader;
  
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -24,18 +28,7 @@ public class MicroJavaOutputterTest {
         outputter = new MicroJavaOutputter();
         factorialMiniJavaCode = " class Factorial{" +
                 "    public static void main(String[] a){" +
-                "        System.out.println(new Fac().ComputeFac(10));" +
-                "    }" +
-                "}" +
-
-                "class Fac {" +
-                "    public int ComputeFac(int num){" +
-                "        int num_aux ;" +
-                "        if (num < 1)" +
-                "            num_aux = 1 ;" +
-                "        else" +
-                "            num_aux = num * (this.ComputeFac(num-1)) ;" +
-                "        return num_aux ;" +
+                "        System.out.println(10);" +
                 "    }" +
                 "}"
                 ;
@@ -90,6 +83,15 @@ public class MicroJavaOutputterTest {
     }
 
     /**
+     * From
+     * http://stackoverflow.com/questions/309424/read-convert-an-inputstream-to-a-string#answer-309718
+     */
+    public static String convertStreamToString(java.io.InputStream is) {
+        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+    }
+
+    /**
      * Test method for {@link MicroJavaOutputter#fooMethod()}.
      */
     @Test
@@ -102,15 +104,33 @@ public class MicroJavaOutputterTest {
      * Test method for {@link MicroJavaOutputter#simpleTransformer()}.
      */
     @Test
-    public final void testSimpleTransformer() throws ParseException{
-        InputStream inputCodeStream = new ByteArrayInputStream(
-            factorialMiniJavaCode.getBytes());
-        // Node root = new MiniJavaParser(inputCodeStream).Goal();
-        // System.out.println("Program parsed successfully");
-        // System.out.println("Yo, Boyz!"); 
-        // // root.accept(new GJNoArguDepthFirst()); // Your assignment part is invoked here.
-        // root.accept(new MicroJavaOutputter()); // Your assignment part is invoked here.
-        // assertEquals();
+    public final void testMainOnly()
+            throws ParseException, FileNotFoundException, microjavaparser.ParseException {
+	InputStream inputCodeStream = new FileInputStream(
+            "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Mini-Java-Test-Code/MainOnly.minijava");
+	InputStream expectedCodeStream = new FileInputStream(
+            "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.microjava");
+        Node root = new MiniJavaParser(inputCodeStream).Goal();
+        root.accept(outputter); // Your assignment part is invoked here.
+
+        // String output
+        String actualOutput = outputter.getMicroJavaCode();
+        String expectedOutput = convertStreamToString(expectedCodeStream);
+
+        // microjavaparser.syntaxtree.Node expectedMicroParseTree = new MicroJavaParser(expectedCodeStream).Goal();
+	// InputStream actualCodeStream = new ByteArrayInputStream(actualOutput.getBytes());
+        // MicroJavaParser.ReInit(actualCodeStream);
+
+        // microjavaparser.syntaxtree.Node actualMicroParseTree = MicroJavaParser.Goal();
+
+        // assertEquals(expectedMicroParseTree, actualMicroParseTree);
+
+        System.out.println("actualOutput: " + actualOutput);
+        System.out.println("expectedOutput: " + expectedOutput);
+
+        // assertArrayEquals(expectedOutput.split("\\s+"),
+        //                   actualOutput.split("\\s+"));
+        // assertEquals("yo\nboyz\nyo;".split("\n"), "yo\nboyz\n  yo;".split("\\s+"));
     }
 
 }

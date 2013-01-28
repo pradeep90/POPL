@@ -7,7 +7,6 @@ public class Main {
          Node root = new MiniJavaParser(System.in).Goal();
          System.out.println("Program parsed successfully");
          System.out.println("Yo, Boyz!"); 
-         // root.accept(new GJNoArguDepthFirst()); // Your assignment part is invoked here.
          root.accept(new MicroJavaOutputter()); // Your assignment part is invoked here.
       }
       catch (ParseException e) {
@@ -15,6 +14,3 @@ public class Main {
       }
    }
 } 
-
-
-

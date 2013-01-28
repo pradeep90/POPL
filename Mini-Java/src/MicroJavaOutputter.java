@@ -11,6 +11,34 @@ import java.util.*;
  * order.  Your visitors may extend this class.
  */
 public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
+    String factorialMicroJavaCode = "class Factorial {" +
+            "   public static void main(String [] a){" +
+            "      new ____NewMainClass____().____Main____(0);" +
+            "   }" +
+            "}" +
+            "" +
+            "class ____NewMainClass____{" +
+
+            "   public void ____Main____(int ____arg_length____){" +
+            "      int ____printMe____;" +
+            "      ____printMe____ = 10;" +
+            "      System.out.println(____printMe____);" +
+            "   }" +
+            "}";
+
+    String finalMainClass = "";
+    String outputCodeString = "";
+
+    /**
+     * Output codeString to stdout.
+     *
+     * Also, append it to outputCodeString.
+     */
+    public void output(String codeString){
+        System.out.print(codeString);
+        outputCodeString += codeString;
+    }
+
     // //
     // // Auto class visitors--probably don't need to be overridden.
     // //
@@ -55,24 +83,28 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //     return _ret;
     // }
 
-    // public R visit(NodeToken n) { return null; }
+    public R visit(NodeToken n) {
+        output(n.tokenImage);
+        return null;
+    }
 
     // //
     // // User-generated visitor methods below
     // //
 
-    // /**
-    //  * f0 -> MainClass()
-    //  * f1 -> ( TypeDeclaration() )*
-    //  * f2 -> <EOF>
-    //  */
-    // public R visit(Goal n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> MainClass()
+     * f1 -> ( TypeDeclaration() )*
+     * f2 -> <EOF>
+     */
+    public R visit(Goal n) {
+        R _ret=null;
+        n.f0.accept(this);
+        n.f1.accept(this);
+        n.f2.accept(this);
+        output(finalMainClass);
+        return _ret;
+    }
 
     // /**
     //  * f0 -> "class"
@@ -682,52 +714,8 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
         return "Yo, boyz!";
     }
 
-    public String simpleTransformer(){
-        String factorialMicroJavaCode = "class Factorial {" +
-                "   public static void main(String [] a){" +
-                "      new ____NewMainClass____().____Main____(0);" +
-                "   }" +
-                "}" +
-                "class Fac{" +
-                "   int ____1234ComputeFac4321____;" +
-
-                "   public void ComputeFac(int num){" +
-                "      int num_aux;" +
-                "      int ____writeable____num;" +
-                "      int ____tmp0;" +
-                "      Fac ___tmp4;" +
-                "      int ___tmp3;" +
-
-                "____writeable____num = num;" +
-                "      if( ____writeable____num<1 ){" +
-                "         num_aux = 1;" +
-                "      } else {" +
-                "         ___tmp4 = this;" +
-                "         ___tmp4.ComputeFac(____writeable____num-1);" +
-                "         ___tmp3 = ___tmp4.____1234ComputeFac4321____;" +
-                "         ____tmp0 = ___tmp3;" +
-                "         num_aux = ____writeable____num*____tmp0;" +
-                "      }" +
-                "      ____1234ComputeFac4321____ = num_aux;" +
-                "   }" +
-                "}" +
-                "class ____NewMainClass____{" +
-
-                "   public void ____Main____(int ____arg_length____){" +
-                "      int ____printMe____;" +
-                "      Fac ___tmp6;" +
-                "      int ___tmp5;" +
-
-                "      ___tmp6 =" +
-                "         new Fac();" +
-                "      ___tmp6.ComputeFac(10);" +
-                "      ___tmp5 = ___tmp6.____1234ComputeFac4321____;" +
-                "      ____printMe____ = ___tmp5;" +
-                "      System.out.println(____printMe____);" +
-                "   }" +
-                "}";
+    public String getMicroJavaCode(){
         return factorialMicroJavaCode;
     }
-
 }
 

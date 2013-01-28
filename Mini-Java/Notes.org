@@ -49,6 +49,7 @@
 ** TODO array.length
 * General notes
 ** GJ* uses Java with Generics
+** I guess I don't have a way to compare two syntax trees. So, to test that my generated MicroJava code is OK, I'm gonna test if it is valid MicroJava and 
 * GLINTs - PCQ|FCK|AIR|POV
 ** Purpose - Use JTB and JavaCC to write a MiniJava to MicroJava translator for valid MiniJava programs.
 ** CQ - (several ways + answer/opinion/>1 POV) => How to produce MicroJava code for each of the syntax tree nodes?
@@ -73,6 +74,8 @@
 * Outline
 ** DONE Compare and contrast the two grammars
 ** DONE Trivial code
-** TODO Unit test for some simple transformation code
-   CLOCK: [2013-01-28 Mon 17:20]
+** DONE Unit test for some simple transformation code
+   CLOCK: [2013-01-28 Mon 17:20]--[2013-01-28 Mon 17:50] =>  0:30
+** TODO Unit test for transformation of only main class
+   CLOCK: [2013-01-28 Mon 17:51]--[2013-01-28 Mon 19:05] =>  1:14
 ** Add features one by one
