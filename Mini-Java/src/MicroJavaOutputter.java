@@ -20,6 +20,7 @@ import java.io.StringWriter;
 public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     public static final int INDENT_AMOUNT = 3;
     public static final int WRAP_WIDTH = 80;
+
     public String mainOnlyMicroJavaCode = "class MainOnly {" +
             "   public static void main(String [] a){" +
             "      new ____NewMainClass____().____Main____(0);" +
@@ -109,6 +110,24 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
         }
 
         return root;   
+    }
+
+    /**
+     * Use this visitor to convert miniJavaRoot to a MicroJava syntax
+     * tree.
+     * 
+     * @return MicroJava equivalent of miniJavaRoot.
+     */
+    public microjavaparser.syntaxtree.Node getMicroJavaParseTree(Node miniJavaRoot){
+        miniJavaRoot.accept(this);
+        InputStream codeStream = new ByteArrayInputStream(getMicroJavaCode().getBytes());
+        microjavaparser.syntaxtree.Node microJavaRoot = null;
+        try {
+            microJavaRoot = new MicroJavaParser(codeStream).Goal();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return microJavaRoot;
     }
 
     // //
