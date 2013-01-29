@@ -719,7 +719,7 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     }
 
     public String getMicroJavaCode(){
-        return factorialMicroJavaCode;
+        return outputCodeString;
     }
 }
 

@@ -7,6 +7,7 @@ options {
 }
 
 PARSER_BEGIN(MicroJavaParser)
+package microjavaparser;
 import microjavaparser.syntaxtree.*;
 import java.util.Vector;
 
