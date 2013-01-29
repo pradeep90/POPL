@@ -53,6 +53,10 @@
 ** TODO Not able to force the execute target to run ONLY when everything has been compiled. It all works ONLY when I add a -B flag. Have to sort out Make dependencies.
 ** TODO Not able to figure out how to use relative paths for input test source files. Winging it for now.
 ** TODO Move the pretty-printing code to a class of its own
+** TODO Maybe construct a MicroJava syntax tree instead of constructing a string version of the same
+*** I think I should use GJNoArguVisitor or GJDepthFirst so that each visit() method will return a Node
+*** Check out [[file:~/Downloads/Applications/Expression_GJ_Pro.jar][Expression_Gj_Pro]] for an example of Generics and return value for visit
+*** VVIP Even if I use Generics, there's an awful lot of Casting going on cos I'm trying to construct a parse tree of some other class hierarchy. I think this is unavoidable. You have to encode that information somewhere.
 * GLINTs - PCQ|FCK|AIR|POV
 ** Purpose - Use JTB and JavaCC to write a MiniJava to MicroJava translator for valid MiniJava programs.
 ** CQ - (several ways + answer/opinion/>1 POV) => How to produce MicroJava code for each of the syntax tree nodes?
@@ -79,7 +83,8 @@
 ** DONE Trivial code
 ** DONE Unit test for some simple transformation code
    CLOCK: [2013-01-28 Mon 17:20]--[2013-01-28 Mon 17:50] =>  0:30
-** Check out relative packages - http://xahlee.info/java-a-day/package.html
-** TODO Unit test for transformation of only main class
+** DONE Check out relative packages - http://xahlee.info/java-a-day/package.html
+** DONE Make unit testing very easy
    CLOCK: [2013-01-28 Mon 17:51]--[2013-01-28 Mon 19:05] =>  1:14
+** TODO Make microjavaparser.syntaxtree.Node be available as Node and make the normal Node be syntaxtree.Node 
 ** Add features one by one

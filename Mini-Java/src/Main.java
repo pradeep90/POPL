@@ -1,5 +1,6 @@
 import syntaxtree.*;
 import visitor.*;
+import microjavaparser.*;
 
 public class Main {
    public static void main(String [] args) {
@@ -7,7 +8,11 @@ public class Main {
          Node root = new MiniJavaParser(System.in).Goal();
          System.out.println("Program parsed successfully");
          System.out.println("Yo, Boyz!"); 
-         root.accept(new MicroJavaOutputter()); // Your assignment part is invoked here.
+         MicroJavaOutputter<microjavaparser.syntaxtree.Node> outputter = new MicroJavaOutputter<microjavaparser.syntaxtree.Node>();
+         root.accept(outputter); // Your assignment part is invoked here.
+         System.out.println("outputter.getMicroJavaCode(): " + outputter.getMicroJavaCode());
+         System.out.println("outputter.outputCodeString: " + outputter.outputCodeString);
+         // System.out.println("outputter.getFullMicroJavaCode(): " + outputter.getFullMicroJavaCode());
       }
       catch (ParseException e) {
          System.out.println(e.toString());

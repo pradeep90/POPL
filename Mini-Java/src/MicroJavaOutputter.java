@@ -13,13 +13,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 
-/**
- * Provides default methods which visit each node in the tree in depth-first
- * order.  Your visitors may extend this class.
+/** 
+ * Visitor to build a MicroJava syntax tree from a MiniJava syntax
+ * tree.
  */
 public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     public static final int INDENT_AMOUNT = 3;
     public static final int WRAP_WIDTH = 80;
+
+    public boolean isInMiniMain = false;
 
     public String mainOnlyMicroJavaCode = "class MainOnly {" +
             "   public static void main(String [] a){" +
@@ -36,8 +38,11 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
             "   }" +
             "}";
 
-    String finalMainClass = "";
-    String outputCodeString = "";
+    public String finalMainClass = "";
+    public String outputCodeString = "";
+    public String callToPseudoMainClassString = "new ____NewMainClass____().____Main____(0);";
+
+    public microjavaparser.syntaxtree.Node syntaxTree = null;
 
     /**
      * Output codeString to stdout.
@@ -46,7 +51,12 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      */
     public void output(String codeString){
         System.out.print(codeString + "\n");
-        outputCodeString += codeString + "\n";
+        if (isInMiniMain){
+            finalMainClass += codeString + "\n";
+        }
+        else{
+            outputCodeString += codeString + "\n";
+        }
     }
 
     /**
@@ -64,6 +74,26 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
         dumper.resetPosition();
         root.accept(dumper);
         return out.toString();
+    }
+
+    /** 
+     * Parse MicroJava code in codeString and return the syntax tree.
+     * 
+     * @return root Node of the MicroJava syntax tree.
+     */
+    public static microjavaparser.syntaxtree.Node getMicroJavaNodeFromString(
+        String codeString){
+
+        InputStream in = new ByteArrayInputStream(codeString.getBytes());
+
+        microjavaparser.syntaxtree.Node root = null;
+        try {
+            root = new MicroJavaParser(in).Goal();
+        } catch(microjavaparser.ParseException e) {
+            e.printStackTrace();
+        }
+
+        return root;
     }
 
     /** 
@@ -190,53 +220,57 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      */
     public R visit(Goal n) {
         R _ret=null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
+        microjavaparser.syntaxtree.MainClass f0 = (microjavaparser.syntaxtree.MainClass) n.f0.accept(this);
+        microjavaparser.syntaxtree.NodeListOptional f1 = (microjavaparser.syntaxtree.NodeListOptional) n.f1.accept(this);
+        microjavaparser.syntaxtree.NodeToken f2 = (microjavaparser.syntaxtree.NodeToken) n.f2.accept(this);
         output(finalMainClass);
+        _ret = (R) new microjavaparser.syntaxtree.Goal(f0, f1, f2);
         return _ret;
     }
 
-    // /**
-    //  * f0 -> "class"
-    //  * f1 -> Identifier()
-    //  * f2 -> "{"
-    //  * f3 -> "public"
-    //  * f4 -> "static"
-    //  * f5 -> "void"
-    //  * f6 -> "main"
-    //  * f7 -> "("
-    //  * f8 -> "String"
-    //  * f9 -> "["
-    //  * f10 -> "]"
-    //  * f11 -> Identifier()
-    //  * f12 -> ")"
-    //  * f13 -> "{"
-    //  * f14 -> PrintStatement()
-    //  * f15 -> "}"
-    //  * f16 -> "}"
-    //  */
-    // public R visit(MainClass n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
-    //     n.f3.accept(this);
-    //     n.f4.accept(this);
-    //     n.f5.accept(this);
-    //     n.f6.accept(this);
-    //     n.f7.accept(this);
-    //     n.f8.accept(this);
-    //     n.f9.accept(this);
-    //     n.f10.accept(this);
-    //     n.f11.accept(this);
-    //     n.f12.accept(this);
-    //     n.f13.accept(this);
-    //     n.f14.accept(this);
-    //     n.f15.accept(this);
-    //     n.f16.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> "class"
+     * f1 -> Identifier()
+     * f2 -> "{"
+     * f3 -> "public"
+     * f4 -> "static"
+     * f5 -> "void"
+     * f6 -> "main"
+     * f7 -> "("
+     * f8 -> "String"
+     * f9 -> "["
+     * f10 -> "]"
+     * f11 -> Identifier()
+     * f12 -> ")"
+     * f13 -> "{"
+     * f14 -> PrintStatement()
+     * f15 -> "}"
+     * f16 -> "}"
+     */
+    public R visit(MainClass n) {
+        R _ret=null;
+        n.f0.accept(this);
+        n.f1.accept(this);
+        n.f2.accept(this);
+        n.f3.accept(this);
+        n.f4.accept(this);
+        n.f5.accept(this);
+        n.f6.accept(this);
+        n.f7.accept(this);
+        n.f8.accept(this);
+        n.f9.accept(this);
+        n.f10.accept(this);
+        n.f11.accept(this);
+        n.f12.accept(this);
+        n.f13.accept(this);
+        output(callToPseudoMainClassString);
+        isInMiniMain = true;
+        n.f14.accept(this);
+        isInMiniMain = false;
+        n.f15.accept(this);
+        n.f16.accept(this);
+        return _ret;
+    }
 
     // /**
     //  * f0 -> ClassDeclaration()
@@ -808,6 +842,10 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     public String getMicroJavaCode(){
         // return outputCodeString;
         return mainOnlyMicroJavaCode;
+    }
+
+    public String getFullMicroJavaCode(){
+        return getFormattedString(getMicroJavaNodeFromString(outputCodeString));
     }
 }
 
