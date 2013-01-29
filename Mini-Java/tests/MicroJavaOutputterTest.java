@@ -6,6 +6,7 @@ import org.junit.After;
 import visitor.*;
 import syntaxtree.*;
 import microjavaparser.*;
+// import java.text.ParseException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.ByteArrayInputStream;
@@ -105,11 +106,11 @@ public class MicroJavaOutputterTest {
      */
     @Test
     public final void testMainOnly()
-            throws ParseException, FileNotFoundException, microjavaparser.ParseException {
+            throws ParseException, FileNotFoundException {
 	InputStream inputCodeStream = new FileInputStream(
-            "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Mini-Java-Test-Code/MainOnly.minijava");
+            "/home/spradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Mini-Java-Test-Code/MainOnly.minijava");
 	InputStream expectedCodeStream = new FileInputStream(
-            "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.microjava");
+            "/home/spradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.microjava");
         Node root = new MiniJavaParser(inputCodeStream).Goal();
         root.accept(outputter); // Your assignment part is invoked here.
 

@@ -212,38 +212,42 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //     return _ret;
     // }
 
-    // /**
-    //  * f0 -> "public"
-    //  * f1 -> Type()
-    //  * f2 -> Identifier()
-    //  * f3 -> "("
-    //  * f4 -> ( FormalParameterList() )?
-    //  * f5 -> ")"
-    //  * f6 -> "{"
-    //  * f7 -> ( VarDeclaration() )*
-    //  * f8 -> ( Statement() )*
-    //  * f9 -> "return"
-    //  * f10 -> Expression()
-    //  * f11 -> ";"
-    //  * f12 -> "}"
-    //  */
-    // public R visit(MethodDeclaration n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
-    //     n.f3.accept(this);
-    //     n.f4.accept(this);
-    //     n.f5.accept(this);
-    //     n.f6.accept(this);
-    //     n.f7.accept(this);
-    //     n.f8.accept(this);
-    //     n.f9.accept(this);
-    //     n.f10.accept(this);
-    //     n.f11.accept(this);
-    //     n.f12.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> "public"
+     * f1 -> Type()
+     * f2 -> Identifier()
+     * f3 -> "("
+     * f4 -> ( FormalParameterList() )?
+     * f5 -> ")"
+     * f6 -> "{"
+     * f7 -> ( VarDeclaration() )*
+     * f8 -> ( Statement() )*
+     * f9 -> "return"
+     * f10 -> Expression()
+     * f11 -> ";"
+     * f12 -> "}"
+     */
+    public R visit(MethodDeclaration n) {
+        R _ret=null;
+        n.f0.accept(this);
+        output("void");
+        // n.f1.accept(this);
+        n.f2.accept(this);
+        n.f3.accept(this);
+        n.f4.accept(this);
+        n.f5.accept(this);
+        n.f6.accept(this);
+        n.f7.accept(this);
+        n.f8.accept(this);
+        // n.f9.accept(this);
+        output("foo = ");
+        n.f10.accept(this);
+        output(";\n");
+        output("____1234Foo4321____ = foo;\n");
+        n.f11.accept(this);
+        n.f12.accept(this);
+        return _ret;
+    }
 
     // /**
     //  * f0 -> FormalParameter()

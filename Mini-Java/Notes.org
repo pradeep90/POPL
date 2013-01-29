@@ -76,6 +76,7 @@
 ** DONE Trivial code
 ** DONE Unit test for some simple transformation code
    CLOCK: [2013-01-28 Mon 17:20]--[2013-01-28 Mon 17:50] =>  0:30
+** Check out relative packages - http://xahlee.info/java-a-day/package.html
 ** TODO Unit test for transformation of only main class
    CLOCK: [2013-01-28 Mon 17:51]--[2013-01-28 Mon 19:05] =>  1:14
 ** Add features one by one
