@@ -86,7 +86,7 @@ micro_java_jtb_stuff:
 	cd $(MICRO_JAVA_PARSER_DIR) && $(JTB) -printer microjava.jj -p microjavaparser
 
 micro_java_javacc_stuff:
-	cd $(MICRO_JAVA_PARSER_DIR) && $(JAVACC) jtb.out.jj
+	cd $(MICRO_JAVA_PARSER_DIR) && $(JAVACC) -STATIC=false jtb.out.jj
 
 # compile - Compile the source
 .PHONY: compile

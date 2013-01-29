@@ -107,8 +107,7 @@ public class MicroJavaOutputterTest {
             "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.WithWhitespace.microjava");
         microjavaparser.syntaxtree.Node root1 = new MicroJavaParser(in1).Goal();
 
-        MicroJavaParser.ReInit(in2);
-        microjavaparser.syntaxtree.Node root2 = MicroJavaParser.Goal();
+        microjavaparser.syntaxtree.Node root2 = new MicroJavaParser(in2).Goal();
 
         String code1 = MicroJavaOutputter.getFormattedString(root1);
         String code2 = MicroJavaOutputter.getFormattedString(root2);
@@ -117,42 +116,47 @@ public class MicroJavaOutputterTest {
     }
 
     /**
-     * Test method for {@link MicroJavaOutputter#simpleTransformer()}.
+     * Test method for {@link MicroJavaOutputter#getMicroJavaNodeFromFile()}.
+     */
+    @Test
+    public final void testGetMicroJavaNodeFromFileNoException(){
+        MicroJavaOutputter.getMicroJavaNodeFromFile("/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.microjava");
+    }
+
+    /**
+     * Test method for {@link MiniJavaOutputter#getMiniJavaNodeFromFile()}.
      */
     // @Test
-    // public final void testMainOnly()
-    //         throws ParseException, FileNotFoundException, microjavaparser.ParseException {
-    //     InputStream inputCodeStream = new FileInputStream(
-    //         "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Mini-Java-Test-Code/MainOnly.minijava");
-    //     Node root = new MiniJavaParser(inputCodeStream).Goal();
-    //     root.accept(outputter); // Your assignment part is invoked here.
-
-    //     // // Trying to get relative paths working.
-    //     // URL url = this.getClass().getResource("foo.txt");
-    //     // System.out.println("url.getFile(): " + url.getFile());
-    //     // InputStream in = this.getClass().getResourceAsStream("Mini-Java-Test-Code/MainOnly.minijava");
-    //     // System.out.println("convertStreamToString(in): " + convertStreamToString(in));
-
-    //     InputStream expectedCodeStream = new FileInputStream(
-    //         "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.microjava");
-    //     microjavaparser.syntaxtree.Node expectedMicroParseTree = new MicroJavaParser(expectedCodeStream).Goal();
-
-    //     InputStream actualCodeStream = new ByteArrayInputStream(
-    //         outputter.getMicroJavaCode().getBytes());
-    //     MicroJavaParser.ReInit(actualCodeStream);
-
-    //     microjavaparser.syntaxtree.Node actualMicroParseTree = MicroJavaParser.Goal();
-
-    //     assertEquals(MicroJavaOutputter.getFormattedString(expectedMicroParseTree),
-    //                  MicroJavaOutputter.getFormattedString(actualMicroParseTree));
-
-    //     // assertEquals(expectedMicroParseTree, actualMicroParseTree);
-
-    //     // System.out.println("actualOutput: " + actualOutput);
-    //     // System.out.println("expectedOutput: " + expectedOutput);
-
-    //     // assertArrayEquals(expectedOutput.split("\\s+"),
-    //     //                   actualOutput.split("\\s+"));
-    //     // assertEquals("yo\nboyz\nyo;".split("\n"), "yo\nboyz\n  yo;".split("\\s+"));
+    // public final void testGetMiniJavaNodeFromFileNoException(){
+    //     MicroJavaOutputter.getMiniJavaNodeFromFile("/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Mini-Java-Test-Code/MainOnly.minijava");
     // }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#simpleTransformer()}.
+     */
+    @Test
+    public final void testMainOnly()
+            throws ParseException, FileNotFoundException, microjavaparser.ParseException {
+        InputStream inputCodeStream = new FileInputStream(
+            "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Mini-Java-Test-Code/MainOnly.minijava");
+        Node root = new MiniJavaParser(inputCodeStream).Goal();
+        root.accept(outputter); // Your assignment part is invoked here.
+
+        // // Trying to get relative paths working.
+        // URL url = this.getClass().getResource("foo.txt");
+        // System.out.println("url.getFile(): " + url.getFile());
+        // InputStream in = this.getClass().getResourceAsStream("Mini-Java-Test-Code/MainOnly.minijava");
+        // System.out.println("convertStreamToString(in): " + convertStreamToString(in));
+
+        microjavaparser.syntaxtree.Node expectedMicroParseTree = MicroJavaOutputter.getMicroJavaNodeFromFile(
+            "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.microjava");
+
+        InputStream actualCodeStream = new ByteArrayInputStream(
+            outputter.getMicroJavaCode().getBytes());
+        microjavaparser.syntaxtree.Node actualMicroParseTree = new MicroJavaParser(
+            actualCodeStream).Goal();
+
+        assertEquals(MicroJavaOutputter.getFormattedString(expectedMicroParseTree),
+                     MicroJavaOutputter.getFormattedString(actualMicroParseTree));
+    }
 }

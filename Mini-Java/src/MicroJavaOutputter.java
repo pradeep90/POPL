@@ -65,6 +65,52 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
         return out.toString();
     }
 
+    /** 
+     * Parse MicroJava code in file filename and return the syntax tree.
+     * 
+     * @return root Node of the MicroJava syntax tree.
+     */
+    public static microjavaparser.syntaxtree.Node getMicroJavaNodeFromFile(String filename){
+        InputStream in = null;
+        try {
+            in = new FileInputStream(filename);
+        } catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        microjavaparser.syntaxtree.Node root = null;
+        try {
+            root = new MicroJavaParser(in).Goal();
+        } catch(microjavaparser.ParseException e) {
+            e.printStackTrace();
+        }
+
+        return root;
+    }
+
+    /** 
+     * Parse MiniJava code in file filename and return the syntax tree.
+     * 
+     * @return root Node of the MiniJava syntax tree.
+     */
+    public static Node getMiniJavaNodeFromFile(String filename){
+        InputStream in = null;
+        try {
+            in = new FileInputStream(filename);
+        } catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Node root = null;
+        try {
+            root = new MiniJavaParser(in).Goal();
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+
+        return root;   
+    }
+
     // //
     // // Auto class visitors--probably don't need to be overridden.
     // //
