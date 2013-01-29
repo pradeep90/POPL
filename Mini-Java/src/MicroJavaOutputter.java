@@ -1,8 +1,10 @@
-import visitor.*;
-import syntaxtree.*;
+// import visitor.*;
+// import syntaxtree.*;
+import visitor.GJNoArguDepthFirst;
 import java.util.*;
 import microjavaparser.visitor.TreeFormatter;
 import microjavaparser.visitor.TreeDumper;
+import microjavaparser.syntaxtree.*;
 import microjavaparser.*;
 
 // import java.text.ParseException;
@@ -42,7 +44,7 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     public String outputCodeString = "";
     public String callToPseudoMainClassString = "new ____NewMainClass____().____Main____(0);";
 
-    public microjavaparser.syntaxtree.Node syntaxTree = null;
+    public Node syntaxTree = null;
 
     /**
      * Output codeString to stdout.
@@ -65,7 +67,7 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      * 
      * @return pretty-printed string version of root.
      */
-    public static String getFormattedString(microjavaparser.syntaxtree.Node root){
+    public static String getFormattedString(Node root){
         StringWriter out = new StringWriter();
         final TreeDumper dumper = new TreeDumper(out);
 
@@ -81,12 +83,12 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      * 
      * @return root Node of the MicroJava syntax tree.
      */
-    public static microjavaparser.syntaxtree.Node getMicroJavaNodeFromString(
+    public static Node getMicroJavaNodeFromString(
         String codeString){
 
         InputStream in = new ByteArrayInputStream(codeString.getBytes());
 
-        microjavaparser.syntaxtree.Node root = null;
+        Node root = null;
         try {
             root = new MicroJavaParser(in).Goal();
         } catch(microjavaparser.ParseException e) {
@@ -101,7 +103,7 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      * 
      * @return root Node of the MicroJava syntax tree.
      */
-    public static microjavaparser.syntaxtree.Node getMicroJavaNodeFromFile(String filename){
+    public static Node getMicroJavaNodeFromFile(String filename){
         InputStream in = null;
         try {
             in = new FileInputStream(filename);
@@ -109,7 +111,7 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
             e.printStackTrace();
         }
 
-        microjavaparser.syntaxtree.Node root = null;
+        Node root = null;
         try {
             root = new MicroJavaParser(in).Goal();
         } catch(microjavaparser.ParseException e) {
@@ -124,7 +126,7 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      * 
      * @return root Node of the MiniJava syntax tree.
      */
-    public static Node getMiniJavaNodeFromFile(String filename){
+    public static syntaxtree.Node getMiniJavaNodeFromFile(String filename){
         InputStream in = null;
         try {
             in = new FileInputStream(filename);
@@ -132,7 +134,7 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
             e.printStackTrace();
         }
 
-        Node root = null;
+        syntaxtree.Node root = null;
         try {
             root = new MiniJavaParser(in).Goal();
         } catch(ParseException e) {
@@ -148,10 +150,10 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      * 
      * @return MicroJava equivalent of miniJavaRoot.
      */
-    public microjavaparser.syntaxtree.Node getMicroJavaParseTree(Node miniJavaRoot){
+    public Node getMicroJavaParseTree(syntaxtree.Node miniJavaRoot){
         miniJavaRoot.accept(this);
         InputStream codeStream = new ByteArrayInputStream(getMicroJavaCode().getBytes());
-        microjavaparser.syntaxtree.Node microJavaRoot = null;
+        Node microJavaRoot = null;
         try {
             microJavaRoot = new MicroJavaParser(codeStream).Goal();
         } catch(Exception e) {
@@ -163,21 +165,21 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     // //
     // // Auto class visitors--probably don't need to be overridden.
     // //
-    // public R visit(NodeList n) {
+    // public R visit(syntaxtree.NodeList n) {
     //     R _ret=null;
     //     int _count=0;
-    //     for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
+    //     for ( Enumeration<syntaxtree.Node> e = n.elements(); e.hasMoreElements(); ) {
     //         e.nextElement().accept(this);
     //         _count++;
     //     }
     //     return _ret;
     // }
 
-    // public R visit(NodeListOptional n) {
+    // public R visit(syntaxtree.NodeListOptional n) {
     //     if ( n.present() ) {
     //         R _ret=null;
     //         int _count=0;
-    //         for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
+    //         for ( Enumeration<syntaxtree.Node> e = n.elements(); e.hasMoreElements(); ) {
     //             e.nextElement().accept(this);
     //             _count++;
     //         }
@@ -187,24 +189,24 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //         return null;
     // }
 
-    // public R visit(NodeOptional n) {
+    // public R visit(syntaxtree.NodeOptional n) {
     //     if ( n.present() )
     //         return n.node.accept(this);
     //     else
     //         return null;
     // }
 
-    // public R visit(NodeSequence n) {
+    // public R visit(syntaxtree.NodeSequence n) {
     //     R _ret=null;
     //     int _count=0;
-    //     for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
+    //     for ( Enumeration<syntaxtree.Node> e = n.elements(); e.hasMoreElements(); ) {
     //         e.nextElement().accept(this);
     //         _count++;
     //     }
     //     return _ret;
     // }
 
-    public R visit(NodeToken n) {
+    public R visit(syntaxtree.NodeToken n) {
         output(n.tokenImage);
         return null;
     }
@@ -218,13 +220,13 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      * f1 -> ( TypeDeclaration() )*
      * f2 -> <EOF>
      */
-    public R visit(Goal n) {
+    public R visit(syntaxtree.Goal n) {
         R _ret=null;
-        microjavaparser.syntaxtree.MainClass f0 = (microjavaparser.syntaxtree.MainClass) n.f0.accept(this);
-        microjavaparser.syntaxtree.NodeListOptional f1 = (microjavaparser.syntaxtree.NodeListOptional) n.f1.accept(this);
-        microjavaparser.syntaxtree.NodeToken f2 = (microjavaparser.syntaxtree.NodeToken) n.f2.accept(this);
+        MainClass f0 = (MainClass) n.f0.accept(this);
+        NodeListOptional f1 = (NodeListOptional) n.f1.accept(this);
+        NodeToken f2 = (NodeToken) n.f2.accept(this);
         output(finalMainClass);
-        _ret = (R) new microjavaparser.syntaxtree.Goal(f0, f1, f2);
+        _ret = (R) new Goal(f0, f1, f2);
         return _ret;
     }
 
@@ -247,7 +249,7 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      * f15 -> "}"
      * f16 -> "}"
      */
-    public R visit(MainClass n) {
+    public R visit(syntaxtree.MainClass n) {
         R _ret=null;
         n.f0.accept(this);
         n.f1.accept(this);
@@ -352,7 +354,7 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      * f11 -> ";"
      * f12 -> "}"
      */
-    public R visit(MethodDeclaration n) {
+    public R visit(syntaxtree.MethodDeclaration n) {
         R _ret=null;
         n.f0.accept(this);
         output("void");
@@ -483,9 +485,9 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      * f2 -> Expression()
      * f3 -> ";"
      */
-    public R visit(AssignmentStatement n) {
+    public R visit(syntaxtree.AssignmentStatement n) {
         R _ret=null;
-        System.out.println("AssignmentStatement"); 
+        System.out.println("syntaxtree.AssignmentStatement"); 
         n.f0.accept(this);
         n.f1.accept(this);
         n.f2.accept(this);
