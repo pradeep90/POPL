@@ -51,6 +51,8 @@
 ** GJ* uses Java with Generics
 ** I guess I don't have a way to compare two syntax trees. So, to test that my generated MicroJava code is OK, I'm gonna test if it is valid MicroJava and 
 ** TODO Not able to force the execute target to run ONLY when everything has been compiled. It all works ONLY when I add a -B flag. Have to sort out Make dependencies.
+** TODO Not able to figure out how to use relative paths for input test source files. Winging it for now.
+** TODO Move the pretty-printing code to a class of its own
 * GLINTs - PCQ|FCK|AIR|POV
 ** Purpose - Use JTB and JavaCC to write a MiniJava to MicroJava translator for valid MiniJava programs.
 ** CQ - (several ways + answer/opinion/>1 POV) => How to produce MicroJava code for each of the syntax tree nodes?
