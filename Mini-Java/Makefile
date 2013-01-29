@@ -42,6 +42,7 @@ JFLAGS      :=	-sourcepath $(SOURCE_DIR) -d $(OUTPUT_DIR) -source 1.6
 RUN_FLAGS := -cp $(OUTPUT_DIR)
 TEST_BUILD_FLAGS := -g -cp $(OUTPUT_DIR):$(JUNIT_JAR) -d $(TEST_OUTPUT_DIR) -Xlint
 TEST_RUN_FLAGS := -cp $(OUTPUT_DIR):$(TEST_OUTPUT_DIR):$(JUNIT_JAR):$(HAMCREST_JAR) org.junit.runner.JUnitCore
+JAVACC_FLAGS	:= -STATIC=false 
 
 # TODO: Add -g??
 JVMFLAGS    := -ea                               	\
@@ -79,14 +80,14 @@ tests := $(OUTPUT_DIR)/tests.txt
 jtb_stuff: minijava.jj
 	cd $(SOURCE_DIR) && $(JTB) $<
 
-javacc_stuff: jtb.out.jj
-	cd $(SOURCE_DIR) && $(JAVACC) $<
+javacc_stuff:
+	cd $(SOURCE_DIR) && $(JAVACC) $(JAVACC_FLAGS) jtb.out.jj
 
 micro_java_jtb_stuff:
 	cd $(MICRO_JAVA_PARSER_DIR) && $(JTB) -printer microjava.jj -p microjavaparser
 
 micro_java_javacc_stuff:
-	cd $(MICRO_JAVA_PARSER_DIR) && $(JAVACC) -STATIC=false jtb.out.jj
+	cd $(MICRO_JAVA_PARSER_DIR) && $(JAVACC) $(JAVACC_FLAGS) jtb.out.jj
 
 # compile - Compile the source
 .PHONY: compile

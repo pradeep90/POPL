@@ -126,10 +126,10 @@ public class MicroJavaOutputterTest {
     /**
      * Test method for {@link MiniJavaOutputter#getMiniJavaNodeFromFile()}.
      */
-    // @Test
-    // public final void testGetMiniJavaNodeFromFileNoException(){
-    //     MicroJavaOutputter.getMiniJavaNodeFromFile("/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Mini-Java-Test-Code/MainOnly.minijava");
-    // }
+    @Test
+    public final void testGetMiniJavaNodeFromFileNoException(){
+        MicroJavaOutputter.getMiniJavaNodeFromFile("/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Mini-Java-Test-Code/MainOnly.minijava");
+    }
 
     /**
      * Test method for {@link MicroJavaOutputter#simpleTransformer()}.
