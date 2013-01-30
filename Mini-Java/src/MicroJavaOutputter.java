@@ -461,10 +461,11 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //  * f0 -> FormalParameter()
     //  * f1 -> ( FormalParameterRest() )*
     //  */
-    // public R visit(FormalParameterList n) {
+    // public R visit(syntaxtree.FormalParameterList n) {
     //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
+    //     R f0 = n.f0.accept(this);
+    //     R f1 = n.f1.accept(this);
+    //     _ret = (R) new FormalParameterList();
     //     return _ret;
     // }
 
@@ -472,10 +473,11 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //  * f0 -> Type()
     //  * f1 -> Identifier()
     //  */
-    // public R visit(FormalParameter n) {
+    // public R visit(syntaxtree.FormalParameter n) {
     //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
+    //     R f0 = n.f0.accept(this);
+    //     R f1 = n.f1.accept(this);
+    //     _ret = (R) new FormalParameter();
     //     return _ret;
     // }
 
@@ -483,10 +485,11 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //  * f0 -> ","
     //  * f1 -> FormalParameter()
     //  */
-    // public R visit(FormalParameterRest n) {
+    // public R visit(syntaxtree.FormalParameterRest n) {
     //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
+    //     R f0 = n.f0.accept(this);
+    //     R f1 = n.f1.accept(this);
+    //     _ret = (R) new FormalParameterRest();
     //     return _ret;
     // }
 
@@ -496,9 +499,10 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //  *       | IntegerType()
     //  *       | Identifier()
     //  */
-    // public R visit(Type n) {
+    // public R visit(syntaxtree.Type n) {
     //     R _ret=null;
-    //     n.f0.accept(this);
+    //     R f0 = n.f0.accept(this);
+    //     _ret = (R) new Type();
     //     return _ret;
     // }
 
@@ -507,29 +511,32 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //  * f1 -> "["
     //  * f2 -> "]"
     //  */
-    // public R visit(ArrayType n) {
+    // public R visit(syntaxtree.ArrayType n) {
     //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
+    //     R f0 = n.f0.accept(this);
+    //     R f1 = n.f1.accept(this);
+    //     R f2 = n.f2.accept(this);
+    //     _ret = (R) new ArrayType();
     //     return _ret;
     // }
 
     // /**
     //  * f0 -> "boolean"
     //  */
-    // public R visit(BooleanType n) {
+    // public R visit(syntaxtree.BooleanType n) {
     //     R _ret=null;
-    //     n.f0.accept(this);
+    //     R f0 = n.f0.accept(this);
+    //     _ret = (R) new BooleanType();
     //     return _ret;
     // }
 
     // /**
     //  * f0 -> "int"
     //  */
-    // public R visit(IntegerType n) {
+    // public R visit(syntaxtree.IntegerType n) {
     //     R _ret=null;
-    //     n.f0.accept(this);
+    //     R f0 = n.f0.accept(this);
+    //     _ret = (R) new IntegerType();
     //     return _ret;
     // }
 
@@ -541,9 +548,10 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //  *       | WhileStatement()
     //  *       | PrintStatement()
     //  */
-    // public R visit(Statement n) {
+    // public R visit(syntaxtree.Statement n) {
     //     R _ret=null;
-    //     n.f0.accept(this);
+    //     R f0 = n.f0.accept(this);
+    //     _ret = (R) new Statement();
     //     return _ret;
     // }
 
@@ -552,50 +560,59 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //  * f1 -> ( Statement() )*
     //  * f2 -> "}"
     //  */
-    // public R visit(Block n) {
+    // public R visit(syntaxtree.Block n) {
     //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
+    //     R f0 = n.f0.accept(this);
+    //     R f1 = n.f1.accept(this);
+    //     R f2 = n.f2.accept(this);
+    //     _ret = (R) new Block();
+    //     return _ret;
+    // }
+
+    // /**
+    //  * f0 -> Identifier()
+    //  * f1 -> "="
+    //  * f2 -> Expression()
+    //  * f3 -> ";"
+    //  */
+    // public R visit(syntaxtree.AssignmentStatement n) {
+    //     R _ret=null;
+    //     System.out.println("syntaxtree.AssignmentStatement"); 
+    //     R f0 = n.f0.accept(this);
+    //     R f1 = n.f1.accept(this);
+    //     R f2 = n.f2.accept(this);
+    //     R f3 = n.f3.accept(this);
+    //     _ret = (R) new AssignmentStatement();
     //     return _ret;
     // }
 
     /**
      * f0 -> Identifier()
-     * f1 -> "="
+     * f1 -> "["
      * f2 -> Expression()
-     * f3 -> ";"
+     * f3 -> "]"
+     * f4 -> "="
+     * f5 -> Expression()
+     * f6 -> ";"
      */
-    public R visit(syntaxtree.AssignmentStatement n) {
+    public R visit(syntaxtree.ArrayAssignmentStatement n) {
         R _ret=null;
-        System.out.println("syntaxtree.AssignmentStatement"); 
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
-        n.f3.accept(this);
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        R f3 = n.f3.accept(this);
+        R f4 = n.f4.accept(this);
+        R f5 = n.f5.accept(this);
+        R f6 = n.f6.accept(this);
+        _ret = (R) new ArrayAssignmentStatement((Identifier) f0,
+                                                (NodeToken) f1,
+                                                (Expression) f2,
+                                                (NodeToken) f3,
+                                                (NodeToken) f4,
+                                                (Expression) f5,
+                                                (NodeToken) f6);
         return _ret;
     }
-
-    // /**
-    //  * f0 -> Identifier()
-    //  * f1 -> "["
-    //  * f2 -> Expression()
-    //  * f3 -> "]"
-    //  * f4 -> "="
-    //  * f5 -> Expression()
-    //  * f6 -> ";"
-    //  */
-    // public R visit(ArrayAssignmentStatement n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
-    //     n.f3.accept(this);
-    //     n.f4.accept(this);
-    //     n.f5.accept(this);
-    //     n.f6.accept(this);
-    //     return _ret;
-    // }
 
     // /**
     //  * f0 -> "if"
@@ -606,15 +623,16 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //  * f5 -> "else"
     //  * f6 -> Statement()
     //  */
-    // public R visit(IfStatement n) {
+    // public R visit(syntaxtree.IfStatement n) {
     //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
-    //     n.f3.accept(this);
-    //     n.f4.accept(this);
-    //     n.f5.accept(this);
-    //     n.f6.accept(this);
+    //     R f0 = n.f0.accept(this);
+    //     R f1 = n.f1.accept(this);
+    //     R f2 = n.f2.accept(this);
+    //     R f3 = n.f3.accept(this);
+    //     R f4 = n.f4.accept(this);
+    //     R f5 = n.f5.accept(this);
+    //     R f6 = n.f6.accept(this);
+    //     _ret = (R) new IfStatement();
     //     return _ret;
     // }
 
@@ -625,60 +643,68 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //  * f3 -> ")"
     //  * f4 -> Statement()
     //  */
-    // public R visit(WhileStatement n) {
+    // public R visit(syntaxtree.WhileStatement n) {
     //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
-    //     n.f3.accept(this);
-    //     n.f4.accept(this);
+    //     R f0 = n.f0.accept(this);
+    //     R f1 = n.f1.accept(this);
+    //     R f2 = n.f2.accept(this);
+    //     R f3 = n.f3.accept(this);
+    //     R f4 = n.f4.accept(this);
+    //     _ret = (R) new WhileStatement();
     //     return _ret;
     // }
 
-    // /**
-    //  * f0 -> "System.out.println"
-    //  * f1 -> "("
-    //  * f2 -> Expression()
-    //  * f3 -> ")"
-    //  * f4 -> ";"
-    //  */
-    // public R visit(PrintStatement n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
-    //     n.f3.accept(this);
-    //     n.f4.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> "System.out.println"
+     * f1 -> "("
+     * f2 -> Expression()
+     * f3 -> ")"
+     * f4 -> ";"
+     */
+    public R visit(syntaxtree.PrintStatement n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        R f3 = n.f3.accept(this);
+        R f4 = n.f4.accept(this);
+        _ret = (R) new PrintStatement((NodeToken) f0,
+                                      (NodeToken) f1,
+                                      (Expression) f2,
+                                      (NodeToken) f3,
+                                      (NodeToken) f4);
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> AndExpression()
-    //  *       | CompareExpression()
-    //  *       | PlusExpression()
-    //  *       | MinusExpression()
-    //  *       | TimesExpression()
-    //  *       | ArrayLookup()
-    //  *       | ArrayLength()
-    //  *       | MessageSend()
-    //  *       | PrimaryExpression()
-    //  */
-    // public R visit(Expression n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> AndExpression()
+     *       | CompareExpression()
+     *       | PlusExpression()
+     *       | MinusExpression()
+     *       | TimesExpression()
+     *       | ArrayLookup()
+     *       | ArrayLength()
+     *       | MessageSend()
+     *       | PrimaryExpression()
+     */
+    public R visit(syntaxtree.Expression n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        _ret = (R) new Expression(new NodeChoice((Node) f0, n.f0.which));
+        return _ret;
+    }
 
     // /**
     //  * f0 -> PrimaryExpression()
     //  * f1 -> "&"
     //  * f2 -> PrimaryExpression()
     //  */
-    // public R visit(AndExpression n) {
+    // public R visit(syntaxtree.AndExpression n) {
     //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
+    //     R f0 = n.f0.accept(this);
+    //     R f1 = n.f1.accept(this);
+    //     R f2 = n.f2.accept(this);
+    //     _ret = (R) new AndExpression();
     //     return _ret;
     // }
 
@@ -687,11 +713,12 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //  * f1 -> "<"
     //  * f2 -> PrimaryExpression()
     //  */
-    // public R visit(CompareExpression n) {
+    // public R visit(syntaxtree.CompareExpression n) {
     //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
+    //     R f0 = n.f0.accept(this);
+    //     R f1 = n.f1.accept(this);
+    //     R f2 = n.f2.accept(this);
+    //     _ret = (R) new CompareExpression();
     //     return _ret;
     // }
 
@@ -700,11 +727,12 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //  * f1 -> "+"
     //  * f2 -> PrimaryExpression()
     //  */
-    // public R visit(PlusExpression n) {
+    // public R visit(syntaxtree.PlusExpression n) {
     //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
+    //     R f0 = n.f0.accept(this);
+    //     R f1 = n.f1.accept(this);
+    //     R f2 = n.f2.accept(this);
+    //     _ret = (R) new PlusExpression();
     //     return _ret;
     // }
 
@@ -713,52 +741,61 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //  * f1 -> "-"
     //  * f2 -> PrimaryExpression()
     //  */
-    // public R visit(MinusExpression n) {
+    // public R visit(syntaxtree.MinusExpression n) {
     //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
+    //     R f0 = n.f0.accept(this);
+    //     R f1 = n.f1.accept(this);
+    //     R f2 = n.f2.accept(this);
+    //     _ret = (R) new MinusExpression();
     //     return _ret;
     // }
 
-    // /**
-    //  * f0 -> PrimaryExpression()
-    //  * f1 -> "*"
-    //  * f2 -> PrimaryExpression()
-    //  */
-    // public R visit(TimesExpression n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> PrimaryExpression()
+     * f1 -> "*"
+     * f2 -> PrimaryExpression()
+     */
+    public R visit(syntaxtree.TimesExpression n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        _ret = (R) new TimesExpression((PrimaryExpression) f0,
+                                       (NodeToken) f1,
+                                       (PrimaryExpression) f2);
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> PrimaryExpression()
-    //  * f1 -> "["
-    //  * f2 -> PrimaryExpression()
-    //  * f3 -> "]"
-    //  */
-    // public R visit(ArrayLookup n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
-    //     n.f3.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> PrimaryExpression()
+     * f1 -> "["
+     * f2 -> PrimaryExpression()
+     * f3 -> "]"
+     */
+    public R visit(syntaxtree.ArrayLookup n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        R f3 = n.f3.accept(this);
+        _ret = (R) new ArrayLookup((PrimaryExpression) f0,
+                                   (NodeToken) f1,
+                                   (PrimaryExpression) f2,
+                                   (NodeToken) f3);
+        return _ret;
+    }
 
     // /**
     //  * f0 -> PrimaryExpression()
     //  * f1 -> "."
     //  * f2 -> "length"
     //  */
-    // public R visit(ArrayLength n) {
+    // public R visit(syntaxtree.ArrayLength n) {
     //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
+    //     R f0 = n.f0.accept(this);
+    //     R f1 = n.f1.accept(this);
+    //     R f2 = n.f2.accept(this);
+    //     _ret = (R) new ArrayLength();
     //     return _ret;
     // }
 
@@ -770,92 +807,103 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //  * f4 -> ( ExpressionList() )?
     //  * f5 -> ")"
     //  */
-    // public R visit(MessageSend n) {
+    // public R visit(syntaxtree.MessageSend n) {
     //     // System.out.println("Function Call??"); 
     //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
-    //     n.f3.accept(this);
-    //     n.f4.accept(this);
-    //     n.f5.accept(this);
+    //     R f0 = n.f0.accept(this);
+    //     R f1 = n.f1.accept(this);
+    //     R f2 = n.f2.accept(this);
+    //     R f3 = n.f3.accept(this);
+    //     R f4 = n.f4.accept(this);
+    //     R f5 = n.f5.accept(this);
+    //     _ret = (R) new MessageSend();
     //     return _ret;
     // }
 
+    // TODO(spradeep): 
     // /**
     //  * f0 -> Expression()
     //  * f1 -> ( ExpressionRest() )*
     //  */
-    // public R visit(ExpressionList n) {
+    // public R visit(syntaxtree.ExpressionList n) {
     //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
+    //     R f0 = n.f0.accept(this);
+    //     R f1 = n.f1.accept(this);
+    //     _ret = (R) new ExpressionList((Expression) f0,
+    //                                   (NodeListOptional) f1);
     //     return _ret;
     // }
 
-    // /**
-    //  * f0 -> ","
-    //  * f1 -> Expression()
-    //  */
-    // public R visit(ExpressionRest n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> ","
+     * f1 -> Expression()
+     */
+    public R visit(syntaxtree.ExpressionRest n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        _ret = (R) new ExpressionRest((NodeToken) f0,
+                                      (Expression) f1);
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> IntegerLiteral()
-    //  *       | TrueLiteral()
-    //  *       | FalseLiteral()
-    //  *       | Identifier()
-    //  *       | ThisExpression()
-    //  *       | ArrayAllocationExpression()
-    //  *       | AllocationExpression()
-    //  *       | NotExpression()
-    //  *       | BracketExpression()
-    //  */
-    // public R visit(PrimaryExpression n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> IntegerLiteral()
+     *       | TrueLiteral()
+     *       | FalseLiteral()
+     *       | Identifier()
+     *       | ThisExpression()
+     *       | ArrayAllocationExpression()
+     *       | AllocationExpression()
+     *       | NotExpression()
+     *       | BracketExpression()
+     */
+    public R visit(syntaxtree.PrimaryExpression n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        _ret = (R) new PrimaryExpression(new NodeChoice((Node) f0, n.f0.which));
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> <INTEGER_LITERAL>
-    //  */
-    // public R visit(IntegerLiteral n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> <INTEGER_LITERAL>
+     */
+    public R visit(syntaxtree.IntegerLiteral n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        _ret = (R) new IntegerLiteral((NodeToken) f0);
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> "true"
-    //  */
-    // public R visit(TrueLiteral n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> "true"
+     */
+    public R visit(syntaxtree.TrueLiteral n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        _ret = (R) new TrueLiteral((NodeToken) f0);
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> "false"
-    //  */
-    // public R visit(FalseLiteral n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> "false"
+     */
+    public R visit(syntaxtree.FalseLiteral n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        _ret = (R) new FalseLiteral((NodeToken) f0);
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> <IDENTIFIER>
-    //  */
-    // public R visit(Identifier n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> <IDENTIFIER>
+     */
+    public R visit(syntaxtree.Identifier n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        _ret = (R) new Identifier((NodeToken) f0);
+        return _ret;
+    }
 
     /**
      * f0 -> "this"
@@ -866,61 +914,75 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
         return (R) new ThisExpression((NodeToken) f0);
     }
 
-    // /**
-    //  * f0 -> "new"
-    //  * f1 -> "int"
-    //  * f2 -> "["
-    //  * f3 -> Expression()
-    //  * f4 -> "]"
-    //  */
-    // public R visit(ArrayAllocationExpression n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
-    //     n.f3.accept(this);
-    //     n.f4.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> "new"
+     * f1 -> "int"
+     * f2 -> "["
+     * f3 -> Expression()
+     * f4 -> "]"
+     */
+    public R visit(syntaxtree.ArrayAllocationExpression n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        R f3 = n.f3.accept(this);
+        R f4 = n.f4.accept(this);
+        _ret = (R) new ArrayAllocationExpression((NodeToken) f0,
+                                                 (NodeToken) f1,
+                                                 (NodeToken) f2,
+                                                 (Expression) f3,
+                                                 (NodeToken) f4);
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> "new"
-    //  * f1 -> Identifier()
-    //  * f2 -> "("
-    //  * f3 -> ")"
-    //  */
-    // public R visit(AllocationExpression n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
-    //     n.f3.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> "new"
+     * f1 -> Identifier()
+     * f2 -> "("
+     * f3 -> ")"
+     */
+    public R visit(syntaxtree.AllocationExpression n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        R f3 = n.f3.accept(this);
+        _ret = (R) new AllocationExpression((NodeToken) f0,
+                                            (Identifier) f1,
+                                            (NodeToken) f2,
+                                            (NodeToken) f3);
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> "!"
-    //  * f1 -> Expression()
-    //  */
-    // public R visit(NotExpression n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> "!"
+     * f1 -> Expression()
+     */
+    public R visit(syntaxtree.NotExpression n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        _ret = (R) new NotExpression((NodeToken) f0,
+                                     (Expression) f1);
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> "("
-    //  * f1 -> Expression()
-    //  * f2 -> ")"
-    //  */
-    // public R visit(BracketExpression n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> "("
+     * f1 -> Expression()
+     * f2 -> ")"
+     */
+    public R visit(syntaxtree.BracketExpression n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        _ret = (R) new BracketExpression((NodeToken) f0,
+                                         (Expression) f1,
+                                         (NodeToken) f2);
+        return _ret;
+    }
 
     public String getMicroJavaCode(){
         return outputCodeString;
