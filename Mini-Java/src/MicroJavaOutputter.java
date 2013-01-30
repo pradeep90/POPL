@@ -156,15 +156,7 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      * @return MicroJava equivalent of miniJavaRoot.
      */
     public Node getMicroJavaParseTree(syntaxtree.Node miniJavaRoot){
-        miniJavaRoot.accept(this);
-        InputStream codeStream = new ByteArrayInputStream(this.getMicroJavaCode().getBytes());
-        Node microJavaRoot = null;
-        try {
-            microJavaRoot = new MicroJavaParser(codeStream).Goal();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return microJavaRoot;
+        return (Node) miniJavaRoot.accept(this);
     }
 
     /** 
@@ -249,7 +241,7 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
 
     public R visit(syntaxtree.NodeToken n) {
         output(n.tokenImage);
-        return null;
+        return (R) new NodeToken(n.tokenImage);
     }
 
     // //
@@ -865,14 +857,14 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //     return _ret;
     // }
 
-    // /**
-    //  * f0 -> "this"
-    //  */
-    // public R visit(ThisExpression n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> "this"
+     */
+    public R visit(syntaxtree.ThisExpression n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        return (R) new ThisExpression((NodeToken) f0);
+    }
 
     // /**
     //  * f0 -> "new"
@@ -931,8 +923,8 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     // }
 
     public String getMicroJavaCode(){
-        // return outputCodeString;
-        return mainOnlyMicroJavaCode;
+        return outputCodeString;
+        // return mainOnlyMicroJavaCode;
     }
 
     public String getFullMicroJavaCode(){

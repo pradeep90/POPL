@@ -25,10 +25,8 @@ import static org.junit.Assert.assertTrue;
 
 public class MicroJavaOutputterTest {
     MicroJavaOutputter outputter;
-    String factorialMiniJavaCode;
-    String factorialMicroJavaCode;
 
-    final String BASE_DIR = "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests";
+    final String BASE_DIR = "/home/spradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests";
     final String MICRO_JAVA_DIR = "Micro-Java-Test-Code";
     final String MINI_JAVA_DIR = "Mini-Java-Test-Code";
     final String MICRO_JAVA_EXTENSION = ".microjava";
@@ -37,56 +35,6 @@ public class MicroJavaOutputterTest {
     @Before
     public void setUp() {
         outputter = new MicroJavaOutputter();
-        factorialMiniJavaCode = " class Factorial{" +
-                "    public static void main(String[] a){" +
-                "        System.out.println(10);" +
-                "    }" +
-                "}"
-                ;
-
-        factorialMicroJavaCode = "class Factorial {" +
-                "   public static void main(String [] a){" +
-                "      new ____NewMainClass____().____Main____(0);" +
-                "   }" +
-                "}" +
-                "class Fac{" +
-                "   int ____1234ComputeFac4321____;" +
-
-                "   public void ComputeFac(int num){" +
-                "      int num_aux;" +
-                "      int ____writeable____num;" +
-                "      int ____tmp0;" +
-                "      Fac ___tmp4;" +
-                "      int ___tmp3;" +
-
-                "____writeable____num = num;" +
-                "      if( ____writeable____num<1 ){" +
-                "         num_aux = 1;" +
-                "      } else {" +
-                "         ___tmp4 = this;" +
-                "         ___tmp4.ComputeFac(____writeable____num-1);" +
-                "         ___tmp3 = ___tmp4.____1234ComputeFac4321____;" +
-                "         ____tmp0 = ___tmp3;" +
-                "         num_aux = ____writeable____num*____tmp0;" +
-                "      }" +
-                "      ____1234ComputeFac4321____ = num_aux;" +
-                "   }" +
-                "}" +
-                "class ____NewMainClass____{" +
-
-                "   public void ____Main____(int ____arg_length____){" +
-                "      int ____printMe____;" +
-                "      Fac ___tmp6;" +
-                "      int ___tmp5;" +
-
-                "      ___tmp6 =" +
-                "         new Fac();" +
-                "      ___tmp6.ComputeFac(10);" +
-                "      ___tmp5 = ___tmp6.____1234ComputeFac4321____;" +
-                "      ____printMe____ = ___tmp5;" +
-                "      System.out.println(____printMe____);" +
-                "   }" +
-                "}";
     }
     
     @After
@@ -101,6 +49,90 @@ public class MicroJavaOutputterTest {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
+
+    /** 
+     * Assert that MicroJava transformation of miniJavaNode is the
+     * same as expectedMicroJavaNode.
+     */
+    public void assertEqualAfterTransform(
+        microjavaparser.syntaxtree.Node expectedMicroJavaNode,
+        Node miniJavaNode){
+
+        assertEquals(MicroJavaOutputter.getFormattedString(expectedMicroJavaNode),
+                     MicroJavaOutputter.getFormattedString(
+                         outputter.getMicroJavaParseTree(miniJavaNode)));
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#getFormattedString()}.
+     */
+    @Test
+    public final void testGetFormattedString()
+            throws FileNotFoundException, microjavaparser.ParseException{
+        InputStream in1 = new FileInputStream(
+            "/home/spradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.microjava");
+        InputStream in2 = new FileInputStream(
+            "/home/spradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.WithWhitespace.microjava");
+        microjavaparser.syntaxtree.Node root1 = new MicroJavaParser(in1).Goal();
+
+        microjavaparser.syntaxtree.Node root2 = new MicroJavaParser(in2).Goal();
+
+        String code1 = MicroJavaOutputter.getFormattedString(root1);
+        String code2 = MicroJavaOutputter.getFormattedString(root2);
+        
+        assertEquals(code1, code2);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#getMicroJavaNodeFromFile()}.
+     */
+    @Test
+    public final void testGetMicroJavaNodeFromFileNoException(){
+        MicroJavaOutputter.getMicroJavaNodeFromFile("/home/spradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.microjava");
+    }
+
+    /**
+     * Test method for {@link MiniJavaOutputter#getMiniJavaNodeFromFile()}.
+     */
+    @Test
+    public final void testGetMiniJavaNodeFromFileNoException(){
+        MicroJavaOutputter.getMiniJavaNodeFromFile("/home/spradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Mini-Java-Test-Code/MainOnly.minijava");
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#visitThisExpression()}.
+     */
+    @Test
+    public final void testVisitThisExpression(){
+        ThisExpression expr = new ThisExpression();
+        microjavaparser.syntaxtree.Node expected = new microjavaparser.syntaxtree.ThisExpression();
+        assertEqualAfterTransform(expected, expr);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#visitNodeToken()}.
+     */
+    @Test
+    public final void testVisitNodeToken(){
+        NodeToken n = new NodeToken("foobar");
+        microjavaparser.syntaxtree.Node expected = new microjavaparser.syntaxtree.NodeToken("foobar");
+        assertEqualAfterTransform(expected, n);
+    }
+
+    // /**
+    //  * Test method for {@link MicroJavaOutputter#visitVarDeclaration()}.
+    //  */
+    // @Test
+    // public final void testVisitVarDeclaration(){
+    //     VarDeclaration var = new VarDeclaration(
+    //         new Type(new NodeChoice(new IntegerType(), 2)),
+    //         new Identifier(new NodeToken("foo")));
+    //     System.out.println("MicroJavaOutputter.getFormattedString(var): " + MicroJavaOutputter.getFormattedString(outputter.getMicroJavaParseTree(var)));
+    // }
+
+    ///////////////////////
+    // Integration Tests //
+    ///////////////////////
 
     /** 
      * Run test to see if MicroJava translation of MiniJava filename
@@ -125,50 +157,15 @@ public class MicroJavaOutputterTest {
         assertEquals(MicroJavaOutputter.getFormattedString(expectedMicroParseTree),
                      MicroJavaOutputter.getFormattedString(actualMicroParseTree));
 
-        System.out.println("outputter.getFullMicroJavaCode(): " + outputter.getFullMicroJavaCode());
+        System.out.println("outputter.getFullMicroJavaCode(): "
+                           + outputter.getFullMicroJavaCode());
     }
 
-    /**
-     * Test method for {@link MicroJavaOutputter#getFormattedString()}.
-     */
-    @Test
-    public final void testGetFormattedString()
-            throws FileNotFoundException, microjavaparser.ParseException{
-        InputStream in1 = new FileInputStream(
-            "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.microjava");
-        InputStream in2 = new FileInputStream(
-            "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.WithWhitespace.microjava");
-        microjavaparser.syntaxtree.Node root1 = new MicroJavaParser(in1).Goal();
-
-        microjavaparser.syntaxtree.Node root2 = new MicroJavaParser(in2).Goal();
-
-        String code1 = MicroJavaOutputter.getFormattedString(root1);
-        String code2 = MicroJavaOutputter.getFormattedString(root2);
-        
-        assertEquals(code1, code2);
-    }
-
-    /**
-     * Test method for {@link MicroJavaOutputter#getMicroJavaNodeFromFile()}.
-     */
-    @Test
-    public final void testGetMicroJavaNodeFromFileNoException(){
-        MicroJavaOutputter.getMicroJavaNodeFromFile("/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.microjava");
-    }
-
-    /**
-     * Test method for {@link MiniJavaOutputter#getMiniJavaNodeFromFile()}.
-     */
-    @Test
-    public final void testGetMiniJavaNodeFromFileNoException(){
-        MicroJavaOutputter.getMiniJavaNodeFromFile("/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Mini-Java-Test-Code/MainOnly.minijava");
-    }
-
-    /**
-     * Test method for {@link MicroJavaOutputter#simpleTransformer()}.
-     */
-    @Test
-    public final void testMainOnly(){
-        doTestMiniAndMicroJava("MainOnly");
-    }
+    // /**
+    //  * Test method for {@link MicroJavaOutputter#simpleTransformer()}.
+    //  */
+    // @Test
+    // public final void testMainOnly(){
+    //     doTestMiniAndMicroJava("MainOnly");
+    // }
 }

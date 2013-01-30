@@ -87,6 +87,10 @@
 ** DONE Make unit testing very easy
    CLOCK: [2013-01-28 Mon 17:51]--[2013-01-28 Mon 19:05] =>  1:14
 ** DONE Make microjavaparser.syntaxtree.Node be available as Node and make the normal Node be syntaxtree.Node 
+** DONE Check whether you can compare two Nodes
+   CLOCK: [2013-01-30 Wed 10:01]--[2013-01-30 Wed 10:02] =>  0:01
+   CLOCK: [2013-01-30 Wed 09:41]--[2013-01-30 Wed 10:01] =>  0:20
+   CLOCK: [2013-01-30 Wed 09:15]--[2013-01-30 Wed 09:38] =>  0:23
 ** TODO Goal, main, class declaration, method, assignment statement
    CLOCK: [2013-01-30 Wed 05:26]--[2013-01-30 Wed 05:52] =>  0:26
    CLOCK: [2013-01-30 Wed 04:18]--[2013-01-30 Wed 05:23] =>  1:05
