@@ -86,5 +86,8 @@
 ** DONE Check out relative packages - http://xahlee.info/java-a-day/package.html
 ** DONE Make unit testing very easy
    CLOCK: [2013-01-28 Mon 17:51]--[2013-01-28 Mon 19:05] =>  1:14
-** TODO Make microjavaparser.syntaxtree.Node be available as Node and make the normal Node be syntaxtree.Node 
+** DONE Make microjavaparser.syntaxtree.Node be available as Node and make the normal Node be syntaxtree.Node 
+** TODO Goal, main, class declaration, method, assignment statement
+   CLOCK: [2013-01-30 Wed 05:26]--[2013-01-30 Wed 05:52] =>  0:26
+   CLOCK: [2013-01-30 Wed 04:18]--[2013-01-30 Wed 05:23] =>  1:05
 ** Add features one by one

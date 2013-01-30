@@ -22,7 +22,11 @@ import java.io.StringWriter;
 public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     public static final int INDENT_AMOUNT = 3;
     public static final int WRAP_WIDTH = 80;
-
+    public static final String NEW_MAIN_METHOD_NAME = "____Main____";
+    public static final String NEW_MAIN_CLASS_NAME = "____NewMainClass____";
+    public static final String MAIN_METHOD_PARAM_NAME = "____arg_length____";
+    public static final String PRINT_ME_STRING = "____printMe____";
+    
     public boolean isInMiniMain = false;
 
     public String mainOnlyMicroJavaCode = "class MainOnly {" +
@@ -44,7 +48,8 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     public String outputCodeString = "";
     public String callToPseudoMainClassString = "new ____NewMainClass____().____Main____(0);";
 
-    public Node syntaxTree = null;
+    public R syntaxTree = null;
+    public R newMainClass = null;
 
     /**
      * Output codeString to stdout.
@@ -152,7 +157,7 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      */
     public Node getMicroJavaParseTree(syntaxtree.Node miniJavaRoot){
         miniJavaRoot.accept(this);
-        InputStream codeStream = new ByteArrayInputStream(getMicroJavaCode().getBytes());
+        InputStream codeStream = new ByteArrayInputStream(this.getMicroJavaCode().getBytes());
         Node microJavaRoot = null;
         try {
             microJavaRoot = new MicroJavaParser(codeStream).Goal();
@@ -160,6 +165,42 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
             e.printStackTrace();
         }
         return microJavaRoot;
+    }
+
+    /** 
+     * Wrap printStatement in a "new main class".
+     * 
+     * @return the ClassDeclaration Node typecast to R.
+     */
+    public R getNewMainClass(R printStatement){
+
+        // TODO(spradeep): Add code for the printStatement
+
+        FormalParameterList params = new FormalParameterList(
+            new FormalParameter(
+                new Type(new NodeChoice(new IntegerType(), 2)),
+                new Identifier(new NodeToken(MAIN_METHOD_PARAM_NAME))),
+            new NodeListOptional());
+
+        NodeListOptional mainMethodBodyStatements = new NodeListOptional(
+            new AssignmentStatement(
+                new VarRef(new NodeChoice(new Identifier(new NodeToken(PRINT_ME_STRING)),
+                                          1)),
+                new Expression(new NodeChoice(
+                    new PrimaryExpression(
+                        new NodeChoice(new IntegerLiteral(new NodeToken("10")),
+                                       0)),
+                    6))));
+        MethodDeclaration mainMethod = new MethodDeclaration(
+            new Identifier(new NodeToken(NEW_MAIN_METHOD_NAME)),
+            new NodeOptional(params),
+            new NodeListOptional(new VarDeclaration(
+                new Type(new NodeChoice(new IntegerType(), 2)),
+                new Identifier(new NodeToken(PRINT_ME_STRING)))),
+            mainMethodBodyStatements);
+        return (R) new ClassDeclaration(new Identifier(new NodeToken(NEW_MAIN_CLASS_NAME)),
+                                        new NodeListOptional(),
+                                        new NodeListOptional(mainMethod));
     }
 
     // //
@@ -251,93 +292,120 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      */
     public R visit(syntaxtree.MainClass n) {
         R _ret=null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
-        n.f3.accept(this);
-        n.f4.accept(this);
-        n.f5.accept(this);
-        n.f6.accept(this);
-        n.f7.accept(this);
-        n.f8.accept(this);
-        n.f9.accept(this);
-        n.f10.accept(this);
-        n.f11.accept(this);
-        n.f12.accept(this);
-        n.f13.accept(this);
-        output(callToPseudoMainClassString);
-        isInMiniMain = true;
-        n.f14.accept(this);
-        isInMiniMain = false;
-        n.f15.accept(this);
-        n.f16.accept(this);
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        R f3 = n.f3.accept(this);
+        R f4 = n.f4.accept(this);
+        R f5 = n.f5.accept(this);
+        R f6 = n.f6.accept(this);
+        R f7 = n.f7.accept(this);
+        R f8 = n.f8.accept(this);
+        R f9 = n.f9.accept(this);
+        R f10 = n.f10.accept(this);
+        R f11 = n.f11.accept(this);
+        R f12 = n.f12.accept(this);
+        R f13 = n.f13.accept(this);
+
+        // // I think I should send f14 (PrintStatement) to some function
+        // // which will wrap it in the ____NewMainClass____ definition
+        // output(callToPseudoMainClassString);
+        // isInMiniMain = true;
+        R f14 = n.f14.accept(this);
+        // isInMiniMain = false;
+
+        // TODO: Should I pass f14 or the raw n.f14 itself?
+        this.newMainClass = getNewMainClass(f14);
+
+        R f15 = n.f15.accept(this);
+        R f16 = n.f16.accept(this);
+        
+
+        Identifier pseudoMainClass = new Identifier(new NodeToken(NEW_MAIN_CLASS_NAME));
+        Identifier pseudoMainMethod = new Identifier(new NodeToken(NEW_MAIN_METHOD_NAME));
+        NodeOptional mainMethodArg = new NodeOptional();
+
+        _ret = (R) new MainClass((Identifier) f1,
+                                 (Identifier) f11,
+                                 pseudoMainClass,
+                                 pseudoMainMethod,
+                                 mainMethodArg);
         return _ret;
     }
 
-    // /**
-    //  * f0 -> ClassDeclaration()
-    //  *       | ClassExtendsDeclaration()
-    //  */
-    // public R visit(TypeDeclaration n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> ClassDeclaration()
+     *       | ClassExtendsDeclaration()
+     */
+    public R visit(syntaxtree.TypeDeclaration n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        return (R) new TypeDeclaration(new NodeChoice((Node) f0, n.f0.which));
+    }
 
-    // /**
-    //  * f0 -> "class"
-    //  * f1 -> Identifier()
-    //  * f2 -> "{"
-    //  * f3 -> ( VarDeclaration() )*
-    //  * f4 -> ( MethodDeclaration() )*
-    //  * f5 -> "}"
-    //  */
-    // public R visit(ClassDeclaration n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
-    //     n.f3.accept(this);
-    //     n.f4.accept(this);
-    //     n.f5.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> "class"
+     * f1 -> Identifier()
+     * f2 -> "{"
+     * f3 -> ( VarDeclaration() )*
+     * f4 -> ( MethodDeclaration() )*
+     * f5 -> "}"
+     */
+    public R visit(syntaxtree.ClassDeclaration n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        R f3 = n.f3.accept(this);
+        R f4 = n.f4.accept(this);
+        R f5 = n.f5.accept(this);
+        _ret = (R) new ClassDeclaration((Identifier) f1,
+                                        (NodeListOptional) f3,
+                                        (NodeListOptional) f4);
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> "class"
-    //  * f1 -> Identifier()
-    //  * f2 -> "extends"
-    //  * f3 -> Identifier()
-    //  * f4 -> "{"
-    //  * f5 -> ( VarDeclaration() )*
-    //  * f6 -> ( MethodDeclaration() )*
-    //  * f7 -> "}"
-    //  */
-    // public R visit(ClassExtendsDeclaration n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
-    //     n.f3.accept(this);
-    //     n.f4.accept(this);
-    //     n.f5.accept(this);
-    //     n.f6.accept(this);
-    //     n.f7.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> "class"
+     * f1 -> Identifier()
+     * f2 -> "extends"
+     * f3 -> Identifier()
+     * f4 -> "{"
+     * f5 -> ( VarDeclaration() )*
+     * f6 -> ( MethodDeclaration() )*
+     * f7 -> "}"
+     */
+    public R visit(syntaxtree.ClassExtendsDeclaration n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        R f3 = n.f3.accept(this);
+        R f4 = n.f4.accept(this);
+        R f5 = n.f5.accept(this);
+        R f6 = n.f6.accept(this);
+        R f7 = n.f7.accept(this);
+        _ret = (R) new ClassExtendsDeclaration((Identifier) f1,
+                                               (Identifier) f3,
+                                               (NodeListOptional) f5,
+                                               (NodeListOptional) f6);
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> Type()
-    //  * f1 -> Identifier()
-    //  * f2 -> ";"
-    //  */
-    // public R visit(VarDeclaration n) {
-    //     R _ret=null;
-    //     n.f0.accept(this);
-    //     n.f1.accept(this);
-    //     n.f2.accept(this);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> Type()
+     * f1 -> Identifier()
+     * f2 -> ";"
+     */
+    public R visit(syntaxtree.VarDeclaration n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        _ret = (R) new VarDeclaration((Type) f0,
+                                      (Identifier) f1);
+        return _ret;
+    }
 
     /**
      * f0 -> "public"
@@ -354,27 +422,48 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      * f11 -> ";"
      * f12 -> "}"
      */
-    public R visit(syntaxtree.MethodDeclaration n) {
-        R _ret=null;
-        n.f0.accept(this);
-        output("void");
-        // n.f1.accept(this);
-        n.f2.accept(this);
-        n.f3.accept(this);
-        n.f4.accept(this);
-        n.f5.accept(this);
-        n.f6.accept(this);
-        n.f7.accept(this);
-        n.f8.accept(this);
-        // n.f9.accept(this);
-        output("foo = ");
-        n.f10.accept(this);
-        output(";\n");
-        output("____1234Foo4321____ = foo;\n");
-        n.f11.accept(this);
-        n.f12.accept(this);
-        return _ret;
-    }
+    // public R visit(syntaxtree.MethodDeclaration n) {
+        
+    //     // TODO(spradeep): writable_arg variable
+        
+    //     R _ret=null;
+    //     // n.f0.accept(this);
+    //     // output("void");
+    //     // // n.f1.accept(this);
+    //     // n.f2.accept(this);
+    //     // n.f3.accept(this);
+    //     // n.f4.accept(this);
+    //     // n.f5.accept(this);
+    //     // n.f6.accept(this);
+    //     // n.f7.accept(this);
+    //     // n.f8.accept(this);
+    //     // // n.f9.accept(this);
+    //     // output("foo = ");
+    //     // n.f10.accept(this);
+    //     // output(";\n");
+    //     // output("____1234Foo4321____ = foo;\n");
+    //     // n.f11.accept(this);
+    //     // n.f12.accept(this);
+
+    //     R f0 = n.f0.accept(this);
+    //     R f1 = n.f1.accept(this);
+    //     R f2 = n.f2.accept(this);
+    //     R f3 = n.f3.accept(this);
+    //     R f4 = n.f4.accept(this);
+    //     R f5 = n.f5.accept(this);
+    //     R f6 = n.f6.accept(this);
+    //     R f7 = n.f7.accept(this);
+    //     R f8 = n.f8.accept(this);
+    //     R f9 = n.f9.accept(this);
+    //     R f10 = n.f10.accept(this);
+    //     R f11 = n.f11.accept(this);
+    //     R f12 = n.f12.accept(this);
+    //     _ret = (R) new MethodDeclaration((Identifier) f2,
+    //                                      (NodeOptional) f4,
+    //                                      (NodeListOptional) f7,
+    //                                      (NodeListOptional) f8);
+    //     return _ret;
+    // }
 
     // /**
     //  * f0 -> FormalParameter()
@@ -847,7 +936,8 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     }
 
     public String getFullMicroJavaCode(){
-        return getFormattedString(getMicroJavaNodeFromString(outputCodeString));
+        return outputCodeString;
+        // return getFormattedString(getMicroJavaNodeFromString(outputCodeString));
     }
 }
 

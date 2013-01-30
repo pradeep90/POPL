@@ -124,6 +124,8 @@ public class MicroJavaOutputterTest {
 
         assertEquals(MicroJavaOutputter.getFormattedString(expectedMicroParseTree),
                      MicroJavaOutputter.getFormattedString(actualMicroParseTree));
+
+        System.out.println("outputter.getFullMicroJavaCode(): " + outputter.getFullMicroJavaCode());
     }
 
     /**
