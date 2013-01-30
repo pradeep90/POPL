@@ -219,7 +219,7 @@ public class TreeFormatter extends DepthFirstVisitor {
    public void visit(Goal n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
-         processList(n.f1);
+          processList(n.f1, force());
       }
       n.f2.accept(this);
    }
@@ -301,13 +301,16 @@ public class TreeFormatter extends DepthFirstVisitor {
     */
    public void visit(ClassDeclaration n) {
       n.f0.accept(this);
+      add(space());
       n.f1.accept(this);
+      add(space());
       n.f2.accept(this);
+      add(space());
       if ( n.f3.present() ) {
-         processList(n.f3);
+          processList(n.f3, space(2));
       }
       if ( n.f4.present() ) {
-         processList(n.f4);
+          processList(n.f4, space(2));
       }
       n.f5.accept(this);
    }
@@ -371,10 +374,10 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f5.accept(this);
       n.f6.accept(this);
       if ( n.f7.present() ) {
-         processList(n.f7);
+          processList(n.f7, space());
       }
       if ( n.f8.present() ) {
-         processList(n.f8);
+          processList(n.f8, space());
       }
       n.f9.accept(this);
    }
@@ -386,7 +389,7 @@ public class TreeFormatter extends DepthFirstVisitor {
    public void visit(FormalParameterList n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
-         processList(n.f1);
+          processList(n.f1, space());
       }
    }
 
@@ -464,7 +467,7 @@ public class TreeFormatter extends DepthFirstVisitor {
    public void visit(Block n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
-         processList(n.f1);
+          processList(n.f1, space());
       }
       n.f2.accept(this);
    }
@@ -659,7 +662,7 @@ public class TreeFormatter extends DepthFirstVisitor {
    public void visit(ExpressionList n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
-         processList(n.f1);
+          processList(n.f1, space());
       }
    }
 

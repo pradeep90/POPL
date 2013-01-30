@@ -248,20 +248,20 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     // // User-generated visitor methods below
     // //
 
-    /**
-     * f0 -> MainClass()
-     * f1 -> ( TypeDeclaration() )*
-     * f2 -> <EOF>
-     */
-    public R visit(syntaxtree.Goal n) {
-        R _ret=null;
-        MainClass f0 = (MainClass) n.f0.accept(this);
-        NodeListOptional f1 = (NodeListOptional) n.f1.accept(this);
-        NodeToken f2 = (NodeToken) n.f2.accept(this);
-        output(finalMainClass);
-        _ret = (R) new Goal(f0, f1, f2);
-        return _ret;
-    }
+    // /**
+    //  * f0 -> MainClass()
+    //  * f1 -> ( TypeDeclaration() )*
+    //  * f2 -> <EOF>
+    //  */
+    // public R visit(syntaxtree.Goal n) {
+    //     R _ret=null;
+    //     MainClass f0 = (MainClass) n.f0.accept(this);
+    //     NodeListOptional f1 = (NodeListOptional) n.f1.accept(this);
+    //     NodeToken f2 = (NodeToken) n.f2.accept(this);
+    //     output(finalMainClass);
+    //     _ret = (R) new Goal(f0, f1, f2);
+    //     return _ret;
+    // }
 
     /**
      * f0 -> "class"
@@ -457,7 +457,6 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //     return _ret;
     // }
 
-    // TODO(spradeep): 
     // /**
     //  * f0 -> FormalParameter()
     //  * f1 -> ( FormalParameterRest() )*
@@ -543,21 +542,23 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
         return _ret;
     }
 
-    // /**
-    //  * f0 -> Block()
-    //  *       | AssignmentStatement()
-    //  *       | ArrayAssignmentStatement()
-    //  *       | IfStatement()
-    //  *       | WhileStatement()
-    //  *       | PrintStatement()
-    //  */
-    // public R visit(syntaxtree.Statement n) {
-    //     R _ret=null;
-    //     R f0 = n.f0.accept(this);
-    //     _ret = (R) new Statement();
-    //     return _ret;
-    // }
+    // TODO(spradeep): Testing
+    /**
+     * f0 -> Block()
+     *       | AssignmentStatement()
+     *       | ArrayAssignmentStatement()
+     *       | IfStatement()
+     *       | WhileStatement()
+     *       | PrintStatement()
+     */
+    public R visit(syntaxtree.Statement n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        _ret = (R) new Statement(new NodeChoice((Node) f0, n.f0.which));
+        return _ret;
+    }
 
+    // TODO(spradeep): 
     // /**
     //  * f0 -> "{"
     //  * f1 -> ( Statement() )*
@@ -568,7 +569,9 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //     R f0 = n.f0.accept(this);
     //     R f1 = n.f1.accept(this);
     //     R f2 = n.f2.accept(this);
-    //     _ret = (R) new Block();
+    //     _ret = (R) new Block((NodeToken) f0,
+    //                          (NodeListOptional) f1,
+    //                          (NodeToken) f2);
     //     return _ret;
     // }
 
@@ -621,45 +624,55 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
         return _ret;
     }
 
-    // /**
-    //  * f0 -> "if"
-    //  * f1 -> "("
-    //  * f2 -> Expression()
-    //  * f3 -> ")"
-    //  * f4 -> Statement()
-    //  * f5 -> "else"
-    //  * f6 -> Statement()
-    //  */
-    // public R visit(syntaxtree.IfStatement n) {
-    //     R _ret=null;
-    //     R f0 = n.f0.accept(this);
-    //     R f1 = n.f1.accept(this);
-    //     R f2 = n.f2.accept(this);
-    //     R f3 = n.f3.accept(this);
-    //     R f4 = n.f4.accept(this);
-    //     R f5 = n.f5.accept(this);
-    //     R f6 = n.f6.accept(this);
-    //     _ret = (R) new IfStatement();
-    //     return _ret;
-    // }
+    /**
+     * f0 -> "if"
+     * f1 -> "("
+     * f2 -> Expression()
+     * f3 -> ")"
+     * f4 -> Statement()
+     * f5 -> "else"
+     * f6 -> Statement()
+     */
+    public R visit(syntaxtree.IfStatement n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        R f3 = n.f3.accept(this);
+        R f4 = n.f4.accept(this);
+        R f5 = n.f5.accept(this);
+        R f6 = n.f6.accept(this);
+        _ret = (R) new IfStatement((NodeToken) f0,
+                                   (NodeToken) f1,
+                                   (Expression) f2,
+                                   (NodeToken) f3,
+                                   (Statement) f4,
+                                   (NodeToken) f5,
+                                   (Statement) f6);
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> "while"
-    //  * f1 -> "("
-    //  * f2 -> Expression()
-    //  * f3 -> ")"
-    //  * f4 -> Statement()
-    //  */
-    // public R visit(syntaxtree.WhileStatement n) {
-    //     R _ret=null;
-    //     R f0 = n.f0.accept(this);
-    //     R f1 = n.f1.accept(this);
-    //     R f2 = n.f2.accept(this);
-    //     R f3 = n.f3.accept(this);
-    //     R f4 = n.f4.accept(this);
-    //     _ret = (R) new WhileStatement();
-    //     return _ret;
-    // }
+    /**
+     * f0 -> "while"
+     * f1 -> "("
+     * f2 -> Expression()
+     * f3 -> ")"
+     * f4 -> Statement()
+     */
+    public R visit(syntaxtree.WhileStatement n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        R f3 = n.f3.accept(this);
+        R f4 = n.f4.accept(this);
+        _ret = (R) new WhileStatement((NodeToken) f0,
+                                      (NodeToken) f1,
+                                      (Expression) f2,
+                                      (NodeToken) f3,
+                                      (Statement) f4);
+        return _ret;
+    }
 
     /**
      * f0 -> "System.out.println"
