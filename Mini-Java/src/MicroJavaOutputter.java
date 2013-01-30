@@ -208,26 +208,28 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //     return _ret;
     // }
 
-    // public R visit(syntaxtree.NodeListOptional n) {
-    //     if ( n.present() ) {
-    //         R _ret=null;
-    //         int _count=0;
-    //         for ( Enumeration<syntaxtree.Node> e = n.elements(); e.hasMoreElements(); ) {
-    //             e.nextElement().accept(this);
-    //             _count++;
-    //         }
-    //         return _ret;
-    //     }
-    //     else
-    //         return null;
-    // }
+    public R visit(syntaxtree.NodeListOptional n) {
+        if ( n.present() ) {
+            R _ret=null;
+            NodeListOptional result = new NodeListOptional();
+            int _count=0;
+            for ( Enumeration<syntaxtree.Node> e = n.elements(); e.hasMoreElements(); ) {
+                result.addNode((Node) e.nextElement().accept(this));
+                _count++;
+            }
+            return (R) result;
+        }
+        else
+            return (R) new NodeListOptional();
+            // return null;
+    }
 
-    // public R visit(syntaxtree.NodeOptional n) {
-    //     if ( n.present() )
-    //         return n.node.accept(this);
-    //     else
-    //         return null;
-    // }
+    public R visit(syntaxtree.NodeOptional n) {
+        if ( n.present() )
+            return (R) new NodeOptional((Node) n.node.accept(this));
+        else
+            return (R) new NodeOptional();
+    }
 
     // public R visit(syntaxtree.NodeSequence n) {
     //     R _ret=null;
@@ -457,18 +459,18 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //     return _ret;
     // }
 
-    // /**
-    //  * f0 -> FormalParameter()
-    //  * f1 -> ( FormalParameterRest() )*
-    //  */
-    // public R visit(syntaxtree.FormalParameterList n) {
-    //     R _ret=null;
-    //     R f0 = n.f0.accept(this);
-    //     R f1 = n.f1.accept(this);
-    //     _ret = (R) new FormalParameterList((FormalParameter) f0,
-    //                                        (NodeListOptional) f1);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> FormalParameter()
+     * f1 -> ( FormalParameterRest() )*
+     */
+    public R visit(syntaxtree.FormalParameterList n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        _ret = (R) new FormalParameterList((FormalParameter) f0,
+                                           (NodeListOptional) f1);
+        return _ret;
+    }
 
     /**
      * f0 -> Type()
@@ -558,22 +560,21 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
         return _ret;
     }
 
-    // TODO(spradeep): 
-    // /**
-    //  * f0 -> "{"
-    //  * f1 -> ( Statement() )*
-    //  * f2 -> "}"
-    //  */
-    // public R visit(syntaxtree.Block n) {
-    //     R _ret=null;
-    //     R f0 = n.f0.accept(this);
-    //     R f1 = n.f1.accept(this);
-    //     R f2 = n.f2.accept(this);
-    //     _ret = (R) new Block((NodeToken) f0,
-    //                          (NodeListOptional) f1,
-    //                          (NodeToken) f2);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> "{"
+     * f1 -> ( Statement() )*
+     * f2 -> "}"
+     */
+    public R visit(syntaxtree.Block n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        _ret = (R) new Block((NodeToken) f0,
+                             (NodeListOptional) f1,
+                             (NodeToken) f2);
+        return _ret;
+    }
 
     // TODO(spradeep): Check this thoroughly later.
     /**
@@ -848,19 +849,18 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //     return _ret;
     // }
 
-    // TODO(spradeep): 
-    // /**
-    //  * f0 -> Expression()
-    //  * f1 -> ( ExpressionRest() )*
-    //  */
-    // public R visit(syntaxtree.ExpressionList n) {
-    //     R _ret=null;
-    //     R f0 = n.f0.accept(this);
-    //     R f1 = n.f1.accept(this);
-    //     _ret = (R) new ExpressionList((Expression) f0,
-    //                                   (NodeListOptional) f1);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> Expression()
+     * f1 -> ( ExpressionRest() )*
+     */
+    public R visit(syntaxtree.ExpressionList n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        _ret = (R) new ExpressionList((Expression) f0,
+                                      (NodeListOptional) f1);
+        return _ret;
+    }
 
     /**
      * f0 -> ","

@@ -33,67 +33,56 @@ public class MicroJavaOutputterTest {
     final String MINI_JAVA_EXTENSION = ".minijava";
 
     // MiniJava test fixtures
-    NodeToken nodeTokenMini = new NodeToken("FooBar");
-    NodeToken nodeTokenMini2 = new NodeToken("FooBarTwo");
-    ArrayType arrayTypeMini = new ArrayType();
-    BooleanType booleanTypeMini = new BooleanType();
-    IntegerLiteral integerLiteralMini = new IntegerLiteral(new NodeToken("75"));
-    IntegerLiteral integerLiteralMini2 = new IntegerLiteral(new NodeToken("89"));
-    IntegerLiteral integerLiteralMini3 = new IntegerLiteral(new NodeToken("63"));
-    PrimaryExpression primaryExpressionMini = new PrimaryExpression(
-        new NodeChoice(integerLiteralMini, 0));
-    PrimaryExpression primaryExpressionMini2 = new PrimaryExpression(
-        new NodeChoice(integerLiteralMini2, 0));
-    PrimaryExpression primaryExpressionMini3 = new PrimaryExpression(
-        new NodeChoice(integerLiteralMini3, 0));
-    Expression expressionMini = new Expression(new NodeChoice(primaryExpressionMini,
-                                                              6));
-    Expression expressionMini2 = new Expression(new NodeChoice(primaryExpressionMini2,
-                                                               6));
-    Expression expressionMini3 = new Expression(new NodeChoice(primaryExpressionMini3,
-                                                               6));
-    ArrayLookup arrayLookupMini = new ArrayLookup(primaryExpressionMini,
-                                                  primaryExpressionMini2);
-    BracketExpression bracketExpressionMini = new BracketExpression(expressionMini);
-    ExpressionRest expressionRestMini = new ExpressionRest(expressionMini);
-    FalseLiteral falseLiteralMini = new FalseLiteral(nodeTokenMini);
-    Identifier identifierMini = new Identifier(nodeTokenMini);
-    Identifier identifierMini2 = new Identifier(nodeTokenMini2);
-    ArrayAssignmentStatement arrayAssignmentStatementMini = new ArrayAssignmentStatement(identifierMini, expressionMini, expressionMini2);
-    AllocationExpression allocationExpressionMini = new AllocationExpression(identifierMini);
-    ArrayAllocationExpression arrayAllocationExpressionMini = new ArrayAllocationExpression(expressionMini);
+    NodeToken nodeTokenMini;
+    NodeToken nodeTokenMini2;
+    ArrayType arrayTypeMini;
+    BooleanType booleanTypeMini;
+    IntegerLiteral integerLiteralMini;
+    IntegerLiteral integerLiteralMini2;
+    IntegerLiteral integerLiteralMini3;
+    PrimaryExpression primaryExpressionMini;
+    PrimaryExpression primaryExpressionMini2;
+    PrimaryExpression primaryExpressionMini3;
+    Expression expressionMini;
+    Expression expressionMini2;
+    Expression expressionMini3;
+    ArrayLookup arrayLookupMini;
+    BracketExpression bracketExpressionMini;
+    ExpressionRest expressionRestMini;
+    FalseLiteral falseLiteralMini;
+    Identifier identifierMini;
+    Identifier identifierMini2;
+    ArrayAssignmentStatement arrayAssignmentStatementMini;
+    AllocationExpression allocationExpressionMini;
+    ArrayAllocationExpression arrayAllocationExpressionMini;
 
-    AssignmentStatement assignmentStatementMini = new AssignmentStatement(identifierMini,
-                                                                          expressionMini);
-    AssignmentStatement assignmentStatementMini2 = new AssignmentStatement(identifierMini2,
-                                                                          expressionMini2);
-    IntegerType integerTypeMini = new IntegerType();
-    AndExpression andExpressionMini = new AndExpression(primaryExpressionMini,
-                                                        primaryExpressionMini2);
-    CompareExpression compareExpressionMini = new CompareExpression(
-        primaryExpressionMini,
-        primaryExpressionMini2);
-    MinusExpression minusExpressionMini = new MinusExpression(primaryExpressionMini,
-                                                              primaryExpressionMini2);
-    NotExpression notExpressionMini = new NotExpression(expressionMini);
-    PlusExpression plusExpressionMini = new PlusExpression(primaryExpressionMini,
-                                                           primaryExpressionMini2);
-    PrintStatement printStatementMini = new PrintStatement(expressionMini);
-    Statement statementMini = new Statement(new NodeChoice(assignmentStatementMini, 1));
-    Statement statementMini2 = new Statement(new NodeChoice(assignmentStatementMini2, 1));
-    ThisExpression thisExpressionMini = new ThisExpression();
-    TimesExpression timesExpressionMini = new TimesExpression(primaryExpressionMini,
-                                                              primaryExpressionMini2);
-    TrueLiteral trueLiteralMini = new TrueLiteral(nodeTokenMini);
-    Type typeMini = new Type(new NodeChoice(integerTypeMini, 2));
-    FormalParameter formalParameterMini = new FormalParameter(typeMini, identifierMini);
-    FormalParameterRest formalParameterRestMini = new FormalParameterRest(
-        formalParameterMini);
-    VarDeclaration varDeclarationMini = new VarDeclaration(typeMini, identifierMini);
-    WhileStatement whileStatementMini = new WhileStatement(expressionMini2, statementMini);
-    IfStatement ifStatementMini = new IfStatement(expressionMini3,
-                                                  statementMini,
-                                                  statementMini2);
+    AssignmentStatement assignmentStatementMini;
+    AssignmentStatement assignmentStatementMini2;
+    IntegerType integerTypeMini;
+    AndExpression andExpressionMini;
+    CompareExpression compareExpressionMini;
+    MinusExpression minusExpressionMini;
+    NotExpression notExpressionMini;
+    PlusExpression plusExpressionMini;
+    PrintStatement printStatementMini;
+    Statement statementMini;
+    Statement statementMini2;
+    ThisExpression thisExpressionMini;
+    TimesExpression timesExpressionMini;
+    TrueLiteral trueLiteralMini;
+    Type typeMini;
+    FormalParameter formalParameterMini;
+    FormalParameterRest formalParameterRestMini;
+    VarDeclaration varDeclarationMini;
+    WhileStatement whileStatementMini;
+    IfStatement ifStatementMini;
+    NodeOptional nodeOptionalMini;
+    NodeListOptional nodeListOptionalMini;
+    Block blockMini;
+    ExpressionList expressionListMini;
+    FormalParameterList formalParameterListMini;
+
+    // TypeDeclaration typeDeclarationMini;
 
     // TODO(spradeep): 
     // MainClass mainClassMini = new MainClass(identifierMini, identifierMini2,
@@ -102,105 +91,68 @@ public class MicroJavaOutputterTest {
     //                                         new NodeOptional());
 
     // ArrayLength arrayLengthMini = new ArrayLength();
-    // Block blockMini = new Block();
     // ClassDeclaration classDeclarationMini = new ClassDeclaration();
     // ClassExtendsDeclaration classExtendsDeclarationMini = new ClassExtendsDeclaration();
-    // ExpressionList expressionListMini = new ExpressionList();
     // Goal goalMini = new Goal();
     // MessageSend messageSendMini = new MessageSend();
     // MethodDeclaration methodDeclarationMini = new MethodDeclaration();
-    // NodeList nodeListMini = new NodeList();
-    // NodeListOptional nodeListOptionalMini = new NodeListOptional();
-    // FormalParameterList formalParameterListMini = new FormalParameterList();
-    // TypeDeclaration typeDeclarationMini = new TypeDeclaration();
-
-    // NodeOptional nodeOptionalMini = new NodeOptional();
-    // NodeSequence nodeSequenceMini = new NodeSequence();
 
 
     // MicroJava test fixtures
 
-    microjavaparser.syntaxtree.NodeToken nodeToken = new microjavaparser.syntaxtree.NodeToken("FooBar");
-    microjavaparser.syntaxtree.NodeToken nodeToken2 = new microjavaparser.syntaxtree.NodeToken("FooBarTwo");
-    microjavaparser.syntaxtree.ArrayType arrayType = new microjavaparser.syntaxtree.ArrayType();
-    microjavaparser.syntaxtree.BooleanType booleanType = new microjavaparser.syntaxtree.BooleanType();
-    microjavaparser.syntaxtree.IntegerType integerType = new microjavaparser.syntaxtree.IntegerType();
-    microjavaparser.syntaxtree.Type type = new microjavaparser.syntaxtree.Type(
-        new microjavaparser.syntaxtree.NodeChoice(integerType, 2));
-    microjavaparser.syntaxtree.IntegerLiteral integerLiteral = new microjavaparser.syntaxtree.IntegerLiteral(new microjavaparser.syntaxtree.NodeToken("75"));
-    microjavaparser.syntaxtree.IntegerLiteral integerLiteral2 = new microjavaparser.syntaxtree.IntegerLiteral(new microjavaparser.syntaxtree.NodeToken("89"));
-    microjavaparser.syntaxtree.IntegerLiteral integerLiteral3 = new microjavaparser.syntaxtree.IntegerLiteral(new microjavaparser.syntaxtree.NodeToken("63"));
-    microjavaparser.syntaxtree.PrimaryExpression primaryExpression =
-            new microjavaparser.syntaxtree.PrimaryExpression(
-                new microjavaparser.syntaxtree.NodeChoice(integerLiteral, 0));
-    microjavaparser.syntaxtree.PrimaryExpression primaryExpression2 =
-            new microjavaparser.syntaxtree.PrimaryExpression(
-                new microjavaparser.syntaxtree.NodeChoice(integerLiteral2, 0));
-    microjavaparser.syntaxtree.PrimaryExpression primaryExpression3 =
-            new microjavaparser.syntaxtree.PrimaryExpression(
-                new microjavaparser.syntaxtree.NodeChoice(integerLiteral3, 0));
-    microjavaparser.syntaxtree.Expression expression =
-            new microjavaparser.syntaxtree.Expression(
-                new microjavaparser.syntaxtree.NodeChoice(primaryExpression, 6));
-    microjavaparser.syntaxtree.Expression expression2 =
-            new microjavaparser.syntaxtree.Expression(
-                new microjavaparser.syntaxtree.NodeChoice(primaryExpression2, 6));
-    microjavaparser.syntaxtree.Expression expression3 =
-            new microjavaparser.syntaxtree.Expression(
-                new microjavaparser.syntaxtree.NodeChoice(primaryExpression3, 6));
-    microjavaparser.syntaxtree.PrintStatement printStatement =
-            new microjavaparser.syntaxtree.PrintStatement(expression);
-    microjavaparser.syntaxtree.AndExpression andExpression =
-            new microjavaparser.syntaxtree.AndExpression(primaryExpression,
-                                                         primaryExpression2);
-    microjavaparser.syntaxtree.CompareExpression compareExpression =
-            new microjavaparser.syntaxtree.CompareExpression(primaryExpression,
-                                                             primaryExpression2);
-    microjavaparser.syntaxtree.PlusExpression plusExpression = new microjavaparser.syntaxtree.PlusExpression(primaryExpression, primaryExpression2);
-    microjavaparser.syntaxtree.MinusExpression minusExpression =
-            new microjavaparser.syntaxtree.MinusExpression(primaryExpression,
-                                                           primaryExpression2);
-    microjavaparser.syntaxtree.TimesExpression timesExpression = new microjavaparser.syntaxtree.TimesExpression(primaryExpression, primaryExpression2);
-    microjavaparser.syntaxtree.ArrayLookup arrayLookup = new microjavaparser.syntaxtree.ArrayLookup(primaryExpression, primaryExpression2);
-    microjavaparser.syntaxtree.ExpressionRest expressionRest = new microjavaparser.syntaxtree.ExpressionRest(expression);
-    microjavaparser.syntaxtree.TrueLiteral trueLiteral = new microjavaparser.syntaxtree.TrueLiteral(nodeToken);
-    microjavaparser.syntaxtree.FalseLiteral falseLiteral = new microjavaparser.syntaxtree.FalseLiteral(nodeToken);
-    microjavaparser.syntaxtree.Identifier identifier = new microjavaparser.syntaxtree.Identifier(nodeToken);
-    microjavaparser.syntaxtree.Identifier identifier2 = new microjavaparser.syntaxtree.Identifier(nodeToken2);
-    microjavaparser.syntaxtree.ThisExpression thisExpression = new microjavaparser.syntaxtree.ThisExpression();
-    microjavaparser.syntaxtree.ArrayAssignmentStatement arrayAssignmentStatement = new microjavaparser.syntaxtree.ArrayAssignmentStatement(identifier, expression, expression2);
-    microjavaparser.syntaxtree.ArrayAllocationExpression arrayAllocationExpression = new microjavaparser.syntaxtree.ArrayAllocationExpression(expression);
-    microjavaparser.syntaxtree.AllocationExpression allocationExpression = new microjavaparser.syntaxtree.AllocationExpression(identifier);
-    microjavaparser.syntaxtree.NotExpression notExpression = new microjavaparser.syntaxtree.NotExpression(expression);
-    microjavaparser.syntaxtree.BracketExpression bracketExpression = new microjavaparser.syntaxtree.BracketExpression(expression);
+    microjavaparser.syntaxtree.NodeToken nodeToken;
+    microjavaparser.syntaxtree.NodeToken nodeToken2;
+    microjavaparser.syntaxtree.ArrayType arrayType;
+    microjavaparser.syntaxtree.BooleanType booleanType;
+    microjavaparser.syntaxtree.IntegerType integerType;
+    microjavaparser.syntaxtree.Type type;
+    microjavaparser.syntaxtree.IntegerLiteral integerLiteral;
+    microjavaparser.syntaxtree.IntegerLiteral integerLiteral2;
+    microjavaparser.syntaxtree.IntegerLiteral integerLiteral3;
+    microjavaparser.syntaxtree.PrimaryExpression primaryExpression;
+    microjavaparser.syntaxtree.PrimaryExpression primaryExpression2;
+    microjavaparser.syntaxtree.PrimaryExpression primaryExpression3;
+    microjavaparser.syntaxtree.Expression expression;
+    microjavaparser.syntaxtree.Expression expression2;
+    microjavaparser.syntaxtree.Expression expression3;
+    microjavaparser.syntaxtree.PrintStatement printStatement;
+    microjavaparser.syntaxtree.AndExpression andExpression;
+    microjavaparser.syntaxtree.CompareExpression compareExpression;
+    microjavaparser.syntaxtree.PlusExpression plusExpression;
+    microjavaparser.syntaxtree.MinusExpression minusExpression;
+    microjavaparser.syntaxtree.TimesExpression timesExpression;
+    microjavaparser.syntaxtree.ArrayLookup arrayLookup;
+    microjavaparser.syntaxtree.ExpressionRest expressionRest;
+    microjavaparser.syntaxtree.TrueLiteral trueLiteral;
+    microjavaparser.syntaxtree.FalseLiteral falseLiteral;
+    microjavaparser.syntaxtree.Identifier identifier;
+    microjavaparser.syntaxtree.Identifier identifier2;
+    microjavaparser.syntaxtree.ThisExpression thisExpression;
+    microjavaparser.syntaxtree.ArrayAssignmentStatement arrayAssignmentStatement;
+    microjavaparser.syntaxtree.ArrayAllocationExpression arrayAllocationExpression;
+    microjavaparser.syntaxtree.AllocationExpression allocationExpression;
+    microjavaparser.syntaxtree.NotExpression notExpression;
+    microjavaparser.syntaxtree.BracketExpression bracketExpression;
 
-    microjavaparser.syntaxtree.VarDeclaration varDeclaration = new microjavaparser.syntaxtree.VarDeclaration(type, identifier);
-    microjavaparser.syntaxtree.AssignmentStatement assignmentStatement =
-            new microjavaparser.syntaxtree.AssignmentStatement(
-                new microjavaparser.syntaxtree.VarRef(
-                    new microjavaparser.syntaxtree.NodeChoice(identifier, 1)),
-                expression);
-    microjavaparser.syntaxtree.AssignmentStatement assignmentStatement2 =
-            new microjavaparser.syntaxtree.AssignmentStatement(
-                new microjavaparser.syntaxtree.VarRef(
-                    new microjavaparser.syntaxtree.NodeChoice(identifier2, 1)),
-                expression2);
+    microjavaparser.syntaxtree.VarDeclaration varDeclaration;
+    microjavaparser.syntaxtree.AssignmentStatement assignmentStatement;
+    microjavaparser.syntaxtree.AssignmentStatement assignmentStatement2;
 
-    microjavaparser.syntaxtree.Statement statement =
-            new microjavaparser.syntaxtree.Statement(
-                new microjavaparser.syntaxtree.NodeChoice(assignmentStatement, 1));
-    microjavaparser.syntaxtree.Statement statement2 =
-            new microjavaparser.syntaxtree.Statement(
-                new microjavaparser.syntaxtree.NodeChoice(assignmentStatement2, 1));
-    microjavaparser.syntaxtree.WhileStatement whileStatement = new microjavaparser.syntaxtree.WhileStatement(expression2, statement);
-    microjavaparser.syntaxtree.IfStatement ifStatement =
-            new microjavaparser.syntaxtree.IfStatement(expression3,
-                                                       statement,
-                                                       statement2);
-    microjavaparser.syntaxtree.FormalParameter formalParameter =
-            new microjavaparser.syntaxtree.FormalParameter(type, identifier);
-    microjavaparser.syntaxtree.FormalParameterRest formalParameterRest =
-            new microjavaparser.syntaxtree.FormalParameterRest(formalParameter);
+    microjavaparser.syntaxtree.Statement statement;
+    microjavaparser.syntaxtree.Statement statement2;
+    microjavaparser.syntaxtree.WhileStatement whileStatement;
+    microjavaparser.syntaxtree.IfStatement ifStatement;
+    microjavaparser.syntaxtree.FormalParameter formalParameter;
+    microjavaparser.syntaxtree.FormalParameterRest formalParameterRest;
+
+    microjavaparser.syntaxtree.NodeOptional nodeOptional;
+
+    microjavaparser.syntaxtree.NodeListOptional nodeListOptional;
+    microjavaparser.syntaxtree.Block block;
+    microjavaparser.syntaxtree.ExpressionList expressionList;
+    microjavaparser.syntaxtree.FormalParameterList formalParameterList;
+
+    // microjavaparser.syntaxtree.TypeDeclaration typeDeclaration;
 
     // TODO(spradeep): 
     // microjavaparser.syntaxtree.MainClass mainClass = new microjavaparser.syntaxtree.MainClass(
@@ -213,27 +165,191 @@ public class MicroJavaOutputterTest {
     //     new microjavaparser.syntaxtree.NodeOptional());
 
 
-    // microjavaparser.syntaxtree.NodeList nodeList = new microjavaparser.syntaxtree.NodeList();
-    // microjavaparser.syntaxtree.NodeListOptional nodeListOptional = new microjavaparser.syntaxtree.NodeListOptional();
     // microjavaparser.syntaxtree.Goal goal = new microjavaparser.syntaxtree.Goal();
-    // microjavaparser.syntaxtree.TypeDeclaration typeDeclaration = new microjavaparser.syntaxtree.TypeDeclaration();
     // microjavaparser.syntaxtree.ClassDeclaration classDeclaration = new microjavaparser.syntaxtree.ClassDeclaration();
     // microjavaparser.syntaxtree.ClassExtendsDeclaration classExtendsDeclaration = new microjavaparser.syntaxtree.ClassExtendsDeclaration();
     // microjavaparser.syntaxtree.MethodDeclaration methodDeclaration = new microjavaparser.syntaxtree.MethodDeclaration();
-    // microjavaparser.syntaxtree.Block block = new microjavaparser.syntaxtree.Block();
     // microjavaparser.syntaxtree.MessageSendStatement messageSendStatement = new microjavaparser.syntaxtree.MessageSendStatement();
-    // microjavaparser.syntaxtree.ExpressionList expressionList = new microjavaparser.syntaxtree.ExpressionList();
-    // microjavaparser.syntaxtree.FormalParameterList formalParameterList = new microjavaparser.syntaxtree.FormalParameterList();
     // microjavaparser.syntaxtree.VarRef varRef = new microjavaparser.syntaxtree.VarRef();
     // microjavaparser.syntaxtree.DotExpression dotExpression = new microjavaparser.syntaxtree.DotExpression();
-
-    // microjavaparser.syntaxtree.NodeOptional nodeOptional = new microjavaparser.syntaxtree.NodeOptional();
-    // microjavaparser.syntaxtree.NodeSequence nodeSequence = new microjavaparser.syntaxtree.NodeSequence();
 
     @Before
     public void setUp() {
         outputter = new MicroJavaOutputter();
 
+        // MiniJava test fixtures
+
+        nodeTokenMini = new NodeToken("FooBar");
+        nodeTokenMini2 = new NodeToken("FooBarTwo");
+        arrayTypeMini = new ArrayType();
+        booleanTypeMini = new BooleanType();
+        integerLiteralMini = new IntegerLiteral(new NodeToken("75"));
+        integerLiteralMini2 = new IntegerLiteral(new NodeToken("89"));
+        integerLiteralMini3 = new IntegerLiteral(new NodeToken("63"));
+        primaryExpressionMini = new PrimaryExpression(
+            new NodeChoice(integerLiteralMini, 0));
+        primaryExpressionMini2 = new PrimaryExpression(
+            new NodeChoice(integerLiteralMini2, 0));
+        primaryExpressionMini3 = new PrimaryExpression(
+            new NodeChoice(integerLiteralMini3, 0));
+        expressionMini = new Expression(new NodeChoice(primaryExpressionMini,
+                                                       6));
+        expressionMini2 = new Expression(new NodeChoice(primaryExpressionMini2,
+                                                        6));
+        expressionMini3 = new Expression(new NodeChoice(primaryExpressionMini3,
+                                                        6));
+        arrayLookupMini = new ArrayLookup(primaryExpressionMini,
+                                          primaryExpressionMini2);
+        bracketExpressionMini = new BracketExpression(expressionMini);
+        expressionRestMini = new ExpressionRest(expressionMini);
+        falseLiteralMini = new FalseLiteral(nodeTokenMini);
+        identifierMini = new Identifier(nodeTokenMini);
+        identifierMini2 = new Identifier(nodeTokenMini2);
+        arrayAssignmentStatementMini = new ArrayAssignmentStatement(identifierMini, expressionMini, expressionMini2);
+        allocationExpressionMini = new AllocationExpression(identifierMini);
+        arrayAllocationExpressionMini = new ArrayAllocationExpression(expressionMini);
+
+        assignmentStatementMini = new AssignmentStatement(identifierMini,
+                                                          expressionMini);
+        assignmentStatementMini2 = new AssignmentStatement(identifierMini2,
+                                                           expressionMini2);
+        integerTypeMini = new IntegerType();
+        andExpressionMini = new AndExpression(primaryExpressionMini,
+                                              primaryExpressionMini2);
+        compareExpressionMini = new CompareExpression(
+            primaryExpressionMini,
+            primaryExpressionMini2);
+        minusExpressionMini = new MinusExpression(primaryExpressionMini,
+                                                  primaryExpressionMini2);
+        notExpressionMini = new NotExpression(expressionMini);
+        plusExpressionMini = new PlusExpression(primaryExpressionMini,
+                                                primaryExpressionMini2);
+        printStatementMini = new PrintStatement(expressionMini);
+        statementMini = new Statement(new NodeChoice(assignmentStatementMini, 1));
+        statementMini2 = new Statement(new NodeChoice(assignmentStatementMini2, 1));
+        thisExpressionMini = new ThisExpression();
+        timesExpressionMini = new TimesExpression(primaryExpressionMini,
+                                                  primaryExpressionMini2);
+        trueLiteralMini = new TrueLiteral(nodeTokenMini);
+        typeMini = new Type(new NodeChoice(integerTypeMini, 2));
+        formalParameterMini = new FormalParameter(typeMini, identifierMini);
+        formalParameterRestMini = new FormalParameterRest(
+            formalParameterMini);
+        varDeclarationMini = new VarDeclaration(typeMini, identifierMini);
+        whileStatementMini = new WhileStatement(expressionMini2, statementMini);
+        ifStatementMini = new IfStatement(expressionMini3,
+                                          statementMini,
+                                          statementMini2);
+        nodeOptionalMini = new NodeOptional(ifStatementMini);
+        nodeListOptionalMini = new NodeListOptional();
+        nodeListOptionalMini.addNode(expressionMini);
+        nodeListOptionalMini.addNode(expressionMini2);
+        nodeListOptionalMini.addNode(expressionMini3);
+
+        // typeDeclarationMini = new TypeDeclaration();
+
+        NodeListOptional tempListOptionalMini = new NodeListOptional(statementMini);
+        tempListOptionalMini.addNode(statementMini2);
+        blockMini = new Block(tempListOptionalMini);
+        expressionListMini = new ExpressionList(
+            expressionMini,
+            new NodeListOptional(expressionMini2));
+
+        formalParameterListMini = new FormalParameterList(formalParameterMini,
+                                                          new NodeListOptional());
+
+        // MicroJava test fixtures
+
+        nodeToken = new microjavaparser.syntaxtree.NodeToken("FooBar");
+        nodeToken2 = new microjavaparser.syntaxtree.NodeToken("FooBarTwo");
+        arrayType = new microjavaparser.syntaxtree.ArrayType();
+        booleanType = new microjavaparser.syntaxtree.BooleanType();
+        integerType = new microjavaparser.syntaxtree.IntegerType();
+        type = new microjavaparser.syntaxtree.Type(
+            new microjavaparser.syntaxtree.NodeChoice(integerType, 2));
+        integerLiteral = new microjavaparser.syntaxtree.IntegerLiteral(
+            new microjavaparser.syntaxtree.NodeToken("75"));
+        integerLiteral2 = new microjavaparser.syntaxtree.IntegerLiteral(
+            new microjavaparser.syntaxtree.NodeToken("89"));
+        integerLiteral3 = new microjavaparser.syntaxtree.IntegerLiteral(
+            new microjavaparser.syntaxtree.NodeToken("63"));
+        primaryExpression = new microjavaparser.syntaxtree.PrimaryExpression(
+            new microjavaparser.syntaxtree.NodeChoice(integerLiteral, 0));
+        primaryExpression2 = new microjavaparser.syntaxtree.PrimaryExpression(
+            new microjavaparser.syntaxtree.NodeChoice(integerLiteral2, 0));
+        primaryExpression3 = new microjavaparser.syntaxtree.PrimaryExpression(
+            new microjavaparser.syntaxtree.NodeChoice(integerLiteral3, 0));
+        expression = new microjavaparser.syntaxtree.Expression(
+            new microjavaparser.syntaxtree.NodeChoice(primaryExpression, 6));
+        expression2 = new microjavaparser.syntaxtree.Expression(
+            new microjavaparser.syntaxtree.NodeChoice(primaryExpression2, 6));
+        expression3 = new microjavaparser.syntaxtree.Expression(
+            new microjavaparser.syntaxtree.NodeChoice(primaryExpression3, 6));
+        printStatement = new microjavaparser.syntaxtree.PrintStatement(expression);
+        andExpression = new microjavaparser.syntaxtree.AndExpression(primaryExpression,
+                                                                     primaryExpression2);
+        compareExpression = new microjavaparser.syntaxtree.CompareExpression(
+            primaryExpression,
+            primaryExpression2);
+        plusExpression = new microjavaparser.syntaxtree.PlusExpression(
+            primaryExpression, primaryExpression2);
+        minusExpression = new microjavaparser.syntaxtree.MinusExpression(primaryExpression,
+                                                                         primaryExpression2);
+        timesExpression = new microjavaparser.syntaxtree.TimesExpression(primaryExpression, primaryExpression2);
+        arrayLookup = new microjavaparser.syntaxtree.ArrayLookup(primaryExpression, primaryExpression2);
+        expressionRest = new microjavaparser.syntaxtree.ExpressionRest(expression);
+        trueLiteral = new microjavaparser.syntaxtree.TrueLiteral(nodeToken);
+        falseLiteral = new microjavaparser.syntaxtree.FalseLiteral(nodeToken);
+        identifier = new microjavaparser.syntaxtree.Identifier(nodeToken);
+        identifier2 = new microjavaparser.syntaxtree.Identifier(nodeToken2);
+        thisExpression = new microjavaparser.syntaxtree.ThisExpression();
+        arrayAssignmentStatement = new microjavaparser.syntaxtree.ArrayAssignmentStatement(identifier, expression, expression2);
+        arrayAllocationExpression = new microjavaparser.syntaxtree.ArrayAllocationExpression(expression);
+        allocationExpression = new microjavaparser.syntaxtree.AllocationExpression(identifier);
+        notExpression = new microjavaparser.syntaxtree.NotExpression(expression);
+        bracketExpression = new microjavaparser.syntaxtree.BracketExpression(expression);
+        varDeclaration = new microjavaparser.syntaxtree.VarDeclaration(type, identifier);
+        assignmentStatement = new microjavaparser.syntaxtree.AssignmentStatement(
+            new microjavaparser.syntaxtree.VarRef(
+                new microjavaparser.syntaxtree.NodeChoice(identifier, 1)),
+            expression);
+        assignmentStatement2 = new microjavaparser.syntaxtree.AssignmentStatement(
+            new microjavaparser.syntaxtree.VarRef(
+                new microjavaparser.syntaxtree.NodeChoice(identifier2, 1)),
+            expression2);
+        statement = new microjavaparser.syntaxtree.Statement(
+            new microjavaparser.syntaxtree.NodeChoice(assignmentStatement, 1));
+        statement2 = new microjavaparser.syntaxtree.Statement(
+            new microjavaparser.syntaxtree.NodeChoice(assignmentStatement2, 1));
+        whileStatement = new microjavaparser.syntaxtree.WhileStatement(expression2,
+                                                                       statement);
+        ifStatement = new microjavaparser.syntaxtree.IfStatement(expression3,
+                                                                 statement,
+                                                                 statement2);
+        formalParameter = new microjavaparser.syntaxtree.FormalParameter(type, identifier);
+        formalParameterRest = new microjavaparser.syntaxtree.FormalParameterRest(formalParameter);
+
+        nodeOptional = new microjavaparser.syntaxtree.NodeOptional(ifStatement);
+
+        nodeListOptional = new microjavaparser.syntaxtree.NodeListOptional();
+        nodeListOptional.addNode(expression);
+        nodeListOptional.addNode(expression2);
+        nodeListOptional.addNode(expression3);
+
+        microjavaparser.syntaxtree.NodeListOptional tempListOptional =
+                new microjavaparser.syntaxtree.NodeListOptional(statement);
+        tempListOptional.addNode(statement2);
+        block = new microjavaparser.syntaxtree.Block(tempListOptional);
+
+        expressionList = new microjavaparser.syntaxtree.ExpressionList(
+            expression,
+            new microjavaparser.syntaxtree.NodeListOptional(expression2));
+
+        formalParameterList = new microjavaparser.syntaxtree.FormalParameterList(
+            formalParameter,
+            new microjavaparser.syntaxtree.NodeListOptional());
+
+        // typeDeclaration = new microjavaparser.syntaxtree.TypeDeclaration();
     }
     
     @After
@@ -532,6 +648,50 @@ public class MicroJavaOutputterTest {
     @Test
     public final void testIfStatement(){
         assertEqualAfterTransform(ifStatement, ifStatementMini);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#NodeOptional()}.
+     */
+    @Test
+    public final void testNodeOptional(){
+        assertEqualAfterTransform(nodeOptional, nodeOptionalMini);
+        assertEqualAfterTransform(new microjavaparser.syntaxtree.NodeOptional(),
+                                  new NodeOptional());
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#NodeListOptional()}.
+     */
+    @Test
+    public final void testNodeListOptional(){
+        assertEqualAfterTransform(nodeListOptional, nodeListOptionalMini);
+        assertEqualAfterTransform(new microjavaparser.syntaxtree.NodeListOptional(),
+                                  new NodeListOptional());
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#Block()}.
+     */
+    @Test
+    public final void testBlock(){
+        assertEqualAfterTransform(block, blockMini);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#ExpressionList()}.
+     */
+    @Test
+    public final void testExpressionList(){
+        assertEqualAfterTransform(expressionList, expressionListMini);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#FormalParameterList()}.
+     */
+    @Test
+    public final void testFormalParameterList(){
+        assertEqualAfterTransform(formalParameterList, formalParameterListMini);
     }
 
     // TODO(spradeep): 
