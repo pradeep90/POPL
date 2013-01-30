@@ -457,6 +457,7 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //     return _ret;
     // }
 
+    // TODO(spradeep): 
     // /**
     //  * f0 -> FormalParameter()
     //  * f1 -> ( FormalParameterRest() )*
@@ -465,80 +466,82 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //     R _ret=null;
     //     R f0 = n.f0.accept(this);
     //     R f1 = n.f1.accept(this);
-    //     _ret = (R) new FormalParameterList();
+    //     _ret = (R) new FormalParameterList((FormalParameter) f0,
+    //                                        (NodeListOptional) f1);
     //     return _ret;
     // }
 
-    // /**
-    //  * f0 -> Type()
-    //  * f1 -> Identifier()
-    //  */
-    // public R visit(syntaxtree.FormalParameter n) {
-    //     R _ret=null;
-    //     R f0 = n.f0.accept(this);
-    //     R f1 = n.f1.accept(this);
-    //     _ret = (R) new FormalParameter();
-    //     return _ret;
-    // }
+    /**
+     * f0 -> Type()
+     * f1 -> Identifier()
+     */
+    public R visit(syntaxtree.FormalParameter n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        _ret = (R) new FormalParameter((Type) f0,
+                                       (Identifier) f1);
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> ","
-    //  * f1 -> FormalParameter()
-    //  */
-    // public R visit(syntaxtree.FormalParameterRest n) {
-    //     R _ret=null;
-    //     R f0 = n.f0.accept(this);
-    //     R f1 = n.f1.accept(this);
-    //     _ret = (R) new FormalParameterRest();
-    //     return _ret;
-    // }
+    /**
+     * f0 -> ","
+     * f1 -> FormalParameter()
+     */
+    public R visit(syntaxtree.FormalParameterRest n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        _ret = (R) new FormalParameterRest((FormalParameter) f1);
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> ArrayType()
-    //  *       | BooleanType()
-    //  *       | IntegerType()
-    //  *       | Identifier()
-    //  */
-    // public R visit(syntaxtree.Type n) {
-    //     R _ret=null;
-    //     R f0 = n.f0.accept(this);
-    //     _ret = (R) new Type();
-    //     return _ret;
-    // }
+    /**
+     * f0 -> ArrayType()
+     *       | BooleanType()
+     *       | IntegerType()
+     *       | Identifier()
+     */
+    public R visit(syntaxtree.Type n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        _ret = (R) new Type(new NodeChoice((Node) f0, n.f0.which));
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> "int"
-    //  * f1 -> "["
-    //  * f2 -> "]"
-    //  */
-    // public R visit(syntaxtree.ArrayType n) {
-    //     R _ret=null;
-    //     R f0 = n.f0.accept(this);
-    //     R f1 = n.f1.accept(this);
-    //     R f2 = n.f2.accept(this);
-    //     _ret = (R) new ArrayType();
-    //     return _ret;
-    // }
+    /**
+     * f0 -> "int"
+     * f1 -> "["
+     * f2 -> "]"
+     */
+    public R visit(syntaxtree.ArrayType n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        _ret = (R) new ArrayType();
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> "boolean"
-    //  */
-    // public R visit(syntaxtree.BooleanType n) {
-    //     R _ret=null;
-    //     R f0 = n.f0.accept(this);
-    //     _ret = (R) new BooleanType();
-    //     return _ret;
-    // }
+    /**
+     * f0 -> "boolean"
+     */
+    public R visit(syntaxtree.BooleanType n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        _ret = (R) new BooleanType();
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> "int"
-    //  */
-    // public R visit(syntaxtree.IntegerType n) {
-    //     R _ret=null;
-    //     R f0 = n.f0.accept(this);
-    //     _ret = (R) new IntegerType();
-    //     return _ret;
-    // }
+    /**
+     * f0 -> "int"
+     */
+    public R visit(syntaxtree.IntegerType n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        _ret = (R) new IntegerType();
+        return _ret;
+    }
 
     // /**
     //  * f0 -> Block()
@@ -569,22 +572,26 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     //     return _ret;
     // }
 
-    // /**
-    //  * f0 -> Identifier()
-    //  * f1 -> "="
-    //  * f2 -> Expression()
-    //  * f3 -> ";"
-    //  */
-    // public R visit(syntaxtree.AssignmentStatement n) {
-    //     R _ret=null;
-    //     System.out.println("syntaxtree.AssignmentStatement"); 
-    //     R f0 = n.f0.accept(this);
-    //     R f1 = n.f1.accept(this);
-    //     R f2 = n.f2.accept(this);
-    //     R f3 = n.f3.accept(this);
-    //     _ret = (R) new AssignmentStatement();
-    //     return _ret;
-    // }
+    // TODO(spradeep): Check this thoroughly later.
+    /**
+     * f0 -> Identifier()
+     * f1 -> "="
+     * f2 -> Expression()
+     * f3 -> ";"
+     */
+    public R visit(syntaxtree.AssignmentStatement n) {
+        R _ret=null;
+        System.out.println("syntaxtree.AssignmentStatement"); 
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        R f3 = n.f3.accept(this);
+        _ret = (R) new AssignmentStatement(new VarRef(new NodeChoice((Node) f0, 1)),
+                                           (NodeToken) f1,
+                                           (Expression) f2,
+                                           (NodeToken) f3);
+        return _ret;
+    }
 
     /**
      * f0 -> Identifier()
@@ -694,61 +701,69 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
         return _ret;
     }
 
-    // /**
-    //  * f0 -> PrimaryExpression()
-    //  * f1 -> "&"
-    //  * f2 -> PrimaryExpression()
-    //  */
-    // public R visit(syntaxtree.AndExpression n) {
-    //     R _ret=null;
-    //     R f0 = n.f0.accept(this);
-    //     R f1 = n.f1.accept(this);
-    //     R f2 = n.f2.accept(this);
-    //     _ret = (R) new AndExpression();
-    //     return _ret;
-    // }
+    /**
+     * f0 -> PrimaryExpression()
+     * f1 -> "&"
+     * f2 -> PrimaryExpression()
+     */
+    public R visit(syntaxtree.AndExpression n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        _ret = (R) new AndExpression((PrimaryExpression) f0,
+                                     (NodeToken) f1,
+                                     (PrimaryExpression) f2);
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> PrimaryExpression()
-    //  * f1 -> "<"
-    //  * f2 -> PrimaryExpression()
-    //  */
-    // public R visit(syntaxtree.CompareExpression n) {
-    //     R _ret=null;
-    //     R f0 = n.f0.accept(this);
-    //     R f1 = n.f1.accept(this);
-    //     R f2 = n.f2.accept(this);
-    //     _ret = (R) new CompareExpression();
-    //     return _ret;
-    // }
+    /**
+     * f0 -> PrimaryExpression()
+     * f1 -> "<"
+     * f2 -> PrimaryExpression()
+     */
+    public R visit(syntaxtree.CompareExpression n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        _ret = (R) new CompareExpression((PrimaryExpression) f0,
+                                         (NodeToken) f1,
+                                         (PrimaryExpression) f2);
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> PrimaryExpression()
-    //  * f1 -> "+"
-    //  * f2 -> PrimaryExpression()
-    //  */
-    // public R visit(syntaxtree.PlusExpression n) {
-    //     R _ret=null;
-    //     R f0 = n.f0.accept(this);
-    //     R f1 = n.f1.accept(this);
-    //     R f2 = n.f2.accept(this);
-    //     _ret = (R) new PlusExpression();
-    //     return _ret;
-    // }
+    /**
+     * f0 -> PrimaryExpression()
+     * f1 -> "+"
+     * f2 -> PrimaryExpression()
+     */
+    public R visit(syntaxtree.PlusExpression n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        _ret = (R) new PlusExpression((PrimaryExpression) f0,
+                                      (NodeToken) f1,
+                                      (PrimaryExpression) f2);
+        return _ret;
+    }
 
-    // /**
-    //  * f0 -> PrimaryExpression()
-    //  * f1 -> "-"
-    //  * f2 -> PrimaryExpression()
-    //  */
-    // public R visit(syntaxtree.MinusExpression n) {
-    //     R _ret=null;
-    //     R f0 = n.f0.accept(this);
-    //     R f1 = n.f1.accept(this);
-    //     R f2 = n.f2.accept(this);
-    //     _ret = (R) new MinusExpression();
-    //     return _ret;
-    // }
+    /**
+     * f0 -> PrimaryExpression()
+     * f1 -> "-"
+     * f2 -> PrimaryExpression()
+     */
+    public R visit(syntaxtree.MinusExpression n) {
+        R _ret=null;
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        _ret = (R) new MinusExpression((PrimaryExpression) f0,
+                                       (NodeToken) f1,
+                                       (PrimaryExpression) f2);
+        return _ret;
+    }
 
     /**
      * f0 -> PrimaryExpression()

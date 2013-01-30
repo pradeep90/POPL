@@ -33,15 +33,12 @@ public class MicroJavaOutputterTest {
     final String MINI_JAVA_EXTENSION = ".minijava";
 
     NodeToken nodeTokenMini = new NodeToken("FooBar");
-    // AndExpression andExpressionMini = new AndExpression();
     // ArrayLength arrayLengthMini = new ArrayLength();
-    // ArrayType arrayTypeMini = new ArrayType();
-    // AssignmentStatement assignmentStatementMini = new AssignmentStatement();
+    ArrayType arrayTypeMini = new ArrayType();
     // Block blockMini = new Block();
-    // BooleanType booleanTypeMini = new BooleanType();
+    BooleanType booleanTypeMini = new BooleanType();
     // ClassDeclaration classDeclarationMini = new ClassDeclaration();
     // ClassExtendsDeclaration classExtendsDeclarationMini = new ClassExtendsDeclaration();
-    // CompareExpression compareExpressionMini = new CompareExpression();
     IntegerLiteral integerLiteralMini = new IntegerLiteral(new NodeToken("75"));
     IntegerLiteral integerLiteralMini2 = new IntegerLiteral(new NodeToken("75"));
     PrimaryExpression primaryExpressionMini = new PrimaryExpression(
@@ -58,34 +55,46 @@ public class MicroJavaOutputterTest {
     // ExpressionList expressionListMini = new ExpressionList();
     ExpressionRest expressionRestMini = new ExpressionRest(expressionMini);
     FalseLiteral falseLiteralMini = new FalseLiteral(nodeTokenMini);
-    // FormalParameter formalParameterMini = new FormalParameter();
-    // FormalParameterList formalParameterListMini = new FormalParameterList();
-    // FormalParameterRest formalParameterRestMini = new FormalParameterRest();
     // Goal goalMini = new Goal();
     Identifier identifierMini = new Identifier(nodeTokenMini);
     ArrayAssignmentStatement arrayAssignmentStatementMini = new ArrayAssignmentStatement(identifierMini, expressionMini, expressionMini2);
     AllocationExpression allocationExpressionMini = new AllocationExpression(identifierMini);
     ArrayAllocationExpression arrayAllocationExpressionMini = new ArrayAllocationExpression(expressionMini);
+
+    AssignmentStatement assignmentStatementMini = new AssignmentStatement
+            (identifierMini,
+             expressionMini);
     // IfStatement ifStatementMini = new IfStatement();
-    // IntegerType integerTypeMini = new IntegerType();
+    IntegerType integerTypeMini = new IntegerType();
     // MainClass mainClassMini = new MainClass();
     // MessageSend messageSendMini = new MessageSend();
     // MethodDeclaration methodDeclarationMini = new MethodDeclaration();
-    // MinusExpression minusExpressionMini = new MinusExpression();
+    AndExpression andExpressionMini = new AndExpression(primaryExpressionMini,
+                                                        primaryExpressionMini2);
+    CompareExpression compareExpressionMini = new CompareExpression(
+        primaryExpressionMini,
+        primaryExpressionMini2);
+    MinusExpression minusExpressionMini = new MinusExpression(primaryExpressionMini,
+                                                              primaryExpressionMini2);
     // NodeList nodeListMini = new NodeList();
     // NodeListOptional nodeListOptionalMini = new NodeListOptional();
     // NodeOptional nodeOptionalMini = new NodeOptional();
     // NodeSequence nodeSequenceMini = new NodeSequence();
     NotExpression notExpressionMini = new NotExpression(expressionMini);
-    // PlusExpression plusExpressionMini = new PlusExpression();
+    PlusExpression plusExpressionMini = new PlusExpression(primaryExpressionMini,
+                                                           primaryExpressionMini2);
     PrintStatement printStatementMini = new PrintStatement(expressionMini);
     // Statement statementMini = new Statement();
     ThisExpression thisExpressionMini = new ThisExpression();
     TimesExpression timesExpressionMini = new TimesExpression(primaryExpressionMini, primaryExpressionMini2);
     TrueLiteral trueLiteralMini = new TrueLiteral(nodeTokenMini);
-    // Type typeMini = new Type();
+    Type typeMini = new Type(new NodeChoice(integerTypeMini, 2));
+    FormalParameter formalParameterMini = new FormalParameter(typeMini, identifierMini);
+    // FormalParameterList formalParameterListMini = new FormalParameterList();
+    FormalParameterRest formalParameterRestMini = new FormalParameterRest(
+        formalParameterMini);
     // TypeDeclaration typeDeclarationMini = new TypeDeclaration();
-    // VarDeclaration varDeclarationMini = new VarDeclaration();
+    VarDeclaration varDeclarationMini = new VarDeclaration(typeMini, identifierMini);
     // WhileStatement whileStatementMini = new WhileStatement();
 
     // microjavaparser.syntaxtree.NodeList nodeList = new microjavaparser.syntaxtree.NodeList();
@@ -98,18 +107,14 @@ public class MicroJavaOutputterTest {
     // microjavaparser.syntaxtree.TypeDeclaration typeDeclaration = new microjavaparser.syntaxtree.TypeDeclaration();
     // microjavaparser.syntaxtree.ClassDeclaration classDeclaration = new microjavaparser.syntaxtree.ClassDeclaration();
     // microjavaparser.syntaxtree.ClassExtendsDeclaration classExtendsDeclaration = new microjavaparser.syntaxtree.ClassExtendsDeclaration();
-    // microjavaparser.syntaxtree.VarDeclaration varDeclaration = new microjavaparser.syntaxtree.VarDeclaration();
     // microjavaparser.syntaxtree.MethodDeclaration methodDeclaration = new microjavaparser.syntaxtree.MethodDeclaration();
-    // microjavaparser.syntaxtree.FormalParameterList formalParameterList = new microjavaparser.syntaxtree.FormalParameterList();
-    // microjavaparser.syntaxtree.FormalParameter formalParameter = new microjavaparser.syntaxtree.FormalParameter();
-    // microjavaparser.syntaxtree.FormalParameterRest formalParameterRest = new microjavaparser.syntaxtree.FormalParameterRest();
-    // microjavaparser.syntaxtree.Type type = new microjavaparser.syntaxtree.Type();
-    // microjavaparser.syntaxtree.ArrayType arrayType = new microjavaparser.syntaxtree.ArrayType();
-    // microjavaparser.syntaxtree.BooleanType booleanType = new microjavaparser.syntaxtree.BooleanType();
-    // microjavaparser.syntaxtree.IntegerType integerType = new microjavaparser.syntaxtree.IntegerType();
+    microjavaparser.syntaxtree.ArrayType arrayType = new microjavaparser.syntaxtree.ArrayType();
+    microjavaparser.syntaxtree.BooleanType booleanType = new microjavaparser.syntaxtree.BooleanType();
+    microjavaparser.syntaxtree.IntegerType integerType = new microjavaparser.syntaxtree.IntegerType();
+    microjavaparser.syntaxtree.Type type = new microjavaparser.syntaxtree.Type(
+        new microjavaparser.syntaxtree.NodeChoice(integerType, 2));
     // microjavaparser.syntaxtree.Statement statement = new microjavaparser.syntaxtree.Statement();
     // microjavaparser.syntaxtree.Block block = new microjavaparser.syntaxtree.Block();
-    // microjavaparser.syntaxtree.AssignmentStatement assignmentStatement = new microjavaparser.syntaxtree.AssignmentStatement();
     // microjavaparser.syntaxtree.IfStatement ifStatement = new microjavaparser.syntaxtree.IfStatement();
     // microjavaparser.syntaxtree.WhileStatement whileStatement = new microjavaparser.syntaxtree.WhileStatement();
     // microjavaparser.syntaxtree.MessageSendStatement messageSendStatement = new microjavaparser.syntaxtree.MessageSendStatement();
@@ -129,10 +134,16 @@ public class MicroJavaOutputterTest {
                 new microjavaparser.syntaxtree.NodeChoice(primaryExpression2, 6));
     microjavaparser.syntaxtree.PrintStatement printStatement =
             new microjavaparser.syntaxtree.PrintStatement(expression);
-    // microjavaparser.syntaxtree.AndExpression andExpression = new microjavaparser.syntaxtree.AndExpression();
-    // microjavaparser.syntaxtree.CompareExpression compareExpression = new microjavaparser.syntaxtree.CompareExpression();
-    // microjavaparser.syntaxtree.PlusExpression plusExpression = new microjavaparser.syntaxtree.PlusExpression();
-    // microjavaparser.syntaxtree.MinusExpression minusExpression = new microjavaparser.syntaxtree.MinusExpression();
+    microjavaparser.syntaxtree.AndExpression andExpression =
+            new microjavaparser.syntaxtree.AndExpression(primaryExpression,
+                                                         primaryExpression2);
+    microjavaparser.syntaxtree.CompareExpression compareExpression =
+            new microjavaparser.syntaxtree.CompareExpression(primaryExpression,
+                                                             primaryExpression2);
+    microjavaparser.syntaxtree.PlusExpression plusExpression = new microjavaparser.syntaxtree.PlusExpression(primaryExpression, primaryExpression2);
+    microjavaparser.syntaxtree.MinusExpression minusExpression =
+            new microjavaparser.syntaxtree.MinusExpression(primaryExpression,
+                                                           primaryExpression2);
     microjavaparser.syntaxtree.TimesExpression timesExpression = new microjavaparser.syntaxtree.TimesExpression(primaryExpression, primaryExpression2);
     microjavaparser.syntaxtree.ArrayLookup arrayLookup = new microjavaparser.syntaxtree.ArrayLookup(primaryExpression, primaryExpression2);
     // microjavaparser.syntaxtree.ExpressionList expressionList = new microjavaparser.syntaxtree.ExpressionList();
@@ -146,6 +157,17 @@ public class MicroJavaOutputterTest {
     microjavaparser.syntaxtree.AllocationExpression allocationExpression = new microjavaparser.syntaxtree.AllocationExpression(identifier);
     microjavaparser.syntaxtree.NotExpression notExpression = new microjavaparser.syntaxtree.NotExpression(expression);
     microjavaparser.syntaxtree.BracketExpression bracketExpression = new microjavaparser.syntaxtree.BracketExpression(expression);
+
+    microjavaparser.syntaxtree.VarDeclaration varDeclaration = new microjavaparser.syntaxtree.VarDeclaration(type, identifier);
+    microjavaparser.syntaxtree.AssignmentStatement assignmentStatement =
+            new microjavaparser.syntaxtree.AssignmentStatement(
+                new microjavaparser.syntaxtree.VarRef(
+                    new microjavaparser.syntaxtree.NodeChoice(identifier, 1)),
+                expression);
+
+    // microjavaparser.syntaxtree.FormalParameterList formalParameterList = new microjavaparser.syntaxtree.FormalParameterList();
+    microjavaparser.syntaxtree.FormalParameter formalParameter = new microjavaparser.syntaxtree.FormalParameter(type, identifier);
+    microjavaparser.syntaxtree.FormalParameterRest formalParameterRest = new microjavaparser.syntaxtree.FormalParameterRest(formalParameter);
     // microjavaparser.syntaxtree.VarRef varRef = new microjavaparser.syntaxtree.VarRef();
     // microjavaparser.syntaxtree.DotExpression dotExpression = new microjavaparser.syntaxtree.DotExpression();
 
@@ -337,6 +359,102 @@ public class MicroJavaOutputterTest {
     @Test
     public final void testArrayLookup(){
         assertEqualAfterTransform(arrayLookup, arrayLookupMini);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#MinusExpression()}.
+     */
+    @Test
+    public final void testMinusExpression(){
+        assertEqualAfterTransform(minusExpression, minusExpressionMini);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#PlusExpression()}.
+     */
+    @Test
+    public final void testPlusExpression(){
+        assertEqualAfterTransform(plusExpression, plusExpressionMini);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#CompareExpression()}.
+     */
+    @Test
+    public final void testCompareExpression(){
+        assertEqualAfterTransform(compareExpression, compareExpressionMini);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#AndExpression()}.
+     */
+    @Test
+    public final void testAndExpression(){
+        assertEqualAfterTransform(andExpression, andExpressionMini);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#AssignmentStatement()}.
+     */
+    @Test
+    public final void testAssignmentStatement(){
+        assertEqualAfterTransform(assignmentStatement, assignmentStatementMini);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#IntegerType()}.
+     */
+    @Test
+    public final void testIntegerType(){
+        assertEqualAfterTransform(integerType, integerTypeMini);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#BooleanType()}.
+     */
+    @Test
+    public final void testBooleanType(){
+        assertEqualAfterTransform(booleanType, booleanTypeMini);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#ArrayType()}.
+     */
+    @Test
+    public final void testArrayType(){
+        assertEqualAfterTransform(arrayType, arrayTypeMini);
+    }
+    
+    /**
+     * Test method for {@link MicroJavaOutputter#Type()}.
+     */
+    @Test
+    public final void testType(){
+        assertEqualAfterTransform(type, typeMini);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#FormalParameter()}.
+     */
+    @Test
+    public final void testFormalParameter(){
+        assertEqualAfterTransform(formalParameter, formalParameterMini);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#FormalParameterRest()}.
+     */
+    @Test
+    public final void testFormalParameterRest(){
+        assertEqualAfterTransform(formalParameterRest, formalParameterRestMini);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#VarDeclaration()}.
+     */
+    @Test
+    public final void testVarDeclaration(){
+        assertEqualAfterTransform(varDeclaration, varDeclarationMini);
     }
 
     // TODO(spradeep): 
