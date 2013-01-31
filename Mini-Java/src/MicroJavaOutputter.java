@@ -26,27 +26,20 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     public static final String NEW_MAIN_CLASS_NAME = "____NewMainClass____";
     public static final String MAIN_METHOD_PARAM_NAME = "____arg_length____";
     public static final String PRINT_ME_STRING = "____printMe____";
+
+    public static final Identifier pseudoMainClassName = new Identifier(
+        new NodeToken(NEW_MAIN_CLASS_NAME));
+    public static final Identifier pseudoMainMethod = new Identifier(
+        new NodeToken(NEW_MAIN_METHOD_NAME));
+    public static final NodeOptional mainMethodArg = new NodeOptional(
+        new ExpressionList(new Expression(new NodeChoice(new PrimaryExpression(
+            new NodeChoice(new IntegerLiteral(new NodeToken("0")), 0)), 6)),
+                           new NodeListOptional()));
     
     public boolean isInMiniMain = false;
 
-    public String mainOnlyMicroJavaCode = "class MainOnly {" +
-            "   public static void main(String [] a){" +
-            "      new ____NewMainClass____().____Main____(0);" +
-            "   }" +
-            "}" +
-            "" +
-            "class ____NewMainClass____{" +
-
-            "   public void ____Main____(int ____arg_length____){" +
-            "      int ____printMe____;" +
-            "      ____printMe____ = 10;" +
-            "      System.out.println(____printMe____);" +
-            "   }" +
-            "}";
-
     public String finalMainClass = "";
     public String outputCodeString = "";
-    public String callToPseudoMainClassString = "new ____NewMainClass____().____Main____(0);";
 
     public R syntaxTree = null;
     public R newMainClass = null;
@@ -164,7 +157,7 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      * 
      * @return the ClassDeclaration Node typecast to R.
      */
-    public R getNewMainClass(R printStatement){
+    public R getNewMainClass(syntaxtree.PrintStatement printStatement){
 
         // TODO(spradeep): Add code for the printStatement
 
@@ -178,11 +171,16 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
             new AssignmentStatement(
                 new VarRef(new NodeChoice(new Identifier(new NodeToken(PRINT_ME_STRING)),
                                           1)),
-                new Expression(new NodeChoice(
-                    new PrimaryExpression(
-                        new NodeChoice(new IntegerLiteral(new NodeToken("10")),
-                                       0)),
-                    6))));
+                // TODO(spradeep): 
+                (Expression) printStatement.f2.accept(this)));
+        mainMethodBodyStatements.addNode(new PrintStatement(
+            new Expression(new NodeChoice(
+                new PrimaryExpression(
+                    new NodeChoice(
+                        new VarRef(new NodeChoice(new Identifier(
+                            new NodeToken(PRINT_ME_STRING)) ,1)),
+                        3)),
+                6))));
         MethodDeclaration mainMethod = new MethodDeclaration(
             new Identifier(new NodeToken(NEW_MAIN_METHOD_NAME)),
             new NodeOptional(params),
@@ -221,7 +219,7 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
         }
         else
             return (R) new NodeListOptional();
-            // return null;
+        // return null;
     }
 
     public R visit(syntaxtree.NodeOptional n) {
@@ -250,20 +248,21 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
     // // User-generated visitor methods below
     // //
 
-    // /**
-    //  * f0 -> MainClass()
-    //  * f1 -> ( TypeDeclaration() )*
-    //  * f2 -> <EOF>
-    //  */
-    // public R visit(syntaxtree.Goal n) {
-    //     R _ret=null;
-    //     MainClass f0 = (MainClass) n.f0.accept(this);
-    //     NodeListOptional f1 = (NodeListOptional) n.f1.accept(this);
-    //     NodeToken f2 = (NodeToken) n.f2.accept(this);
-    //     output(finalMainClass);
-    //     _ret = (R) new Goal(f0, f1, f2);
-    //     return _ret;
-    // }
+    /**
+     * f0 -> MainClass()
+     * f1 -> ( TypeDeclaration() )*
+     * f2 -> <EOF>
+     */
+    public R visit(syntaxtree.Goal n) {
+        R _ret=null;
+        output(finalMainClass);
+        MainClass f0 = (MainClass) n.f0.accept(this);
+        NodeListOptional f1 = (NodeListOptional) n.f1.accept(this);
+        f1.addNode((Node) newMainClass);
+        NodeToken f2 = (NodeToken) n.f2.accept(this);
+        _ret = (R) new Goal (f0, f1, f2);
+        return _ret;
+    }
 
     /**
      * f0 -> "class"
@@ -305,23 +304,19 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
         // // which will wrap it in the ____NewMainClass____ definition
         // output(callToPseudoMainClassString);
         // isInMiniMain = true;
-        R f14 = n.f14.accept(this);
+
+        // R f14 = n.f14.accept(this);
+
         // isInMiniMain = false;
 
-        // TODO: Should I pass f14 or the raw n.f14 itself?
-        this.newMainClass = getNewMainClass(f14);
+        this.newMainClass = getNewMainClass(n.f14);
 
         R f15 = n.f15.accept(this);
         R f16 = n.f16.accept(this);
-        
-
-        Identifier pseudoMainClass = new Identifier(new NodeToken(NEW_MAIN_CLASS_NAME));
-        Identifier pseudoMainMethod = new Identifier(new NodeToken(NEW_MAIN_METHOD_NAME));
-        NodeOptional mainMethodArg = new NodeOptional();
 
         _ret = (R) new MainClass((Identifier) f1,
                                  (Identifier) f11,
-                                 pseudoMainClass,
+                                 pseudoMainClassName,
                                  pseudoMainMethod,
                                  mainMethodArg);
         return _ret;
@@ -416,48 +411,48 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      * f11 -> ";"
      * f12 -> "}"
      */
-    // public R visit(syntaxtree.MethodDeclaration n) {
+    public R visit(syntaxtree.MethodDeclaration n) {
         
-    //     // TODO(spradeep): writable_arg variable
+        // TODO(spradeep): writable_arg variable
         
-    //     R _ret=null;
-    //     // n.f0.accept(this);
-    //     // output("void");
-    //     // // n.f1.accept(this);
-    //     // n.f2.accept(this);
-    //     // n.f3.accept(this);
-    //     // n.f4.accept(this);
-    //     // n.f5.accept(this);
-    //     // n.f6.accept(this);
-    //     // n.f7.accept(this);
-    //     // n.f8.accept(this);
-    //     // // n.f9.accept(this);
-    //     // output("foo = ");
-    //     // n.f10.accept(this);
-    //     // output(";\n");
-    //     // output("____1234Foo4321____ = foo;\n");
-    //     // n.f11.accept(this);
-    //     // n.f12.accept(this);
+        R _ret=null;
+        // n.f0.accept(this);
+        // output("void");
+        // // n.f1.accept(this);
+        // n.f2.accept(this);
+        // n.f3.accept(this);
+        // n.f4.accept(this);
+        // n.f5.accept(this);
+        // n.f6.accept(this);
+        // n.f7.accept(this);
+        // n.f8.accept(this);
+        // // n.f9.accept(this);
+        // output("foo = ");
+        // n.f10.accept(this);
+        // output(";\n");
+        // output("____1234Foo4321____ = foo;\n");
+        // n.f11.accept(this);
+        // n.f12.accept(this);
 
-    //     R f0 = n.f0.accept(this);
-    //     R f1 = n.f1.accept(this);
-    //     R f2 = n.f2.accept(this);
-    //     R f3 = n.f3.accept(this);
-    //     R f4 = n.f4.accept(this);
-    //     R f5 = n.f5.accept(this);
-    //     R f6 = n.f6.accept(this);
-    //     R f7 = n.f7.accept(this);
-    //     R f8 = n.f8.accept(this);
-    //     R f9 = n.f9.accept(this);
-    //     R f10 = n.f10.accept(this);
-    //     R f11 = n.f11.accept(this);
-    //     R f12 = n.f12.accept(this);
-    //     _ret = (R) new MethodDeclaration((Identifier) f2,
-    //                                      (NodeOptional) f4,
-    //                                      (NodeListOptional) f7,
-    //                                      (NodeListOptional) f8);
-    //     return _ret;
-    // }
+        R f0 = n.f0.accept(this);
+        R f1 = n.f1.accept(this);
+        R f2 = n.f2.accept(this);
+        R f3 = n.f3.accept(this);
+        R f4 = n.f4.accept(this);
+        R f5 = n.f5.accept(this);
+        R f6 = n.f6.accept(this);
+        R f7 = n.f7.accept(this);
+        R f8 = n.f8.accept(this);
+        R f9 = n.f9.accept(this);
+        R f10 = n.f10.accept(this);
+        R f11 = n.f11.accept(this);
+        R f12 = n.f12.accept(this);
+        _ret = (R) new MethodDeclaration((Identifier) f2,
+                                         (NodeOptional) f4,
+                                         (NodeListOptional) f7,
+                                         (NodeListOptional) f8);
+        return _ret;
+    }
 
     /**
      * f0 -> FormalParameter()
@@ -675,6 +670,8 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
         return _ret;
     }
 
+    // TODO(spradeep): Take care of MiniJava Expressions that are not
+    // valid MicroJava expressions.
     /**
      * f0 -> "System.out.println"
      * f1 -> "("
@@ -1014,7 +1011,6 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
 
     public String getMicroJavaCode(){
         return outputCodeString;
-        // return mainOnlyMicroJavaCode;
     }
 
     public String getFullMicroJavaCode(){

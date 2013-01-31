@@ -101,5 +101,11 @@
    CLOCK: [2013-01-30 Wed 21:29]--[2013-01-30 Wed 22:22] =>  0:53
    CLOCK: [2013-01-30 Wed 15:05]--[2013-01-30 Wed 16:05] =>  1:00
    CLOCK: [2013-01-30 Wed 12:53]--[2013-01-30 Wed 14:11] =>  1:18
+** DONE MainClass
+   CLOCK: [2013-01-31 Thu 20:51]--[2013-01-31 Thu 22:25] =>  1:34
+** TODO Maybe make complex methods like PrintStatement, Method Declaration, Message Send, etc. return a NodeListOptional of the different nodes they generate.
+*** I think you need something more for Message Send, though
+** TODO What if there are multiple print statements in a method? Don't declare the print variable more than once.
+** TODO Integration test: MainOnly
 ** TODO Complex features
 *** length: just make it an identifier

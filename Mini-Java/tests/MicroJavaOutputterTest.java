@@ -81,22 +81,14 @@ public class MicroJavaOutputterTest {
     Block blockMini;
     ExpressionList expressionListMini;
     FormalParameterList formalParameterListMini;
-
-    // TypeDeclaration typeDeclarationMini;
-
-    // TODO(spradeep): 
-    // MainClass mainClassMini = new MainClass(identifierMini, identifierMini2,
-    //                                         new Identifier(new NodeToken("YoClass")),
-    //                                         new Identifier(new NodeToken("BoyzMainMethod")),
-    //                                         new NodeOptional());
+    Goal goalMini;
+    MainClass mainClassMini;
 
     // ArrayLength arrayLengthMini = new ArrayLength();
     // ClassDeclaration classDeclarationMini = new ClassDeclaration();
     // ClassExtendsDeclaration classExtendsDeclarationMini = new ClassExtendsDeclaration();
-    // Goal goalMini = new Goal();
     // MessageSend messageSendMini = new MessageSend();
     // MethodDeclaration methodDeclarationMini = new MethodDeclaration();
-
 
     // MicroJava test fixtures
 
@@ -151,8 +143,8 @@ public class MicroJavaOutputterTest {
     microjavaparser.syntaxtree.Block block;
     microjavaparser.syntaxtree.ExpressionList expressionList;
     microjavaparser.syntaxtree.FormalParameterList formalParameterList;
-
-    // microjavaparser.syntaxtree.TypeDeclaration typeDeclaration;
+    microjavaparser.syntaxtree.Goal goal;
+    microjavaparser.syntaxtree.MainClass mainClass;
 
     // TODO(spradeep): 
     // microjavaparser.syntaxtree.MainClass mainClass = new microjavaparser.syntaxtree.MainClass(
@@ -165,7 +157,6 @@ public class MicroJavaOutputterTest {
     //     new microjavaparser.syntaxtree.NodeOptional());
 
 
-    // microjavaparser.syntaxtree.Goal goal = new microjavaparser.syntaxtree.Goal();
     // microjavaparser.syntaxtree.ClassDeclaration classDeclaration = new microjavaparser.syntaxtree.ClassDeclaration();
     // microjavaparser.syntaxtree.ClassExtendsDeclaration classExtendsDeclaration = new microjavaparser.syntaxtree.ClassExtendsDeclaration();
     // microjavaparser.syntaxtree.MethodDeclaration methodDeclaration = new microjavaparser.syntaxtree.MethodDeclaration();
@@ -175,6 +166,12 @@ public class MicroJavaOutputterTest {
 
     @Before
     public void setUp() {
+
+        // BIG WARNING: Be VERY careful about constructing complex
+        // Nodes out of simpler Node instances cos you might end up
+        // using the same simple Node instance twice and will then get
+        // an error from TreeFormatter.
+        
         outputter = new MicroJavaOutputter();
 
         // MiniJava test fixtures
@@ -257,6 +254,11 @@ public class MicroJavaOutputterTest {
 
         formalParameterListMini = new FormalParameterList(formalParameterMini,
                                                           new NodeListOptional());
+
+        mainClassMini = new MainClass(identifierMini,
+                                      identifierMini2,
+                                      printStatementMini);
+        goalMini = new Goal(mainClassMini, new NodeListOptional());
 
         // MicroJava test fixtures
 
@@ -348,6 +350,20 @@ public class MicroJavaOutputterTest {
         formalParameterList = new microjavaparser.syntaxtree.FormalParameterList(
             formalParameter,
             new microjavaparser.syntaxtree.NodeListOptional());
+
+        mainClass = new microjavaparser.syntaxtree.MainClass(
+            identifier,
+            identifier2,
+            MicroJavaOutputter.pseudoMainClassName,
+            MicroJavaOutputter.pseudoMainMethod,
+            MicroJavaOutputter.mainMethodArg);
+
+        MicroJavaOutputter tempOutputter = new MicroJavaOutputter();
+        goal = new microjavaparser.syntaxtree.Goal(
+            mainClass,
+            new microjavaparser.syntaxtree.NodeListOptional(
+                (microjavaparser.syntaxtree.Node)
+                tempOutputter.getNewMainClass(printStatementMini)));
 
         // typeDeclaration = new microjavaparser.syntaxtree.TypeDeclaration();
     }
@@ -694,6 +710,55 @@ public class MicroJavaOutputterTest {
         assertEqualAfterTransform(formalParameterList, formalParameterListMini);
     }
 
+    /**
+     * Test method for {@link MicroJavaOutputter#getNewMainClass()}.
+     */
+    @Test
+    public final void testGetNewMainClass(){
+        // We're only testing for the ____NewMainClass____ bit, but
+        // have to give the full code cos the parser expects a
+        // complete program.
+        String expectedNewMainClassString =
+                "class MainOnly {" +
+                "   public static void main(String [] a){" +
+                "      new ____NewMainClass____().____Main____(0);" +
+                "   }" +
+                "}" +
+                "" +
+                "class ____NewMainClass____{" +
+                "" +
+                "   public void ____Main____(int ____arg_length____){" +
+                "      int ____printMe____;" +
+                "" +
+                "      ____printMe____ = 75;" +
+                "      System.out.println(____printMe____);" +
+                "   }" +
+                "}";
+
+        microjavaparser.syntaxtree.Goal expectedGoal = (microjavaparser.syntaxtree.Goal)
+                MicroJavaOutputter.getMicroJavaNodeFromString(expectedNewMainClassString);
+        microjavaparser.syntaxtree.Node expectedNewMainClassNode =
+                expectedGoal.f1.nodes.get(0);
+
+        microjavaparser.syntaxtree.Node actualNewMainClassNode =
+                (microjavaparser.syntaxtree.Node)
+                outputter.getNewMainClass(printStatementMini);
+
+
+        assertEquals(MicroJavaOutputter.getFormattedString(expectedNewMainClassNode),
+                     MicroJavaOutputter.getFormattedString(actualNewMainClassNode));
+
+        System.out.println("MicroJavaOutputter.getFormattedString(actualNewMainClassNode): " + MicroJavaOutputter.getFormattedString(actualNewMainClassNode));
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#Goal()}.
+     */
+    @Test
+    public final void testGoal(){
+        assertEqualAfterTransform(goal, goalMini);
+    }
+
     // TODO(spradeep): 
     // /**
     //  * Test method for {@link MicroJavaOutputter#MainClass()}.
@@ -710,17 +775,6 @@ public class MicroJavaOutputterTest {
     // @Test
     // public final void testPrimaryExpression(){
         
-    // }
-
-    // /**
-    //  * Test method for {@link MicroJavaOutputter#visitVarDeclaration()}.
-    //  */
-    // @Test
-    // public final void testVisitVarDeclaration(){
-    //     VarDeclaration var = new VarDeclaration(
-    //         new Type(new NodeChoice(new IntegerType(), 2)),
-    //         new Identifier(new NodeToken("foo")));
-    //     System.out.println("MicroJavaOutputter.getFormattedString(var): " + MicroJavaOutputter.getFormattedString(outputter.getMicroJavaParseTree(var)));
     // }
 
     ///////////////////////
@@ -746,19 +800,14 @@ public class MicroJavaOutputterTest {
         Node root = MicroJavaOutputter.getMiniJavaNodeFromFile(BASE_DIR + File.separator + MINI_JAVA_DIR + File.separator + basename + MINI_JAVA_EXTENSION);
         microjavaparser.syntaxtree.Node actualMicroParseTree =
                 outputter.getMicroJavaParseTree(root);
-
+        System.out.println("MicroJavaOutputter.getFormattedString(expectedMicroParseTree): " + MicroJavaOutputter.getFormattedString(expectedMicroParseTree));
+        System.out.println("MicroJavaOutputter.getFormattedString(actualMicroParseTree): " + MicroJavaOutputter.getFormattedString(actualMicroParseTree));
         assertEquals(MicroJavaOutputter.getFormattedString(expectedMicroParseTree),
                      MicroJavaOutputter.getFormattedString(actualMicroParseTree));
-
-        System.out.println("outputter.getFullMicroJavaCode(): "
-                           + outputter.getFullMicroJavaCode());
     }
 
-    // /**
-    //  * Test method for {@link MicroJavaOutputter#simpleTransformer()}.
-    //  */
-    // @Test
-    // public final void testMainOnly(){
-    //     doTestMiniAndMicroJava("MainOnly");
-    // }
+    @Test
+    public final void testMainOnly(){
+        doTestMiniAndMicroJava("MainOnly");
+    }
 }
