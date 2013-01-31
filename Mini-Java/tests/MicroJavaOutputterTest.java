@@ -460,7 +460,7 @@ public class MicroJavaOutputterTest {
      * Test method for {@link MicroJavaOutputter#visitNodeToken()}.
      */
     @Test
-    public final void testVisitNodeToken(){
+    public final void testNodeToken(){
         assertEqualAfterTransform(nodeToken, nodeTokenMini);
     }
 
@@ -468,7 +468,7 @@ public class MicroJavaOutputterTest {
      * Test method for {@link MicroJavaOutputter#visitThisExpression()}.
      */
     @Test
-    public final void testVisitThisExpression(){
+    public final void testThisExpression(){
         assertEqualAfterTransform(thisExpression, thisExpressionMini);
     }
 
@@ -476,7 +476,7 @@ public class MicroJavaOutputterTest {
      * Test method for {@link MicroJavaOutputter#visitIdentifier()}.
      */
     @Test
-    public final void testVisitIdentifier(){
+    public final void testIdentifier(){
         assertEqualAfterTransform(identifier, identifierMini);
     }
 
@@ -930,14 +930,13 @@ public class MicroJavaOutputterTest {
         assertEqualAfterTransform(primaryExpression8, primaryExpressionMini8);   
     }
 
-    // TODO(spradeep): 
-    // /**
-    //  * Test method for {@link MicroJavaOutputter#MainClass()}.
-    //  */
-    // @Test
-    // public final void testMainClass(){
-    //     assertEqualAfterTransform(mainClass, mainClassMini);
-    // }
+    /**
+     * Test method for {@link MicroJavaOutputter#MainClass()}.
+     */
+    @Test
+    public final void testMainClass(){
+        assertEqualAfterTransform(mainClass, mainClassMini);
+    }
 
 
     ///////////////////////

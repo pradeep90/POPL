@@ -19,7 +19,7 @@ import java.io.StringWriter;
  * Visitor to build a MicroJava syntax tree from a MiniJava syntax
  * tree.
  */
-public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
+public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
     public static final int INDENT_AMOUNT = 3;
     public static final int WRAP_WIDTH = 80;
     public static final String NEW_MAIN_METHOD_NAME = "____Main____";
@@ -41,7 +41,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
     public String finalMainClass = "";
     public String outputCodeString = "";
 
-    public Node syntaxTree = null;
+    public ExpansionNode syntaxTree = null;
     public Node newMainClass = null;
 
     /**
@@ -173,7 +173,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
             new AssignmentStatement(
                 new VarRef(new NodeChoice(new Identifier(new NodeToken(PRINT_ME_STRING)),
                                           1)),
-                (Expression) printStatement.f2.accept(this)));
+                (Expression) printStatement.f2.accept(this).node));
         mainMethodBodyStatements.addNode(new PrintStatement(
             new Expression(new NodeChoice(
                 new PrimaryExpression(
@@ -189,9 +189,10 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
                 new Type(new NodeChoice(new IntegerType(), 2)),
                 new Identifier(new NodeToken(PRINT_ME_STRING)))),
             mainMethodBodyStatements);
-        return new ClassDeclaration(new Identifier(new NodeToken(NEW_MAIN_CLASS_NAME)),
-                                    new NodeListOptional(),
-                                    new NodeListOptional(mainMethod));
+        return new ClassDeclaration(
+            new Identifier(new NodeToken(NEW_MAIN_CLASS_NAME)),
+            new NodeListOptional(),
+            new NodeListOptional(mainMethod));
     }
 
     // //
@@ -207,31 +208,31 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
     //     return _ret;
     // }
 
-    public Node visit(syntaxtree.NodeListOptional n) {
+    public ExpansionNode visit(syntaxtree.NodeListOptional n) {
         if ( n.present() ) {
-            Node _ret=null;
+            ExpansionNode _ret=null;
             NodeListOptional result = new NodeListOptional();
             int _count=0;
             for ( Enumeration<syntaxtree.Node> e = n.elements(); e.hasMoreElements(); ) {
                 result.addNode(e.nextElement().accept(this));
                 _count++;
             }
-            return result;
+            return new ExpansionNode(result);
         }
         else
-            return new NodeListOptional();
+            return new ExpansionNode(new NodeListOptional());
         // return null;
     }
 
-    public Node visit(syntaxtree.NodeOptional n) {
+    public ExpansionNode visit(syntaxtree.NodeOptional n) {
         if ( n.present() )
-            return new NodeOptional(n.node.accept(this));
+            return new ExpansionNode(new NodeOptional(n.node.accept(this)));
         else
-            return new NodeOptional();
+            return new ExpansionNode(new NodeOptional());
     }
 
-    // public Node visit(syntaxtree.NodeSequence n) {
-    //     Node _ret=null;
+    // public ExpansionNode visit(syntaxtree.NodeSequence n) {
+    //     ExpansionNode _ret=null;
     //     int _count=0;
     //     for ( Enumeration<syntaxtree.Node> e = n.elements(); e.hasMoreElements(); ) {
     //         e.nextElement().accept(this);
@@ -240,9 +241,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
     //     return _ret;
     // }
 
-    public Node visit(syntaxtree.NodeToken n) {
+    public ExpansionNode visit(syntaxtree.NodeToken n) {
         output(n.tokenImage);
-        return new NodeToken(n.tokenImage);
+        return new ExpansionNode(new NodeToken(n.tokenImage));
     }
 
     // //
@@ -254,14 +255,14 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f1 -> ( TypeDeclaration() )*
      * f2 -> <EOF>
      */
-    public Node visit(syntaxtree.Goal n) {
-        Node _ret=null;
+    public ExpansionNode visit(syntaxtree.Goal n) {
+        ExpansionNode _ret=null;
         output(finalMainClass);
-        MainClass f0 = (MainClass) n.f0.accept(this);
-        NodeListOptional f1 = (NodeListOptional) n.f1.accept(this);
+        MainClass f0 = (MainClass) n.f0.accept(this).node;
+        NodeListOptional f1 = (NodeListOptional) n.f1.accept(this).node;
         f1.addNode(newMainClass);
-        NodeToken f2 = (NodeToken) n.f2.accept(this);
-        _ret = new Goal (f0, f1, f2);
+        NodeToken f2 = (NodeToken) n.f2.accept(this).node;
+        _ret = new ExpansionNode(new Goal (f0, f1, f2));
         return _ret;
     }
 
@@ -284,33 +285,33 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f15 -> "}"
      * f16 -> "}"
      */
-    public Node visit(syntaxtree.MainClass n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        Node f3 = n.f3.accept(this);
-        Node f4 = n.f4.accept(this);
-        Node f5 = n.f5.accept(this);
-        Node f6 = n.f6.accept(this);
-        Node f7 = n.f7.accept(this);
-        Node f8 = n.f8.accept(this);
-        Node f9 = n.f9.accept(this);
-        Node f10 = n.f10.accept(this);
-        Node f11 = n.f11.accept(this);
-        Node f12 = n.f12.accept(this);
-        Node f13 = n.f13.accept(this);
+    public ExpansionNode visit(syntaxtree.MainClass n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        ExpansionNode f3 = n.f3.accept(this);
+        ExpansionNode f4 = n.f4.accept(this);
+        ExpansionNode f5 = n.f5.accept(this);
+        ExpansionNode f6 = n.f6.accept(this);
+        ExpansionNode f7 = n.f7.accept(this);
+        ExpansionNode f8 = n.f8.accept(this);
+        ExpansionNode f9 = n.f9.accept(this);
+        ExpansionNode f10 = n.f10.accept(this);
+        ExpansionNode f11 = n.f11.accept(this);
+        ExpansionNode f12 = n.f12.accept(this);
+        ExpansionNode f13 = n.f13.accept(this);
 
         this.newMainClass = getNewMainClass(n.f14);
 
-        Node f15 = n.f15.accept(this);
-        Node f16 = n.f16.accept(this);
+        ExpansionNode f15 = n.f15.accept(this);
+        ExpansionNode f16 = n.f16.accept(this);
 
-        _ret = new MainClass((Identifier) f1,
-                             (Identifier) f11,
-                             pseudoMainClassName,
-                             pseudoMainMethod,
-                             mainMethodArg);
+        _ret = new ExpansionNode(new MainClass((Identifier) f1.node,
+                                               (Identifier) f11.node,
+                                               pseudoMainClassName,
+                                               pseudoMainMethod,
+                                               mainMethodArg));
         return _ret;
     }
 
@@ -318,10 +319,10 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f0 -> ClassDeclaration()
      *       | ClassExtendsDeclaration()
      */
-    public Node visit(syntaxtree.TypeDeclaration n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        return new TypeDeclaration(new NodeChoice(f0, n.f0.which));
+    public ExpansionNode visit(syntaxtree.TypeDeclaration n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        return new ExpansionNode(new TypeDeclaration(new NodeChoice(f0.node, n.f0.which)));
     }
 
     /**
@@ -332,17 +333,17 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f4 -> ( MethodDeclaration() )*
      * f5 -> "}"
      */
-    public Node visit(syntaxtree.ClassDeclaration n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        Node f3 = n.f3.accept(this);
-        Node f4 = n.f4.accept(this);
-        Node f5 = n.f5.accept(this);
-        _ret = new ClassDeclaration((Identifier) f1,
-                                    (NodeListOptional) f3,
-                                    (NodeListOptional) f4);
+    public ExpansionNode visit(syntaxtree.ClassDeclaration n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        ExpansionNode f3 = n.f3.accept(this);
+        ExpansionNode f4 = n.f4.accept(this);
+        ExpansionNode f5 = n.f5.accept(this);
+        _ret = new ExpansionNode(new ClassDeclaration((Identifier) f1.node,
+                                                      (NodeListOptional) f3.node,
+                                                      (NodeListOptional) f4.node));
         return _ret;
     }
 
@@ -356,20 +357,20 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f6 -> ( MethodDeclaration() )*
      * f7 -> "}"
      */
-    public Node visit(syntaxtree.ClassExtendsDeclaration n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        Node f3 = n.f3.accept(this);
-        Node f4 = n.f4.accept(this);
-        Node f5 = n.f5.accept(this);
-        Node f6 = n.f6.accept(this);
-        Node f7 = n.f7.accept(this);
-        _ret = new ClassExtendsDeclaration((Identifier) f1,
-                                           (Identifier) f3,
-                                           (NodeListOptional) f5,
-                                           (NodeListOptional) f6);
+    public ExpansionNode visit(syntaxtree.ClassExtendsDeclaration n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        ExpansionNode f3 = n.f3.accept(this);
+        ExpansionNode f4 = n.f4.accept(this);
+        ExpansionNode f5 = n.f5.accept(this);
+        ExpansionNode f6 = n.f6.accept(this);
+        ExpansionNode f7 = n.f7.accept(this);
+        _ret = new ExpansionNode(new ClassExtendsDeclaration((Identifier) f1.node,
+                                                             (Identifier) f3.node,
+                                                             (NodeListOptional) f5.node,
+                                                             (NodeListOptional) f6.node));
         return _ret;
     }
 
@@ -378,84 +379,84 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f1 -> Identifier()
      * f2 -> ";"
      */
-    public Node visit(syntaxtree.VarDeclaration n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        _ret = new VarDeclaration((Type) f0,
-                                  (Identifier) f1);
+    public ExpansionNode visit(syntaxtree.VarDeclaration n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        _ret = new ExpansionNode(new VarDeclaration((Type) f0.node,
+                                                    (Identifier) f1.node));
         return _ret;
     }
 
-    /**
-     * f0 -> "public"
-     * f1 -> Type()
-     * f2 -> Identifier()
-     * f3 -> "("
-     * f4 -> ( FormalParameterList() )?
-     * f5 -> ")"
-     * f6 -> "{"
-     * f7 -> ( VarDeclaration() )*
-     * f8 -> ( Statement() )*
-     * f9 -> "return"
-     * f10 -> Expression()
-     * f11 -> ";"
-     * f12 -> "}"
-     */
-    public Node visit(syntaxtree.MethodDeclaration n) {
+    // /**
+    //  * f0 -> "public"
+    //  * f1 -> Type()
+    //  * f2 -> Identifier()
+    //  * f3 -> "("
+    //  * f4 -> ( FormalParameterList() )?
+    //  * f5 -> ")"
+    //  * f6 -> "{"
+    //  * f7 -> ( VarDeclaration() )*
+    //  * f8 -> ( Statement() )*
+    //  * f9 -> "return"
+    //  * f10 -> Expression()
+    //  * f11 -> ";"
+    //  * f12 -> "}"
+    //  */
+    // public ExpansionNode visit(syntaxtree.MethodDeclaration n) {
         
-        // TODO(spradeep): writable_arg variable
+    //     // TODO(spradeep): writable_arg variable
         
-        Node _ret=null;
-        // n.f0.accept(this);
-        // output("void");
-        // // n.f1.accept(this);
-        // n.f2.accept(this);
-        // n.f3.accept(this);
-        // n.f4.accept(this);
-        // n.f5.accept(this);
-        // n.f6.accept(this);
-        // n.f7.accept(this);
-        // n.f8.accept(this);
-        // // n.f9.accept(this);
-        // output("foo = ");
-        // n.f10.accept(this);
-        // output(";\n");
-        // output("____1234Foo4321____ = foo;\n");
-        // n.f11.accept(this);
-        // n.f12.accept(this);
+    //     ExpansionNode _ret=null;
+    //     // n.f0.accept(this);
+    //     // output("void");
+    //     // // n.f1.accept(this);
+    //     // n.f2.accept(this);
+    //     // n.f3.accept(this);
+    //     // n.f4.accept(this);
+    //     // n.f5.accept(this);
+    //     // n.f6.accept(this);
+    //     // n.f7.accept(this);
+    //     // n.f8.accept(this);
+    //     // // n.f9.accept(this);
+    //     // output("foo = ");
+    //     // n.f10.accept(this);
+    //     // output(";\n");
+    //     // output("____1234Foo4321____ = foo;\n");
+    //     // n.f11.accept(this);
+    //     // n.f12.accept(this);
 
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        Node f3 = n.f3.accept(this);
-        Node f4 = n.f4.accept(this);
-        Node f5 = n.f5.accept(this);
-        Node f6 = n.f6.accept(this);
-        Node f7 = n.f7.accept(this);
-        Node f8 = n.f8.accept(this);
-        Node f9 = n.f9.accept(this);
-        Node f10 = n.f10.accept(this);
-        Node f11 = n.f11.accept(this);
-        Node f12 = n.f12.accept(this);
-        _ret = new MethodDeclaration((Identifier) f2,
-                                     (NodeOptional) f4,
-                                     (NodeListOptional) f7,
-                                     (NodeListOptional) f8);
-        return _ret;
-    }
+    //     ExpansionNode f0 = n.f0.accept(this);
+    //     ExpansionNode f1 = n.f1.accept(this);
+    //     ExpansionNode f2 = n.f2.accept(this);
+    //     ExpansionNode f3 = n.f3.accept(this);
+    //     ExpansionNode f4 = n.f4.accept(this);
+    //     ExpansionNode f5 = n.f5.accept(this);
+    //     ExpansionNode f6 = n.f6.accept(this);
+    //     ExpansionNode f7 = n.f7.accept(this);
+    //     ExpansionNode f8 = n.f8.accept(this);
+    //     ExpansionNode f9 = n.f9.accept(this);
+    //     ExpansionNode f10 = n.f10.accept(this);
+    //     ExpansionNode f11 = n.f11.accept(this);
+    //     ExpansionNode f12 = n.f12.accept(this);
+    //     _ret = new MethodDeclaration((Identifier) f2,
+    //                                  (NodeOptional) f4,
+    //                                  (NodeListOptional) f7,
+    //                                  (NodeListOptional) f8);
+    //     return _ret;
+    // }
 
     /**
      * f0 -> FormalParameter()
      * f1 -> ( FormalParameterRest() )*
      */
-    public Node visit(syntaxtree.FormalParameterList n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        _ret = new FormalParameterList((FormalParameter) f0,
-                                       (NodeListOptional) f1);
+    public ExpansionNode visit(syntaxtree.FormalParameterList n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        _ret = new ExpansionNode(new FormalParameterList((FormalParameter) f0.node,
+                                                         (NodeListOptional) f1.node));
         return _ret;
     }
 
@@ -463,12 +464,12 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f0 -> Type()
      * f1 -> Identifier()
      */
-    public Node visit(syntaxtree.FormalParameter n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        _ret = new FormalParameter((Type) f0,
-                                   (Identifier) f1);
+    public ExpansionNode visit(syntaxtree.FormalParameter n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        _ret = new ExpansionNode(new FormalParameter((Type) f0.node,
+                                                     (Identifier) f1.node));
         return _ret;
     }
 
@@ -476,11 +477,11 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f0 -> ","
      * f1 -> FormalParameter()
      */
-    public Node visit(syntaxtree.FormalParameterRest n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        _ret = new FormalParameterRest((FormalParameter) f1);
+    public ExpansionNode visit(syntaxtree.FormalParameterRest n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        _ret = new ExpansionNode(new FormalParameterRest((FormalParameter) f1.node));
         return _ret;
     }
 
@@ -490,10 +491,10 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      *       | IntegerType()
      *       | Identifier()
      */
-    public Node visit(syntaxtree.Type n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        _ret = new Type(new NodeChoice(f0, n.f0.which));
+    public ExpansionNode visit(syntaxtree.Type n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        _ret = new ExpansionNode(new Type(new NodeChoice(f0.node, n.f0.which)));
         return _ret;
     }
 
@@ -502,32 +503,32 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f1 -> "["
      * f2 -> "]"
      */
-    public Node visit(syntaxtree.ArrayType n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        _ret = new ArrayType();
+    public ExpansionNode visit(syntaxtree.ArrayType n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        _ret = new ExpansionNode(new ArrayType());
         return _ret;
     }
 
     /**
      * f0 -> "boolean"
      */
-    public Node visit(syntaxtree.BooleanType n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        _ret = new BooleanType();
+    public ExpansionNode visit(syntaxtree.BooleanType n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        _ret = new ExpansionNode(new BooleanType());
         return _ret;
     }
 
     /**
      * f0 -> "int"
      */
-    public Node visit(syntaxtree.IntegerType n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        _ret = new IntegerType();
+    public ExpansionNode visit(syntaxtree.IntegerType n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        _ret = new ExpansionNode(new IntegerType());
         return _ret;
     }
 
@@ -539,10 +540,10 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      *       | WhileStatement()
      *       | PrintStatement()
      */
-    public Node visit(syntaxtree.Statement n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        _ret = new Statement(new NodeChoice(f0, n.f0.which));
+    public ExpansionNode visit(syntaxtree.Statement n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        _ret = new ExpansionNode(new Statement(new NodeChoice(f0.node, n.f0.which)));
         return _ret;
     }
 
@@ -551,14 +552,14 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f1 -> ( Statement() )*
      * f2 -> "}"
      */
-    public Node visit(syntaxtree.Block n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        _ret = new Block((NodeToken) f0,
-                         (NodeListOptional) f1,
-                         (NodeToken) f2);
+    public ExpansionNode visit(syntaxtree.Block n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        _ret = new ExpansionNode(new Block((NodeToken) f0.node,
+                                           (NodeListOptional) f1.node,
+                                           (NodeToken) f2.node));
         return _ret;
     }
 
@@ -569,17 +570,17 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f2 -> Expression()
      * f3 -> ";"
      */
-    public Node visit(syntaxtree.AssignmentStatement n) {
-        Node _ret=null;
+    public ExpansionNode visit(syntaxtree.AssignmentStatement n) {
+        ExpansionNode _ret=null;
         System.out.println("syntaxtree.AssignmentStatement"); 
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        Node f3 = n.f3.accept(this);
-        _ret = new AssignmentStatement(new VarRef(new NodeChoice(f0, 1)),
-                                       (NodeToken) f1,
-                                       (Expression) f2,
-                                       (NodeToken) f3);
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        ExpansionNode f3 = n.f3.accept(this);
+        _ret = new ExpansionNode(new AssignmentStatement(new VarRef(new NodeChoice(f0.node, 1)),
+                                                         (NodeToken) f1.node,
+                                                         (Expression) f2.node,
+                                                         (NodeToken) f3.node));
         return _ret;
     }
 
@@ -592,25 +593,25 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f5 -> Expression()
      * f6 -> ";"
      */
-    public Node visit(syntaxtree.ArrayAssignmentStatement n) {
+    public ExpansionNode visit(syntaxtree.ArrayAssignmentStatement n) {
         // TODO(spradeep): See if the order of expansion of f2 and f5
         // makes a big difference. Remember, there can be multiple Nodes
         // on expansion of Expression.
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        Node f3 = n.f3.accept(this);
-        Node f4 = n.f4.accept(this);
-        Node f5 = n.f5.accept(this);
-        Node f6 = n.f6.accept(this);
-        _ret = new ArrayAssignmentStatement((Identifier) f0,
-                                            (NodeToken) f1,
-                                            (Expression) f2,
-                                            (NodeToken) f3,
-                                            (NodeToken) f4,
-                                            (Expression) f5,
-                                            (NodeToken) f6);
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        ExpansionNode f3 = n.f3.accept(this);
+        ExpansionNode f4 = n.f4.accept(this);
+        ExpansionNode f5 = n.f5.accept(this);
+        ExpansionNode f6 = n.f6.accept(this);
+        _ret = new ExpansionNode(new ArrayAssignmentStatement((Identifier) f0.node,
+                                                              (NodeToken) f1.node,
+                                                              (Expression) f2.node,
+                                                              (NodeToken) f3.node,
+                                                              (NodeToken) f4.node,
+                                                              (Expression) f5.node,
+                                                              (NodeToken) f6.node));
         return _ret;
     }
 
@@ -623,22 +624,22 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f5 -> "else"
      * f6 -> Statement()
      */
-    public Node visit(syntaxtree.IfStatement n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        Node f3 = n.f3.accept(this);
-        Node f4 = n.f4.accept(this);
-        Node f5 = n.f5.accept(this);
-        Node f6 = n.f6.accept(this);
-        _ret = new IfStatement((NodeToken) f0,
-                               (NodeToken) f1,
-                               (Expression) f2,
-                               (NodeToken) f3,
-                               (Statement) f4,
-                               (NodeToken) f5,
-                               (Statement) f6);
+    public ExpansionNode visit(syntaxtree.IfStatement n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        ExpansionNode f3 = n.f3.accept(this);
+        ExpansionNode f4 = n.f4.accept(this);
+        ExpansionNode f5 = n.f5.accept(this);
+        ExpansionNode f6 = n.f6.accept(this);
+        _ret = new ExpansionNode(new IfStatement((NodeToken) f0.node,
+                                                 (NodeToken) f1.node,
+                                                 (Expression) f2.node,
+                                                 (NodeToken) f3.node,
+                                                 (Statement) f4.node,
+                                                 (NodeToken) f5.node,
+                                                 (Statement) f6.node));
         return _ret;
     }
 
@@ -649,18 +650,18 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f3 -> ")"
      * f4 -> Statement()
      */
-    public Node visit(syntaxtree.WhileStatement n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        Node f3 = n.f3.accept(this);
-        Node f4 = n.f4.accept(this);
-        _ret = new WhileStatement((NodeToken) f0,
-                                  (NodeToken) f1,
-                                  (Expression) f2,
-                                  (NodeToken) f3,
-                                  (Statement) f4);
+    public ExpansionNode visit(syntaxtree.WhileStatement n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        ExpansionNode f3 = n.f3.accept(this);
+        ExpansionNode f4 = n.f4.accept(this);
+        _ret = new ExpansionNode(new WhileStatement((NodeToken) f0.node,
+                                                    (NodeToken) f1.node,
+                                                    (Expression) f2.node,
+                                                    (NodeToken) f3.node,
+                                                    (Statement) f4.node));
         return _ret;
     }
 
@@ -673,18 +674,18 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f3 -> ")"
      * f4 -> ";"
      */
-    public Node visit(syntaxtree.PrintStatement n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        Node f3 = n.f3.accept(this);
-        Node f4 = n.f4.accept(this);
-        _ret = new PrintStatement((NodeToken) f0,
-                                  (NodeToken) f1,
-                                  (Expression) f2,
-                                  (NodeToken) f3,
-                                  (NodeToken) f4);
+    public ExpansionNode visit(syntaxtree.PrintStatement n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        ExpansionNode f3 = n.f3.accept(this);
+        ExpansionNode f4 = n.f4.accept(this);
+        _ret = new ExpansionNode(new PrintStatement((NodeToken) f0.node,
+                                                    (NodeToken) f1.node,
+                                                    (Expression) f2.node,
+                                                    (NodeToken) f3.node,
+                                                    (NodeToken) f4.node));
         return _ret;
     }
 
@@ -699,10 +700,10 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      *       | MessageSend()
      *       | PrimaryExpression()
      */
-    public Node visit(syntaxtree.Expression n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        _ret = new Expression(new NodeChoice(f0, n.f0.which));
+    public ExpansionNode visit(syntaxtree.Expression n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        _ret = new ExpansionNode(new Expression(new NodeChoice(f0.node, n.f0.which)));
         return _ret;
     }
 
@@ -711,14 +712,14 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f1 -> "&"
      * f2 -> PrimaryExpression()
      */
-    public Node visit(syntaxtree.AndExpression n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        _ret = new AndExpression((PrimaryExpression) f0,
-                                 (NodeToken) f1,
-                                 (PrimaryExpression) f2);
+    public ExpansionNode visit(syntaxtree.AndExpression n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        _ret = new ExpansionNode(new AndExpression((PrimaryExpression) f0.node,
+                                                   (NodeToken) f1.node,
+                                                   (PrimaryExpression) f2.node));
         return _ret;
     }
 
@@ -727,14 +728,14 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f1 -> "<"
      * f2 -> PrimaryExpression()
      */
-    public Node visit(syntaxtree.CompareExpression n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        _ret = new CompareExpression((PrimaryExpression) f0,
-                                     (NodeToken) f1,
-                                     (PrimaryExpression) f2);
+    public ExpansionNode visit(syntaxtree.CompareExpression n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        _ret = new ExpansionNode(new CompareExpression((PrimaryExpression) f0.node,
+                                                       (NodeToken) f1.node,
+                                                       (PrimaryExpression) f2.node));
         return _ret;
     }
 
@@ -743,14 +744,14 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f1 -> "+"
      * f2 -> PrimaryExpression()
      */
-    public Node visit(syntaxtree.PlusExpression n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        _ret = new PlusExpression((PrimaryExpression) f0,
-                                  (NodeToken) f1,
-                                  (PrimaryExpression) f2);
+    public ExpansionNode visit(syntaxtree.PlusExpression n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        _ret = new ExpansionNode(new PlusExpression((PrimaryExpression) f0.node,
+                                                    (NodeToken) f1.node,
+                                                    (PrimaryExpression) f2.node));
         return _ret;
     }
 
@@ -759,14 +760,14 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f1 -> "-"
      * f2 -> PrimaryExpression()
      */
-    public Node visit(syntaxtree.MinusExpression n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        _ret = new MinusExpression((PrimaryExpression) f0,
-                                   (NodeToken) f1,
-                                   (PrimaryExpression) f2);
+    public ExpansionNode visit(syntaxtree.MinusExpression n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        _ret = new ExpansionNode(new MinusExpression((PrimaryExpression) f0.node,
+                                                     (NodeToken) f1.node,
+                                                     (PrimaryExpression) f2.node));
         return _ret;
     }
 
@@ -775,14 +776,14 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f1 -> "*"
      * f2 -> PrimaryExpression()
      */
-    public Node visit(syntaxtree.TimesExpression n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        _ret = new TimesExpression((PrimaryExpression) f0,
-                                   (NodeToken) f1,
-                                   (PrimaryExpression) f2);
+    public ExpansionNode visit(syntaxtree.TimesExpression n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        _ret = new ExpansionNode(new TimesExpression((PrimaryExpression) f0.node,
+                                                     (NodeToken) f1.node,
+                                                     (PrimaryExpression) f2.node));
         return _ret;
     }
 
@@ -792,66 +793,66 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f2 -> PrimaryExpression()
      * f3 -> "]"
      */
-    public Node visit(syntaxtree.ArrayLookup n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        Node f3 = n.f3.accept(this);
-        _ret = new ArrayLookup((PrimaryExpression) f0,
-                               (NodeToken) f1,
-                               (PrimaryExpression) f2,
-                               (NodeToken) f3);
+    public ExpansionNode visit(syntaxtree.ArrayLookup n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        ExpansionNode f3 = n.f3.accept(this);
+        _ret = new ExpansionNode(new ArrayLookup((PrimaryExpression) f0.node,
+                                                 (NodeToken) f1.node,
+                                                 (PrimaryExpression) f2.node,
+                                                 (NodeToken) f3.node));
         return _ret;
     }
 
-    // /**
-    //  * f0 -> PrimaryExpression()
-    //  * f1 -> "."
-    //  * f2 -> "length"
-    //  */
-    // public Node visit(syntaxtree.ArrayLength n) {
-    //     // TODO(spradeep): PrimaryExpression could have precedingNodes
-    //     // as well.
-    //     Node _ret=null;
-    //     Node f0 = n.f0.accept(this);
-    //     Node f1 = n.f1.accept(this);
-    //     Node f2 = n.f2.accept(this);
-    //     _ret = new ArrayLength();
-    //     return _ret;
-    // }
+    // // /**
+    // //  * f0 -> PrimaryExpression()
+    // //  * f1 -> "."
+    // //  * f2 -> "length"
+    // //  */
+    // // public ExpansionNode visit(syntaxtree.ArrayLength n) {
+    // //     // TODO(spradeep): PrimaryExpression could have precedingNodes
+    // //     // as well.
+    // //     ExpansionNode _ret=null;
+    // //     ExpansionNode f0 = n.f0.accept(this);
+    // //     ExpansionNode f1 = n.f1.accept(this);
+    // //     ExpansionNode f2 = n.f2.accept(this);
+    // //     _ret = new ArrayLength();
+    // //     return _ret;
+    // // }
 
-    // /**
-    //  * f0 -> PrimaryExpression()
-    //  * f1 -> "."
-    //  * f2 -> Identifier()
-    //  * f3 -> "("
-    //  * f4 -> ( ExpressionList() )?
-    //  * f5 -> ")"
-    //  */
-    // public Node visit(syntaxtree.MessageSend n) {
-    //     // System.out.println("Function Call??"); 
-    //     Node _ret=null;
-    //     Node f0 = n.f0.accept(this);
-    //     Node f1 = n.f1.accept(this);
-    //     Node f2 = n.f2.accept(this);
-    //     Node f3 = n.f3.accept(this);
-    //     Node f4 = n.f4.accept(this);
-    //     Node f5 = n.f5.accept(this);
-    //     _ret = new MessageSend();
-    //     return _ret;
-    // }
+    // // /**
+    // //  * f0 -> PrimaryExpression()
+    // //  * f1 -> "."
+    // //  * f2 -> Identifier()
+    // //  * f3 -> "("
+    // //  * f4 -> ( ExpressionList() )?
+    // //  * f5 -> ")"
+    // //  */
+    // // public ExpansionNode visit(syntaxtree.MessageSend n) {
+    // //     // System.out.println("Function Call??"); 
+    // //     ExpansionNode _ret=null;
+    // //     ExpansionNode f0 = n.f0.accept(this);
+    // //     ExpansionNode f1 = n.f1.accept(this);
+    // //     ExpansionNode f2 = n.f2.accept(this);
+    // //     ExpansionNode f3 = n.f3.accept(this);
+    // //     ExpansionNode f4 = n.f4.accept(this);
+    // //     ExpansionNode f5 = n.f5.accept(this);
+    // //     _ret = new MessageSend();
+    // //     return _ret;
+    // // }
 
     /**
      * f0 -> Expression()
      * f1 -> ( ExpressionRest() )*
      */
-    public Node visit(syntaxtree.ExpressionList n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        _ret = new ExpressionList((Expression) f0,
-                                  (NodeListOptional) f1);
+    public ExpansionNode visit(syntaxtree.ExpressionList n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        _ret = new ExpansionNode(new ExpressionList((Expression) f0.node,
+                                                    (NodeListOptional) f1.node));
         return _ret;
     }
 
@@ -859,12 +860,12 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f0 -> ","
      * f1 -> Expression()
      */
-    public Node visit(syntaxtree.ExpressionRest n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        _ret = new ExpressionRest((NodeToken) f0,
-                                  (Expression) f1);
+    public ExpansionNode visit(syntaxtree.ExpressionRest n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        _ret = new ExpansionNode(new ExpressionRest((NodeToken) f0.node,
+                                                    (Expression) f1.node));
         return _ret;
     }
 
@@ -879,60 +880,60 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      *       | NotExpression()
      *       | BracketExpression()
      */
-    public Node visit(syntaxtree.PrimaryExpression n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        _ret = new PrimaryExpression(new NodeChoice(f0, n.f0.which));
+    public ExpansionNode visit(syntaxtree.PrimaryExpression n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        _ret = new ExpansionNode(new PrimaryExpression(new NodeChoice(f0.node, n.f0.which)));
         return _ret;
     }
 
     /**
      * f0 -> <INTEGER_LITERAL>
      */
-    public Node visit(syntaxtree.IntegerLiteral n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        _ret = new IntegerLiteral((NodeToken) f0);
+    public ExpansionNode visit(syntaxtree.IntegerLiteral n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        _ret = new ExpansionNode(new IntegerLiteral((NodeToken) f0.node));
         return _ret;
     }
 
     /**
      * f0 -> "true"
      */
-    public Node visit(syntaxtree.TrueLiteral n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        _ret = new TrueLiteral((NodeToken) f0);
+    public ExpansionNode visit(syntaxtree.TrueLiteral n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        _ret = new ExpansionNode(new TrueLiteral((NodeToken) f0.node));
         return _ret;
     }
 
     /**
      * f0 -> "false"
      */
-    public Node visit(syntaxtree.FalseLiteral n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        _ret = new FalseLiteral((NodeToken) f0);
+    public ExpansionNode visit(syntaxtree.FalseLiteral n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        _ret = new ExpansionNode(new FalseLiteral((NodeToken) f0.node));
         return _ret;
     }
 
     /**
      * f0 -> <IDENTIFIER>
      */
-    public Node visit(syntaxtree.Identifier n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        _ret = new Identifier((NodeToken) f0);
+    public ExpansionNode visit(syntaxtree.Identifier n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        _ret = new ExpansionNode(new Identifier((NodeToken) f0.node));
         return _ret;
     }
 
     /**
      * f0 -> "this"
      */
-    public Node visit(syntaxtree.ThisExpression n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        return new ThisExpression((NodeToken) f0);
+    public ExpansionNode visit(syntaxtree.ThisExpression n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        return new ExpansionNode(new ThisExpression((NodeToken) f0.node));
     }
 
     /**
@@ -942,18 +943,18 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f3 -> Expression()
      * f4 -> "]"
      */
-    public Node visit(syntaxtree.ArrayAllocationExpression n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        Node f3 = n.f3.accept(this);
-        Node f4 = n.f4.accept(this);
-        _ret = new ArrayAllocationExpression((NodeToken) f0,
-                                             (NodeToken) f1,
-                                             (NodeToken) f2,
-                                             (Expression) f3,
-                                             (NodeToken) f4);
+    public ExpansionNode visit(syntaxtree.ArrayAllocationExpression n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        ExpansionNode f3 = n.f3.accept(this);
+        ExpansionNode f4 = n.f4.accept(this);
+        _ret = new ExpansionNode(new ArrayAllocationExpression((NodeToken) f0.node,
+                                                               (NodeToken) f1.node,
+                                                               (NodeToken) f2.node,
+                                                               (Expression) f3.node,
+                                                               (NodeToken) f4.node));
         return _ret;
     }
 
@@ -963,16 +964,16 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f2 -> "("
      * f3 -> ")"
      */
-    public Node visit(syntaxtree.AllocationExpression n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        Node f3 = n.f3.accept(this);
-        _ret = new AllocationExpression((NodeToken) f0,
-                                        (Identifier) f1,
-                                        (NodeToken) f2,
-                                        (NodeToken) f3);
+    public ExpansionNode visit(syntaxtree.AllocationExpression n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        ExpansionNode f3 = n.f3.accept(this);
+        _ret = new ExpansionNode(new AllocationExpression((NodeToken) f0.node,
+                                                          (Identifier) f1.node,
+                                                          (NodeToken) f2.node,
+                                                          (NodeToken) f3.node));
         return _ret;
     }
 
@@ -980,12 +981,12 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f0 -> "!"
      * f1 -> Expression()
      */
-    public Node visit(syntaxtree.NotExpression n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        _ret = new NotExpression((NodeToken) f0,
-                                 (Expression) f1);
+    public ExpansionNode visit(syntaxtree.NotExpression n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        _ret = new ExpansionNode(new NotExpression((NodeToken) f0.node,
+                                                   (Expression) f1.node));
         return _ret;
     }
 
@@ -994,14 +995,14 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
      * f1 -> Expression()
      * f2 -> ")"
      */
-    public Node visit(syntaxtree.BracketExpression n) {
-        Node _ret=null;
-        Node f0 = n.f0.accept(this);
-        Node f1 = n.f1.accept(this);
-        Node f2 = n.f2.accept(this);
-        _ret = new BracketExpression((NodeToken) f0,
-                                     (Expression) f1,
-                                     (NodeToken) f2);
+    public ExpansionNode visit(syntaxtree.BracketExpression n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        _ret = new ExpansionNode(new BracketExpression((NodeToken) f0.node,
+                                                       (Expression) f1.node,
+                                                       (NodeToken) f2.node));
         return _ret;
     }
 
