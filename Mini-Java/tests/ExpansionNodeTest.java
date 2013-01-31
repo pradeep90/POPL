@@ -24,17 +24,22 @@ import static org.junit.Assert.assertTrue;
 public class ExpansionNodeTest{
     NodeToken nodeToken;
     NodeToken nodeToken2;
+    NodeToken nodeToken3;
     ExpansionNode node;
     ExpansionNode node2;
     NodeListOptional precedingNodeList;
+    NodeListOptional varDeclarations;
 
     @Before
     public void setUp(){
         nodeToken = new NodeToken("foo");
         nodeToken2 = new NodeToken("bar");
+        nodeToken3 = new NodeToken("baz");
         precedingNodeList = new NodeListOptional(nodeToken);
+        varDeclarations = new NodeListOptional(nodeToken2);
+        varDeclarations.addNode(nodeToken3);
         node = new ExpansionNode(nodeToken);
-        node2 = new ExpansionNode(nodeToken, precedingNodeList);
+        node2 = new ExpansionNode(nodeToken, varDeclarations, precedingNodeList);
     }
     
     @After
@@ -51,19 +56,20 @@ public class ExpansionNodeTest{
     }
 
     /**
-     * Test method for {@link ExpansionNode#getPrecedingNodes()}.
-     */
-    @Test
-    public final void testGetPrecedingNodes(){
-        assertEquals(precedingNodeList, node2.getPrecedingNodes());
-    }
-
-    /**
      * Test method for {@link ExpansionNode#hasPrecedingNodes()}.
      */
     @Test
     public final void testHasPrecedingNodes(){
         assertEquals(false, node.hasPrecedingNodes());
         assertEquals(true, node2.hasPrecedingNodes());
+    }
+
+    /**
+     * Test method for {@link ExpansionNode#hasVarDeclarations()}.
+     */
+    @Test
+    public final void testHasVarDeclarations(){
+        assertEquals(false, node.hasVarDeclarations());
+        assertEquals(true, node2.hasVarDeclarations());
     }
 }

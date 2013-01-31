@@ -119,8 +119,8 @@
 ** TODO Clean up stuff in getNewMainClass
    CLOCK: [2013-02-01 Fri 00:45]--[2013-02-01 Fri 00:47] =>  0:02
    CLOCK: [2013-02-01 Fri 00:28]--[2013-02-01 Fri 00:33] =>  0:05
-** TODO Have a new type: ExpansionNode, which would implement Node.
-   CLOCK: [2013-02-01 Fri 01:47]
+** DONE Have a new type: ExpansionNode, which would implement Node.
+   CLOCK: [2013-02-01 Fri 01:47]--[2013-02-01 Fri 02:20] =>  0:33
 ** TODO ArrayLength
 *** temporary variable for the PrimaryExpression
 *** then simply do varref
@@ -134,6 +134,7 @@
 *** TODO writable argument 
 *** return return value storage variable and MethodDeclaration
 ** TODO MessageSend
+** TODO Maybe have placeholders for temporary variables and then number them uniquely within their scope
 ** TODO Test microjavaparser Statement for Message Send statement???
 ** TODO Maybe make complex methods like PrintStatement, Method Declaration, Message Send, etc. return a NodeListOptional of the different nodes they generate.
 *** I think you need something more for Message Send, though

@@ -190,8 +190,8 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
                 new Identifier(new NodeToken(PRINT_ME_STRING)))),
             mainMethodBodyStatements);
         return new ClassDeclaration(new Identifier(new NodeToken(NEW_MAIN_CLASS_NAME)),
-                                        new NodeListOptional(),
-                                        new NodeListOptional(mainMethod));
+                                    new NodeListOptional(),
+                                    new NodeListOptional(mainMethod));
     }
 
     // //
@@ -307,10 +307,10 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f16 = n.f16.accept(this);
 
         _ret = new MainClass((Identifier) f1,
-                                 (Identifier) f11,
-                                 pseudoMainClassName,
-                                 pseudoMainMethod,
-                                 mainMethodArg);
+                             (Identifier) f11,
+                             pseudoMainClassName,
+                             pseudoMainMethod,
+                             mainMethodArg);
         return _ret;
     }
 
@@ -341,8 +341,8 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f4 = n.f4.accept(this);
         Node f5 = n.f5.accept(this);
         _ret = new ClassDeclaration((Identifier) f1,
-                                        (NodeListOptional) f3,
-                                        (NodeListOptional) f4);
+                                    (NodeListOptional) f3,
+                                    (NodeListOptional) f4);
         return _ret;
     }
 
@@ -367,9 +367,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f6 = n.f6.accept(this);
         Node f7 = n.f7.accept(this);
         _ret = new ClassExtendsDeclaration((Identifier) f1,
-                                               (Identifier) f3,
-                                               (NodeListOptional) f5,
-                                               (NodeListOptional) f6);
+                                           (Identifier) f3,
+                                           (NodeListOptional) f5,
+                                           (NodeListOptional) f6);
         return _ret;
     }
 
@@ -384,7 +384,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f1 = n.f1.accept(this);
         Node f2 = n.f2.accept(this);
         _ret = new VarDeclaration((Type) f0,
-                                      (Identifier) f1);
+                                  (Identifier) f1);
         return _ret;
     }
 
@@ -440,9 +440,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f11 = n.f11.accept(this);
         Node f12 = n.f12.accept(this);
         _ret = new MethodDeclaration((Identifier) f2,
-                                         (NodeOptional) f4,
-                                         (NodeListOptional) f7,
-                                         (NodeListOptional) f8);
+                                     (NodeOptional) f4,
+                                     (NodeListOptional) f7,
+                                     (NodeListOptional) f8);
         return _ret;
     }
 
@@ -455,7 +455,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f0 = n.f0.accept(this);
         Node f1 = n.f1.accept(this);
         _ret = new FormalParameterList((FormalParameter) f0,
-                                           (NodeListOptional) f1);
+                                       (NodeListOptional) f1);
         return _ret;
     }
 
@@ -468,7 +468,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f0 = n.f0.accept(this);
         Node f1 = n.f1.accept(this);
         _ret = new FormalParameter((Type) f0,
-                                       (Identifier) f1);
+                                   (Identifier) f1);
         return _ret;
     }
 
@@ -557,8 +557,8 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f1 = n.f1.accept(this);
         Node f2 = n.f2.accept(this);
         _ret = new Block((NodeToken) f0,
-                             (NodeListOptional) f1,
-                             (NodeToken) f2);
+                         (NodeListOptional) f1,
+                         (NodeToken) f2);
         return _ret;
     }
 
@@ -577,9 +577,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f2 = n.f2.accept(this);
         Node f3 = n.f3.accept(this);
         _ret = new AssignmentStatement(new VarRef(new NodeChoice(f0, 1)),
-                                           (NodeToken) f1,
-                                           (Expression) f2,
-                                           (NodeToken) f3);
+                                       (NodeToken) f1,
+                                       (Expression) f2,
+                                       (NodeToken) f3);
         return _ret;
     }
 
@@ -605,12 +605,12 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f5 = n.f5.accept(this);
         Node f6 = n.f6.accept(this);
         _ret = new ArrayAssignmentStatement((Identifier) f0,
-                                                (NodeToken) f1,
-                                                (Expression) f2,
-                                                (NodeToken) f3,
-                                                (NodeToken) f4,
-                                                (Expression) f5,
-                                                (NodeToken) f6);
+                                            (NodeToken) f1,
+                                            (Expression) f2,
+                                            (NodeToken) f3,
+                                            (NodeToken) f4,
+                                            (Expression) f5,
+                                            (NodeToken) f6);
         return _ret;
     }
 
@@ -633,12 +633,12 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f5 = n.f5.accept(this);
         Node f6 = n.f6.accept(this);
         _ret = new IfStatement((NodeToken) f0,
-                                   (NodeToken) f1,
-                                   (Expression) f2,
-                                   (NodeToken) f3,
-                                   (Statement) f4,
-                                   (NodeToken) f5,
-                                   (Statement) f6);
+                               (NodeToken) f1,
+                               (Expression) f2,
+                               (NodeToken) f3,
+                               (Statement) f4,
+                               (NodeToken) f5,
+                               (Statement) f6);
         return _ret;
     }
 
@@ -657,10 +657,10 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f3 = n.f3.accept(this);
         Node f4 = n.f4.accept(this);
         _ret = new WhileStatement((NodeToken) f0,
-                                      (NodeToken) f1,
-                                      (Expression) f2,
-                                      (NodeToken) f3,
-                                      (Statement) f4);
+                                  (NodeToken) f1,
+                                  (Expression) f2,
+                                  (NodeToken) f3,
+                                  (Statement) f4);
         return _ret;
     }
 
@@ -681,10 +681,10 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f3 = n.f3.accept(this);
         Node f4 = n.f4.accept(this);
         _ret = new PrintStatement((NodeToken) f0,
-                                      (NodeToken) f1,
-                                      (Expression) f2,
-                                      (NodeToken) f3,
-                                      (NodeToken) f4);
+                                  (NodeToken) f1,
+                                  (Expression) f2,
+                                  (NodeToken) f3,
+                                  (NodeToken) f4);
         return _ret;
     }
 
@@ -717,8 +717,8 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f1 = n.f1.accept(this);
         Node f2 = n.f2.accept(this);
         _ret = new AndExpression((PrimaryExpression) f0,
-                                     (NodeToken) f1,
-                                     (PrimaryExpression) f2);
+                                 (NodeToken) f1,
+                                 (PrimaryExpression) f2);
         return _ret;
     }
 
@@ -733,8 +733,8 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f1 = n.f1.accept(this);
         Node f2 = n.f2.accept(this);
         _ret = new CompareExpression((PrimaryExpression) f0,
-                                         (NodeToken) f1,
-                                         (PrimaryExpression) f2);
+                                     (NodeToken) f1,
+                                     (PrimaryExpression) f2);
         return _ret;
     }
 
@@ -749,8 +749,8 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f1 = n.f1.accept(this);
         Node f2 = n.f2.accept(this);
         _ret = new PlusExpression((PrimaryExpression) f0,
-                                      (NodeToken) f1,
-                                      (PrimaryExpression) f2);
+                                  (NodeToken) f1,
+                                  (PrimaryExpression) f2);
         return _ret;
     }
 
@@ -765,8 +765,8 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f1 = n.f1.accept(this);
         Node f2 = n.f2.accept(this);
         _ret = new MinusExpression((PrimaryExpression) f0,
-                                       (NodeToken) f1,
-                                       (PrimaryExpression) f2);
+                                   (NodeToken) f1,
+                                   (PrimaryExpression) f2);
         return _ret;
     }
 
@@ -781,8 +781,8 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f1 = n.f1.accept(this);
         Node f2 = n.f2.accept(this);
         _ret = new TimesExpression((PrimaryExpression) f0,
-                                       (NodeToken) f1,
-                                       (PrimaryExpression) f2);
+                                   (NodeToken) f1,
+                                   (PrimaryExpression) f2);
         return _ret;
     }
 
@@ -799,9 +799,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f2 = n.f2.accept(this);
         Node f3 = n.f3.accept(this);
         _ret = new ArrayLookup((PrimaryExpression) f0,
-                                   (NodeToken) f1,
-                                   (PrimaryExpression) f2,
-                                   (NodeToken) f3);
+                               (NodeToken) f1,
+                               (PrimaryExpression) f2,
+                               (NodeToken) f3);
         return _ret;
     }
 
@@ -811,6 +811,8 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
     //  * f2 -> "length"
     //  */
     // public Node visit(syntaxtree.ArrayLength n) {
+    //     // TODO(spradeep): PrimaryExpression could have precedingNodes
+    //     // as well.
     //     Node _ret=null;
     //     Node f0 = n.f0.accept(this);
     //     Node f1 = n.f1.accept(this);
@@ -849,7 +851,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f0 = n.f0.accept(this);
         Node f1 = n.f1.accept(this);
         _ret = new ExpressionList((Expression) f0,
-                                      (NodeListOptional) f1);
+                                  (NodeListOptional) f1);
         return _ret;
     }
 
@@ -862,7 +864,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f0 = n.f0.accept(this);
         Node f1 = n.f1.accept(this);
         _ret = new ExpressionRest((NodeToken) f0,
-                                      (Expression) f1);
+                                  (Expression) f1);
         return _ret;
     }
 
@@ -948,10 +950,10 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f3 = n.f3.accept(this);
         Node f4 = n.f4.accept(this);
         _ret = new ArrayAllocationExpression((NodeToken) f0,
-                                                 (NodeToken) f1,
-                                                 (NodeToken) f2,
-                                                 (Expression) f3,
-                                                 (NodeToken) f4);
+                                             (NodeToken) f1,
+                                             (NodeToken) f2,
+                                             (Expression) f3,
+                                             (NodeToken) f4);
         return _ret;
     }
 
@@ -968,9 +970,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f2 = n.f2.accept(this);
         Node f3 = n.f3.accept(this);
         _ret = new AllocationExpression((NodeToken) f0,
-                                            (Identifier) f1,
-                                            (NodeToken) f2,
-                                            (NodeToken) f3);
+                                        (Identifier) f1,
+                                        (NodeToken) f2,
+                                        (NodeToken) f3);
         return _ret;
     }
 
@@ -983,7 +985,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f0 = n.f0.accept(this);
         Node f1 = n.f1.accept(this);
         _ret = new NotExpression((NodeToken) f0,
-                                     (Expression) f1);
+                                 (Expression) f1);
         return _ret;
     }
 
@@ -998,8 +1000,8 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<Node> {
         Node f1 = n.f1.accept(this);
         Node f2 = n.f2.accept(this);
         _ret = new BracketExpression((NodeToken) f0,
-                                         (Expression) f1,
-                                         (NodeToken) f2);
+                                     (Expression) f1,
+                                     (NodeToken) f2);
         return _ret;
     }
 
