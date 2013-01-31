@@ -158,20 +158,21 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      * @return the ClassDeclaration Node typecast to R.
      */
     public R getNewMainClass(syntaxtree.PrintStatement printStatement){
-
-        // TODO(spradeep): Add code for the printStatement
-
         FormalParameterList params = new FormalParameterList(
             new FormalParameter(
                 new Type(new NodeChoice(new IntegerType(), 2)),
                 new Identifier(new NodeToken(MAIN_METHOD_PARAM_NAME))),
             new NodeListOptional());
 
+        // TODO(spradeep): What if expression is made up of multiple
+        // expressions? => Fill mainMethodBodyStatements with the
+        // direct MicroJava equivalent of printStatement. It will take
+        // care of everything.
+
         NodeListOptional mainMethodBodyStatements = new NodeListOptional(
             new AssignmentStatement(
                 new VarRef(new NodeChoice(new Identifier(new NodeToken(PRINT_ME_STRING)),
                                           1)),
-                // TODO(spradeep): 
                 (Expression) printStatement.f2.accept(this)));
         mainMethodBodyStatements.addNode(new PrintStatement(
             new Expression(new NodeChoice(
@@ -299,15 +300,6 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
         R f11 = n.f11.accept(this);
         R f12 = n.f12.accept(this);
         R f13 = n.f13.accept(this);
-
-        // // I think I should send f14 (PrintStatement) to some function
-        // // which will wrap it in the ____NewMainClass____ definition
-        // output(callToPseudoMainClassString);
-        // isInMiniMain = true;
-
-        // R f14 = n.f14.accept(this);
-
-        // isInMiniMain = false;
 
         this.newMainClass = getNewMainClass(n.f14);
 
@@ -539,7 +531,6 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
         return _ret;
     }
 
-    // TODO(spradeep): Testing
     /**
      * f0 -> Block()
      *       | AssignmentStatement()

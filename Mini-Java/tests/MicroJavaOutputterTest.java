@@ -83,10 +83,12 @@ public class MicroJavaOutputterTest {
     FormalParameterList formalParameterListMini;
     Goal goalMini;
     MainClass mainClassMini;
+    ClassDeclaration classDeclarationMini;
+    ClassExtendsDeclaration classExtendsDeclarationMini;
+    TypeDeclaration typeDeclarationMini;
+    TypeDeclaration typeDeclarationMini2;
+    ArrayLength arrayLengthMini;
 
-    // ArrayLength arrayLengthMini = new ArrayLength();
-    // ClassDeclaration classDeclarationMini = new ClassDeclaration();
-    // ClassExtendsDeclaration classExtendsDeclarationMini = new ClassExtendsDeclaration();
     // MessageSend messageSendMini = new MessageSend();
     // MethodDeclaration methodDeclarationMini = new MethodDeclaration();
 
@@ -145,6 +147,10 @@ public class MicroJavaOutputterTest {
     microjavaparser.syntaxtree.FormalParameterList formalParameterList;
     microjavaparser.syntaxtree.Goal goal;
     microjavaparser.syntaxtree.MainClass mainClass;
+    microjavaparser.syntaxtree.ClassDeclaration classDeclaration;
+    microjavaparser.syntaxtree.ClassExtendsDeclaration classExtendsDeclaration;
+    microjavaparser.syntaxtree.TypeDeclaration typeDeclaration;
+    microjavaparser.syntaxtree.TypeDeclaration typeDeclaration2;
 
     // TODO(spradeep): 
     // microjavaparser.syntaxtree.MainClass mainClass = new microjavaparser.syntaxtree.MainClass(
@@ -157,8 +163,6 @@ public class MicroJavaOutputterTest {
     //     new microjavaparser.syntaxtree.NodeOptional());
 
 
-    // microjavaparser.syntaxtree.ClassDeclaration classDeclaration = new microjavaparser.syntaxtree.ClassDeclaration();
-    // microjavaparser.syntaxtree.ClassExtendsDeclaration classExtendsDeclaration = new microjavaparser.syntaxtree.ClassExtendsDeclaration();
     // microjavaparser.syntaxtree.MethodDeclaration methodDeclaration = new microjavaparser.syntaxtree.MethodDeclaration();
     // microjavaparser.syntaxtree.MessageSendStatement messageSendStatement = new microjavaparser.syntaxtree.MessageSendStatement();
     // microjavaparser.syntaxtree.VarRef varRef = new microjavaparser.syntaxtree.VarRef();
@@ -243,8 +247,6 @@ public class MicroJavaOutputterTest {
         nodeListOptionalMini.addNode(expressionMini2);
         nodeListOptionalMini.addNode(expressionMini3);
 
-        // typeDeclarationMini = new TypeDeclaration();
-
         NodeListOptional tempListOptionalMini = new NodeListOptional(statementMini);
         tempListOptionalMini.addNode(statementMini2);
         blockMini = new Block(tempListOptionalMini);
@@ -259,6 +261,18 @@ public class MicroJavaOutputterTest {
                                       identifierMini2,
                                       printStatementMini);
         goalMini = new Goal(mainClassMini, new NodeListOptional());
+        classDeclarationMini = new ClassDeclaration(identifierMini,
+                                                    new NodeListOptional(),
+                                                    new NodeListOptional());
+        classExtendsDeclarationMini = new ClassExtendsDeclaration(identifierMini,
+                                                                  identifierMini2,
+                                                                  new NodeListOptional(),
+                                                                  new NodeListOptional());
+
+        typeDeclarationMini = new TypeDeclaration(
+            new NodeChoice(classDeclarationMini, 0));
+        typeDeclarationMini2 = new TypeDeclaration(
+            new NodeChoice(classExtendsDeclarationMini, 1));
 
         // MicroJava test fixtures
 
@@ -364,8 +378,19 @@ public class MicroJavaOutputterTest {
             new microjavaparser.syntaxtree.NodeListOptional(
                 (microjavaparser.syntaxtree.Node)
                 tempOutputter.getNewMainClass(printStatementMini)));
+        classDeclaration = new microjavaparser.syntaxtree.ClassDeclaration(
+            identifier,
+            new microjavaparser.syntaxtree.NodeListOptional(),
+            new microjavaparser.syntaxtree.NodeListOptional());
 
-        // typeDeclaration = new microjavaparser.syntaxtree.TypeDeclaration();
+        classExtendsDeclaration = new microjavaparser.syntaxtree.ClassExtendsDeclaration(
+            identifier,
+            identifier2,
+            new microjavaparser.syntaxtree.NodeListOptional(),
+            new microjavaparser.syntaxtree.NodeListOptional());
+
+        typeDeclaration = new microjavaparser.syntaxtree.TypeDeclaration(new microjavaparser.syntaxtree.NodeChoice(classDeclaration, 0));
+        typeDeclaration2 = new microjavaparser.syntaxtree.TypeDeclaration(new microjavaparser.syntaxtree.NodeChoice(classExtendsDeclaration, 1));
     }
     
     @After
@@ -623,7 +648,22 @@ public class MicroJavaOutputterTest {
      */
     @Test
     public final void testType(){
-        assertEqualAfterTransform(type, typeMini);
+        Type typeMini1 = new Type(new NodeChoice(arrayTypeMini, 0));
+        Type typeMini2 = new Type(new NodeChoice(booleanTypeMini, 1));
+        Type typeMini3 = new Type(new NodeChoice(integerTypeMini, 2));
+        Type typeMini4 = new Type(new NodeChoice(identifierMini, 3));
+        microjavaparser.syntaxtree.Type type1 = new microjavaparser.syntaxtree.Type(
+            new microjavaparser.syntaxtree.NodeChoice(arrayType, 0));
+        microjavaparser.syntaxtree.Type type2 = new microjavaparser.syntaxtree.Type(
+            new microjavaparser.syntaxtree.NodeChoice(booleanType, 1));
+        microjavaparser.syntaxtree.Type type3 = new microjavaparser.syntaxtree.Type(
+            new microjavaparser.syntaxtree.NodeChoice(integerType, 2));
+        microjavaparser.syntaxtree.Type type4 = new microjavaparser.syntaxtree.Type(
+            new microjavaparser.syntaxtree.NodeChoice(identifier, 3));
+        assertEqualAfterTransform(type1, typeMini1);
+        assertEqualAfterTransform(type2, typeMini2);
+        assertEqualAfterTransform(type3, typeMini3);
+        assertEqualAfterTransform(type4, typeMini4);
     }
 
     /**
@@ -759,6 +799,139 @@ public class MicroJavaOutputterTest {
         assertEqualAfterTransform(goal, goalMini);
     }
 
+    /**
+     * Test method for {@link MicroJavaOutputter#ClassDeclaration()}.
+     */
+    @Test
+    public final void testClassDeclaration(){
+        assertEqualAfterTransform(classDeclaration, classDeclarationMini);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#ClassExtendsDeclaration()}.
+     */
+    @Test
+    public final void testClassExtendsDeclaration(){
+        assertEqualAfterTransform(classExtendsDeclaration, classExtendsDeclarationMini);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#TypeDeclaration()}.
+     */
+    @Test
+    public final void testTypeDeclaration(){
+        assertEqualAfterTransform(typeDeclaration, typeDeclarationMini);
+        assertEqualAfterTransform(typeDeclaration2, typeDeclarationMini2);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#Statement()}.
+     */
+    @Test
+    public final void testStatement(){
+        Statement statementMini0 = new Statement(new NodeChoice(blockMini, 0));
+        Statement statementMini1 = new Statement(new NodeChoice(assignmentStatementMini, 1));
+        Statement statementMini2 = new Statement(new NodeChoice(arrayAssignmentStatementMini, 2));
+        Statement statementMini3 = new Statement(new NodeChoice(ifStatementMini, 3));
+        Statement statementMini4 = new Statement(new NodeChoice(whileStatementMini, 4));
+        Statement statementMini5 = new Statement(new NodeChoice(printStatementMini, 5));
+
+        microjavaparser.syntaxtree.Statement statement0 = new microjavaparser.syntaxtree.Statement(new microjavaparser.syntaxtree.NodeChoice(block, 0));
+        microjavaparser.syntaxtree.Statement statement1 = new microjavaparser.syntaxtree.Statement(new microjavaparser.syntaxtree.NodeChoice(assignmentStatement, 1));
+        microjavaparser.syntaxtree.Statement statement2 = new microjavaparser.syntaxtree.Statement(new microjavaparser.syntaxtree.NodeChoice(arrayAssignmentStatement, 2));
+        microjavaparser.syntaxtree.Statement statement3 = new microjavaparser.syntaxtree.Statement(new microjavaparser.syntaxtree.NodeChoice(ifStatement, 3));
+        microjavaparser.syntaxtree.Statement statement4 = new microjavaparser.syntaxtree.Statement(new microjavaparser.syntaxtree.NodeChoice(whileStatement, 4));
+        microjavaparser.syntaxtree.Statement statement5 = new microjavaparser.syntaxtree.Statement(new microjavaparser.syntaxtree.NodeChoice(printStatement, 5));
+
+        assertEqualAfterTransform(statement0, statementMini0);
+        assertEqualAfterTransform(statement1, statementMini1);
+        assertEqualAfterTransform(statement2, statementMini2);
+        assertEqualAfterTransform(statement3, statementMini3);
+        assertEqualAfterTransform(statement4, statementMini4);
+        assertEqualAfterTransform(statement5, statementMini5);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#Expression()}.
+     */
+    @Test
+    public final void testExpression(){
+        Expression expressionMini0 = new Expression(new NodeChoice(andExpressionMini, 0));
+        Expression expressionMini1 = new Expression(new NodeChoice(compareExpressionMini, 1));
+        Expression expressionMini2 = new Expression(new NodeChoice(plusExpressionMini, 2));
+        Expression expressionMini3 = new Expression(new NodeChoice(minusExpressionMini, 3));
+        Expression expressionMini4 = new Expression(new NodeChoice(timesExpressionMini, 4));
+        Expression expressionMini5 = new Expression(new NodeChoice(arrayLookupMini, 5));
+
+        // TODO(spradeep): 
+        // Expression expressionMini6 = new Expression(new NodeChoice(arrayLengthMini, 6));
+
+        // TODO(spradeep): 
+        // Expression expressionMini7 = new Expression(new NodeChoice(messageSendMini, 7));
+
+        Expression expressionMini8 = new Expression(new NodeChoice(primaryExpressionMini, 8));
+
+        microjavaparser.syntaxtree.Expression expression0 = new microjavaparser.syntaxtree.Expression(new microjavaparser.syntaxtree.NodeChoice(andExpression, 0));
+        microjavaparser.syntaxtree.Expression expression1 = new microjavaparser.syntaxtree.Expression(new microjavaparser.syntaxtree.NodeChoice(compareExpression, 1));
+        microjavaparser.syntaxtree.Expression expression2 = new microjavaparser.syntaxtree.Expression(new microjavaparser.syntaxtree.NodeChoice(plusExpression, 2));
+        microjavaparser.syntaxtree.Expression expression3 = new microjavaparser.syntaxtree.Expression(new microjavaparser.syntaxtree.NodeChoice(minusExpression, 3));
+        microjavaparser.syntaxtree.Expression expression4 = new microjavaparser.syntaxtree.Expression(new microjavaparser.syntaxtree.NodeChoice(timesExpression, 4));
+        microjavaparser.syntaxtree.Expression expression5 = new microjavaparser.syntaxtree.Expression(new microjavaparser.syntaxtree.NodeChoice(arrayLookup, 5));
+
+        // TODO(spradeep): 
+        // microjavaparser.syntaxtree.Expression expression6 = new microjavaparser.syntaxtree.Expression(new microjavaparser.syntaxtree.NodeChoice(arrayLength, 6));
+        // TODO(spradeep): 
+        // microjavaparser.syntaxtree.Expression expression7 = new microjavaparser.syntaxtree.Expression(new microjavaparser.syntaxtree.NodeChoice(messageSend, 7));
+
+        microjavaparser.syntaxtree.Expression expression8 = new microjavaparser.syntaxtree.Expression(new microjavaparser.syntaxtree.NodeChoice(primaryExpression, 8));
+
+        assertEqualAfterTransform(expression0, expressionMini0);
+        assertEqualAfterTransform(expression1, expressionMini1);
+        assertEqualAfterTransform(expression2, expressionMini2);
+        assertEqualAfterTransform(expression3, expressionMini3);
+        assertEqualAfterTransform(expression4, expressionMini4);
+        assertEqualAfterTransform(expression5, expressionMini5);
+        // assertEqualAfterTransform(expression6, expressionMini6);
+        // assertEqualAfterTransform(expression7, expressionMini7);
+        assertEqualAfterTransform(expression8, expressionMini8);
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#PrimaryExpression()}.
+     */
+    @Test
+    public final void testPrimaryExpression(){
+        PrimaryExpression primaryExpressionMini0 = new PrimaryExpression(new NodeChoice(integerLiteralMini, 0));
+        PrimaryExpression primaryExpressionMini1 = new PrimaryExpression(new NodeChoice(trueLiteralMini, 1));
+        PrimaryExpression primaryExpressionMini2 = new PrimaryExpression(new NodeChoice(falseLiteralMini, 2));
+        PrimaryExpression primaryExpressionMini3 = new PrimaryExpression(new NodeChoice(identifierMini, 3));
+        PrimaryExpression primaryExpressionMini4 = new PrimaryExpression(new NodeChoice(thisExpressionMini, 4));
+        PrimaryExpression primaryExpressionMini5 = new PrimaryExpression(new NodeChoice(arrayAllocationExpressionMini, 5));
+        PrimaryExpression primaryExpressionMini6 = new PrimaryExpression(new NodeChoice(allocationExpressionMini, 6));
+        PrimaryExpression primaryExpressionMini7 = new PrimaryExpression(new NodeChoice(notExpressionMini, 7));
+        PrimaryExpression primaryExpressionMini8 = new PrimaryExpression(new NodeChoice(bracketExpressionMini, 8));
+
+        microjavaparser.syntaxtree.PrimaryExpression primaryExpression0 = new microjavaparser.syntaxtree.PrimaryExpression(new microjavaparser.syntaxtree.NodeChoice(integerLiteral, 0));
+        microjavaparser.syntaxtree.PrimaryExpression primaryExpression1 = new microjavaparser.syntaxtree.PrimaryExpression(new microjavaparser.syntaxtree.NodeChoice(trueLiteral, 1));
+        microjavaparser.syntaxtree.PrimaryExpression primaryExpression2 = new microjavaparser.syntaxtree.PrimaryExpression(new microjavaparser.syntaxtree.NodeChoice(falseLiteral, 2));
+        microjavaparser.syntaxtree.PrimaryExpression primaryExpression3 = new microjavaparser.syntaxtree.PrimaryExpression(new microjavaparser.syntaxtree.NodeChoice(identifier, 3));
+        microjavaparser.syntaxtree.PrimaryExpression primaryExpression4 = new microjavaparser.syntaxtree.PrimaryExpression(new microjavaparser.syntaxtree.NodeChoice(thisExpression, 4));
+        microjavaparser.syntaxtree.PrimaryExpression primaryExpression5 = new microjavaparser.syntaxtree.PrimaryExpression(new microjavaparser.syntaxtree.NodeChoice(arrayAllocationExpression, 5));
+        microjavaparser.syntaxtree.PrimaryExpression primaryExpression6 = new microjavaparser.syntaxtree.PrimaryExpression(new microjavaparser.syntaxtree.NodeChoice(allocationExpression, 6));
+        microjavaparser.syntaxtree.PrimaryExpression primaryExpression7 = new microjavaparser.syntaxtree.PrimaryExpression(new microjavaparser.syntaxtree.NodeChoice(notExpression, 7));
+        microjavaparser.syntaxtree.PrimaryExpression primaryExpression8 = new microjavaparser.syntaxtree.PrimaryExpression(new microjavaparser.syntaxtree.NodeChoice(bracketExpression, 8));
+
+        assertEqualAfterTransform(primaryExpression0, primaryExpressionMini0);
+        assertEqualAfterTransform(primaryExpression1, primaryExpressionMini1);
+        assertEqualAfterTransform(primaryExpression2, primaryExpressionMini2);
+        assertEqualAfterTransform(primaryExpression3, primaryExpressionMini3);
+        assertEqualAfterTransform(primaryExpression4, primaryExpressionMini4);
+        assertEqualAfterTransform(primaryExpression5, primaryExpressionMini5);
+        assertEqualAfterTransform(primaryExpression6, primaryExpressionMini6);
+        assertEqualAfterTransform(primaryExpression7, primaryExpressionMini7);
+        assertEqualAfterTransform(primaryExpression8, primaryExpressionMini8);   
+    }
+
     // TODO(spradeep): 
     // /**
     //  * Test method for {@link MicroJavaOutputter#MainClass()}.
@@ -768,14 +941,6 @@ public class MicroJavaOutputterTest {
     //     assertEqualAfterTransform(mainClass, mainClassMini);
     // }
 
-    // TODO(spradeep): 
-    // /**
-    //  * Test method for {@link MicroJavaOutputter#PrimaryExpression()}.
-    //  */
-    // @Test
-    // public final void testPrimaryExpression(){
-        
-    // }
 
     ///////////////////////
     // Integration Tests //

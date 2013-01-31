@@ -47,17 +47,6 @@
 *** call the method
 *** return the return value if needed
 ** TODO array.length
-* General notes
-** GJ* uses Java with Generics
-** I guess I don't have a way to compare two syntax trees. So, to test that my generated MicroJava code is OK, I'm gonna test if it is valid MicroJava and 
-** TODO Not able to force the execute target to run ONLY when everything has been compiled. It all works ONLY when I add a -B flag. Have to sort out Make dependencies.
-** TODO Not able to figure out how to use relative paths for input test source files. Winging it for now.
-** TODO Move the pretty-printing code to a class of its own
-** TODO Maybe construct a MicroJava syntax tree instead of constructing a string version of the same
-*** I think I should use GJNoArguVisitor or GJDepthFirst so that each visit() method will return a Node
-*** Check out [[file:~/Downloads/Applications/Expression_GJ_Pro.jar][Expression_Gj_Pro]] for an example of Generics and return value for visit
-*** VVIP Even if I use Generics, there's an awful lot of Casting going on cos I'm trying to construct a parse tree of some other class hierarchy. I think this is unavoidable. You have to encode that information somewhere.
-** VVIP Big bug => In my test fixtures, I had been passing the same node twice e.g., (prim, prim). I'd done this at several levels.
 * GLINTs - PCQ|FCK|AIR|POV
 ** Purpose - Use JTB and JavaCC to write a MiniJava to MicroJava translator for valid MiniJava programs.
 ** CQ - (several ways + answer/opinion/>1 POV) => How to produce MicroJava code for each of the syntax tree nodes?
@@ -76,6 +65,18 @@
 ** What surprised me -
 ** Relation to my life / Actions -
 ** Next Actions - DRFMF / Chunk + Repetition + Feel
+* General notes
+** GJ* uses Java with Generics
+** I guess I don't have a way to compare two syntax trees. So, to test that my generated MicroJava code is OK, I'm gonna test if it is valid MicroJava and 
+** TODO Not able to force the execute target to run ONLY when everything has been compiled. It all works ONLY when I add a -B flag. Have to sort out Make dependencies.
+** TODO Not able to figure out how to use relative paths for input test source files. Winging it for now.
+** TODO Move the pretty-printing code to a class of its own
+** TODO Maybe construct a MicroJava syntax tree instead of constructing a string version of the same
+*** I think I should use GJNoArguVisitor or GJDepthFirst so that each visit() method will return a Node
+*** Check out [[file:~/Downloads/Applications/Expression_GJ_Pro.jar][Expression_Gj_Pro]] for an example of Generics and return value for visit
+*** VVIP Even if I use Generics, there's an awful lot of Casting going on cos I'm trying to construct a parse tree of some other class hierarchy. I think this is unavoidable. You have to encode that information somewhere.
+** VVIP Big bug => In my test fixtures, I had been passing the same node twice e.g., (prim, prim). I'd done this at several levels.
+** Note: the big instantiation and method call statement in the Main Class's main method is an exception. Usually, instantiation and method call are broken apart.
 * Outline
 ** DONE Compare and contrast the two grammars
 ** DONE Trivial code
@@ -103,9 +104,36 @@
    CLOCK: [2013-01-30 Wed 12:53]--[2013-01-30 Wed 14:11] =>  1:18
 ** DONE MainClass
    CLOCK: [2013-01-31 Thu 20:51]--[2013-01-31 Thu 22:25] =>  1:34
+** DONE Type
+   CLOCK: [2013-01-31 Thu 23:12]--[2013-01-31 Thu 23:13] =>  0:01
+** DONE ClassDeclaration, ClassExtendsDeclaration
+   CLOCK: [2013-01-31 Thu 23:14]--[2013-01-31 Thu 23:22] =>  0:08
+** DONE TypeDeclaration
+   CLOCK: [2013-01-31 Thu 23:23]--[2013-01-31 Thu 23:30] =>  0:07
+** DONE Statement
+   CLOCK: [2013-01-31 Thu 23:30]--[2013-01-31 Thu 23:36] =>  0:06
+** DONE Expression
+   CLOCK: [2013-01-31 Thu 23:36]--[2013-01-31 Thu 23:47] =>  0:11
+** DONE PrimaryExpression
+   CLOCK: [2013-01-31 Thu 23:47]--[2013-01-31 Thu 23:56] =>  0:09
+** TODO Clean up stuff in getNewMainClass
+   CLOCK: [2013-02-01 Fri 00:45]--[2013-02-01 Fri 00:47] =>  0:02
+   CLOCK: [2013-02-01 Fri 00:28]--[2013-02-01 Fri 00:33] =>  0:05
+** TODO ArrayLength
+*** temporary variable for the PrimaryExpression
+*** then simply do varref
+*** Return nodelist
+** TODO Expression
+** TODO AssignmentStatement
+*** VarRef not Identifier
+** TODO PrintStatement
+*** return aux statements and then the print statement
+** TODO MethodDeclaration
+*** TODO writable argument 
+*** return return value storage variable and MethodDeclaration
+** TODO MessageSend
+** TODO Test microjavaparser Statement for Message Send statement???
 ** TODO Maybe make complex methods like PrintStatement, Method Declaration, Message Send, etc. return a NodeListOptional of the different nodes they generate.
 *** I think you need something more for Message Send, though
 ** TODO What if there are multiple print statements in a method? Don't declare the print variable more than once.
 ** TODO Integration test: MainOnly
-** TODO Complex features
-*** length: just make it an identifier
