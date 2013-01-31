@@ -8,7 +8,7 @@ public class Main {
          Node root = new MiniJavaParser(System.in).Goal();
          System.out.println("Program parsed successfully");
          System.out.println("Yo, Boyz!"); 
-         MicroJavaOutputter<microjavaparser.syntaxtree.Node> outputter = new MicroJavaOutputter<microjavaparser.syntaxtree.Node>();
+         MicroJavaOutputter outputter = new MicroJavaOutputter();
          microjavaparser.syntaxtree.Node microJavaRoot = root.accept(outputter);
          
          System.out.println("outputter.getMicroJavaCode(): " + outputter.getMicroJavaCode());

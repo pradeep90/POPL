@@ -119,7 +119,7 @@
 ** TODO Clean up stuff in getNewMainClass
    CLOCK: [2013-02-01 Fri 00:45]--[2013-02-01 Fri 00:47] =>  0:02
    CLOCK: [2013-02-01 Fri 00:28]--[2013-02-01 Fri 00:33] =>  0:05
-** TODO Have a new type: ExpansionNode
+** TODO Have a new type: ExpansionNode, which would implement Node.
    CLOCK: [2013-02-01 Fri 01:47]
 ** TODO ArrayLength
 *** temporary variable for the PrimaryExpression

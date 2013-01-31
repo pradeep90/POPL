@@ -376,7 +376,6 @@ public class MicroJavaOutputterTest {
         goal = new microjavaparser.syntaxtree.Goal(
             mainClass,
             new microjavaparser.syntaxtree.NodeListOptional(
-                (microjavaparser.syntaxtree.Node)
                 tempOutputter.getNewMainClass(printStatementMini)));
         classDeclaration = new microjavaparser.syntaxtree.ClassDeclaration(
             identifier,
@@ -781,7 +780,6 @@ public class MicroJavaOutputterTest {
                 expectedGoal.f1.nodes.get(0);
 
         microjavaparser.syntaxtree.Node actualNewMainClassNode =
-                (microjavaparser.syntaxtree.Node)
                 outputter.getNewMainClass(printStatementMini);
 
 
