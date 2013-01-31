@@ -593,6 +593,9 @@ public class MicroJavaOutputter<R> extends GJNoArguDepthFirst<R> {
      * f6 -> ";"
      */
     public R visit(syntaxtree.ArrayAssignmentStatement n) {
+        // TODO(spradeep): See if the order of expansion of f2 and f5
+        // makes a big difference. Remember, there can be multiple Nodes
+        // on expansion of Expression.
         R _ret=null;
         R f0 = n.f0.accept(this);
         R f1 = n.f1.accept(this);
