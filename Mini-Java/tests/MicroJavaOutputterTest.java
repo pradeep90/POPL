@@ -905,10 +905,7 @@ public class MicroJavaOutputterTest {
                 "class ____NewMainClass____{" +
                 "" +
                 "   public void ____Main____(int ____arg_length____){" +
-                "      int ____printMe____;" +
-                "" +
-                "      ____printMe____ = 75;" +
-                "      System.out.println(____printMe____);" +
+                "      System.out.println(75);" +
                 "   }" +
                 "}";
 
@@ -1160,6 +1157,7 @@ public class MicroJavaOutputterTest {
 
         String expectedString =
                 "      int ___tmp0 ;" +
+                "      TYPE_FooBarFour ___tmp1 ;" +
                 "      ___tmp0 =  63;" +
                 "      ___tmp0 . FooBarFour ( 89 , 75 ) ;" +
                 "      ___tmp1 = ___tmp0.____1234FooBarFour4321____ ;" +
@@ -1240,7 +1238,7 @@ public class MicroJavaOutputterTest {
         // doTestMiniAndMicroJava("BinarySearch");
         // doTestMiniAndMicroJava("BinaryTree");
         // doTestMiniAndMicroJava("BubbleSort");
-        // doTestMiniAndMicroJava("Factorial");
+        doTestMiniAndMicroJava("Factorial");
         // doTestMiniAndMicroJava("LinearSearch");
         // doTestMiniAndMicroJava("LinkedList");
         // doTestMiniAndMicroJava("MainOnly");

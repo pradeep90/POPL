@@ -36,6 +36,8 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
             new NodeChoice(new IntegerLiteral(new NodeToken("0")), 0)), 6)),
                            new NodeListOptional()));
 
+    public HashMap<String, Type> methodReturnTypeHash = new HashMap<String, Type>();
+
     public int tempCtr = 0;
     
     public boolean isInMiniMain = false;
@@ -108,25 +110,38 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         return new Identifier(new NodeToken(varName));
     }
 
+    public static String getMethodName(Identifier methodIdentifier){
+        return methodIdentifier.f0.tokenImage;
+    }
+
+    public static String getMethodRetVarName(Identifier methodIdentifier){
+        return "____1234" + getMethodName(methodIdentifier) + "4321____";
+    }
+
     public static Identifier getMethodRetVarIdentifier(Identifier methodIdentifier){
-        String methodName = methodIdentifier.f0.tokenImage;
-        return getTempIdentifier("____1234" + methodName + "4321____");
+        return getTempIdentifier(getMethodRetVarName(methodIdentifier));
     }
 
     /** 
      * @return VarDeclaration for varName.
      */
     public VarDeclaration getVarDeclaration(String varName){
-        return getVarDeclaration(varName, new IntegerType());
+        return getVarDeclaration(varName, new Type(new NodeChoice(new IntegerType(), 2)));
+    }
+
+    /** 
+     * @return VarDeclaration for varName given the methodIdentifier.
+     */
+    public VarDeclaration getVarDeclaration(String varName, Identifier methodIdentifier){
+        return getVarDeclaration(varName, new Type(new NodeChoice(
+            getTempIdentifier("TYPE_" + getMethodName(methodIdentifier)), 3)));
     }
 
     /** 
      * @return VarDeclaration for varName with type.
      */
-    public VarDeclaration getVarDeclaration(String varName, Node type){
-        return new VarDeclaration(
-            new Type(new NodeChoice(type, 0)),
-            getTempIdentifier(varName));
+    public VarDeclaration getVarDeclaration(String varName, Type type){
+        return new VarDeclaration(type, getTempIdentifier(varName));
     }
 
     public AssignmentStatement getAssiStatement(String varName, Node primExprNode){
@@ -241,31 +256,13 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
                 new Identifier(new NodeToken(MAIN_METHOD_PARAM_NAME))),
             new NodeListOptional());
 
-        // TODO(spradeep): What if expression is made up of multiple
-        // expressions? => Fill mainMethodBodyStatements with the
-        // direct MicroJava equivalent of printStatement. It will take
-        // care of everything.
+        ExpansionNode printStatementStuff = printStatement.accept(this);
 
-        NodeListOptional mainMethodBodyStatements = new NodeListOptional(
-            new AssignmentStatement(
-                new VarRef(new NodeChoice(new Identifier(new NodeToken(PRINT_ME_STRING)),
-                                          1)),
-                (Expression) printStatement.f2.accept(this).node));
-        mainMethodBodyStatements.addNode(new PrintStatement(
-            new Expression(new NodeChoice(
-                new PrimaryExpression(
-                    new NodeChoice(
-                        new VarRef(new NodeChoice(new Identifier(
-                            new NodeToken(PRINT_ME_STRING)) ,1)),
-                        3)),
-                6))));
         MethodDeclaration mainMethod = new MethodDeclaration(
             new Identifier(new NodeToken(NEW_MAIN_METHOD_NAME)),
             new NodeOptional(params),
-            new NodeListOptional(new VarDeclaration(
-                new Type(new NodeChoice(new IntegerType(), 2)),
-                new Identifier(new NodeToken(PRINT_ME_STRING)))),
-            mainMethodBodyStatements);
+            printStatementStuff.varDeclarations,
+            getSquashedNodeList(printStatementStuff));
         return new ClassDeclaration(
             new Identifier(new NodeToken(NEW_MAIN_CLASS_NAME)),
             new NodeListOptional(),
@@ -565,10 +562,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
                                                        (NodeOptional) f4.node,
                                                        allVarDeclarations,
                                                        allStatements));
-        VarDeclaration pseudoReturnVariable = new VarDeclaration(
-            // TODO(spradeep): Decide this based on something
-            new Type(new NodeChoice(new IntegerType(), 2)),
-            getMethodRetVarIdentifier((Identifier) f2.node));
+        VarDeclaration pseudoReturnVariable =
+                getVarDeclaration(getMethodRetVarName((Identifier) f2.node),
+                                  (Identifier) f2.node);
         _ret.varDeclarations.addNode(pseudoReturnVariable);
         return _ret;
     }
@@ -1005,7 +1001,8 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         String tempVarName = getNewTempVarName();
 
         VarDeclaration tempDeclaration = getVarDeclaration(tempVarName,
-                                                           new ArrayType());
+                                                           new Type(new NodeChoice(
+                                                               new ArrayType(), 0)));
         AssignmentStatement tempStatement = getAssiStatement(tempVarName,
                                                              f0.node);
         VarRef tempRef = new VarRef(new NodeChoice(
@@ -1056,20 +1053,24 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
             (Identifier) f2.node,
             (NodeOptional) f4.node);
 
+        Identifier methodIdentifier = (Identifier) f2.node;
+        VarDeclaration retVarDeclaration = getVarDeclaration(retTempVarName,
+                                                             methodIdentifier);
         AssignmentStatement returnValueAssignmentStatement = getAssiStatement(
             retTempVarName,
             new PrimaryExpression(new NodeChoice(
                 new VarRef(new NodeChoice(new DotExpression(
                     getTempIdentifier(tempVarName),
-                    getMethodRetVarIdentifier(((Identifier) f2.node))),
+                    getMethodRetVarIdentifier(methodIdentifier)),
                                           0)), 3)));
         
         _ret = new ExpansionNode(getTempIdentifier(retTempVarName));
 
-        _ret.extendAuxiliary(f0);
-        _ret.extendAuxiliary(f4);
         _ret.varDeclarations.addNode(tempDeclaration);
+        _ret.varDeclarations.addNode(retVarDeclaration);
+        _ret.extendAuxiliary(f0);
         _ret.precedingNodes.addNode(tempStatement);
+        _ret.extendAuxiliary(f4);
         _ret.precedingNodes.addNode(messageSendStatement);
         _ret.precedingNodes.addNode(returnValueAssignmentStatement);
         return _ret;

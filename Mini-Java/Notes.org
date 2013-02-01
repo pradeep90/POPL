@@ -152,6 +152,7 @@
 ** DONE Wrapup Code for final code testing
    CLOCK: [2013-02-01 Fri 18:28]--[2013-02-01 Fri 19:10] =>  0:42
 ** DONE MessageSend STATEMENT: get the return value in a temporary variable and send it as an IDENTIFIER expression.
+   CLOCK: [2013-02-01 Fri 21:02]--[2013-02-01 Fri 21:05] =>  0:03
    CLOCK: [2013-02-01 Fri 19:32]--[2013-02-01 Fri 19:38] =>  0:06
    CLOCK: [2013-02-01 Fri 19:11]--[2013-02-01 Fri 19:30] =>  0:19
 ** DONE ELSE: assignment statements - make them happen within the else body itself.
@@ -163,8 +164,10 @@
    CLOCK: [2013-02-01 Fri 20:17]--[2013-02-01 Fri 20:20] =>  0:03
 ** DONE Counter for temporary variables => getNewTempVarName
    CLOCK: [2013-02-01 Fri 20:21]--[2013-02-01 Fri 20:41] =>  0:20
-** TODO Map temporary variable names to their Types - till then maybe name the Type as TYPE + TEMPNAME
 ** DONE Proper name for return variables
-** TODO getNewMainClass special case: Make sure you include the varDeclarations and precedingNodes
+** DONE getNewMainClass special case: Make sure you include the varDeclarations and precedingNodes
+   CLOCK: [2013-02-01 Fri 20:49]--[2013-02-01 Fri 20:59] =>  0:10
+** TODO 
+** TODO Map temporary variable names to their Types - till then maybe name the Type as TYPE + TEMPNAME
 ** TODO MethodDeclaration: writable argument => Need to replace original argument with this variable everywhere.
 *** Maybe do that in the second pass
