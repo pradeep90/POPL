@@ -580,7 +580,7 @@ public class MicroJavaOutputterTest {
 
         // String expectedString =
         //         "      int [ ]   ____TEMP____ ;" +
-        //         "      ____TEMP____ =  4 + 3;" +
+        //         "      ____TEMP____ =  75 + 89;" +
         //         "";
 
         // ExpansionNode expected = convertToExpansionNode(expectedString);
@@ -588,19 +588,22 @@ public class MicroJavaOutputterTest {
         //     new ArrayAllocationExpression(new Expression(
         //         new NodeChoice(plusExpressionMini, 2))));
 
+        // System.out.println("MicroJavaOutputter.getFormattedString(plusExpression): " + MicroJavaOutputter.getFormattedString(plusExpression));
+        // System.out.println("MicroJavaOutputter.getFormattedString(actual): " + MicroJavaOutputter.getFormattedString(actual));
+
         // System.out.println("MicroJavaOutputter.getFormattedString(varDeclarations): " + MicroJavaOutputter.getFormattedString(expected.varDeclarations));
         // System.out.println("MicroJavaOutputter.getFormattedString(precedingNodes): " + MicroJavaOutputter.getFormattedString(expected.precedingNodes));
         // // System.out.println("MicroJavaOutputter.getFormattedString(node): " + MicroJavaOutputter.getFormattedString(expectedArrayLengthExpansionNode.node));
 
-        // assertEquals(
-        //     MicroJavaOutputter.getFormattedString(
-        //         expected.varDeclarations),
-        //     MicroJavaOutputter.getFormattedString(actual.varDeclarations));
+        // // assertEquals(
+        // //     MicroJavaOutputter.getFormattedString(
+        // //         expected.varDeclarations),
+        // //     MicroJavaOutputter.getFormattedString(actual.varDeclarations));
 
-        // assertEquals(
-        //     MicroJavaOutputter.getFormattedString(
-        //         expected.precedingNodes),
-        //     MicroJavaOutputter.getFormattedString(actual.precedingNodes));
+        // // assertEquals(
+        // //     MicroJavaOutputter.getFormattedString(
+        // //         expected.precedingNodes),
+        // //     MicroJavaOutputter.getFormattedString(actual.precedingNodes));
     }
 
     /**

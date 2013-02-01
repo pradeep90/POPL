@@ -128,18 +128,19 @@
 *** temporary variable for the PrimaryExpression
 *** then simply do varref
 *** Return nodelist
-** TODO Simple nodes => use ExpansionNode
-   CLOCK: [2013-02-01 Fri 13:41]
+** DONE Simple nodes => use ExpansionNode
+   CLOCK: [2013-02-01 Fri 13:41]--[2013-02-01 Fri 15:01] =>  1:20
 ** TODO Expression
 ** TODO AssignmentStatement
 *** VarRef not Identifier
-** TODO PrintStatement
+** DONE PrintStatement
 *** return aux statements and then the print statement
 ** TODO MethodDeclaration
 *** TODO writable argument 
 *** return return value storage variable and MethodDeclaration
 ** TODO MessageSend
 ** TODO Maybe have placeholders for temporary variables and then number them uniquely within their scope
+** TODO Have method return value variable in ClassDeclaration
 ** TODO Test microjavaparser Statement for Message Send statement???
 ** TODO Maybe make complex methods like PrintStatement, Method Declaration, Message Send, etc. return a NodeListOptional of the different nodes they generate.
 *** I think you need something more for Message Send, though
