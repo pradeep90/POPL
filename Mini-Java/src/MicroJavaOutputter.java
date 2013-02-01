@@ -26,6 +26,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
     public static final String NEW_MAIN_CLASS_NAME = "____NewMainClass____";
     public static final String MAIN_METHOD_PARAM_NAME = "____arg_length____";
     public static final String PRINT_ME_STRING = "____printMe____";
+    public static final String TEMP_VAR_NAME = "____TEMP____";
 
     public static final Identifier pseudoMainClassName = new Identifier(
         new NodeToken(NEW_MAIN_CLASS_NAME));
@@ -806,21 +807,34 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         return _ret;
     }
 
-    // // /**
-    // //  * f0 -> PrimaryExpression()
-    // //  * f1 -> "."
-    // //  * f2 -> "length"
-    // //  */
-    // // public ExpansionNode visit(syntaxtree.ArrayLength n) {
-    // //     // TODO(spradeep): PrimaryExpression could have precedingNodes
-    // //     // as well.
-    // //     ExpansionNode _ret=null;
-    // //     ExpansionNode f0 = n.f0.accept(this);
-    // //     ExpansionNode f1 = n.f1.accept(this);
-    // //     ExpansionNode f2 = n.f2.accept(this);
-    // //     _ret = new ArrayLength();
-    // //     return _ret;
-    // // }
+    /**
+     * f0 -> PrimaryExpression()
+     * f1 -> "."
+     * f2 -> "length"
+     */
+    public ExpansionNode visit(syntaxtree.ArrayLength n) {
+        // TODO(spradeep): PrimaryExpression could have precedingNodes
+        // as well.
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        // TODO(spradeep): Extract getNewTempVar into a method
+        VarDeclaration tempDeclaration = new VarDeclaration(
+            new Type(new NodeChoice(new ArrayType(), 0)),
+            new Identifier(new NodeToken(TEMP_VAR_NAME)));
+        AssignmentStatement tempStatement = new AssignmentStatement(
+            new VarRef(new NodeChoice(new Identifier(new NodeToken(TEMP_VAR_NAME)), 1)),
+            new Expression(new NodeChoice(f0.node, 6)));
+        VarRef tempRef = new VarRef(new NodeChoice(
+            new DotExpression(new Identifier(new NodeToken(TEMP_VAR_NAME)),
+                              new Identifier(new NodeToken("length"))), 0));
+
+        _ret = new ExpansionNode(tempRef);
+        _ret.varDeclarations.addNode(tempDeclaration);
+        _ret.precedingNodes.addNode(tempStatement);
+        return _ret;
+    }
 
     // // /**
     // //  * f0 -> PrimaryExpression()

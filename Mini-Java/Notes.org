@@ -121,9 +121,10 @@
    CLOCK: [2013-02-01 Fri 00:28]--[2013-02-01 Fri 00:33] =>  0:05
 ** DONE Have a new type: ExpansionNode, which would implement Node.
    CLOCK: [2013-02-01 Fri 01:47]--[2013-02-01 Fri 02:20] =>  0:33
-** TODO Modify it all to use ExpansionNode
+** DONE Modify it all to use ExpansionNode
    CLOCK: [2013-02-01 Fri 02:20]--[2013-02-01 Fri 03:47] =>  1:27
-** TODO ArrayLength
+** DONE ArrayLength
+   CLOCK: [2013-02-01 Fri 11:37]--[2013-02-01 Fri 13:24] =>  1:47
 *** temporary variable for the PrimaryExpression
 *** then simply do varref
 *** Return nodelist

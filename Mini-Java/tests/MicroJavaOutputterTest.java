@@ -88,6 +88,7 @@ public class MicroJavaOutputterTest {
     TypeDeclaration typeDeclarationMini;
     TypeDeclaration typeDeclarationMini2;
     ArrayLength arrayLengthMini;
+    ArrayLength arrayLengthMini2;
 
     // MessageSend messageSendMini = new MessageSend();
     // MethodDeclaration methodDeclarationMini = new MethodDeclaration();
@@ -151,6 +152,7 @@ public class MicroJavaOutputterTest {
     microjavaparser.syntaxtree.ClassExtendsDeclaration classExtendsDeclaration;
     microjavaparser.syntaxtree.TypeDeclaration typeDeclaration;
     microjavaparser.syntaxtree.TypeDeclaration typeDeclaration2;
+    ExpansionNode arrayLength;
 
     // TODO(spradeep): 
     // microjavaparser.syntaxtree.MainClass mainClass = new microjavaparser.syntaxtree.MainClass(
@@ -268,11 +270,15 @@ public class MicroJavaOutputterTest {
                                                                   identifierMini2,
                                                                   new NodeListOptional(),
                                                                   new NodeListOptional());
-
         typeDeclarationMini = new TypeDeclaration(
             new NodeChoice(classDeclarationMini, 0));
         typeDeclarationMini2 = new TypeDeclaration(
             new NodeChoice(classExtendsDeclarationMini, 1));
+        arrayLengthMini = new ArrayLength(new PrimaryExpression(
+            new NodeChoice(arrayAllocationExpressionMini, 5)));
+        arrayLengthMini2 = new ArrayLength(new PrimaryExpression(
+            new NodeChoice(identifierMini2, 5)));
+        
 
         // MicroJava test fixtures
 
@@ -418,6 +424,7 @@ public class MicroJavaOutputterTest {
                          outputter.getMicroJavaParseTree(miniJavaNode)));
     }
 
+
     /**
      * Test method for {@link MicroJavaOutputter#getFormattedString()}.
      */
@@ -454,6 +461,55 @@ public class MicroJavaOutputterTest {
     @Test
     public final void testGetMiniJavaNodeFromFileNoException(){
         MicroJavaOutputter.getMiniJavaNodeFromFile("/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Mini-Java-Test-Code/MainOnly.minijava");
+    }
+
+    /** 
+     * Wrap body in the method of a trivial Main Class so that
+     * MicroJavaParser can parse it and return the body of the method
+     * as an ExpansionNode.
+     * 
+     * @return ExpansionNode corresponding to the body.
+     */
+    public static ExpansionNode convertToExpansionNode(String body){
+        String codeString =
+                "class MainOnly {" +
+                "   public static void main(String [] a){" +
+                "      new ____NewMainClass____().____Main____(0);" +
+                "   }" +
+                "}" +
+                "" +
+                "class ____NewMainClass____{" +
+                "" +
+                "   public void ____Main____(int ____arg_length____){" +
+                "" +
+                body +
+                "   }" +
+                "}";
+
+        microjavaparser.syntaxtree.Goal goal = (microjavaparser.syntaxtree.Goal)
+                MicroJavaOutputter.getMicroJavaNodeFromString(codeString);
+        microjavaparser.syntaxtree.TypeDeclaration typeDeclaration =
+                (microjavaparser.syntaxtree.TypeDeclaration) goal.f1.nodes.get(0);
+        microjavaparser.syntaxtree.ClassDeclaration classDeclaration =
+                (microjavaparser.syntaxtree.ClassDeclaration)
+                typeDeclaration.f0.choice;
+        microjavaparser.syntaxtree.MethodDeclaration methodDeclaration =
+                (microjavaparser.syntaxtree.MethodDeclaration)
+                classDeclaration.f4.nodes.get(0);
+        ExpansionNode result = new ExpansionNode(null);
+        result.varDeclarations = methodDeclaration.f7;
+        result.precedingNodes = methodDeclaration.f8;
+        return result;
+    }
+
+    @Test
+    public final void testConvertToExpansionNode(){
+        String printStatement = "System.out.println(75);";
+        ExpansionNode actual = convertToExpansionNode(printStatement);
+        // System.out.println("MicroJavaOutputter.getFormattedString(actual.varDeclarations): " + MicroJavaOutputter.getFormattedString(actual.varDeclarations));
+        // System.out.println("MicroJavaOutputter.getFormattedString(actual.precedingNodes): " + MicroJavaOutputter.getFormattedString(actual.precedingNodes));
+        assertEqualAfterTransform(actual.precedingNodes.nodes.get(0),
+                                  printStatementMini);
     }
 
     /**
@@ -938,6 +994,60 @@ public class MicroJavaOutputterTest {
         assertEqualAfterTransform(mainClass, mainClassMini);
     }
 
+    /**
+     * Test method for {@link MicroJavaOutputter#ArrayLength()}.
+     */
+    @Test
+    public final void testArrayLength_ArrayAllocationExpression(){
+        // TODO(spradeep): Test the usage of the actual array length
+        // expression node
+
+        String expectedArrayLengthString =
+                "      int [ ]   ____TEMP____ ;" +
+                "      ____TEMP____ = new int [ 75 ] ;" +
+                "";
+
+        ExpansionNode expectedArrayLengthExpansionNode =
+                convertToExpansionNode(expectedArrayLengthString);
+
+        System.out.println("MicroJavaOutputter.getFormattedString(varDeclarations): " + MicroJavaOutputter.getFormattedString(expectedArrayLengthExpansionNode.varDeclarations));
+        System.out.println("MicroJavaOutputter.getFormattedString(precedingNodes): " + MicroJavaOutputter.getFormattedString(expectedArrayLengthExpansionNode.precedingNodes));
+        // System.out.println("MicroJavaOutputter.getFormattedString(node): " + MicroJavaOutputter.getFormattedString(expectedArrayLengthExpansionNode.node));
+
+        ExpansionNode actual = (ExpansionNode) outputter.getMicroJavaParseTree(arrayLengthMini);
+
+        assertEquals(MicroJavaOutputter.getFormattedString(expectedArrayLengthExpansionNode.varDeclarations),
+                     MicroJavaOutputter.getFormattedString(actual.varDeclarations));
+        assertEquals(MicroJavaOutputter.getFormattedString(expectedArrayLengthExpansionNode.precedingNodes),
+                     MicroJavaOutputter.getFormattedString(actual.precedingNodes));
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#ArrayLength()}.
+     */
+    @Test
+    public final void testArrayLength_Identifier(){
+        // TODO(spradeep): Test the usage of the actual array length
+        // expression node
+
+        String expectedArrayLengthString =
+                "      int [ ]   ____TEMP____ ;" +
+                "      ____TEMP____ = FooBarTwo;" +
+                "";
+
+        ExpansionNode expectedArrayLengthExpansionNode =
+                convertToExpansionNode(expectedArrayLengthString);
+        ExpansionNode actual = (ExpansionNode) outputter.getMicroJavaParseTree(arrayLengthMini2);
+
+        System.out.println("MicroJavaOutputter.getFormattedString(varDeclarations): " + MicroJavaOutputter.getFormattedString(expectedArrayLengthExpansionNode.varDeclarations));
+        System.out.println("MicroJavaOutputter.getFormattedString(precedingNodes): " + MicroJavaOutputter.getFormattedString(expectedArrayLengthExpansionNode.precedingNodes));
+        // System.out.println("MicroJavaOutputter.getFormattedString(node): " + MicroJavaOutputter.getFormattedString(expectedArrayLengthExpansionNode.node));
+
+        assertEquals(MicroJavaOutputter.getFormattedString(expectedArrayLengthExpansionNode.varDeclarations),
+                     MicroJavaOutputter.getFormattedString(actual.varDeclarations));
+        assertEquals(MicroJavaOutputter.getFormattedString(expectedArrayLengthExpansionNode.precedingNodes),
+                     MicroJavaOutputter.getFormattedString(actual.precedingNodes));
+    }
 
     ///////////////////////
     // Integration Tests //
