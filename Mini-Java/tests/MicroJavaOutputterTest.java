@@ -424,6 +424,14 @@ public class MicroJavaOutputterTest {
                          outputter.getMicroJavaParseTree(miniJavaNode)));
     }
 
+    /** 
+     * Assert that node1 and node2 are equal MicroJava nodes.
+     */
+    public void assertEqualMicroJavaNodes(microjavaparser.syntaxtree.Node expected,
+                                          microjavaparser.syntaxtree.Node actual){
+        assertEquals(MicroJavaOutputter.getFormattedString(expected),
+                     MicroJavaOutputter.getFormattedString(actual));
+    }
 
     /**
      * Test method for {@link MicroJavaOutputter#getFormattedString()}.
@@ -513,7 +521,7 @@ public class MicroJavaOutputterTest {
     }
 
     /**
-     * Test method for {@link MicroJavaOutputter#visitNodeToken()}.
+     * Test method for {@link MicroJavaOutputter#NodeToken()}.
      */
     @Test
     public final void testNodeToken(){
@@ -521,7 +529,7 @@ public class MicroJavaOutputterTest {
     }
 
     /**
-     * Test method for {@link MicroJavaOutputter#visitThisExpression()}.
+     * Test method for {@link MicroJavaOutputter#ThisExpression()}.
      */
     @Test
     public final void testThisExpression(){
@@ -529,7 +537,7 @@ public class MicroJavaOutputterTest {
     }
 
     /**
-     * Test method for {@link MicroJavaOutputter#visitIdentifier()}.
+     * Test method for {@link MicroJavaOutputter#Identifier()}.
      */
     @Test
     public final void testIdentifier(){
@@ -565,8 +573,34 @@ public class MicroJavaOutputterTest {
      */
     @Test
     public final void testArrayAllocationExpression(){
+        // TODO(spradeep): Test the actual expression node usage
+
         assertEqualAfterTransform(arrayAllocationExpression,
                                   arrayAllocationExpressionMini);
+
+        // String expectedString =
+        //         "      int [ ]   ____TEMP____ ;" +
+        //         "      ____TEMP____ =  4 + 3;" +
+        //         "";
+
+        // ExpansionNode expected = convertToExpansionNode(expectedString);
+        // ExpansionNode actual = (ExpansionNode) outputter.getMicroJavaParseTree(
+        //     new ArrayAllocationExpression(new Expression(
+        //         new NodeChoice(plusExpressionMini, 2))));
+
+        // System.out.println("MicroJavaOutputter.getFormattedString(varDeclarations): " + MicroJavaOutputter.getFormattedString(expected.varDeclarations));
+        // System.out.println("MicroJavaOutputter.getFormattedString(precedingNodes): " + MicroJavaOutputter.getFormattedString(expected.precedingNodes));
+        // // System.out.println("MicroJavaOutputter.getFormattedString(node): " + MicroJavaOutputter.getFormattedString(expectedArrayLengthExpansionNode.node));
+
+        // assertEquals(
+        //     MicroJavaOutputter.getFormattedString(
+        //         expected.varDeclarations),
+        //     MicroJavaOutputter.getFormattedString(actual.varDeclarations));
+
+        // assertEquals(
+        //     MicroJavaOutputter.getFormattedString(
+        //         expected.precedingNodes),
+        //     MicroJavaOutputter.getFormattedString(actual.precedingNodes));
     }
 
     /**
@@ -1047,6 +1081,17 @@ public class MicroJavaOutputterTest {
                      MicroJavaOutputter.getFormattedString(actual.varDeclarations));
         assertEquals(MicroJavaOutputter.getFormattedString(expectedArrayLengthExpansionNode.precedingNodes),
                      MicroJavaOutputter.getFormattedString(actual.precedingNodes));
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#concatenateNodeLists()}.
+     */
+    @Test
+    public final void testConcateNodeLists(){
+        microjavaparser.syntaxtree.NodeListOptional list1 = new microjavaparser.syntaxtree.NodeListOptional();
+        microjavaparser.syntaxtree.NodeListOptional list2 = nodeListOptional;
+
+        assertEqualMicroJavaNodes(nodeListOptional, MicroJavaOutputter.concatenateNodeLists(list1, list2));
     }
 
     ///////////////////////

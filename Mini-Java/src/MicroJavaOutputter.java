@@ -60,6 +60,24 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         }
     }
 
+    /** 
+     * @return NodeListOptional containing nodes of list1 and list2.
+     */
+    public static NodeListOptional concatenateNodeLists(NodeListOptional list1,
+                                                        NodeListOptional list2){
+        NodeListOptional result = new NodeListOptional();
+
+        for (Node node : list1.nodes){
+            result.addNode(node);
+        }
+
+        for (Node node : list2.nodes){
+            result.addNode(node);
+        }
+        return result;
+    }
+
+
     /**
      * Format the source code in the syntax tree using TreeFormatter,
      * then dump it to a string using TreeDumper.
@@ -704,7 +722,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
     public ExpansionNode visit(syntaxtree.Expression n) {
         ExpansionNode _ret=null;
         ExpansionNode f0 = n.f0.accept(this);
-        _ret = new ExpansionNode(new Expression(new NodeChoice(f0.node, n.f0.which)));
+        _ret = new ExpansionNode(new Expression(new NodeChoice(f0.node, n.f0.which)),
+                                 f0.varDeclarations,
+                                 f0.precedingNodes);
         return _ret;
     }
 
@@ -721,6 +741,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         _ret = new ExpansionNode(new AndExpression((PrimaryExpression) f0.node,
                                                    (NodeToken) f1.node,
                                                    (PrimaryExpression) f2.node));
+        // _ret.varDeclarations.addNode
         return _ret;
     }
 
@@ -897,7 +918,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
     public ExpansionNode visit(syntaxtree.PrimaryExpression n) {
         ExpansionNode _ret=null;
         ExpansionNode f0 = n.f0.accept(this);
-        _ret = new ExpansionNode(new PrimaryExpression(new NodeChoice(f0.node, n.f0.which)));
+        _ret = new ExpansionNode(new PrimaryExpression(new NodeChoice(f0.node, n.f0.which)),
+                                 f0.varDeclarations,
+                                 f0.precedingNodes);
         return _ret;
     }
 
@@ -968,7 +991,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
                                                                (NodeToken) f1.node,
                                                                (NodeToken) f2.node,
                                                                (Expression) f3.node,
-                                                               (NodeToken) f4.node));
+                                                               (NodeToken) f4.node),
+                                 f3.varDeclarations,
+                                 f3.precedingNodes);
         return _ret;
     }
 
