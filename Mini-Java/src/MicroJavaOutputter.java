@@ -52,7 +52,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
      * Also, append it to outputCodeString.
      */
     public void output(String codeString){
-        System.out.print(codeString + "\n");
+        // System.out.print(codeString + "\n");
         if (isInMiniMain){
             finalMainClass += codeString + "\n";
         }
@@ -76,6 +76,15 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
             result.addNode(node);
         }
         return result;
+    }
+
+    /** 
+     * @return VarDeclaration for varName.
+     */
+    public VarDeclaration getVarDeclaration(String varName){
+        return new VarDeclaration(
+            new Type(new NodeChoice(new IntegerType(), 0)),
+            new Identifier(new NodeToken(TEMP_VAR_NAME)));
     }
 
 
@@ -250,7 +259,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
     public ExpansionNode visit(syntaxtree.NodeOptional n) {
         ExpansionNode _ret;
         if ( n.present() ){
-            _ret = new ExpansionNode(new NodeOptional(n.node.accept(this)));
+            ExpansionNode curr = n.node.accept(this);
+            _ret = new ExpansionNode(new NodeOptional(curr));
+            _ret.extendAuxiliary(curr);
             return _ret;
         }
         else{
@@ -635,7 +646,6 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         return _ret;
     }
 
-    // TODO(spradeep): Check this thoroughly later.
     /**
      * f0 -> Identifier()
      * f1 -> "="
@@ -744,8 +754,6 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         return _ret;
     }
 
-    // TODO(spradeep): Take care of MiniJava Expressions that are not
-    // valid MicroJava expressions.
     /**
      * f0 -> "System.out.println"
      * f1 -> "("
@@ -925,33 +933,54 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
 
         _ret = new ExpansionNode(tempRef);
 
-        // TODO(spradeep): PrimaryExpression could have precedingNodes
         _ret.extendAuxiliary(f0);
         _ret.varDeclarations.addNode(tempDeclaration);
         _ret.precedingNodes.addNode(tempStatement);
         return _ret;
     }
 
-    // // /**
-    // //  * f0 -> PrimaryExpression()
-    // //  * f1 -> "."
-    // //  * f2 -> Identifier()
-    // //  * f3 -> "("
-    // //  * f4 -> ( ExpressionList() )?
-    // //  * f5 -> ")"
-    // //  */
-    // // public ExpansionNode visit(syntaxtree.MessageSend n) {
-    // //     // System.out.println("Function Call??"); 
-    // //     ExpansionNode _ret=null;
-    // //     ExpansionNode f0 = n.f0.accept(this);
-    // //     ExpansionNode f1 = n.f1.accept(this);
-    // //     ExpansionNode f2 = n.f2.accept(this);
-    // //     ExpansionNode f3 = n.f3.accept(this);
-    // //     ExpansionNode f4 = n.f4.accept(this);
-    // //     ExpansionNode f5 = n.f5.accept(this);
-    // //     _ret = new MessageSend();
-    // //     return _ret;
-    // // }
+    /**
+     * f0 -> PrimaryExpression()
+     * f1 -> "."
+     * f2 -> Identifier()
+     * f3 -> "("
+     * f4 -> ( ExpressionList() )?
+     * f5 -> ")"
+     */
+    public ExpansionNode visit(syntaxtree.MessageSend n) {
+        ExpansionNode _ret=null;
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        ExpansionNode f3 = n.f3.accept(this);
+        ExpansionNode f4 = n.f4.accept(this);
+        ExpansionNode f5 = n.f5.accept(this);
+
+        // TODO(spradeep): Extract getNewTempVar into a method
+        // TODO(spradeep): Get the type of the temp variable
+        VarDeclaration tempDeclaration = new VarDeclaration(
+            new Type(new NodeChoice(new IntegerType(), 0)),
+            new Identifier(new NodeToken(TEMP_VAR_NAME)));
+        AssignmentStatement tempStatement = new AssignmentStatement(
+            new VarRef(new NodeChoice(new Identifier(new NodeToken(TEMP_VAR_NAME)), 1)),
+            new Expression(new NodeChoice(f0.node, 6)));
+        Identifier tempIdentifier = new Identifier(new NodeToken(TEMP_VAR_NAME));
+
+        MessageSendStatement messageSendStatement = new MessageSendStatement(
+            tempIdentifier,
+            (Identifier) f2.node,
+            (NodeOptional) f4.node);
+
+        // TODO(spradeep): Change this
+        _ret = new ExpansionNode(messageSendStatement);
+
+        _ret.extendAuxiliary(f0);
+        _ret.extendAuxiliary(f4);
+        _ret.varDeclarations.addNode(tempDeclaration);
+        _ret.precedingNodes.addNode(tempStatement);
+        // _ret.precedingNodes.addNode(messageSendStatement);
+        return _ret;
+    }
 
     /**
      * f0 -> Expression()

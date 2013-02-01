@@ -77,6 +77,7 @@
 *** VVIP Even if I use Generics, there's an awful lot of Casting going on cos I'm trying to construct a parse tree of some other class hierarchy. I think this is unavoidable. You have to encode that information somewhere.
 ** VVIP Big bug => In my test fixtures, I had been passing the same node twice e.g., (prim, prim). I'd done this at several levels.
 ** Note: the big instantiation and method call statement in the Main Class's main method is an exception. Usually, instantiation and method call are broken apart.
+** Note: Temporary variables are numbered uniquely globally (not just within local scope).
 * Outline
 ** DONE Compare and contrast the two grammars
 ** DONE Trivial code
@@ -116,7 +117,7 @@
    CLOCK: [2013-01-31 Thu 23:36]--[2013-01-31 Thu 23:47] =>  0:11
 ** DONE PrimaryExpression
    CLOCK: [2013-01-31 Thu 23:47]--[2013-01-31 Thu 23:56] =>  0:09
-** TODO Clean up stuff in getNewMainClass
+** DONE Clean up stuff in getNewMainClass
    CLOCK: [2013-02-01 Fri 00:45]--[2013-02-01 Fri 00:47] =>  0:02
    CLOCK: [2013-02-01 Fri 00:28]--[2013-02-01 Fri 00:33] =>  0:05
 ** DONE Have a new type: ExpansionNode, which would implement Node.
@@ -128,23 +129,32 @@
 *** temporary variable for the PrimaryExpression
 *** then simply do varref
 *** Return nodelist
+** DONE Maybe make complex methods like PrintStatement, Method Declaration, Message Send, etc. return a NodeListOptional of the different nodes they generate.
+*** I think you need something more for Message Send, though
 ** DONE Simple nodes => use ExpansionNode
    CLOCK: [2013-02-01 Fri 13:41]--[2013-02-01 Fri 15:01] =>  1:20
-** TODO Expression
-** TODO AssignmentStatement
+** DONE What if there are multiple print statements in a method? Don't declare the print variable more than once.
+** DONE MainOnly
+** DONE Expression
+** DONE AssignmentStatement
 *** VarRef not Identifier
 ** DONE PrintStatement
 *** return aux statements and then the print statement
 ** DONE MethodDeclaration
    CLOCK: [2013-02-01 Fri 15:12]--[2013-02-01 Fri 16:31] =>  1:19
 *** return return value storage variable and MethodDeclaration
+** DONE MessageSend
+   CLOCK: [2013-02-01 Fri 16:54]--[2013-02-01 Fri 16:59] =>  0:05
+   CLOCK: [2013-02-01 Fri 16:31]--[2013-02-01 Fri 16:53] =>  0:22
+** DONE General stock-keeping
+   CLOCK: [2013-02-01 Fri 16:53]--[2013-02-01 Fri 17:30] =>  0:37
+** TODO MessageSend STATEMENT: get the return value in a temporary variable and send it as a varref expression.
+   CLOCK: [2013-02-01 Fri 18:28]
+** TODO ELSE: assignment statements - make them happen within the else body itself.
+** TODO Have method return value variable in ClassDeclaration
+** TODO Counter for temporary variables => getNewTempVarName
+** TODO Map temporary variable names to their Types - till then maybe name the Type as TYPE + TEMPNAME
+** TODO Proper name for return variables
+** TODO getNewMainClass special case: Make sure you include the varDeclarations and precedingNodes
 ** TODO MethodDeclaration: writable argument => Need to replace original argument with this variable everywhere.
 *** Maybe do that in the second pass
-** TODO MessageSend
-** TODO Maybe have placeholders for temporary variables and then number them uniquely within their scope
-** TODO Have method return value variable in ClassDeclaration
-** TODO Test microjavaparser Statement for Message Send statement???
-** TODO Maybe make complex methods like PrintStatement, Method Declaration, Message Send, etc. return a NodeListOptional of the different nodes they generate.
-*** I think you need something more for Message Send, though
-** TODO What if there are multiple print statements in a method? Don't declare the print variable more than once.
-** TODO Integration test: MainOnly
