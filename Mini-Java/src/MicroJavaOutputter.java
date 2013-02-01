@@ -27,6 +27,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
     public static final String MAIN_METHOD_PARAM_NAME = "____arg_length____";
     public static final String PRINT_ME_STRING = "____printMe____";
     public static final String TEMP_VAR_NAME = "____TEMP____";
+    public static final String RET_VAR_NAME = "____RET_VAL____";
 
     public static final Identifier pseudoMainClassName = new Identifier(
         new NodeToken(NEW_MAIN_CLASS_NAME));
@@ -431,63 +432,84 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         return _ret;
     }
 
-    // /**
-    //  * f0 -> "public"
-    //  * f1 -> Type()
-    //  * f2 -> Identifier()
-    //  * f3 -> "("
-    //  * f4 -> ( FormalParameterList() )?
-    //  * f5 -> ")"
-    //  * f6 -> "{"
-    //  * f7 -> ( VarDeclaration() )*
-    //  * f8 -> ( Statement() )*
-    //  * f9 -> "return"
-    //  * f10 -> Expression()
-    //  * f11 -> ";"
-    //  * f12 -> "}"
-    //  */
-    // public ExpansionNode visit(syntaxtree.MethodDeclaration n) {
+    /**
+     * f0 -> "public"
+     * f1 -> Type()
+     * f2 -> Identifier()
+     * f3 -> "("
+     * f4 -> ( FormalParameterList() )?
+     * f5 -> ")"
+     * f6 -> "{"
+     * f7 -> ( VarDeclaration() )*
+     * f8 -> ( Statement() )*
+     * f9 -> "return"
+     * f10 -> Expression()
+     * f11 -> ";"
+     * f12 -> "}"
+     */
+    public ExpansionNode visit(syntaxtree.MethodDeclaration n) {
         
-    //     // TODO(spradeep): writable_arg variable
+        // TODO(spradeep): writable_arg variable
         
-    //     ExpansionNode _ret=null;
-    //     // n.f0.accept(this);
-    //     // output("void");
-    //     // // n.f1.accept(this);
-    //     // n.f2.accept(this);
-    //     // n.f3.accept(this);
-    //     // n.f4.accept(this);
-    //     // n.f5.accept(this);
-    //     // n.f6.accept(this);
-    //     // n.f7.accept(this);
-    //     // n.f8.accept(this);
-    //     // // n.f9.accept(this);
-    //     // output("foo = ");
-    //     // n.f10.accept(this);
-    //     // output(";\n");
-    //     // output("____1234Foo4321____ = foo;\n");
-    //     // n.f11.accept(this);
-    //     // n.f12.accept(this);
+        ExpansionNode _ret=null;
+        // n.f0.accept(this);
+        // output("void");
+        // // n.f1.accept(this);
+        // n.f2.accept(this);
+        // n.f3.accept(this);
+        // n.f4.accept(this);
+        // n.f5.accept(this);
+        // n.f6.accept(this);
+        // n.f7.accept(this);
+        // n.f8.accept(this);
+        // // n.f9.accept(this);
+        // output("foo = ");
+        // n.f10.accept(this);
+        // output(";\n");
+        // output("____1234Foo4321____ = foo;\n");
+        // n.f11.accept(this);
+        // n.f12.accept(this);
 
-    //     ExpansionNode f0 = n.f0.accept(this);
-    //     ExpansionNode f1 = n.f1.accept(this);
-    //     ExpansionNode f2 = n.f2.accept(this);
-    //     ExpansionNode f3 = n.f3.accept(this);
-    //     ExpansionNode f4 = n.f4.accept(this);
-    //     ExpansionNode f5 = n.f5.accept(this);
-    //     ExpansionNode f6 = n.f6.accept(this);
-    //     ExpansionNode f7 = n.f7.accept(this);
-    //     ExpansionNode f8 = n.f8.accept(this);
-    //     ExpansionNode f9 = n.f9.accept(this);
-    //     ExpansionNode f10 = n.f10.accept(this);
-    //     ExpansionNode f11 = n.f11.accept(this);
-    //     ExpansionNode f12 = n.f12.accept(this);
-    //     _ret = new MethodDeclaration((Identifier) f2,
-    //                                  (NodeOptional) f4,
-    //                                  (NodeListOptional) f7,
-    //                                  (NodeListOptional) f8);
-    //     return _ret;
-    // }
+        ExpansionNode f0 = n.f0.accept(this);
+        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f2 = n.f2.accept(this);
+        ExpansionNode f3 = n.f3.accept(this);
+        ExpansionNode f4 = n.f4.accept(this);
+        ExpansionNode f5 = n.f5.accept(this);
+        ExpansionNode f6 = n.f6.accept(this);
+        ExpansionNode f7 = n.f7.accept(this);
+        ExpansionNode f8 = n.f8.accept(this);
+        ExpansionNode f9 = n.f9.accept(this);
+        ExpansionNode f10 = n.f10.accept(this);
+        ExpansionNode f11 = n.f11.accept(this);
+        ExpansionNode f12 = n.f12.accept(this);
+
+        NodeListOptional allVarDeclarations = concatenateNodeLists((NodeListOptional) f7.node,
+                                                                   f8.varDeclarations);
+        allVarDeclarations = concatenateNodeLists(allVarDeclarations,
+                                                  f10.varDeclarations);
+        NodeListOptional allStatements = concatenateNodeLists(f8.precedingNodes,
+                                                              (NodeListOptional) f8.node);
+        allStatements = concatenateNodeLists(allStatements,
+                                             f10.precedingNodes);
+
+        Statement pseudoReturnStatement = new Statement(new NodeChoice(new AssignmentStatement(
+            new VarRef(new NodeChoice(new Identifier(new NodeToken(RET_VAR_NAME)), 1)),
+            (Expression) f10.node), 1));
+
+        allStatements.addNode(pseudoReturnStatement);
+
+        _ret = new ExpansionNode(new MethodDeclaration((Identifier) f2.node,
+                                                       (NodeOptional) f4.node,
+                                                       allVarDeclarations,
+                                                       allStatements));
+        VarDeclaration pseudoReturnVariable = new VarDeclaration(
+            // TODO(spradeep): Decide this based on something
+            new Type(new NodeChoice(new IntegerType(), 2)),
+            new Identifier(new NodeToken(RET_VAR_NAME)));
+        _ret.varDeclarations.addNode(pseudoReturnVariable);
+        return _ret;
+    }
 
     /**
      * f0 -> FormalParameter()
@@ -885,7 +907,6 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
      * f2 -> "length"
      */
     public ExpansionNode visit(syntaxtree.ArrayLength n) {
-        // TODO(spradeep): PrimaryExpression could have precedingNodes
         // as well.
         ExpansionNode _ret=null;
         ExpansionNode f0 = n.f0.accept(this);
@@ -903,6 +924,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
                               new Identifier(new NodeToken("length"))), 0));
 
         _ret = new ExpansionNode(tempRef);
+
+        // TODO(spradeep): PrimaryExpression could have precedingNodes
+        _ret.extendAuxiliary(f0);
         _ret.varDeclarations.addNode(tempDeclaration);
         _ret.precedingNodes.addNode(tempStatement);
         return _ret;

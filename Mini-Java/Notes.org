@@ -135,9 +135,11 @@
 *** VarRef not Identifier
 ** DONE PrintStatement
 *** return aux statements and then the print statement
-** TODO MethodDeclaration
-*** TODO writable argument 
+** DONE MethodDeclaration
+   CLOCK: [2013-02-01 Fri 15:12]--[2013-02-01 Fri 16:31] =>  1:19
 *** return return value storage variable and MethodDeclaration
+** TODO MethodDeclaration: writable argument => Need to replace original argument with this variable everywhere.
+*** Maybe do that in the second pass
 ** TODO MessageSend
 ** TODO Maybe have placeholders for temporary variables and then number them uniquely within their scope
 ** TODO Have method return value variable in ClassDeclaration

@@ -35,6 +35,8 @@ public class MicroJavaOutputterTest {
     // MiniJava test fixtures
     NodeToken nodeTokenMini;
     NodeToken nodeTokenMini2;
+    NodeToken nodeTokenMini3;
+    NodeToken nodeTokenMini4;
     ArrayType arrayTypeMini;
     BooleanType booleanTypeMini;
     IntegerLiteral integerLiteralMini;
@@ -52,6 +54,8 @@ public class MicroJavaOutputterTest {
     FalseLiteral falseLiteralMini;
     Identifier identifierMini;
     Identifier identifierMini2;
+    Identifier identifierMini3;
+    Identifier identifierMini4;
     ArrayAssignmentStatement arrayAssignmentStatementMini;
     AllocationExpression allocationExpressionMini;
     ArrayAllocationExpression arrayAllocationExpressionMini;
@@ -71,6 +75,7 @@ public class MicroJavaOutputterTest {
     TimesExpression timesExpressionMini;
     TrueLiteral trueLiteralMini;
     Type typeMini;
+    Type typeMini2;
     FormalParameter formalParameterMini;
     FormalParameterRest formalParameterRestMini;
     VarDeclaration varDeclarationMini;
@@ -89,14 +94,16 @@ public class MicroJavaOutputterTest {
     TypeDeclaration typeDeclarationMini2;
     ArrayLength arrayLengthMini;
     ArrayLength arrayLengthMini2;
+    MethodDeclaration methodDeclarationMini;
 
     // MessageSend messageSendMini = new MessageSend();
-    // MethodDeclaration methodDeclarationMini = new MethodDeclaration();
 
     // MicroJava test fixtures
 
     microjavaparser.syntaxtree.NodeToken nodeToken;
     microjavaparser.syntaxtree.NodeToken nodeToken2;
+    microjavaparser.syntaxtree.NodeToken nodeToken3;
+    microjavaparser.syntaxtree.NodeToken nodeToken4;
     microjavaparser.syntaxtree.ArrayType arrayType;
     microjavaparser.syntaxtree.BooleanType booleanType;
     microjavaparser.syntaxtree.IntegerType integerType;
@@ -122,6 +129,8 @@ public class MicroJavaOutputterTest {
     microjavaparser.syntaxtree.FalseLiteral falseLiteral;
     microjavaparser.syntaxtree.Identifier identifier;
     microjavaparser.syntaxtree.Identifier identifier2;
+    microjavaparser.syntaxtree.Identifier identifier3;
+    microjavaparser.syntaxtree.Identifier identifier4;
     microjavaparser.syntaxtree.ThisExpression thisExpression;
     microjavaparser.syntaxtree.ArrayAssignmentStatement arrayAssignmentStatement;
     microjavaparser.syntaxtree.ArrayAllocationExpression arrayAllocationExpression;
@@ -153,6 +162,7 @@ public class MicroJavaOutputterTest {
     microjavaparser.syntaxtree.TypeDeclaration typeDeclaration;
     microjavaparser.syntaxtree.TypeDeclaration typeDeclaration2;
     ExpansionNode arrayLength;
+    microjavaparser.syntaxtree.MethodDeclaration methodDeclaration;
 
     // TODO(spradeep): 
     // microjavaparser.syntaxtree.MainClass mainClass = new microjavaparser.syntaxtree.MainClass(
@@ -165,7 +175,6 @@ public class MicroJavaOutputterTest {
     //     new microjavaparser.syntaxtree.NodeOptional());
 
 
-    // microjavaparser.syntaxtree.MethodDeclaration methodDeclaration = new microjavaparser.syntaxtree.MethodDeclaration();
     // microjavaparser.syntaxtree.MessageSendStatement messageSendStatement = new microjavaparser.syntaxtree.MessageSendStatement();
     // microjavaparser.syntaxtree.VarRef varRef = new microjavaparser.syntaxtree.VarRef();
     // microjavaparser.syntaxtree.DotExpression dotExpression = new microjavaparser.syntaxtree.DotExpression();
@@ -184,6 +193,8 @@ public class MicroJavaOutputterTest {
 
         nodeTokenMini = new NodeToken("FooBar");
         nodeTokenMini2 = new NodeToken("FooBarTwo");
+        nodeTokenMini3 = new NodeToken("FooBarThree");
+        nodeTokenMini4 = new NodeToken("FooBarFour");
         arrayTypeMini = new ArrayType();
         booleanTypeMini = new BooleanType();
         integerLiteralMini = new IntegerLiteral(new NodeToken("75"));
@@ -208,6 +219,8 @@ public class MicroJavaOutputterTest {
         falseLiteralMini = new FalseLiteral(nodeTokenMini);
         identifierMini = new Identifier(nodeTokenMini);
         identifierMini2 = new Identifier(nodeTokenMini2);
+        identifierMini3 = new Identifier(nodeTokenMini3);
+        identifierMini4 = new Identifier(nodeTokenMini4);
         arrayAssignmentStatementMini = new ArrayAssignmentStatement(identifierMini, expressionMini, expressionMini2);
         allocationExpressionMini = new AllocationExpression(identifierMini);
         arrayAllocationExpressionMini = new ArrayAllocationExpression(expressionMini);
@@ -235,6 +248,7 @@ public class MicroJavaOutputterTest {
                                                   primaryExpressionMini2);
         trueLiteralMini = new TrueLiteral(nodeTokenMini);
         typeMini = new Type(new NodeChoice(integerTypeMini, 2));
+        typeMini2 = new Type(new NodeChoice(booleanTypeMini, 1));
         formalParameterMini = new FormalParameter(typeMini, identifierMini);
         formalParameterRestMini = new FormalParameterRest(
             formalParameterMini);
@@ -278,12 +292,20 @@ public class MicroJavaOutputterTest {
             new NodeChoice(arrayAllocationExpressionMini, 5)));
         arrayLengthMini2 = new ArrayLength(new PrimaryExpression(
             new NodeChoice(identifierMini2, 5)));
-        
+        methodDeclarationMini = new MethodDeclaration(
+            typeMini2,
+            identifierMini4,
+            new NodeOptional(),
+            new NodeListOptional(varDeclarationMini),
+            new NodeListOptional(statementMini2),
+            expressionMini3);
 
         // MicroJava test fixtures
 
         nodeToken = new microjavaparser.syntaxtree.NodeToken("FooBar");
         nodeToken2 = new microjavaparser.syntaxtree.NodeToken("FooBarTwo");
+        nodeToken3 = new microjavaparser.syntaxtree.NodeToken("FooBarThree");
+        nodeToken4 = new microjavaparser.syntaxtree.NodeToken("FooBarFour");
         arrayType = new microjavaparser.syntaxtree.ArrayType();
         booleanType = new microjavaparser.syntaxtree.BooleanType();
         integerType = new microjavaparser.syntaxtree.IntegerType();
@@ -324,6 +346,8 @@ public class MicroJavaOutputterTest {
         falseLiteral = new microjavaparser.syntaxtree.FalseLiteral(nodeToken);
         identifier = new microjavaparser.syntaxtree.Identifier(nodeToken);
         identifier2 = new microjavaparser.syntaxtree.Identifier(nodeToken2);
+        identifier3 = new microjavaparser.syntaxtree.Identifier(nodeToken3);
+        identifier4 = new microjavaparser.syntaxtree.Identifier(nodeToken4);
         thisExpression = new microjavaparser.syntaxtree.ThisExpression();
         arrayAssignmentStatement = new microjavaparser.syntaxtree.ArrayAssignmentStatement(identifier, expression, expression2);
         arrayAllocationExpression = new microjavaparser.syntaxtree.ArrayAllocationExpression(expression);
@@ -396,6 +420,24 @@ public class MicroJavaOutputterTest {
 
         typeDeclaration = new microjavaparser.syntaxtree.TypeDeclaration(new microjavaparser.syntaxtree.NodeChoice(classDeclaration, 0));
         typeDeclaration2 = new microjavaparser.syntaxtree.TypeDeclaration(new microjavaparser.syntaxtree.NodeChoice(classExtendsDeclaration, 1));
+
+        microjavaparser.syntaxtree.Expression methodReturnValue = expression2;
+        microjavaparser.syntaxtree.Statement methodReturnStatement =
+                new microjavaparser.syntaxtree.Statement(new microjavaparser.syntaxtree.NodeChoice(
+                    new microjavaparser.syntaxtree.AssignmentStatement(
+                        new microjavaparser.syntaxtree.VarRef(new microjavaparser.syntaxtree.NodeChoice(new microjavaparser.syntaxtree.Identifier(new microjavaparser.syntaxtree.NodeToken(
+                            MicroJavaOutputter.RET_VAR_NAME)), 1)),
+                        expression3),
+                    1));
+
+        microjavaparser.syntaxtree.NodeListOptional methodStatements = new microjavaparser.syntaxtree.NodeListOptional();
+        methodStatements.addNode(statement2);
+        methodStatements.addNode(methodReturnStatement);
+        methodDeclaration = new microjavaparser.syntaxtree.MethodDeclaration(
+            identifier4,
+            new microjavaparser.syntaxtree.NodeOptional(),
+            new microjavaparser.syntaxtree.NodeListOptional(varDeclaration),
+            methodStatements);
     }
     
     @After
@@ -1097,6 +1139,16 @@ public class MicroJavaOutputterTest {
         assertEqualMicroJavaNodes(nodeListOptional, MicroJavaOutputter.concatenateNodeLists(list1, list2));
     }
 
+    /**
+     * Test method for {@link MicroJavaOutputter#MethodDeclaration()}.
+     */
+    @Test
+    public final void testMethodDeclaration(){
+        System.out.println("MicroJavaOutputter.getFormattedString(methodDeclaration): " + MicroJavaOutputter.getFormattedString(methodDeclaration));
+        System.out.println("MicroJavaOutputter.getFormattedString(outputter.getMicroJavaParseTree(methodDeclarationMini)): " + MicroJavaOutputter.getFormattedString(outputter.getMicroJavaParseTree(methodDeclarationMini)));
+        assertEqualAfterTransform(methodDeclaration, methodDeclarationMini);
+    }
+
     ///////////////////////
     // Integration Tests //
     ///////////////////////
@@ -1130,4 +1182,9 @@ public class MicroJavaOutputterTest {
     public final void testMainOnly(){
         doTestMiniAndMicroJava("MainOnly");
     }
+
+    // @Test
+    // public final void testMainOnly(){
+    //     doTestMiniAndMicroJava("MainOnly");
+    // }
 }
