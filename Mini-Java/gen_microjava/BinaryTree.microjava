@@ -1,0 +1,149 @@
+ class BinaryTree {
+public static void main ( String [ ] a ) {
+new ____NewMainClass____ ( ) . ____Main____ ( 0  ) ; } }  class BT { public
+   void Start ( ) { Tree  root ;  boolean  ntb ;  int  nti ;  int  ____TEMP____
+   ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int
+   ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____
+   ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int
+   ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____
+   ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int
+   ____TEMP____ ; ____TEMP____ = root ;  ____TEMP____ = root ;  ____TEMP____ =
+   root ;  ____TEMP____ = root ;  ____TEMP____ = root ;  ____TEMP____ = root ;
+   ____TEMP____ = root ;  ____TEMP____ = root ;  ____TEMP____ = root ;
+   ____TEMP____ = root ;  ____TEMP____ = root ;  ____TEMP____ = root ;
+   ____TEMP____ = root ;  ____TEMP____ = root ;  ____TEMP____ = root ;
+   ____TEMP____ = root ;  ____TEMP____ = root ;  ____TEMP____ = root ;
+   ____TEMP____ = root ;  root = new Tree ( ) ;  ntb = ____TEMP____ . Init ( 16
+   ) ;  ;  ntb = ____TEMP____ . Print ( ) ;  ;  System.out.println ( 100000000
+   ) ;  ntb = ____TEMP____ . Insert ( 8  ) ;  ;  ntb = ____TEMP____ . Print ( )
+   ;  ;  ntb = ____TEMP____ . Insert ( 24  ) ;  ;  ntb = ____TEMP____ . Insert
+   ( 4  ) ;  ;  ntb = ____TEMP____ . Insert ( 12  ) ;  ;  ntb = ____TEMP____ .
+   Insert ( 20  ) ;  ;  ntb = ____TEMP____ . Insert ( 28  ) ;  ;  ntb =
+   ____TEMP____ . Insert ( 14  ) ;  ;  ntb = ____TEMP____ . Print ( ) ;  ;
+   System.out.println ( ____TEMP____ . Search ( 24  ) ;  ) ;
+   System.out.println ( ____TEMP____ . Search ( 12  ) ;  ) ;
+   System.out.println ( ____TEMP____ . Search ( 16  ) ;  ) ;
+   System.out.println ( ____TEMP____ . Search ( 50  ) ;  ) ;
+   System.out.println ( ____TEMP____ . Search ( 12  ) ;  ) ;  ntb =
+   ____TEMP____ . Delete ( 12  ) ;  ;  ntb = ____TEMP____ . Print ( ) ;  ;
+   System.out.println ( ____TEMP____ . Search ( 12  ) ;  ) ;  ____RET_VAL____ =
+   0 ; } }
+class Tree { Tree  left ;   Tree  right ;   int  key ;   boolean  has_left ;
+   boolean  has_right ;   Tree  my_null ; public void Init ( int  v_key  ) {
+   key = v_key ;  has_left = false ;  has_right = false ;  ____RET_VAL____ =
+   true ; }   public void SetRight ( Tree  rn  ) { right = rn ;
+   ____RET_VAL____ = true ; }   public void SetLeft ( Tree  ln  ) { left = ln ;
+   ____RET_VAL____ = true ; }   public void GetRight ( ) { ____RET_VAL____ =
+   right ; }   public void GetLeft ( ) { ____RET_VAL____ = left ; }   public
+   void GetKey ( ) { ____RET_VAL____ = key ; }   public void SetKey ( int
+   v_key  ) { key = v_key ;  ____RET_VAL____ = true ; }   public void
+   GetHas_Right ( ) { ____RET_VAL____ = has_right ; }   public void GetHas_Left
+   ( ) { ____RET_VAL____ = has_left ; }   public void SetHas_Left ( boolean
+   val  ) { has_left = val ;  ____RET_VAL____ = true ; }   public void
+   SetHas_Right ( boolean  val  ) { has_right = val ;  ____RET_VAL____ = true ;
+   }   public void Compare ( int  num1 , int  num2   ) { boolean  ntb ;  int
+   nti ; ntb = false ;  nti = num2 + 1 ;  if ( num1 < num2 ) ntb = false ;
+   else if ( ! ( num1 < nti ) ) ntb = false ;  else ntb = true ;
+   ____RET_VAL____ = ntb ; }   public void Insert ( int  v_key  ) { Tree
+   new_node ;  boolean  ntb ;  boolean  cont ;  int  key_aux ;  Tree
+   current_node ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____
+   ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int
+   ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____
+   ; ____TEMP____ = new_node ;  ____TEMP____ = current_node ;  ____TEMP____ =
+   current_node ;  ____TEMP____ = current_node ;  ____TEMP____ = current_node ;
+   ____TEMP____ = current_node ;  ____TEMP____ = current_node ;  ____TEMP____ =
+   current_node ;  ____TEMP____ = current_node ;  ____TEMP____ = current_node ;
+   new_node = new Tree ( ) ;  ntb = ____TEMP____ . Init ( v_key  ) ;  ;
+   current_node = this ;  cont = true ;  while ( cont ) { key_aux =
+   ____TEMP____ . GetKey ( ) ;  ;  if ( v_key < key_aux ) { if ( ____TEMP____ .
+   GetHas_Left ( ) ;  ) current_node = ____TEMP____ . GetLeft ( ) ;  ;  else {
+   cont = false ;  ntb = ____TEMP____ . SetHas_Left ( true  ) ;  ;  ntb =
+   ____TEMP____ . SetLeft ( new_node  ) ;  ; }  }  else { if ( ____TEMP____ .
+   GetHas_Right ( ) ;  ) current_node = ____TEMP____ . GetRight ( ) ;  ;  else
+   { cont = false ;  ntb = ____TEMP____ . SetHas_Right ( true  ) ;  ;  ntb =
+   ____TEMP____ . SetRight ( new_node  ) ;  ; }  }  }   ____RET_VAL____ = true
+   ; }   public void Delete ( int  v_key  ) { Tree  current_node ;  Tree
+   parent_node ;  boolean  cont ;  boolean  found ;  boolean  is_root ;  int
+   key_aux ;  boolean  ntb ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int
+   ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____
+   ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;
+   ____TEMP____ = current_node ;  ____TEMP____ = current_node ;  ____TEMP____ =
+   current_node ;  ____TEMP____ = current_node ;  ____TEMP____ = current_node ;
+   ____TEMP____ = current_node ;  ____TEMP____ = current_node ;  ____TEMP____ =
+   this ;  ____TEMP____ = this ;  current_node = this ;  parent_node = this ;
+   cont = true ;  found = false ;  is_root = true ;  while ( cont ) { key_aux =
+   ____TEMP____ . GetKey ( ) ;  ;  if ( v_key < key_aux ) if ( ____TEMP____ .
+   GetHas_Left ( ) ;  ) { parent_node = current_node ;  current_node =
+   ____TEMP____ . GetLeft ( ) ;  ; }  else cont = false ;   else if ( key_aux <
+   v_key ) if ( ____TEMP____ . GetHas_Right ( ) ;  ) { parent_node =
+   current_node ;  current_node = ____TEMP____ . GetRight ( ) ;  ; }  else cont
+   = false ;   else { if ( is_root ) if ( ( ! ____TEMP____ . GetHas_Right ( ) ;
+   ) & ( ! ____TEMP____ . GetHas_Left ( ) ;  )  ) ntb = true ;  else ntb =
+   ____TEMP____ . Remove ( parent_node , current_node ) ;  ;   else ntb =
+   ____TEMP____ . Remove ( parent_node , current_node ) ;  ;   found = true ;
+   cont = false ; }    is_root = false ; }   ____RET_VAL____ = found ; }
+   public void Remove ( Tree  p_node , Tree  c_node   ) { boolean  ntb ;  int
+   auxkey1 ;  int  auxkey2 ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int
+   ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____
+   ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int
+   ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ; ____TEMP____ =
+   c_node ;  ____TEMP____ = this ;  ____TEMP____ = c_node ;  ____TEMP____ =
+   this ;  ____TEMP____ = c_node ;  ____TEMP____ = p_node ;  ____TEMP____ = (
+   ____TEMP____ . GetLeft ( ) ;  ) ;  ____TEMP____ = this ;  ____TEMP____ =
+   p_node ;  ____TEMP____ = p_node ;  ____TEMP____ = p_node ;  ____TEMP____ =
+   p_node ;  if ( ____TEMP____ . GetHas_Left ( ) ;  ) ntb = ____TEMP____ .
+   RemoveLeft ( p_node , c_node ) ;  ;  else if ( ____TEMP____ . GetHas_Right (
+   ) ;  ) ntb = ____TEMP____ . RemoveRight ( p_node , c_node ) ;  ;  else {
+   auxkey1 = ____TEMP____ . GetKey ( ) ;  ;  auxkey2 = ____TEMP____ . GetKey (
+   ) ;  ;  if ( ____TEMP____ . Compare ( auxkey1 , auxkey2 ) ;  ) { ntb =
+   ____TEMP____ . SetLeft ( my_null  ) ;  ;  ntb = ____TEMP____ . SetHas_Left (
+   false  ) ;  ; }  else { ntb = ____TEMP____ . SetRight ( my_null  ) ;  ;  ntb
+   = ____TEMP____ . SetHas_Right ( false  ) ;  ; }  }    ____RET_VAL____ = true
+   ; }   public void RemoveRight ( Tree  p_node , Tree  c_node   ) { boolean
+   ntb ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int
+   ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____
+   ; ____TEMP____ = c_node ;  ____TEMP____ = c_node ;  ____TEMP____ = (
+   ____TEMP____ . GetRight ( ) ;  ) ;  ____TEMP____ = c_node ;  ____TEMP____ =
+   c_node ;  ____TEMP____ = p_node ;  ____TEMP____ = p_node ;  while (
+   ____TEMP____ . GetHas_Right ( ) ;  ) { ntb = ____TEMP____ . SetKey (
+   ____TEMP____ . GetKey ( ) ;   ) ;  ;  p_node = c_node ;  c_node =
+   ____TEMP____ . GetRight ( ) ;  ; }   ntb = ____TEMP____ . SetRight ( my_null
+   ) ;  ;  ntb = ____TEMP____ . SetHas_Right ( false  ) ;  ;  ____RET_VAL____ =
+   true ; }   public void RemoveLeft ( Tree  p_node , Tree  c_node   ) {
+   boolean  ntb ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____
+   ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int
+   ____TEMP____ ; ____TEMP____ = c_node ;  ____TEMP____ = c_node ;
+   ____TEMP____ = ( ____TEMP____ . GetLeft ( ) ;  ) ;  ____TEMP____ = c_node ;
+   ____TEMP____ = c_node ;  ____TEMP____ = p_node ;  ____TEMP____ = p_node ;
+   while ( ____TEMP____ . GetHas_Left ( ) ;  ) { ntb = ____TEMP____ . SetKey (
+   ____TEMP____ . GetKey ( ) ;   ) ;  ;  p_node = c_node ;  c_node =
+   ____TEMP____ . GetLeft ( ) ;  ; }   ntb = ____TEMP____ . SetLeft ( my_null
+   ) ;  ;  ntb = ____TEMP____ . SetHas_Left ( false  ) ;  ;  ____RET_VAL____ =
+   true ; }   public void Search ( int  v_key  ) { boolean  cont ;  int  ifound
+   ;  Tree  current_node ;  int  key_aux ;  int  ____TEMP____ ;  int
+   ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____
+   ; ____TEMP____ = current_node ;  ____TEMP____ = current_node ;  ____TEMP____
+   = current_node ;  ____TEMP____ = current_node ;  ____TEMP____ = current_node
+   ;  current_node = this ;  cont = true ;  ifound = 0 ;  while ( cont ) {
+   key_aux = ____TEMP____ . GetKey ( ) ;  ;  if ( v_key < key_aux ) if (
+   ____TEMP____ . GetHas_Left ( ) ;  ) current_node = ____TEMP____ . GetLeft (
+   ) ;  ;  else cont = false ;   else if ( key_aux < v_key ) if ( ____TEMP____
+   . GetHas_Right ( ) ;  ) current_node = ____TEMP____ . GetRight ( ) ;  ;
+   else cont = false ;   else { ifound = 1 ;  cont = false ; }   }
+   ____RET_VAL____ = ifound ; }   public void Print ( ) { Tree  current_node ;
+   boolean  ntb ;  int  ____TEMP____ ; ____TEMP____ = this ;  current_node =
+   this ;  ntb = ____TEMP____ . RecPrint ( current_node  ) ;  ;
+   ____RET_VAL____ = true ; }   public void RecPrint ( Tree  node  ) { boolean
+   ntb ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int
+   ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____
+   ; ____TEMP____ = node ;  ____TEMP____ = node ;  ____TEMP____ = this ;
+   ____TEMP____ = node ;  ____TEMP____ = node ;  ____TEMP____ = node ;
+   ____TEMP____ = this ;  if ( ____TEMP____ . GetHas_Left ( ) ;  ) { ntb =
+   ____TEMP____ . RecPrint ( ____TEMP____ . GetLeft ( ) ;   ) ;  ; }  else ntb
+   = true ;   System.out.println ( ____TEMP____ . GetKey ( ) ;  ) ;  if (
+   ____TEMP____ . GetHas_Right ( ) ;  ) { ntb = ____TEMP____ . RecPrint (
+   ____TEMP____ . GetRight ( ) ;   ) ;  ; }  else ntb = true ;
+   ____RET_VAL____ = true ; } }
+class ____NewMainClass____ { public void ____Main____ ( int  ____arg_length____
+   ) { int  ____printMe____ ; ____printMe____ = ____TEMP____ . Start ( ) ;  ;
+   System.out.println ( ____printMe____ ) ; } } 

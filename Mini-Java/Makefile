@@ -12,6 +12,8 @@ SOURCE_DIR  := src
 OUTPUT_DIR  := class
 TEST_OUTPUT_DIR := class/tests
 MICRO_JAVA_PARSER_DIR	:= $(SOURCE_DIR)/microjavaparser
+GEN_MICROJAVA_OUTPUT_DIR	:= bin
+GEN_MICROJAVA_INPUT_DIR	:= gen_microjava
 
 # Unix tools
 AWK     := awk
@@ -77,6 +79,8 @@ all_src_files := $(OUTPUT_DIR)/all-src-files.txt
 all_tests := $(OUTPUT_DIR)/all-tests.txt
 tests := $(OUTPUT_DIR)/tests.txt
 
+all_generated_microjava_files	:= $(GEN_MICROJAVA_OUTPUT_DIR)/all-gen-microjava-files.txt
+
 jtb_stuff: minijava.jj
 	cd $(SOURCE_DIR) && $(JTB) $<
 
@@ -138,6 +142,14 @@ javadoc: $(all_src_files)
 
 execute: compile
 	$(JAVA) $(RUN_FLAGS) Main < Mini-Java-Code/Factorial.java
+
+$(all_generated_microjava_files):
+	$(MKDIR) $(GEN_MICROJAVA_OUTPUT_DIR)
+	$(FIND) $(GEN_MICROJAVA_INPUT_DIR) -name '*.java' > $@
+
+try_compile: $(all_generated_microjava_files)
+	# $(JAVAC) $(JFLAGS) @$<
+	$(JAVAC) -sourcepath $(GEN_MICROJAVA_INPUT_DIR) -d $(GEN_MICROJAVA_OUTPUT_DIR) -source 1.6 gen_microjava/BubbleSort.java
 
 .PHONY: clean
 

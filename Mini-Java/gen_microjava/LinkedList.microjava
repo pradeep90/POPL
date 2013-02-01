@@ -1,0 +1,105 @@
+ class LinkedList {
+public static void main ( String [ ] a ) {
+new ____NewMainClass____ ( ) . ____Main____ ( 0  ) ; } }  class Element { int
+   Age ;   int  Salary ;   boolean  Married ; public void Init ( int  v_Age ,
+   int  v_Salary   , boolean  v_Married   ) { Age = v_Age ;  Salary = v_Salary
+   ;  Married = v_Married ;  ____RET_VAL____ = true ; }   public void GetAge (
+   ) { ____RET_VAL____ = Age ; }   public void GetSalary ( ) { ____RET_VAL____
+   = Salary ; }   public void GetMarried ( ) { ____RET_VAL____ = Married ; }
+   public void Equal ( Element  other  ) { boolean  ret_val ;  int  aux01 ;
+   int  aux02 ;  int  nt ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int
+   ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____
+   ; ____TEMP____ = other ;  ____TEMP____ = this ;  ____TEMP____ = other ;
+   ____TEMP____ = this ;  ____TEMP____ = other ;  ____TEMP____ = other ;
+   ret_val = true ;  aux01 = ____TEMP____ . GetAge ( ) ;  ;  if ( !
+   ____TEMP____ . Compare ( aux01 , Age ) ;  ) ret_val = false ;  else { aux02
+   = ____TEMP____ . GetSalary ( ) ;  ;  if ( ! ____TEMP____ . Compare ( aux02 ,
+   Salary ) ;  ) ret_val = false ;  else if ( Married ) if ( ! ____TEMP____ .
+   GetMarried ( ) ;  ) ret_val = false ;  else nt = 0 ;   else if (
+   ____TEMP____ . GetMarried ( ) ;  ) ret_val = false ;  else nt = 0 ;    }
+   ____RET_VAL____ = ret_val ; }   public void Compare ( int  num1 , int  num2
+   ) { boolean  retval ;  int  aux02 ; retval = false ;  aux02 = num2 + 1 ;  if
+   ( num1 < num2 ) retval = false ;  else if ( ! ( num1 < aux02 ) ) retval =
+   false ;  else retval = true ;    ____RET_VAL____ = retval ; } }
+class List { Element  elem ;   List  next ;   boolean  end ; public void Init (
+   ) { end = true ;  ____RET_VAL____ = true ; }   public void InitNew ( Element
+   v_elem , List  v_next   , boolean  v_end   ) { end = v_end ;  elem = v_elem
+   ;  next = v_next ;  ____RET_VAL____ = true ; }   public void Insert (
+   Element  new_elem  ) { boolean  ret_val ;  List  aux03 ;  List  aux02 ;  int
+   ____TEMP____ ; ____TEMP____ = aux02 ;  aux03 = this ;  aux02 = new List ( )
+   ;  ret_val = ____TEMP____ . InitNew ( new_elem , aux03 , false ) ;  ;
+   ____RET_VAL____ = aux02 ; }   public void SetNext ( List  v_next  ) { next =
+   v_next ;  ____RET_VAL____ = true ; }   public void Delete ( Element  e  ) {
+   List  my_head ;  boolean  ret_val ;  boolean  aux05 ;  List  aux01 ;  List
+   prev ;  boolean  var_end ;  Element  var_elem ;  int  aux04 ;  int  nt ;
+   int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int
+   ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____
+   ; ____TEMP____ = e ;  ____TEMP____ = aux01 ;  ____TEMP____ = aux01 ;
+   ____TEMP____ = prev ;  ____TEMP____ = aux01 ;  ____TEMP____ = aux01 ;
+   ____TEMP____ = aux01 ;  my_head = this ;  ret_val = false ;  aux04 = 0 - 1 ;
+   aux01 = this ;  prev = this ;  var_end = end ;  var_elem = elem ;  while ( (
+   ! var_end ) & ( ! ret_val )  ) { if ( ____TEMP____ . Equal ( var_elem  ) ;
+   ) { ret_val = true ;  if ( aux04 < 0 ) { my_head = ____TEMP____ . GetNext (
+   ) ;  ; }  else { System.out.println ( 0 - 555 ) ;  aux05 = ____TEMP____ .
+   SetNext ( ____TEMP____ . GetNext ( ) ;   ) ;  ;  System.out.println ( 0 -
+   555 ) ; }  }  else nt = 0 ;   if ( ! ret_val ) { prev = aux01 ;  aux01 =
+   ____TEMP____ . GetNext ( ) ;  ;  var_end = ____TEMP____ . GetEnd ( ) ;  ;
+   var_elem = ____TEMP____ . GetElem ( ) ;  ;  aux04 = 1 ; }  else nt = 0 ;  }
+   ____RET_VAL____ = my_head ; }   public void Search ( Element  e  ) { int
+   int_ret_val ;  List  aux01 ;  Element  var_elem ;  boolean  var_end ;  int
+   nt ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int
+   ____TEMP____ ; ____TEMP____ = e ;  ____TEMP____ = aux01 ;  ____TEMP____ =
+   aux01 ;  ____TEMP____ = aux01 ;  int_ret_val = 0 ;  aux01 = this ;  var_end
+   = end ;  var_elem = elem ;  while ( ! var_end ) { if ( ____TEMP____ . Equal
+   ( var_elem  ) ;  ) { int_ret_val = 1 ; }  else nt = 0 ;   aux01 =
+   ____TEMP____ . GetNext ( ) ;  ;  var_end = ____TEMP____ . GetEnd ( ) ;  ;
+   var_elem = ____TEMP____ . GetElem ( ) ;  ; }   ____RET_VAL____ = int_ret_val
+   ; }   public void GetEnd ( ) { ____RET_VAL____ = end ; }   public void
+   GetElem ( ) { ____RET_VAL____ = elem ; }   public void GetNext ( ) {
+   ____RET_VAL____ = next ; }   public void Print ( ) { List  aux01 ;  boolean
+   var_end ;  Element  var_elem ;  int  ____TEMP____ ;  int  ____TEMP____ ;
+   int  ____TEMP____ ;  int  ____TEMP____ ; ____TEMP____ = var_elem ;
+   ____TEMP____ = aux01 ;  ____TEMP____ = aux01 ;  ____TEMP____ = aux01 ;
+   aux01 = this ;  var_end = end ;  var_elem = elem ;  while ( ! var_end ) {
+   System.out.println ( ____TEMP____ . GetAge ( ) ;  ) ;  aux01 = ____TEMP____
+   . GetNext ( ) ;  ;  var_end = ____TEMP____ . GetEnd ( ) ;  ;  var_elem =
+   ____TEMP____ . GetElem ( ) ;  ; }   ____RET_VAL____ = true ; } }
+class LL { public void Start ( ) { List  head ;  List  last_elem ;  boolean
+   aux01 ;  Element  el01 ;  Element  el02 ;  Element  el03 ;  int
+   ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____
+   ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int
+   ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____
+   ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int
+   ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____
+   ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int
+   ____TEMP____ ; ____TEMP____ = last_elem ;  ____TEMP____ = head ;
+   ____TEMP____ = head ;  ____TEMP____ = el01 ;  ____TEMP____ = head ;
+   ____TEMP____ = head ;  ____TEMP____ = el01 ;  ____TEMP____ = head ;
+   ____TEMP____ = head ;  ____TEMP____ = el01 ;  ____TEMP____ = head ;
+   ____TEMP____ = head ;  ____TEMP____ = el03 ;  ____TEMP____ = head ;
+   ____TEMP____ = head ;  ____TEMP____ = el01 ;  ____TEMP____ = head ;
+   ____TEMP____ = head ;  ____TEMP____ = head ;  ____TEMP____ = head ;
+   ____TEMP____ = head ;  ____TEMP____ = head ;  last_elem = new List ( ) ;
+   aux01 = ____TEMP____ . Init ( ) ;  ;  head = last_elem ;  aux01 =
+   ____TEMP____ . Init ( ) ;  ;  aux01 = ____TEMP____ . Print ( ) ;  ;  el01 =
+   new Element ( ) ;  aux01 = ____TEMP____ . Init ( 25 , 37000 , false ) ;  ;
+   head = ____TEMP____ . Insert ( el01  ) ;  ;  aux01 = ____TEMP____ . Print (
+   ) ;  ;  System.out.println ( 10000000 ) ;  el01 = new Element ( ) ;  aux01 =
+   ____TEMP____ . Init ( 39 , 42000 , true ) ;  ;  el02 = el01 ;  head =
+   ____TEMP____ . Insert ( el01  ) ;  ;  aux01 = ____TEMP____ . Print ( ) ;  ;
+   System.out.println ( 10000000 ) ;  el01 = new Element ( ) ;  aux01 =
+   ____TEMP____ . Init ( 22 , 34000 , false ) ;  ;  head = ____TEMP____ .
+   Insert ( el01  ) ;  ;  aux01 = ____TEMP____ . Print ( ) ;  ;  el03 = new
+   Element ( ) ;  aux01 = ____TEMP____ . Init ( 27 , 34000 , false ) ;  ;
+   System.out.println ( ____TEMP____ . Search ( el02  ) ;  ) ;
+   System.out.println ( ____TEMP____ . Search ( el03  ) ;  ) ;
+   System.out.println ( 10000000 ) ;  el01 = new Element ( ) ;  aux01 =
+   ____TEMP____ . Init ( 28 , 35000 , false ) ;  ;  head = ____TEMP____ .
+   Insert ( el01  ) ;  ;  aux01 = ____TEMP____ . Print ( ) ;  ;
+   System.out.println ( 2220000 ) ;  head = ____TEMP____ . Delete ( el02  ) ;
+   ;  aux01 = ____TEMP____ . Print ( ) ;  ;  System.out.println ( 33300000 ) ;
+   head = ____TEMP____ . Delete ( el01  ) ;  ;  aux01 = ____TEMP____ . Print (
+   ) ;  ;  System.out.println ( 44440000 ) ;  ____RET_VAL____ = 0 ; } }
+class ____NewMainClass____ { public void ____Main____ ( int  ____arg_length____
+   ) { int  ____printMe____ ; ____printMe____ = ____TEMP____ . Start ( ) ;  ;
+   System.out.println ( ____printMe____ ) ; } } 

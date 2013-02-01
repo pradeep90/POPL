@@ -15,6 +15,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.io.PrintStream;
+import java.io.FileOutputStream;
 import java.io.File;
 import java.net.URL;
  
@@ -27,6 +29,7 @@ public class MicroJavaOutputterTest {
     MicroJavaOutputter outputter;
 
     final String BASE_DIR = "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests";
+    final String GEN_MICROJAVA_DIR =  "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/gen_microjava";
     final String MICRO_JAVA_DIR = "Micro-Java-Test-Code";
     final String MINI_JAVA_DIR = "Mini-Java-Test-Code";
     final String MICRO_JAVA_EXTENSION = ".microjava";
@@ -416,8 +419,7 @@ public class MicroJavaOutputterTest {
         microjavaparser.syntaxtree.Statement methodReturnStatement =
                 new microjavaparser.syntaxtree.Statement(new microjavaparser.syntaxtree.NodeChoice(
                     new microjavaparser.syntaxtree.AssignmentStatement(
-                        new microjavaparser.syntaxtree.VarRef(new microjavaparser.syntaxtree.NodeChoice(new microjavaparser.syntaxtree.Identifier(new microjavaparser.syntaxtree.NodeToken(
-                            MicroJavaOutputter.RET_VAR_NAME)), 1)),
+                        new microjavaparser.syntaxtree.VarRef(new microjavaparser.syntaxtree.NodeChoice(MicroJavaOutputter.getMethodRetVarIdentifier(identifier4), 1)),
                         expression3),
                     1));
 
@@ -464,6 +466,16 @@ public class MicroJavaOutputterTest {
                                           microjavaparser.syntaxtree.Node actual){
         assertEquals(MicroJavaOutputter.getFormattedString(expected),
                      MicroJavaOutputter.getFormattedString(actual));
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#getNewTempVarName()}.
+     */
+    @Test
+    public final void testGetNewTempVarName(){
+        assertEquals("___tmp0", outputter.getNewTempVarName());
+        assertEquals("___tmp1", outputter.getNewTempVarName());
+        assertEquals("___tmp2", outputter.getNewTempVarName());
     }
 
     /**
@@ -1073,8 +1085,8 @@ public class MicroJavaOutputterTest {
         // expression node
 
         String expectedArrayLengthString =
-                "      int [ ]   ____TEMP____ ;" +
-                "      ____TEMP____ = new int [ 75 ] ;" +
+                "      int [ ]   ___tmp0 ;" +
+                "      ___tmp0 = new int [ 75 ] ;" +
                 "";
 
         ExpansionNode expectedArrayLengthExpansionNode =
@@ -1101,8 +1113,8 @@ public class MicroJavaOutputterTest {
         // expression node
 
         String expectedArrayLengthString =
-                "      int [ ]   ____TEMP____ ;" +
-                "      ____TEMP____ = FooBarTwo;" +
+                "      int [ ]   ___tmp0 ;" +
+                "      ___tmp0 = FooBarTwo;" +
                 "";
 
         ExpansionNode expectedArrayLengthExpansionNode =
@@ -1147,13 +1159,16 @@ public class MicroJavaOutputterTest {
     public final void testMessageSend(){
 
         String expectedString =
-                "      int ____TEMP____ ;" +
-                "      ____TEMP____ =  63;" +
-                "      ____TEMP____ . FooBarFour ( 89 , 75 ) ;" +
+                "      int ___tmp0 ;" +
+                "      ___tmp0 =  63;" +
+                "      ___tmp0 . FooBarFour ( 89 , 75 ) ;" +
+                "      ___tmp1 = ___tmp0.____1234FooBarFour4321____ ;" +
+                "      System.out.println(___tmp1);" +
                 "";
 
         ExpansionNode expected = convertToExpansionNode(expectedString);
-        ExpansionNode actual = (ExpansionNode) outputter.getMicroJavaParseTree(messageSendMini);
+        PrintStatement tempPrintStatement = new PrintStatement(new Expression(new NodeChoice(messageSendMini, 7)));
+        ExpansionNode actual = (ExpansionNode) outputter.getMicroJavaParseTree(tempPrintStatement);
 
         System.out.println("MicroJavaOutputter.getFormattedString(actual): "
                            + MicroJavaOutputter.getFormattedString(actual));
@@ -1191,8 +1206,25 @@ public class MicroJavaOutputterTest {
                 outputter.getMicroJavaParseTree(root);
         System.out.println("MicroJavaOutputter.getFormattedString(expectedMicroParseTree): " + MicroJavaOutputter.getFormattedString(expectedMicroParseTree));
         System.out.println("MicroJavaOutputter.getFormattedString(actualMicroParseTree): " + MicroJavaOutputter.getFormattedString(actualMicroParseTree));
+
+        // writeCodeToFile(MicroJavaOutputter.getFormattedString(actualMicroParseTree),
+        //                 GEN_MICROJAVA_DIR + File.separator + basename + ".java");
+        
         // assertEquals(MicroJavaOutputter.getFormattedString(expectedMicroParseTree),
         //              MicroJavaOutputter.getFormattedString(actualMicroParseTree));
+    }
+    
+    public void writeCodeToFile(String code, String filename){
+        PrintStream out = null;
+        try {
+            out = new PrintStream(new FileOutputStream(filename));
+            out.print(code);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (out != null) out.close();
+        }
     }
 
     @Test
@@ -1205,14 +1237,14 @@ public class MicroJavaOutputterTest {
         // Test if the code generated for each of the MiniJava files
         // is valid MicroJava.
 
-        doTestMiniAndMicroJava("BinarySearch");
-        doTestMiniAndMicroJava("BinaryTree");
-        doTestMiniAndMicroJava("BubbleSort");
-        doTestMiniAndMicroJava("Factorial");
-        doTestMiniAndMicroJava("LinearSearch");
-        doTestMiniAndMicroJava("LinkedList");
-        doTestMiniAndMicroJava("MainOnly");
-        doTestMiniAndMicroJava("QuickSort");
-        doTestMiniAndMicroJava("TreeVisitor");
+        // doTestMiniAndMicroJava("BinarySearch");
+        // doTestMiniAndMicroJava("BinaryTree");
+        // doTestMiniAndMicroJava("BubbleSort");
+        // doTestMiniAndMicroJava("Factorial");
+        // doTestMiniAndMicroJava("LinearSearch");
+        // doTestMiniAndMicroJava("LinkedList");
+        // doTestMiniAndMicroJava("MainOnly");
+        // doTestMiniAndMicroJava("QuickSort");
+        // doTestMiniAndMicroJava("TreeVisitor");
     }
 }

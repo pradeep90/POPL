@@ -1,0 +1,52 @@
+ class BinarySearch {
+public static void main ( String [ ] a ) {
+new ____NewMainClass____ ( ) . ____Main____ ( 0  ) ; } }  class BS { int [ ]
+   number ;   int  size ; public void Start ( int  sz  ) { int  aux01 ;  int
+   aux02 ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int
+   ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____
+   ;  int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ;
+   ____TEMP____ = this ;  ____TEMP____ = this ;  ____TEMP____ = this ;
+   ____TEMP____ = this ;  ____TEMP____ = this ;  ____TEMP____ = this ;
+   ____TEMP____ = this ;  ____TEMP____ = this ;  ____TEMP____ = this ;
+   ____TEMP____ = this ;  aux01 = ____TEMP____ . Init ( sz  ) ;  ;  aux02 =
+   ____TEMP____ . Print ( ) ;  ;  if ( ____TEMP____ . Search ( 8  ) ;  )
+   System.out.println ( 1 ) ;  else System.out.println ( 0 ) ;   if (
+   ____TEMP____ . Search ( 19  ) ;  ) System.out.println ( 1 ) ;  else
+   System.out.println ( 0 ) ;   if ( ____TEMP____ . Search ( 20  ) ;  )
+   System.out.println ( 1 ) ;  else System.out.println ( 0 ) ;   if (
+   ____TEMP____ . Search ( 21  ) ;  ) System.out.println ( 1 ) ;  else
+   System.out.println ( 0 ) ;   if ( ____TEMP____ . Search ( 37  ) ;  )
+   System.out.println ( 1 ) ;  else System.out.println ( 0 ) ;   if (
+   ____TEMP____ . Search ( 38  ) ;  ) System.out.println ( 1 ) ;  else
+   System.out.println ( 0 ) ;   if ( ____TEMP____ . Search ( 39  ) ;  )
+   System.out.println ( 1 ) ;  else System.out.println ( 0 ) ;   if (
+   ____TEMP____ . Search ( 50  ) ;  ) System.out.println ( 1 ) ;  else
+   System.out.println ( 0 ) ;   ____RET_VAL____ = 999 ; }   public void Search
+   ( int  num  ) { boolean  bs01 ;  int  right ;  int  left ;  boolean
+   var_cont ;  int  medium ;  int  aux01 ;  int  nt ;  int [ ]   ____TEMP____ ;
+   int  ____TEMP____ ;  int  ____TEMP____ ;  int  ____TEMP____ ; ____TEMP____ =
+   number ;  ____TEMP____ = this ;  ____TEMP____ = this ;  ____TEMP____ = this
+   ;  aux01 = 0 ;  bs01 = false ;  right = ____TEMP____ . length ;  right =
+   right - 1 ;  left = 0 ;  var_cont = true ;  while ( var_cont ) { medium =
+   left + right ;  medium = ____TEMP____ . Div ( medium  ) ;  ;  aux01 = number
+   [ medium ] ;  if ( num < aux01 ) right = medium - 1 ;  else left = medium +
+   1 ;   if ( ____TEMP____ . Compare ( aux01 , num ) ;  ) var_cont = false ;
+   else var_cont = true ;   if ( right < left ) var_cont = false ;  else nt = 0
+   ;  }   if ( ____TEMP____ . Compare ( aux01 , num ) ;  ) bs01 = true ;  else
+   bs01 = false ;   ____RET_VAL____ = bs01 ; }   public void Div ( int  num  )
+   { int  count01 ;  int  count02 ;  int  aux03 ; count01 = 0 ;  count02 = 0 ;
+   aux03 = num - 1 ;  while ( count02 < aux03 ) { count01 = count01 + 1 ;
+   count02 = count02 + 2 ; }   ____RET_VAL____ = count01 ; }   public void
+   Compare ( int  num1 , int  num2   ) { boolean  retval ;  int  aux02 ; retval
+   = false ;  aux02 = num2 + 1 ;  if ( num1 < num2 ) retval = false ;  else if
+   ( ! ( num1 < aux02 ) ) retval = false ;  else retval = true ;
+   ____RET_VAL____ = retval ; }   public void Print ( ) { int  j ; j = 1 ;
+   while ( j < ( size ) ) { System.out.println ( number [ j ] ) ;  j = j + 1 ;
+   }   System.out.println ( 99999 ) ;  ____RET_VAL____ = 0 ; }   public void
+   Init ( int  sz  ) { int  j ;  int  k ;  int  aux02 ;  int  aux01 ; size = sz
+   ;  number = new int [ sz ] ;  j = 1 ;  k = size + 1 ;  while ( j < ( size )
+   ) { aux01 = 2 * j ;  aux02 = k - 3 ;  number [ j ] = aux01 + aux02 ;  j = j
+   + 1 ;  k = k - 1 ; }   ____RET_VAL____ = 0 ; } }
+class ____NewMainClass____ { public void ____Main____ ( int  ____arg_length____
+   ) { int  ____printMe____ ; ____printMe____ = ____TEMP____ . Start ( 20  ) ;
+   ;  System.out.println ( ____printMe____ ) ; } } 

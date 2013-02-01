@@ -78,6 +78,7 @@
 ** VVIP Big bug => In my test fixtures, I had been passing the same node twice e.g., (prim, prim). I'd done this at several levels.
 ** Note: the big instantiation and method call statement in the Main Class's main method is an exception. Usually, instantiation and method call are broken apart.
 ** Note: Temporary variables are numbered uniquely globally (not just within local scope).
+** Assuming ELSE body can have more than one statement (check out BinaryTree.microjava).
 * Outline
 ** DONE Compare and contrast the two grammars
 ** DONE Trivial code
@@ -148,13 +149,22 @@
    CLOCK: [2013-02-01 Fri 16:31]--[2013-02-01 Fri 16:53] =>  0:22
 ** DONE General stock-keeping
    CLOCK: [2013-02-01 Fri 16:53]--[2013-02-01 Fri 17:30] =>  0:37
-** TODO MessageSend STATEMENT: get the return value in a temporary variable and send it as a varref expression.
-   CLOCK: [2013-02-01 Fri 18:28]
-** TODO ELSE: assignment statements - make them happen within the else body itself.
-** TODO Have method return value variable in ClassDeclaration
-** TODO Counter for temporary variables => getNewTempVarName
+** DONE Wrapup Code for final code testing
+   CLOCK: [2013-02-01 Fri 18:28]--[2013-02-01 Fri 19:10] =>  0:42
+** DONE MessageSend STATEMENT: get the return value in a temporary variable and send it as an IDENTIFIER expression.
+   CLOCK: [2013-02-01 Fri 19:32]--[2013-02-01 Fri 19:38] =>  0:06
+   CLOCK: [2013-02-01 Fri 19:11]--[2013-02-01 Fri 19:30] =>  0:19
+** DONE ELSE: assignment statements - make them happen within the else body itself.
+   CLOCK: [2013-02-01 Fri 19:38]--[2013-02-01 Fri 20:12] =>  0:34
+** DONE WHILE: assignment statements - make them happen within the body itself.
+   CLOCK: [2013-02-01 Fri 20:12]--[2013-02-01 Fri 20:17] =>  0:05
+** DONE Have method return value variable in ClassDeclaration
+   CLOCK: [2013-02-01 Fri 20:41]--[2013-02-01 Fri 20:49] =>  0:08
+   CLOCK: [2013-02-01 Fri 20:17]--[2013-02-01 Fri 20:20] =>  0:03
+** DONE Counter for temporary variables => getNewTempVarName
+   CLOCK: [2013-02-01 Fri 20:21]--[2013-02-01 Fri 20:41] =>  0:20
 ** TODO Map temporary variable names to their Types - till then maybe name the Type as TYPE + TEMPNAME
-** TODO Proper name for return variables
+** DONE Proper name for return variables
 ** TODO getNewMainClass special case: Make sure you include the varDeclarations and precedingNodes
 ** TODO MethodDeclaration: writable argument => Need to replace original argument with this variable everywhere.
 *** Maybe do that in the second pass
