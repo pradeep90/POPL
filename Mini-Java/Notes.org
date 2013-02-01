@@ -167,7 +167,15 @@
 ** DONE Proper name for return variables
 ** DONE getNewMainClass special case: Make sure you include the varDeclarations and precedingNodes
    CLOCK: [2013-02-01 Fri 20:49]--[2013-02-01 Fri 20:59] =>  0:10
-** TODO 
-** TODO Map temporary variable names to their Types - till then maybe name the Type as TYPE + TEMPNAME
+** DONE Clean up getNewMainClass
+   CLOCK: [2013-02-01 Fri 21:05]--[2013-02-01 Fri 21:37] =>  0:32
+** DONE Map temporary variable names to their Types - till then maybe name the Type as TYPE + TEMPNAME
+   CLOCK: [2013-02-01 Fri 21:38]--[2013-02-01 Fri 21:38] =>  0:00
+** DONE Map method names to return types
+   CLOCK: [2013-02-01 Fri 21:38]--[2013-02-01 Fri 21:41] =>  0:03
+** DONE Go through all code to replace TYPE_methodname with actual Type
+   CLOCK: [2013-02-01 Fri 21:41]--[2013-02-01 Fri 23:19] =>  1:38
+** TODO Get type of Primary Expression
+   CLOCK: [2013-02-01 Fri 23:19]
 ** TODO MethodDeclaration: writable argument => Need to replace original argument with this variable everywhere.
 *** Maybe do that in the second pass

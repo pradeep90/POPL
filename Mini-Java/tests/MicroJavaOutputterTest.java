@@ -165,6 +165,7 @@ public class MicroJavaOutputterTest {
     microjavaparser.syntaxtree.TypeDeclaration typeDeclaration2;
     ExpansionNode arrayLength;
     microjavaparser.syntaxtree.MethodDeclaration methodDeclaration;
+    microjavaparser.syntaxtree.MethodDeclaration methodDeclaration2;
 
     // microjavaparser.syntaxtree.MessageSendStatement messageSendStatement = new microjavaparser.syntaxtree.MessageSendStatement();
     // microjavaparser.syntaxtree.VarRef varRef = new microjavaparser.syntaxtree.VarRef();
@@ -431,6 +432,29 @@ public class MicroJavaOutputterTest {
             new microjavaparser.syntaxtree.NodeOptional(),
             new microjavaparser.syntaxtree.NodeListOptional(varDeclaration),
             methodStatements);
+
+        microjavaparser.syntaxtree.Expression methodReturnValue2 = expression2;
+        microjavaparser.syntaxtree.Statement methodReturnStatement2 =
+                new microjavaparser.syntaxtree.Statement(new microjavaparser.syntaxtree.NodeChoice(
+                    new microjavaparser.syntaxtree.AssignmentStatement(
+                        new microjavaparser.syntaxtree.VarRef(new microjavaparser.syntaxtree.NodeChoice(MicroJavaOutputter.getMethodRetVarIdentifier(identifier4), 1)),
+                        expression3),
+                    1));
+
+        microjavaparser.syntaxtree.NodeListOptional methodStatements2
+                = new microjavaparser.syntaxtree.NodeListOptional();
+        methodStatements2.addNode(statement2);
+        methodStatements2.addNode(methodReturnStatement);
+        methodDeclaration2 = new microjavaparser.syntaxtree.MethodDeclaration(
+            identifier4,
+            new microjavaparser.syntaxtree.NodeOptional(),
+            new microjavaparser.syntaxtree.NodeListOptional(
+                outputter.getVarDeclaration(
+                    "test_variable",
+                    MicroJavaOutputter.getTempIdentifier(
+                        MicroJavaOutputter.getMethodName(identifier4)))),
+            methodStatements);
+
     }
     
     @After
@@ -1146,6 +1170,10 @@ public class MicroJavaOutputterTest {
     public final void testMethodDeclaration(){
         System.out.println("MicroJavaOutputter.getFormattedString(methodDeclaration): " + MicroJavaOutputter.getFormattedString(methodDeclaration));
         System.out.println("MicroJavaOutputter.getFormattedString(outputter.getMicroJavaParseTree(methodDeclarationMini)): " + MicroJavaOutputter.getFormattedString(outputter.getMicroJavaParseTree(methodDeclarationMini)));
+
+        System.out.println("MicroJavaOutputter.getFormattedString(methodDeclaration2): " + MicroJavaOutputter.getFormattedString(methodDeclaration2));
+
+
         assertEqualAfterTransform(methodDeclaration, methodDeclarationMini);
     }
 
@@ -1235,7 +1263,7 @@ public class MicroJavaOutputterTest {
         // Test if the code generated for each of the MiniJava files
         // is valid MicroJava.
 
-        // doTestMiniAndMicroJava("BinarySearch");
+        doTestMiniAndMicroJava("BinarySearch");
         // doTestMiniAndMicroJava("BinaryTree");
         // doTestMiniAndMicroJava("BubbleSort");
         doTestMiniAndMicroJava("Factorial");

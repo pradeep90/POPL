@@ -42,6 +42,8 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
     
     public boolean isInMiniMain = false;
 
+    public boolean isFirstPass = true;
+
     public String finalMainClass = "";
     public String outputCodeString = "";
 
@@ -98,6 +100,12 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
                                     middle);
     }
 
+    public void addBinding(Identifier methodIdentifier, Type returnType){
+        methodReturnTypeHash.put(getMethodName(methodIdentifier),
+                                 returnType);
+    }
+
+
     /** 
      * @return new unique temporary variable name.
      */
@@ -133,8 +141,15 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
      * @return VarDeclaration for varName given the methodIdentifier.
      */
     public VarDeclaration getVarDeclaration(String varName, Identifier methodIdentifier){
-        return getVarDeclaration(varName, new Type(new NodeChoice(
-            getTempIdentifier("TYPE_" + getMethodName(methodIdentifier)), 3)));
+        if (methodReturnTypeHash.containsKey(getMethodName(methodIdentifier))){
+            return getVarDeclaration(varName,
+                                     methodReturnTypeHash.get(
+                                         getMethodName(methodIdentifier)));
+        }
+        else{
+            return getVarDeclaration(varName, new Type(new NodeChoice(
+                getTempIdentifier("TYPE_" + getMethodName(methodIdentifier)), 3)));
+        }
     }
 
     /** 
@@ -342,14 +357,36 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
     public ExpansionNode visit(syntaxtree.Goal n) {
         // TODO(spradeep): Later, see if you need to use
         // extendAuxiliary here.
-        ExpansionNode _ret=null;
-        output(finalMainClass);
-        MainClass f0 = (MainClass) n.f0.accept(this).node;
-        NodeListOptional f1 = (NodeListOptional) n.f1.accept(this).node;
+        ExpansionNode _ret;
+        MainClass f0;
+        NodeListOptional f1;
+        NodeToken f2;
+
+        // _ret = null;
+        // f0 = (MainClass) n.f0.accept(this).node;
+        // f1 = (NodeListOptional) n.f1.accept(this).node;
+        // f1.addNode(newMainClass);
+        // f2 = (NodeToken) n.f2.accept(this).node;
+        // _ret = new ExpansionNode(new Goal (f0, f1, f2));
+
+        // isFirstPass = false;
+
+        _ret = null;
+        f0 = (MainClass) n.f0.accept(this).node;
+        f1 = (NodeListOptional) n.f1.accept(this).node;
         f1.addNode(newMainClass);
-        NodeToken f2 = (NodeToken) n.f2.accept(this).node;
+        f2 = (NodeToken) n.f2.accept(this).node;
         _ret = new ExpansionNode(new Goal (f0, f1, f2));
-        return _ret;
+
+        VariableSubstituter variableSubstituter = new VariableSubstituter();
+        variableSubstituter.methodReturnTypeHash = methodReturnTypeHash;
+
+        System.out.println("methodReturnTypeHash: " + methodReturnTypeHash);
+
+        // assertEqualMicroJavaNodes(_ret.node, variableSubstituter.visit((Goal)_ret.node));
+        return new ExpansionNode(variableSubstituter.visit((Goal)_ret.node));
+
+        // return _ret;
     }
 
     /**
@@ -510,23 +547,6 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         // TODO(spradeep): writable_arg variable
         
         ExpansionNode _ret=null;
-        // n.f0.accept(this);
-        // output("void");
-        // // n.f1.accept(this);
-        // n.f2.accept(this);
-        // n.f3.accept(this);
-        // n.f4.accept(this);
-        // n.f5.accept(this);
-        // n.f6.accept(this);
-        // n.f7.accept(this);
-        // n.f8.accept(this);
-        // // n.f9.accept(this);
-        // output("foo = ");
-        // n.f10.accept(this);
-        // output(";\n");
-        // output("____1234Foo4321____ = foo;\n");
-        // n.f11.accept(this);
-        // n.f12.accept(this);
 
         ExpansionNode f0 = n.f0.accept(this);
         ExpansionNode f1 = n.f1.accept(this);
@@ -566,6 +586,8 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
                 getVarDeclaration(getMethodRetVarName((Identifier) f2.node),
                                   (Identifier) f2.node);
         _ret.varDeclarations.addNode(pseudoReturnVariable);
+
+        addBinding((Identifier) f2.node, (Type) f1.node);
         return _ret;
     }
 
