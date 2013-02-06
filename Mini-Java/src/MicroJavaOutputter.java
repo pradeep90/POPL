@@ -50,6 +50,35 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
     public ExpansionNode syntaxTree = null;
     public Node newMainClass = null;
 
+    public String currClassName;
+    public NodeListOptional currClassVarDeclarations;
+    public NodeListOptional currMethodVarDeclarations;
+
+    /** 
+     * @return Type from VarDeclaration of identifier.
+     */
+    public Type lookupVarType(Identifier identifier){
+        if (currMethodVarDeclarations != null){
+            for (Node currNode : currMethodVarDeclarations.nodes){
+                VarDeclaration currDeclaration = (VarDeclaration) currNode;
+                if (getMethodName(currDeclaration.f1).equals(getMethodName(identifier))){
+                    return currDeclaration.f0;
+                }
+            }
+        }
+
+        if (currClassVarDeclarations != null){
+            for (Node currNode : currClassVarDeclarations.nodes){
+                VarDeclaration currDeclaration = (VarDeclaration) currNode;
+                if (getMethodName(currDeclaration.f1).equals(getMethodName(identifier))){
+                    return currDeclaration.f0;
+                }
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Output codeString to stdout.
      *
@@ -464,8 +493,11 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         ExpansionNode _ret=null;
         ExpansionNode f0 = n.f0.accept(this);
         ExpansionNode f1 = n.f1.accept(this);
+        currClassName = n.f1.f0.tokenImage;
         ExpansionNode f2 = n.f2.accept(this);
         ExpansionNode f3 = n.f3.accept(this);
+
+        currClassVarDeclarations = (NodeListOptional) f3.node;
         ExpansionNode f4 = n.f4.accept(this);
         ExpansionNode f5 = n.f5.accept(this);
 
@@ -493,10 +525,14 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         ExpansionNode _ret=null;
         ExpansionNode f0 = n.f0.accept(this);
         ExpansionNode f1 = n.f1.accept(this);
+        currClassName = n.f1.f0.tokenImage;
         ExpansionNode f2 = n.f2.accept(this);
         ExpansionNode f3 = n.f3.accept(this);
         ExpansionNode f4 = n.f4.accept(this);
         ExpansionNode f5 = n.f5.accept(this);
+
+        currClassVarDeclarations = (NodeListOptional) f5.node;
+
         ExpansionNode f6 = n.f6.accept(this);
         ExpansionNode f7 = n.f7.accept(this);
         _ret = new ExpansionNode(new ClassExtendsDeclaration((Identifier) f1.node,
@@ -556,6 +592,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         ExpansionNode f5 = n.f5.accept(this);
         ExpansionNode f6 = n.f6.accept(this);
         ExpansionNode f7 = n.f7.accept(this);
+
+        currMethodVarDeclarations = (NodeListOptional) f7.node;
+
         ExpansionNode f8 = n.f8.accept(this);
         ExpansionNode f9 = n.f9.accept(this);
         ExpansionNode f10 = n.f10.accept(this);
@@ -1069,26 +1108,33 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
 
         // TODO(spradeep): Get the type of the temp variable
         VarDeclaration tempDeclaration;
-        PrimaryExpression firstTemp = (PrimaryExpression) f0.node;
+        PrimaryExpression tempPrimExpr1 = (PrimaryExpression) f0.node;
         Type firstTempType;
 
-        // if (((NodeChoice) firstTemp.f0).which == 4){
-        //     // this.foo()
-        //     System.out.println("THIS"); 
-        //     tempDeclaration = getVarDeclaration(tempVarName);
-        //     // firstTempType = new Type(new NodeChoice(getTempIdentifier("CLASS_NAME"), 3));
-        // }
-        // else if (((NodeChoice) firstTemp.f0).which == 3){
-        //     System.out.println("IDENTIFIER"); 
-        //     // identifier.foo() => lookup declaration
-        //     tempDeclaration = getVarDeclaration(
-        //         tempVarName,
-        //         (Identifier) ((NodeChoice) firstTemp.f0).choice);
-        //     // firstTempType = new Type(new NodeChoice())
-        // }
-        // else
+        if (tempPrimExpr1.f0.which == 4){
+            // expr: "this.foo()"
 
-        tempDeclaration = getVarDeclaration(tempVarName);
+            System.out.println("THIS"); 
+            firstTempType = new Type(new NodeChoice(getTempIdentifier(currClassName), 3));
+            tempDeclaration = getVarDeclaration(tempVarName, firstTempType);
+        }
+        else if (tempPrimExpr1.f0.which == 3){
+            // expr: identifier.foo() => lookup declaration
+
+            System.out.println("IDENTIFIER"); 
+
+            firstTempType = lookupVarType((Identifier) tempPrimExpr1.f0.choice);
+            tempDeclaration = getVarDeclaration(tempVarName, firstTempType);
+        }
+        else{
+            // expr: (new Bar()).foo()
+
+            AllocationExpression allocationExpression =
+                    (AllocationExpression) tempPrimExpr1.f0.choice;
+            String className = allocationExpression.f1.f0.tokenImage;
+            firstTempType = new Type(new NodeChoice(getTempIdentifier(className), 3));
+            tempDeclaration = getVarDeclaration(tempVarName, firstTempType);
+        }
 
         AssignmentStatement tempStatement = getAssiStatement(tempVarName, f0.node);
         MessageSendStatement messageSendStatement = new MessageSendStatement(

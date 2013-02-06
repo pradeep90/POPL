@@ -48,6 +48,9 @@ public class MicroJavaOutputterTest {
     PrimaryExpression primaryExpressionMini;
     PrimaryExpression primaryExpressionMini2;
     PrimaryExpression primaryExpressionMini3;
+    PrimaryExpression primaryExpressionMiniIdentifier;
+    PrimaryExpression primaryExpressionMiniAllocation;
+    PrimaryExpression primaryExpressionMiniThis;
     Expression expressionMini;
     Expression expressionMini2;
     Expression expressionMini3;
@@ -210,11 +213,20 @@ public class MicroJavaOutputterTest {
         expressionRestMini = new ExpressionRest(expressionMini);
         falseLiteralMini = new FalseLiteral(nodeTokenMini);
         identifierMini = new Identifier(nodeTokenMini);
+
         identifierMini2 = new Identifier(nodeTokenMini2);
         identifierMini3 = new Identifier(nodeTokenMini3);
         identifierMini4 = new Identifier(nodeTokenMini4);
-        arrayAssignmentStatementMini = new ArrayAssignmentStatement(identifierMini, expressionMini, expressionMini2);
-        allocationExpressionMini = new AllocationExpression(identifierMini);
+        primaryExpressionMiniIdentifier =
+                new PrimaryExpression(new NodeChoice(identifierMini3, 3));
+        arrayAssignmentStatementMini = new ArrayAssignmentStatement(identifierMini,
+                                                                    expressionMini,
+                                                                    expressionMini2);
+        allocationExpressionMini = new AllocationExpression(identifierMini3);
+
+        primaryExpressionMiniAllocation =
+                new PrimaryExpression(new NodeChoice(allocationExpressionMini, 6));
+
         arrayAllocationExpressionMini = new ArrayAllocationExpression(expressionMini);
 
         assignmentStatementMini = new AssignmentStatement(identifierMini,
@@ -236,6 +248,9 @@ public class MicroJavaOutputterTest {
         statementMini = new Statement(new NodeChoice(assignmentStatementMini, 1));
         statementMini2 = new Statement(new NodeChoice(assignmentStatementMini2, 1));
         thisExpressionMini = new ThisExpression();
+
+        primaryExpressionMiniThis = new PrimaryExpression(new NodeChoice(thisExpressionMini,
+                                                                         4));
         timesExpressionMini = new TimesExpression(primaryExpressionMini,
                                                   primaryExpressionMini2);
         trueLiteralMini = new TrueLiteral(nodeTokenMini);
@@ -291,6 +306,7 @@ public class MicroJavaOutputterTest {
             new NodeListOptional(varDeclarationMini),
             new NodeListOptional(statementMini2),
             expressionMini3);
+
         messageSendMini = new MessageSend(primaryExpressionMini3,
                                           identifierMini4,
                                           new NodeOptional(expressionListMini));
@@ -346,7 +362,8 @@ public class MicroJavaOutputterTest {
         thisExpression = new microjavaparser.syntaxtree.ThisExpression();
         arrayAssignmentStatement = new microjavaparser.syntaxtree.ArrayAssignmentStatement(identifier, expression, expression2);
         arrayAllocationExpression = new microjavaparser.syntaxtree.ArrayAllocationExpression(expression);
-        allocationExpression = new microjavaparser.syntaxtree.AllocationExpression(identifier);
+        allocationExpression = new microjavaparser.syntaxtree.AllocationExpression(
+            identifier3);
         notExpression = new microjavaparser.syntaxtree.NotExpression(expression);
         bracketExpression = new microjavaparser.syntaxtree.BracketExpression(expression);
         varDeclaration = new microjavaparser.syntaxtree.VarDeclaration(type, identifier);
@@ -1177,16 +1194,157 @@ public class MicroJavaOutputterTest {
         assertEqualAfterTransform(methodDeclaration, methodDeclarationMini);
     }
 
+    // /**
+    //  * Test method for {@link MicroJavaOutputter#MessageSend()}.
+    //  */
+    // @Test
+    // public final void testMessageSend(){
+    //     String expectedString =
+    //             "      int ___tmp0 ;" +
+    //             "      TYPE_FooBarFour ___tmp1 ;" +
+    //             "      ___tmp0 =  63;" +
+    //             "      ___tmp0 . FooBarFour ( 89 , 75 ) ;" +
+    //             "      ___tmp1 = ___tmp0.____1234FooBarFour4321____ ;" +
+    //             "      System.out.println(___tmp1);" +
+    //             "";
+
+    //     ExpansionNode expected = convertToExpansionNode(expectedString);
+    //     PrintStatement tempPrintStatement = new PrintStatement(new Expression(new NodeChoice(messageSendMini, 7)));
+    //     ExpansionNode actual = (ExpansionNode) outputter.getMicroJavaParseTree(tempPrintStatement);
+
+    //     System.out.println("MicroJavaOutputter.getFormattedString(actual): "
+    //                        + MicroJavaOutputter.getFormattedString(actual));
+    //     assertEqualMicroJavaNodes(expected.varDeclarations, actual.varDeclarations);
+    //     assertEqualMicroJavaNodes(
+    //         expected.precedingNodes,
+    //         MicroJavaOutputter.concatenateNodeLists(
+    //             actual.precedingNodes,
+    //             new microjavaparser.syntaxtree.NodeListOptional(actual.node)));
+    // }
+
     /**
      * Test method for {@link MicroJavaOutputter#MessageSend()}.
      */
     @Test
-    public final void testMessageSend(){
+    public final void testMessageSendThis(){
+        MessageSend messageSendMini = new MessageSend(primaryExpressionMiniThis,
+                                                      identifierMini4,
+                                                      new NodeOptional(expressionListMini));
+        outputter.currClassName = "YoBoyzClass";
+        String expectedString =
+                "      YoBoyzClass ___tmp0 ;" +
+                "      TYPE_FooBarFour ___tmp1 ;" +
+                "      ___tmp0 =  this;" +
+                "      ___tmp0 . FooBarFour ( 89 , 75 ) ;" +
+                "      ___tmp1 = ___tmp0.____1234FooBarFour4321____ ;" +
+                "      System.out.println(___tmp1);" +
+                "";
+
+        ExpansionNode expected = convertToExpansionNode(expectedString);
+        PrintStatement tempPrintStatement = new PrintStatement(new Expression(new NodeChoice(messageSendMini, 7)));
+        ExpansionNode actual = (ExpansionNode) outputter.getMicroJavaParseTree(tempPrintStatement);
+
+        System.out.println("MicroJavaOutputter.getFormattedString(actual): "
+                           + MicroJavaOutputter.getFormattedString(actual));
+        assertEqualMicroJavaNodes(expected.varDeclarations, actual.varDeclarations);
+        assertEqualMicroJavaNodes(
+            expected.precedingNodes,
+            MicroJavaOutputter.concatenateNodeLists(
+                actual.precedingNodes,
+                new microjavaparser.syntaxtree.NodeListOptional(actual.node)));
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#lookupVarType()}.
+     */
+    @Test
+    public final void testLookupVarType(){
+        microjavaparser.syntaxtree.Identifier identifier5 =
+                new microjavaparser.syntaxtree.Identifier(
+                    new microjavaparser.syntaxtree.NodeToken("FooBarFive"));
+        microjavaparser.syntaxtree.Identifier identifier6 =
+                new microjavaparser.syntaxtree.Identifier(
+                    new microjavaparser.syntaxtree.NodeToken("FooBarSix"));
+
+        microjavaparser.syntaxtree.Type type4 =
+                new microjavaparser.syntaxtree.Type(
+                    new microjavaparser.syntaxtree.NodeChoice(identifier5, 3));
+
+        microjavaparser.syntaxtree.VarDeclaration varDeclaration =
+                new microjavaparser.syntaxtree.VarDeclaration(
+                    type4, identifier6);
+
+        outputter.currMethodVarDeclarations = new microjavaparser.syntaxtree.NodeListOptional(
+            varDeclaration);
+        assertEquals(type4, outputter.lookupVarType(identifier6));
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#MessageSend()}.
+     */
+    @Test
+    public final void testMessageSendIdentifier(){
+        MessageSend messageSendMini = new MessageSend(primaryExpressionMiniIdentifier,
+                                                      identifierMini4,
+                                                      new NodeOptional(expressionListMini));
+
+        microjavaparser.syntaxtree.Identifier identifier5 =
+                new microjavaparser.syntaxtree.Identifier(
+                    new microjavaparser.syntaxtree.NodeToken("FooBarFive"));
+
+        microjavaparser.syntaxtree.Identifier identifierCopy3 =
+                new microjavaparser.syntaxtree.Identifier(
+                    new microjavaparser.syntaxtree.NodeToken("FooBarThree"));
+
+        microjavaparser.syntaxtree.Type type4 =
+                new microjavaparser.syntaxtree.Type(
+                    new microjavaparser.syntaxtree.NodeChoice(identifier5, 3));
+
+        microjavaparser.syntaxtree.VarDeclaration varDeclaration =
+                new microjavaparser.syntaxtree.VarDeclaration(
+                    type4, identifierCopy3);
+
+        outputter.currClassName = "YoBoyzClass";
+        outputter.currMethodVarDeclarations = new microjavaparser.syntaxtree.NodeListOptional(
+            varDeclaration);
 
         String expectedString =
-                "      int ___tmp0 ;" +
+                "      FooBarFive ___tmp0 ;" +
                 "      TYPE_FooBarFour ___tmp1 ;" +
-                "      ___tmp0 =  63;" +
+                "      ___tmp0 =  FooBarThree;" +
+                "      ___tmp0 . FooBarFour ( 89 , 75 ) ;" +
+                "      ___tmp1 = ___tmp0.____1234FooBarFour4321____ ;" +
+                "      System.out.println(___tmp1);" +
+                "";
+
+        ExpansionNode expected = convertToExpansionNode(expectedString);
+        PrintStatement tempPrintStatement = new PrintStatement(new Expression(new NodeChoice(messageSendMini, 7)));
+        ExpansionNode actual = (ExpansionNode) outputter.getMicroJavaParseTree(
+            tempPrintStatement);
+
+        System.out.println("MicroJavaOutputter.getFormattedString(actual): "
+                           + MicroJavaOutputter.getFormattedString(actual));
+        assertEqualMicroJavaNodes(expected.varDeclarations, actual.varDeclarations);
+        assertEqualMicroJavaNodes(
+            expected.precedingNodes,
+            MicroJavaOutputter.concatenateNodeLists(
+                actual.precedingNodes,
+                new microjavaparser.syntaxtree.NodeListOptional(actual.node)));
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#MessageSend()}.
+     */
+    @Test
+    public final void testMessageSendAllocation(){
+
+        MessageSend messageSendMini = new MessageSend(primaryExpressionMiniAllocation,
+                                                      identifierMini4,
+                                                      new NodeOptional(expressionListMini));
+        String expectedString =
+                "      FooBarThree ___tmp0 ;" +
+                "      TYPE_FooBarFour ___tmp1 ;" +
+                "      ___tmp0 =  new FooBarThree();" +
                 "      ___tmp0 . FooBarFour ( 89 , 75 ) ;" +
                 "      ___tmp1 = ___tmp0.____1234FooBarFour4321____ ;" +
                 "      System.out.println(___tmp1);" +
@@ -1225,18 +1383,19 @@ public class MicroJavaOutputterTest {
         // System.out.println("convertStreamToString(in): " + convertStreamToString(in));
 
         System.out.println(basename); 
-        microjavaparser.syntaxtree.Node expectedMicroParseTree = MicroJavaOutputter.getMicroJavaNodeFromFile(BASE_DIR + File.separator + MICRO_JAVA_DIR + File.separator + basename + MICRO_JAVA_EXTENSION);
+        // microjavaparser.syntaxtree.Node expectedMicroParseTree = MicroJavaOutputter.getMicroJavaNodeFromFile(BASE_DIR + File.separator + MICRO_JAVA_DIR + File.separator + basename + MICRO_JAVA_EXTENSION);
+        // System.out.println("MicroJavaOutputter.getFormattedString(expectedMicroParseTree): " + MicroJavaOutputter.getFormattedString(expectedMicroParseTree));
 
         Node root = MicroJavaOutputter.getMiniJavaNodeFromFile(BASE_DIR + File.separator + MINI_JAVA_DIR + File.separator + basename + MINI_JAVA_EXTENSION);
         microjavaparser.syntaxtree.Node actualMicroParseTree =
                 outputter.getMicroJavaParseTree(root);
-        System.out.println("MicroJavaOutputter.getFormattedString(expectedMicroParseTree): " + MicroJavaOutputter.getFormattedString(expectedMicroParseTree));
+
         System.out.println("MicroJavaOutputter.getFormattedString(actualMicroParseTree): " + MicroJavaOutputter.getFormattedString(actualMicroParseTree));
 
         MicroJavaOutputter.getMicroJavaNodeFromString(MicroJavaOutputter.getFormattedString(actualMicroParseTree));
 
-        // writeCodeToFile(MicroJavaOutputter.getFormattedString(actualMicroParseTree),
-        //                 GEN_MICROJAVA_DIR + File.separator + basename + ".java");
+        writeCodeToFile(MicroJavaOutputter.getFormattedString(actualMicroParseTree),
+                        GEN_MICROJAVA_DIR + File.separator + basename + ".java");
         
         // assertEquals(MicroJavaOutputter.getFormattedString(expectedMicroParseTree),
         //              MicroJavaOutputter.getFormattedString(actualMicroParseTree));
@@ -1265,10 +1424,12 @@ public class MicroJavaOutputterTest {
         // Test if the code generated for each of the MiniJava files
         // is valid MicroJava.
 
-        doTestMiniAndMicroJava("BinarySearch");
-        // doTestMiniAndMicroJava("BinaryTree");
+        // doTestMiniAndMicroJava("BinarySearch");
+
+        // // doTestMiniAndMicroJava("BinaryTree");
+
         // doTestMiniAndMicroJava("BubbleSort");
-        doTestMiniAndMicroJava("Factorial");
+        // doTestMiniAndMicroJava("Factorial");
         // doTestMiniAndMicroJava("LinearSearch");
         // doTestMiniAndMicroJava("LinkedList");
         // doTestMiniAndMicroJava("MainOnly");

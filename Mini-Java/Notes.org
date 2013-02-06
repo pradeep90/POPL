@@ -175,7 +175,10 @@
    CLOCK: [2013-02-01 Fri 21:38]--[2013-02-01 Fri 21:41] =>  0:03
 ** DONE Go through all code to replace TYPE_methodname with actual Type
    CLOCK: [2013-02-01 Fri 21:41]--[2013-02-01 Fri 23:19] =>  1:38
-** TODO Get type of Primary Expression
+** DONE Get type of Primary Expression
+   CLOCK: [2013-02-06 Wed 23:48]--[2013-02-07 Thu 01:23] =>  1:35
    CLOCK: [2013-02-01 Fri 23:19]--[2013-02-01 Fri 23:41] =>  0:22
+** TODO Check with all the programs
+   CLOCK: [2013-02-07 Thu 01:24]--[2013-02-07 Thu 01:36] =>  0:12
 ** TODO MethodDeclaration: writable argument => Need to replace original argument with this variable everywhere.
 *** Maybe do that in the second pass
