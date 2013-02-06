@@ -16,7 +16,6 @@ public class IntegerValue extends Value {
 
     @Override
     public boolean isFalse(){
-        // return !integerValue;
         return true;
     }
 }

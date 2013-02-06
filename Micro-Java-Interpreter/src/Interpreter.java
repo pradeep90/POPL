@@ -508,12 +508,15 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
         Result _ret=null;
         n.f0.accept(this, arg);
         n.f1.accept(this, arg);
-        n.f2.accept(this, arg);
+        Result f2 = n.f2.accept(this, arg);
         n.f3.accept(this, arg);
         n.f4.accept(this, arg);
         Value value;
-        // return new Result(value, store);
-        return _ret;
+
+        // TODO(spradeep): Should I actually print here? 
+        System.out.println(((IntegerValue) f2.value).integerValue);
+        
+        return new Result(null, f2.store);
     }
 
     /**

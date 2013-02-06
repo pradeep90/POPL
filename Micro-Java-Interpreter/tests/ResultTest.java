@@ -29,5 +29,8 @@ public class ResultTest{
     public final void testEquals(){
         assertEquals(new Result(new BooleanValue(true), new Store()),
                      result);
+
+        assertFalse(new Result(null, new Store()).equals(result));
+        assertFalse(result.equals(new Result(null, new Store())));
     }
 }

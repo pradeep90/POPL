@@ -51,7 +51,9 @@
     CLOCK: [2013-02-06 Wed 12:58]--[2013-02-06 Wed 13:19] =>  0:21
 *** TODO testExpressionRest(){ [STUCK HERE - Figure out how to "interpret" expression lists, etc.]
     CLOCK: [2013-02-06 Wed 13:19]--[2013-02-06 Wed 13:21] =>  0:02
-*** testPrintStatement(){
+**** It is part of a message send (method call), so get the list of formal params from the method closure and bind each parameter to the corresponding argument value in the CLOSURE's environment
+*** DONE testPrintStatement(){
+    CLOCK: [2013-02-06 Wed 13:42]--[2013-02-06 Wed 13:55] =>  0:13
 *** testArrayAssignmentStatement(){
 *** testTimesExpression(){
 *** testArrayLookup(){

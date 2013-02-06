@@ -355,4 +355,14 @@ public class InterpreterTest{
     //     assertEquals(new Result(new BooleanValue(false), store),
     //                  interpreter.visit(notExpression2, arg));
     // }
+
+    /**
+     * Test method for {@link Interpreter#PrintStatement()}.
+     */
+    @Test
+    public final void testPrintStatement(){
+        interpreter.visit(printStatement, arg);
+        assertEquals(new Result(null, store),
+                     interpreter.visit(printStatement, arg));
+    }
 }
