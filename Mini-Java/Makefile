@@ -141,7 +141,7 @@ javadoc: $(all_src_files)
         echo $(JAVADOC) $(JDFLAGS) @$<
 
 execute: compile
-	$(JAVA) $(RUN_FLAGS) Main < Mini-Java-Code/Factorial.java
+	$(JAVA) $(RUN_FLAGS) P1 < Mini-Java-Code/Factorial.java
 
 $(all_generated_microjava_files):
 	$(MKDIR) $(GEN_MICROJAVA_OUTPUT_DIR)

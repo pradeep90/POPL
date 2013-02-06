@@ -1233,6 +1233,8 @@ public class MicroJavaOutputterTest {
         System.out.println("MicroJavaOutputter.getFormattedString(expectedMicroParseTree): " + MicroJavaOutputter.getFormattedString(expectedMicroParseTree));
         System.out.println("MicroJavaOutputter.getFormattedString(actualMicroParseTree): " + MicroJavaOutputter.getFormattedString(actualMicroParseTree));
 
+        MicroJavaOutputter.getMicroJavaNodeFromString(MicroJavaOutputter.getFormattedString(actualMicroParseTree));
+
         // writeCodeToFile(MicroJavaOutputter.getFormattedString(actualMicroParseTree),
         //                 GEN_MICROJAVA_DIR + File.separator + basename + ".java");
         

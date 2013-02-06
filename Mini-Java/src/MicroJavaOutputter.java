@@ -381,7 +381,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         VariableSubstituter variableSubstituter = new VariableSubstituter();
         variableSubstituter.methodReturnTypeHash = methodReturnTypeHash;
 
-        System.out.println("methodReturnTypeHash: " + methodReturnTypeHash);
+        // System.out.println("methodReturnTypeHash: " + methodReturnTypeHash);
 
         // assertEqualMicroJavaNodes(_ret.node, variableSubstituter.visit((Goal)_ret.node));
         return new ExpansionNode(variableSubstituter.visit((Goal)_ret.node));
@@ -1068,7 +1068,28 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         String retTempVarName = getNewTempVarName();
 
         // TODO(spradeep): Get the type of the temp variable
-        VarDeclaration tempDeclaration = getVarDeclaration(tempVarName);
+        VarDeclaration tempDeclaration;
+        PrimaryExpression firstTemp = (PrimaryExpression) f0.node;
+        Type firstTempType;
+
+        // if (((NodeChoice) firstTemp.f0).which == 4){
+        //     // this.foo()
+        //     System.out.println("THIS"); 
+        //     tempDeclaration = getVarDeclaration(tempVarName);
+        //     // firstTempType = new Type(new NodeChoice(getTempIdentifier("CLASS_NAME"), 3));
+        // }
+        // else if (((NodeChoice) firstTemp.f0).which == 3){
+        //     System.out.println("IDENTIFIER"); 
+        //     // identifier.foo() => lookup declaration
+        //     tempDeclaration = getVarDeclaration(
+        //         tempVarName,
+        //         (Identifier) ((NodeChoice) firstTemp.f0).choice);
+        //     // firstTempType = new Type(new NodeChoice())
+        // }
+        // else
+
+        tempDeclaration = getVarDeclaration(tempVarName);
+
         AssignmentStatement tempStatement = getAssiStatement(tempVarName, f0.node);
         MessageSendStatement messageSendStatement = new MessageSendStatement(
             getTempIdentifier(tempVarName),

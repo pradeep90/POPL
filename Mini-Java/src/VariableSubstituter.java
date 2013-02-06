@@ -41,8 +41,8 @@ public class VariableSubstituter extends GJNoArguDepthFirst<Node> {
             return new Type(new NodeChoice(new IntegerType(), 2));
         }
         else if (currType instanceof Identifier){
-            System.out.println("((Identifier)currType).f0.tokenImage: "
-                               + ((Identifier)currType).f0.tokenImage);
+            // System.out.println("((Identifier)currType).f0.tokenImage: "
+                               // + ((Identifier)currType).f0.tokenImage);
             return new Type(new NodeChoice(new Identifier(new NodeToken(MicroJavaOutputter.getMethodName((Identifier) currType))), 3));
         }
         return null;
@@ -338,8 +338,8 @@ public class VariableSubstituter extends GJNoArguDepthFirst<Node> {
             Identifier curr = (Identifier) ((NodeChoice) n.f0).choice;
             String name = MicroJavaOutputter.getMethodName(curr);
             if (name.startsWith("TYPE_")){
-                System.out.println("name.substring(5): " + name.substring(5));
-                System.out.println("methodReturnTypeHash.get(name.substring(5)): " + methodReturnTypeHash.get(name.substring(5)));
+                // System.out.println("name.substring(5): " + name.substring(5));
+                // System.out.println("methodReturnTypeHash.get(name.substring(5)): " + methodReturnTypeHash.get(name.substring(5)));
                 return getCopyOfType(methodReturnTypeHash.get(name.substring(5)));
             }
         }
