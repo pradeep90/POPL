@@ -32,8 +32,8 @@ public class EnvironmentTest{
         location3 = new Location();
         value1 = new IntegerValue(74);
         value2 = new IntegerValue(93);
-        binding1 = new Binding(identifier1, location1);
-        binding2 = new Binding(identifier2, location2);
+        binding1 = new Binding("name1", location1);
+        binding2 = new Binding("name2", location2);
     }
     
     @After

@@ -6,12 +6,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class StoreTest{
+public class ResultTest{
+    Value value;
     Store store;
+    Result result;
 
     @Before
     public void setUp(){
+        value = new BooleanValue(true);
         store = new Store();
+        result = new Result(value, store);
     }
     
     @After
@@ -19,20 +23,11 @@ public class StoreTest{
     }
     
     /**
-     * Test method for {@link Store#Store()}.
-     */
-    @Test
-    public final void testStore(){
-        assertTrue(store.isEmpty()); 
-    }
-
-    /**
-     * Test method for {@link Store#equals()}.
+     * Test method for {@link Result#equals()}.
      */
     @Test
     public final void testEquals(){
-        Store store2 = new Store();
-
-        assertEquals(store, store2);
+        assertEquals(new Result(new BooleanValue(true), new Store()),
+                     result);
     }
 }

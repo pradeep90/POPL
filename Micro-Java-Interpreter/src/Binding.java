@@ -1,16 +1,11 @@
 import syntaxtree.*;
 
 public class Binding {
-    Identifier identifier;
+    String name;
     Location value;
 
-    public Binding(Identifier identifier, Location value) {
-        this.identifier = identifier;
+    public Binding(String name, Location value) {
+        this.name = name;
         this.value = value;
-    }
-
-    public Binding(String identifierName, Location value){
-        this(new Identifier(new NodeToken(identifierName)),
-             value);
     }
 }

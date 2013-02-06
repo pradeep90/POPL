@@ -13,7 +13,12 @@ public class Location {
         this.index = index;
     }
 
-    public boolean equals(Location other){
-        return other.index == this.index;
+    public boolean equals(Object o) {
+        if (o instanceof Location) {
+            Location other = (Location) o;
+            return other.index == this.index;
+        }
+        return false;
     }
+
 }

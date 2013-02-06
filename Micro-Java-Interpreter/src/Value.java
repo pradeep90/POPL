@@ -3,4 +3,10 @@ public abstract class Value {
 
     // Decide whether you want to have ALL values as Cells (aka Boxes)
     // or ints as ints themselves.
+    public abstract boolean equals(Object o);
+
+    public abstract boolean isFalse();
+    public boolean isTrue(){
+        return !isFalse();
+    }
 }

@@ -9,6 +9,7 @@
 ** Class class (with vtable)
 * Notes
 ** Am going with the PLAI idea of having an Environment and a Store. Environment alone won't do the trick. Plus, it's all assign by reference, so you need to keep track of the original value somewhere.
+** VVIP BUG: I was using == instead of .equals in the equals method everywhere.
 * Plan of action
 ** DONE Build an Environment class
    CLOCK: [2013-02-06 Wed 09:31]--[2013-02-06 Wed 10:47] =>  1:16
@@ -30,11 +31,64 @@
 ** DONE fetch Location * Store => Value
 ** DONE new-loc
 * TODO Interpret trivial stuff using the environment
-   CLOCK: [2013-02-06 Wed 11:16]
-*** variable reference, etc
-*** allocation of different kinds
-*** different expressions (primary or otherwise)
-*** different statements
+  CLOCK: [2013-02-06 Wed 11:16]--[2013-02-06 Wed 12:21] =>  1:05
+*** DONE identifier
+    CLOCK: [2013-02-06 Wed 12:23]--[2013-02-06 Wed 12:32] =>  0:09
+*** ??? testNodeToken(){
+*** DONE testThisExpression(){
+    CLOCK: [2013-02-06 Wed 12:36]--[2013-02-06 Wed 12:46] =>  0:10
+*** DONE testIdentifier(){
+*** DONE testFalseLiteral(){
+*** DONE testTrueLiteral(){
+*** DONE testIntegerLiteral(){
+    CLOCK: [2013-02-06 Wed 12:46]--[2013-02-06 Wed 12:50] =>  0:04
+*** DONE testArrayAllocationExpression(){
+    CLOCK: [2013-02-06 Wed 12:50]--[2013-02-06 Wed 12:55] =>  0:05
+*** TODO testAllocationExpression(){ (wait for class implementation)
+*** DONE testBracketExpression(){
+    CLOCK: [2013-02-06 Wed 12:56]--[2013-02-06 Wed 12:58] =>  0:02
+*** DONE testNotExpression(){
+    CLOCK: [2013-02-06 Wed 12:58]--[2013-02-06 Wed 13:19] =>  0:21
+*** TODO testExpressionRest(){ [STUCK HERE - Figure out how to "interpret" expression lists, etc.]
+    CLOCK: [2013-02-06 Wed 13:19]--[2013-02-06 Wed 13:21] =>  0:02
+*** testPrintStatement(){
+*** testArrayAssignmentStatement(){
+*** testTimesExpression(){
+*** testArrayLookup(){
+*** testMinusExpression(){
+*** testPlusExpression(){
+*** testCompareExpression(){
+*** testAndExpression(){
+*** testAssignmentStatement(){
+*** testIntegerType(){
+*** testBooleanType(){
+*** testArrayType(){
+*** testType(){
+*** testFormalParameter(){
+*** testFormalParameterRest(){
+*** testVarDeclaration(){
+*** testWhileStatement(){
+*** testIfStatement(){
+*** testNodeOptional(){
+*** testNodeListOptional(){
+*** testBlock(){
+*** testExpressionList(){
+*** testFormalParameterList(){
+*** testGetNewMainClass(){
+*** testGoal(){
+*** testClassDeclaration(){
+*** testClassExtendsDeclaration(){
+*** testTypeDeclaration(){
+*** testStatement(){
+*** testExpression(){
+*** testPrimaryExpression(){
+*** testMainClass(){
+*** testArrayLength_ArrayAllocationExpression(){
+*** testArrayLength_Identifier(){
+*** testConcateNodeLists(){
+*** testMethodDeclaration(){
+*** testMessageSend(){
+*** testMainOnly(){
 ** Closure
 ** Methods
 ** Mutually recursive methods

@@ -19,12 +19,24 @@ public class Environment {
         bindingList.add(0, newBinding);
     }
 
+    public void extend(String name, Location location){
+        extend(new Binding(name, location));
+    }
+
+    public void extend(Identifier identifier, Location location){
+        extend(new Binding(getIdentifierName(identifier), location));
+    }
+
+    public void extend(ThisExpression thisExpression, Location location){
+        extend(new Binding("this", location));
+    }
+
     /** 
-     * @return Location corresponding to identifier in this environment.
+     * @return Location corresponding to name in this environment.
      */
-    public Location lookup(Identifier identifier){
+    public Location lookup(String name){
         for (Binding b : bindingList){
-            if (b.identifier.f0.tokenImage == identifier.f0.tokenImage){
+            if (b.name.equals(name)){
                 return b.value;
             }
         }
@@ -35,7 +47,15 @@ public class Environment {
         return null;
     }
 
-    public Location lookup(String identifierName){
-        return lookup(new Identifier(new NodeToken(identifierName)));
+    public Location lookup(Identifier identifier){
+        return lookup(getIdentifierName(identifier));
+    }
+    
+    public Location lookup(ThisExpression thisExpression){
+        return lookup("this");
+    }
+
+    public String getIdentifierName(Identifier identifier){
+        return identifier.f0.tokenImage;
     }
 }
