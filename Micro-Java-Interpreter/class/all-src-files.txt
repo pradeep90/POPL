@@ -1,7 +1,9 @@
 src/MicroJavaParserConstants.java
 src/Token.java
+src/BooleanValue.java
 src/JavaCharStream.java
 src/MicroJavaParser.java
+src/Result.java
 src/visitor/GJNoArguVisitor.java
 src/visitor/GJVisitor.java
 src/visitor/GJNoArguDepthFirst.java
@@ -12,7 +14,10 @@ src/visitor/GJVoidDepthFirst.java
 src/visitor/GJDepthFirst.java
 src/visitor/TreeDumper.java
 src/visitor/DepthFirstVisitor.java
+src/Storage.java
+src/ArrayValue.java
 src/MicroJavaParserTokenManager.java
+src/Location.java
 src/syntaxtree/ClassExtendsDeclaration.java
 src/syntaxtree/ThisExpression.java
 src/syntaxtree/VarRef.java
@@ -64,6 +69,12 @@ src/syntaxtree/DotExpression.java
 src/syntaxtree/NodeListOptional.java
 src/syntaxtree/NodeSequence.java
 src/syntaxtree/PrimaryExpression.java
+src/Value.java
 src/ParseException.java
 src/P2.java
+src/Binding.java
+src/Interpreter.java
+src/Store.java
 src/TokenMgrError.java
+src/Environment.java
+src/IntegerValue.java

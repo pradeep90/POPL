@@ -7,9 +7,30 @@
 ** Closure (for methods) (along with the `this` variable)
 ** Mutually recursive methods? => Recursive environment (maybe subclasses Environment)
 ** Class class (with vtable)
+* Notes
+** Am going with the PLAI idea of having an Environment and a Store. Environment alone won't do the trick. Plus, it's all assign by reference, so you need to keep track of the original value somewhere.
 * Plan of action
-** Build an environment class
-** Interpret trivial stuff using the environment
+** DONE Build an Environment class
+   CLOCK: [2013-02-06 Wed 09:31]--[2013-02-06 Wed 10:47] =>  1:16
+*** DONE Binding
+*** DONE empty-env
+*** DONE extend-env
+** DONE Build a Store class (I'm just having it as an alias for HashMap)
+*** DONE Location
+*** DONE Storage <Location, Value>
+*** DONE Store
+*** DONE empty-store
+*** DONE override-store
+** DONE Build a Value class
+** DONE Subclass Value
+** DONE Result <Value, Store>
+   CLOCK: [2013-02-06 Wed 11:09]--[2013-02-06 Wed 11:10] =>  0:01
+   CLOCK: [2013-02-06 Wed 11:02]--[2013-02-06 Wed 11:08] =>  0:06
+** DONE lookup symbol * env => Location
+** DONE fetch Location * Store => Value
+** DONE new-loc
+* TODO Interpret trivial stuff using the environment
+   CLOCK: [2013-02-06 Wed 11:16]
 *** variable reference, etc
 *** allocation of different kinds
 *** different expressions (primary or otherwise)

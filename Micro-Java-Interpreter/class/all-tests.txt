@@ -1,0 +1,3 @@
+tests/EnvironmentTest.java
+tests/LocationTest.java
+tests/StoreTest.java
