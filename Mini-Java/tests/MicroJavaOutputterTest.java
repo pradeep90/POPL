@@ -978,6 +978,10 @@ public class MicroJavaOutputterTest {
      */
     @Test
     public final void testClassDeclaration(){
+        // Type typeMini1 = new Type(new NodeChoice(arrayTypeMini, 0));
+        // VarDeclaration varDeclaration = new VarDeclaration(typeMini1, identifierMini2);
+        // classDeclarationMini.f3.addNode(varDeclaration);
+        // classDeclaration.f3.addNode(varDeclaration);
         assertEqualAfterTransform(classDeclaration, classDeclarationMini);
     }
 
@@ -1194,34 +1198,6 @@ public class MicroJavaOutputterTest {
         assertEqualAfterTransform(methodDeclaration, methodDeclarationMini);
     }
 
-    // /**
-    //  * Test method for {@link MicroJavaOutputter#MessageSend()}.
-    //  */
-    // @Test
-    // public final void testMessageSend(){
-    //     String expectedString =
-    //             "      int ___tmp0 ;" +
-    //             "      TYPE_FooBarFour ___tmp1 ;" +
-    //             "      ___tmp0 =  63;" +
-    //             "      ___tmp0 . FooBarFour ( 89 , 75 ) ;" +
-    //             "      ___tmp1 = ___tmp0.____1234FooBarFour4321____ ;" +
-    //             "      System.out.println(___tmp1);" +
-    //             "";
-
-    //     ExpansionNode expected = convertToExpansionNode(expectedString);
-    //     PrintStatement tempPrintStatement = new PrintStatement(new Expression(new NodeChoice(messageSendMini, 7)));
-    //     ExpansionNode actual = (ExpansionNode) outputter.getMicroJavaParseTree(tempPrintStatement);
-
-    //     System.out.println("MicroJavaOutputter.getFormattedString(actual): "
-    //                        + MicroJavaOutputter.getFormattedString(actual));
-    //     assertEqualMicroJavaNodes(expected.varDeclarations, actual.varDeclarations);
-    //     assertEqualMicroJavaNodes(
-    //         expected.precedingNodes,
-    //         MicroJavaOutputter.concatenateNodeLists(
-    //             actual.precedingNodes,
-    //             new microjavaparser.syntaxtree.NodeListOptional(actual.node)));
-    // }
-
     /**
      * Test method for {@link MicroJavaOutputter#MessageSend()}.
      */
@@ -1415,25 +1391,94 @@ public class MicroJavaOutputterTest {
     }
 
     @Test
-    public final void testMainOnly(){
-        doTestMiniAndMicroJava("MainOnly");
-    }
-
-    @Test
     public final void testMicroJavaParsing(){
         // Test if the code generated for each of the MiniJava files
         // is valid MicroJava.
 
         // doTestMiniAndMicroJava("BinarySearch");
+        // doTestMiniAndMicroJava("Factorial");
 
-        // // doTestMiniAndMicroJava("BinaryTree");
+        // doTestMiniAndMicroJava("BinaryTree");
 
         // doTestMiniAndMicroJava("BubbleSort");
-        // doTestMiniAndMicroJava("Factorial");
+
         // doTestMiniAndMicroJava("LinearSearch");
+
         // doTestMiniAndMicroJava("LinkedList");
         // doTestMiniAndMicroJava("MainOnly");
         // doTestMiniAndMicroJava("QuickSort");
         // doTestMiniAndMicroJava("TreeVisitor");
     }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#BinarySearch()}.
+     */
+    @Test
+    public final void testBinarySearch(){
+        doTestMiniAndMicroJava("BinarySearch");
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#Factorial()}.
+     */
+    @Test
+    public final void testFactorial(){
+        doTestMiniAndMicroJava("Factorial");
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#BubbleSort()}.
+     */
+    @Test
+    public final void testBubbleSort(){
+        doTestMiniAndMicroJava("BubbleSort");
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#MainOnly()}.
+     */
+    @Test
+    public final void testMainOnly(){
+        doTestMiniAndMicroJava("MainOnly");
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#QuickSort()}.
+     */
+    @Test
+    public final void testQuickSort(){
+        doTestMiniAndMicroJava("QuickSort");
+    }
+
+    // /**
+    //  * Test method for {@link MicroJavaOutputter#BinaryTree()}.
+    //  */
+    // @Test
+    // public final void testBinaryTree(){
+    //     doTestMiniAndMicroJava("BinaryTree");
+    // }
+
+    // /**
+    //  * Test method for {@link MicroJavaOutputter#LinearSearch()}.
+    //  */
+    // @Test
+    // public final void testLinearSearch(){
+    //     doTestMiniAndMicroJava("LinearSearch");
+    // }
+
+    // /**
+    //  * Test method for {@link MicroJavaOutputter#LinkedList()}.
+    //  */
+    // @Test
+    // public final void testLinkedList(){
+    //     doTestMiniAndMicroJava("LinkedList");
+    // }
+
+    // /**
+    //  * Test method for {@link MicroJavaOutputter#TreeVisitor()}.
+    //  */
+    // @Test
+    // public final void testTreeVisitor(){
+    //     doTestMiniAndMicroJava("TreeVisitor");
+    // }
 }

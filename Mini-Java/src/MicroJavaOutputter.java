@@ -129,6 +129,34 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
                                     middle);
     }
 
+    /**
+     * Make sure the preceding nodes for each statement come
+     * IMMEDIATELY before it.
+     * 
+     * @return ExpansionNode containing varDeclarations and list of
+     * statements for statementList.
+     */
+    public ExpansionNode getSquashedStatementList(
+        syntaxtree.NodeListOptional statementList){
+        
+
+        NodeListOptional allVarDeclarations = new NodeListOptional();
+        NodeListOptional allStatements = new NodeListOptional();
+
+        // Make all statements and their preceding nodes appear together
+        for (syntaxtree.Node node : statementList.nodes){
+            syntaxtree.Statement currStatement = (syntaxtree.Statement) node;
+            ExpansionNode currNode = currStatement.accept(this);
+            allStatements = concatenateNodeLists(allStatements,
+                                                 getSquashedNodeList(currNode));
+
+            allVarDeclarations = concatenateNodeLists(allVarDeclarations,
+                                                      currNode.varDeclarations);
+        }
+
+        return new ExpansionNode(null, allVarDeclarations, allStatements);
+    }
+
     public void addBinding(Identifier methodIdentifier, Type returnType){
         methodReturnTypeHash.put(getMethodName(methodIdentifier),
                                  returnType);
@@ -595,20 +623,26 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
 
         currMethodVarDeclarations = (NodeListOptional) f7.node;
 
-        ExpansionNode f8 = n.f8.accept(this);
+        // ExpansionNode f8 = n.f8.accept(this);
+
+        ExpansionNode f8 = getSquashedStatementList(n.f8);
+
         ExpansionNode f9 = n.f9.accept(this);
         ExpansionNode f10 = n.f10.accept(this);
         ExpansionNode f11 = n.f11.accept(this);
         ExpansionNode f12 = n.f12.accept(this);
+        
+        NodeListOptional allVarDeclarations = concatenateNodeLists(
+            (NodeListOptional) f7.node,
+            f8.varDeclarations);
 
-        NodeListOptional allVarDeclarations = concatenateNodeLists((NodeListOptional) f7.node,
-                                                                   f8.varDeclarations);
-        allVarDeclarations = concatenateNodeLists(allVarDeclarations,
-                                                  f10.varDeclarations);
-        NodeListOptional allStatements = concatenateNodeLists(f8.precedingNodes,
-                                                              (NodeListOptional) f8.node);
+        NodeListOptional allStatements = f8.precedingNodes;
+
         allStatements = concatenateNodeLists(allStatements,
                                              f10.precedingNodes);
+
+        allVarDeclarations = concatenateNodeLists(allVarDeclarations,
+                                                  f10.varDeclarations);
 
         Statement pseudoReturnStatement = new Statement(new NodeChoice(new AssignmentStatement(
             new VarRef(new NodeChoice(getMethodRetVarIdentifier((Identifier) f2.node),
@@ -745,12 +779,12 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
     public ExpansionNode visit(syntaxtree.Block n) {
         ExpansionNode _ret=null;
         ExpansionNode f0 = n.f0.accept(this);
-        ExpansionNode f1 = n.f1.accept(this);
+        ExpansionNode f1 = getSquashedStatementList(n.f1);
         ExpansionNode f2 = n.f2.accept(this);
 
         // Put the assignment statements within the block itself.
         _ret = new ExpansionNode(new Block((NodeToken) f0.node,
-                                           (NodeListOptional) getSquashedNodeList(f1),
+                                           f1.precedingNodes,
                                            (NodeToken) f2.node));
         _ret.varDeclarations = f1.varDeclarations;
         return _ret;
@@ -1126,8 +1160,24 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
             firstTempType = lookupVarType((Identifier) tempPrimExpr1.f0.choice);
             tempDeclaration = getVarDeclaration(tempVarName, firstTempType);
         }
+        else if (tempPrimExpr1.f0.which == 8){
+            // expr: (barExpr).foo()
+
+            BracketExpression bracketExpression = (BracketExpression) tempPrimExpr1.f0.choice;
+
+            // Case 1: barExpr is a MessageSend expression => it would
+            // be reduced to an identifier.
+
+            // TODO(spradeep): BUG: firstTempType ends up being null
+            // cos the identifier we are looking up is a temp and thus
+            // won't have its VarDeclaration among the class or method
+            // VarDeclarations.
+            firstTempType = lookupVarType((Identifier) bracketExpression.f1.f0.choice);
+            System.out.println("firstTempType: " + firstTempType);
+            tempDeclaration = getVarDeclaration(tempVarName, firstTempType);
+        }
         else{
-            // expr: (new Bar()).foo()
+            // expr: new Bar().foo()
 
             AllocationExpression allocationExpression =
                     (AllocationExpression) tempPrimExpr1.f0.choice;

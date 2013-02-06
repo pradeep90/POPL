@@ -178,7 +178,20 @@
 ** DONE Get type of Primary Expression
    CLOCK: [2013-02-06 Wed 23:48]--[2013-02-07 Thu 01:23] =>  1:35
    CLOCK: [2013-02-01 Fri 23:19]--[2013-02-01 Fri 23:41] =>  0:22
+** DONE Get int[] arr; to work => Not the main issue. It was because I was using the same outputter several times in succession.
 ** TODO Check with all the programs
+   CLOCK: [2013-02-07 Thu 02:25]--[2013-02-07 Thu 03:21] =>  0:56
+   CLOCK: [2013-02-07 Thu 02:02]--[2013-02-07 Thu 02:24] =>  0:22
+   CLOCK: [2013-02-07 Thu 01:39]--[2013-02-07 Thu 02:02] =>  0:23
    CLOCK: [2013-02-07 Thu 01:24]--[2013-02-07 Thu 01:36] =>  0:12
+*** DONE MainOnly
+*** DONE Factorial
+*** DONE BinarySearch
+*** DONE BubbleSort
+*** DONE QuickSort
+*** TODO BinaryTree
+*** TODO LinearSearch
+*** TODO LinkedList
+*** TODO TreeVisitor
 ** TODO MethodDeclaration: writable argument => Need to replace original argument with this variable everywhere.
 *** Maybe do that in the second pass
