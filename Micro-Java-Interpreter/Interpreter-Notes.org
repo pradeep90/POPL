@@ -1,0 +1,22 @@
+			  Interpreter Notes
+
+* TODO Check out outline resources for writing a Java interpreter (maybe EOPL will have some guidance here or some other recommended book)
+* What I need to implement for the interpreter
+** Cell
+** Environment: <identifier, cell>
+** Closure (for methods) (along with the `this` variable)
+** Mutually recursive methods? => Recursive environment (maybe subclasses Environment)
+** Class class (with vtable)
+* Plan of action
+** Build an environment class
+** Interpret trivial stuff using the environment
+*** variable reference, etc
+*** allocation of different kinds
+*** different expressions (primary or otherwise)
+*** different statements
+** Closure
+** Methods
+** Mutually recursive methods
+** Class class
+** Class declaration
+** Inheritance
