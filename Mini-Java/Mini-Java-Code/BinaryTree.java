@@ -95,13 +95,13 @@ class Tree{
     }
 
     public boolean SetHas_Left(boolean val){
-	 has_left = val ;
-	 return true ;
+        has_left = val ;
+        return true ;
     }
 
     public boolean SetHas_Right(boolean val){
-	 has_right = val ;
-	 return true ;
+        has_right = val ;
+        return true ;
     }
     
     // This method compares two integers and

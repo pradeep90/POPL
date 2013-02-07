@@ -57,26 +57,30 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
     /** 
      * @return Type from VarDeclaration of identifier.
      */
-    public Type lookupVarType(Identifier identifier){
-        if (currMethodVarDeclarations != null){
-            for (Node currNode : currMethodVarDeclarations.nodes){
-                VarDeclaration currDeclaration = (VarDeclaration) currNode;
-                if (getMethodName(currDeclaration.f1).equals(getMethodName(identifier))){
-                    return currDeclaration.f0;
-                }
-            }
+    public Type lookupVarType(Identifier identifier, NodeListOptional tempDeclarations){
+        NodeListOptional allVarDeclarations = new NodeListOptional();
+        if (tempDeclarations != null){
+            allVarDeclarations = concatenateNodeLists(allVarDeclarations, tempDeclarations);
         }
 
-        if (currClassVarDeclarations != null){
-            for (Node currNode : currClassVarDeclarations.nodes){
-                VarDeclaration currDeclaration = (VarDeclaration) currNode;
-                if (getMethodName(currDeclaration.f1).equals(getMethodName(identifier))){
-                    return currDeclaration.f0;
-                }
+        if (currMethodVarDeclarations != null)
+            allVarDeclarations = concatenateNodeLists(allVarDeclarations, currMethodVarDeclarations);
+
+        if (currClassVarDeclarations != null)
+            allVarDeclarations = concatenateNodeLists(allVarDeclarations, currClassVarDeclarations);
+        
+        for (Node currNode : allVarDeclarations.nodes){
+            VarDeclaration currDeclaration = (VarDeclaration) currNode;
+            if (getMethodName(currDeclaration.f1).equals(getMethodName(identifier))){
+                return VariableSubstituter.getCopyOfType(currDeclaration.f0);
             }
         }
 
         return null;
+    }
+
+    public Type lookupVarType(Identifier identifier){
+        return lookupVarType(identifier, null);
     }
 
     /**
@@ -187,21 +191,23 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         return getTempIdentifier(getMethodRetVarName(methodIdentifier));
     }
 
-    /** 
-     * @return VarDeclaration for varName.
-     */
-    public VarDeclaration getVarDeclaration(String varName){
-        return getVarDeclaration(varName, new Type(new NodeChoice(new IntegerType(), 2)));
-    }
+    // /** 
+    //  * @return VarDeclaration for varName.
+    //  */
+    // public VarDeclaration getVarDeclaration(String varName){
+    //     return getVarDeclaration(varName, new Type(new NodeChoice(new IntegerType(), 2)));
+    // }
 
     /** 
      * @return VarDeclaration for varName given the methodIdentifier.
      */
     public VarDeclaration getVarDeclaration(String varName, Identifier methodIdentifier){
         if (methodReturnTypeHash.containsKey(getMethodName(methodIdentifier))){
-            return getVarDeclaration(varName,
-                                     methodReturnTypeHash.get(
-                                         getMethodName(methodIdentifier)));
+            Type type = VariableSubstituter.getCopyOfType(
+                methodReturnTypeHash.get(getMethodName(methodIdentifier)));
+
+            VarDeclaration _ret =  getVarDeclaration(varName, type);
+            return _ret;
         }
         else{
             return getVarDeclaration(varName, new Type(new NodeChoice(
@@ -213,7 +219,13 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
      * @return VarDeclaration for varName with type.
      */
     public VarDeclaration getVarDeclaration(String varName, Type type){
-        return new VarDeclaration(type, getTempIdentifier(varName));
+        if (type == null){
+            System.out.println("null type in getVarDeclaration"); 
+            System.out.println("varName: " + varName);
+        }
+
+        VarDeclaration _ret = new VarDeclaration(type, getTempIdentifier(varName));
+        return _ret;
     }
 
     public AssignmentStatement getAssiStatement(String varName, Node primExprNode){
@@ -1140,7 +1152,6 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         String tempVarName = getNewTempVarName();
         String retTempVarName = getNewTempVarName();
 
-        // TODO(spradeep): Get the type of the temp variable
         VarDeclaration tempDeclaration;
         PrimaryExpression tempPrimExpr1 = (PrimaryExpression) f0.node;
         Type firstTempType;
@@ -1157,7 +1168,17 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
 
             System.out.println("IDENTIFIER"); 
 
-            firstTempType = lookupVarType((Identifier) tempPrimExpr1.f0.choice);
+            // TODO(spradeep): Have a global stack of VarDeclarations
+            // for a method and class. lookup declaration in there.
+            Identifier identifier = (Identifier) tempPrimExpr1.f0.choice;
+
+            firstTempType = lookupVarType((Identifier) tempPrimExpr1.f0.choice,
+                                          f0.varDeclarations);
+
+            if (firstTempType == null){
+                System.out.println("firstTempType is null in IDENTIFIER MessageSend"); 
+            }
+
             tempDeclaration = getVarDeclaration(tempVarName, firstTempType);
         }
         else if (tempPrimExpr1.f0.which == 8){
@@ -1165,15 +1186,14 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
 
             BracketExpression bracketExpression = (BracketExpression) tempPrimExpr1.f0.choice;
 
+            Identifier identifier = (Identifier) bracketExpression.f1.f0.choice;
+
             // Case 1: barExpr is a MessageSend expression => it would
             // be reduced to an identifier.
-
-            // TODO(spradeep): BUG: firstTempType ends up being null
-            // cos the identifier we are looking up is a temp and thus
-            // won't have its VarDeclaration among the class or method
-            // VarDeclarations.
-            firstTempType = lookupVarType((Identifier) bracketExpression.f1.f0.choice);
-            System.out.println("firstTempType: " + firstTempType);
+            firstTempType = lookupVarType(identifier, f0.varDeclarations);
+            if (firstTempType == null){
+                System.out.println("firstTempType is null in BracketExpression MessageSend"); 
+            }
             tempDeclaration = getVarDeclaration(tempVarName, firstTempType);
         }
         else{

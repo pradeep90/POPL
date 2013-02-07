@@ -29,7 +29,7 @@ public class VariableSubstituter extends GJNoArguDepthFirst<Node> {
     //                              returnType);
     // }
 
-    public Type getCopyOfType(Type type){
+    public static Type getCopyOfType(Type type){
         Node currType = type.f0.choice;
         if (currType instanceof ArrayType){
             return new Type(new NodeChoice(new ArrayType(), 0));
@@ -334,8 +334,8 @@ public class VariableSubstituter extends GJNoArguDepthFirst<Node> {
         Node _ret=null;
         n.f0.accept(this);
 
-        if (((NodeChoice) n.f0).choice instanceof Identifier){
-            Identifier curr = (Identifier) ((NodeChoice) n.f0).choice;
+        if (n.f0.which == 3){
+            Identifier curr = (Identifier) n.f0.choice;
             String name = MicroJavaOutputter.getMethodName(curr);
             if (name.startsWith("TYPE_")){
                 // System.out.println("name.substring(5): " + name.substring(5));
