@@ -92,7 +92,7 @@
    CLOCK: [2013-01-30 Wed 10:01]--[2013-01-30 Wed 10:02] =>  0:01
    CLOCK: [2013-01-30 Wed 09:41]--[2013-01-30 Wed 10:01] =>  0:20
    CLOCK: [2013-01-30 Wed 09:15]--[2013-01-30 Wed 09:38] =>  0:23
-** TODO Goal, main, class declaration, method, assignment statement
+** DONE Goal, main, class declaration, method, assignment statement
    CLOCK: [2013-01-30 Wed 05:26]--[2013-01-30 Wed 05:52] =>  0:26
    CLOCK: [2013-01-30 Wed 04:18]--[2013-01-30 Wed 05:23] =>  1:05
 ** DONE Identifier
@@ -189,7 +189,7 @@
 *** DONE BinarySearch
 *** DONE BubbleSort
 *** DONE QuickSort
-** TODO (foo.bar()).baz() => Have a global stack of VarDeclarations
+** DONE (foo.bar()).baz() => Have a global stack of VarDeclarations
    CLOCK: [2013-02-07 Thu 04:14]--[2013-02-07 Thu 05:38] =>  1:24
    CLOCK: [2013-02-07 Thu 03:30]--[2013-02-07 Thu 04:12] =>  0:42
 ** TODO Get faulty programs working
@@ -197,5 +197,9 @@
 *** TODO LinearSearch
 *** TODO LinkedList
 *** TODO TreeVisitor
+** DONE Class variable declarations
+   CLOCK: [2013-02-07 Thu 22:14]--[2013-02-07 Thu 22:59] =>  0:45
+   CLOCK: [2013-02-07 Thu 19:29]--[2013-02-07 Thu 19:50] =>  0:21
+** TODO I think the main thing left is to have writable argument and while statement trickery
 ** TODO MethodDeclaration: writable argument => Need to replace original argument with this variable everywhere.
 *** Maybe do that in the second pass

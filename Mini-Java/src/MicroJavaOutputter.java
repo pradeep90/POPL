@@ -37,6 +37,8 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
                            new NodeListOptional()));
 
     public HashMap<String, Type> methodReturnTypeHash = new HashMap<String, Type>();
+    public HashMap<String, NodeListOptional> classVarDeclarationsHash =
+            new HashMap<String, NodeListOptional>();
 
     public int tempCtr = 0;
     
@@ -68,9 +70,14 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
 
         if (currClassVarDeclarations != null)
             allVarDeclarations = concatenateNodeLists(allVarDeclarations, currClassVarDeclarations);
+
+        System.out.println("In lookupVarType"); 
+        System.out.println("getMethodName(identifier): " + getMethodName(identifier));
         
         for (Node currNode : allVarDeclarations.nodes){
             VarDeclaration currDeclaration = (VarDeclaration) currNode;
+            System.out.println("getMethodName(currDeclaration.f1): "
+                               + getMethodName(currDeclaration.f1));
             if (getMethodName(currDeclaration.f1).equals(getMethodName(identifier))){
                 return VariableSubstituter.getCopyOfType(currDeclaration.f0);
             }
@@ -538,6 +545,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         ExpansionNode f3 = n.f3.accept(this);
 
         currClassVarDeclarations = (NodeListOptional) f3.node;
+        classVarDeclarationsHash.put(currClassName, currClassVarDeclarations);
+        System.out.println("Setting currClassVarDeclarations"); 
+        System.out.println("getFormattedString(currClassVarDeclarations): " + getFormattedString(currClassVarDeclarations));
         ExpansionNode f4 = n.f4.accept(this);
         ExpansionNode f5 = n.f5.accept(this);
 
@@ -571,7 +581,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         ExpansionNode f4 = n.f4.accept(this);
         ExpansionNode f5 = n.f5.accept(this);
 
-        currClassVarDeclarations = (NodeListOptional) f5.node;
+        currClassVarDeclarations = classVarDeclarationsHash.get(getMethodName((Identifier) f3.node));
+        currClassVarDeclarations = concatenateNodeLists(currClassVarDeclarations,
+                                                        (NodeListOptional) f5.node);
 
         ExpansionNode f6 = n.f6.accept(this);
         ExpansionNode f7 = n.f7.accept(this);
@@ -623,6 +635,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         // TODO(spradeep): writable_arg variable
         
         ExpansionNode _ret=null;
+        currMethodVarDeclarations = new NodeListOptional();
 
         ExpansionNode f0 = n.f0.accept(this);
         ExpansionNode f1 = n.f1.accept(this);
@@ -633,7 +646,8 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         ExpansionNode f6 = n.f6.accept(this);
         ExpansionNode f7 = n.f7.accept(this);
 
-        currMethodVarDeclarations = (NodeListOptional) f7.node;
+        currMethodVarDeclarations = concatenateNodeLists(currMethodVarDeclarations,
+                                                         (NodeListOptional) f7.node);
 
         // ExpansionNode f8 = n.f8.accept(this);
 
@@ -699,6 +713,20 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         ExpansionNode _ret=null;
         ExpansionNode f0 = n.f0.accept(this);
         ExpansionNode f1 = n.f1.accept(this);
+
+        if (f0.node == null){
+            System.out.println("f0.node is null"); 
+            System.out.println("getFormattedString(f1.node): " + getFormattedString(f1.node));
+            // System.out.println("getFormattedString(f0.node): " + getFormattedString(f0.node));
+        }
+
+        if (f1.node == null){
+            System.out.println("f1.node is null"); 
+        }
+
+        currMethodVarDeclarations.addNode(new VarDeclaration((Type) f0.node,
+                                                             (Identifier) f1.node));
+        
         _ret = new ExpansionNode(new FormalParameter((Type) f0.node,
                                                      (Identifier) f1.node));
         _ret.extendAuxiliary(f0);
@@ -1174,11 +1202,10 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
 
             firstTempType = lookupVarType((Identifier) tempPrimExpr1.f0.choice,
                                           f0.varDeclarations);
-
             if (firstTempType == null){
                 System.out.println("firstTempType is null in IDENTIFIER MessageSend"); 
+                System.out.println("getMethodName(tempPrimExpr1.f0.choice): " + getMethodName((Identifier) tempPrimExpr1.f0.choice));
             }
-
             tempDeclaration = getVarDeclaration(tempVarName, firstTempType);
         }
         else if (tempPrimExpr1.f0.which == 8){
@@ -1207,6 +1234,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         }
 
         AssignmentStatement tempStatement = getAssiStatement(tempVarName, f0.node);
+
         MessageSendStatement messageSendStatement = new MessageSendStatement(
             getTempIdentifier(tempVarName),
             (Identifier) f2.node,
@@ -1228,7 +1256,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         _ret.varDeclarations.addNode(tempDeclaration);
         _ret.varDeclarations.addNode(retVarDeclaration);
         _ret.extendAuxiliary(f0);
+
         _ret.precedingNodes.addNode(tempStatement);
+
         _ret.extendAuxiliary(f4);
         _ret.precedingNodes.addNode(messageSendStatement);
         _ret.precedingNodes.addNode(returnValueAssignmentStatement);

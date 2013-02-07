@@ -554,7 +554,7 @@ public class MicroJavaOutputterTest {
      */
     @Test
     public final void testGetMiniJavaNodeFromFileNoException(){
-        MicroJavaOutputter.getMiniJavaNodeFromFile("/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Mini-Java-Test-Code/MainOnly.minijava");
+        MicroJavaOutputter.getMiniJavaNodeFromFile("/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Mini-Java-Test-Code/Factorial.minijava");
     }
 
     /** 
@@ -849,6 +849,8 @@ public class MicroJavaOutputterTest {
      */
     @Test
     public final void testFormalParameter(){
+        outputter.currMethodVarDeclarations =
+                new microjavaparser.syntaxtree.NodeListOptional();
         assertEqualAfterTransform(formalParameter, formalParameterMini);
     }
 
@@ -857,6 +859,8 @@ public class MicroJavaOutputterTest {
      */
     @Test
     public final void testFormalParameterRest(){
+        outputter.currMethodVarDeclarations =
+                new microjavaparser.syntaxtree.NodeListOptional();
         assertEqualAfterTransform(formalParameterRest, formalParameterRestMini);
     }
 
@@ -925,6 +929,8 @@ public class MicroJavaOutputterTest {
      */
     @Test
     public final void testFormalParameterList(){
+        outputter.currMethodVarDeclarations =
+                new microjavaparser.syntaxtree.NodeListOptional();
         assertEqualAfterTransform(formalParameterList, formalParameterListMini);
     }
 
@@ -990,6 +996,7 @@ public class MicroJavaOutputterTest {
      */
     @Test
     public final void testClassExtendsDeclaration(){
+        outputter.classVarDeclarationsHash.put("FooBarTwo", new microjavaparser.syntaxtree.NodeListOptional());
         assertEqualAfterTransform(classExtendsDeclaration, classExtendsDeclarationMini);
     }
 
@@ -999,6 +1006,8 @@ public class MicroJavaOutputterTest {
     @Test
     public final void testTypeDeclaration(){
         assertEqualAfterTransform(typeDeclaration, typeDeclarationMini);
+
+        outputter.classVarDeclarationsHash.put("FooBarTwo", new microjavaparser.syntaxtree.NodeListOptional());
         assertEqualAfterTransform(typeDeclaration2, typeDeclarationMini2);
     }
 
@@ -1479,19 +1488,27 @@ public class MicroJavaOutputterTest {
     }
 
     /**
+     * Test method for {@link MicroJavaOutputter#ArrayAssignment()}.
+     */
+    @Test
+    public final void testArrayAssignment(){
+        doTestMiniAndMicroJava("ArrayAssignment");
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#AssignmentExploit()}.
+     */
+    @Test
+    public final void testAssignmentExploit(){
+        doTestMiniAndMicroJava("AssignmentExploit");
+    }
+
+    /**
      * Test method for {@link MicroJavaOutputter#BinarySearch()}.
      */
     @Test
     public final void testBinarySearch(){
         doTestMiniAndMicroJava("BinarySearch");
-    }
-
-    /**
-     * Test method for {@link MicroJavaOutputter#Factorial()}.
-     */
-    @Test
-    public final void testFactorial(){
-        doTestMiniAndMicroJava("Factorial");
     }
 
     /**
@@ -1503,11 +1520,99 @@ public class MicroJavaOutputterTest {
     }
 
     /**
-     * Test method for {@link MicroJavaOutputter#MainOnly()}.
+     * Test method for {@link MicroJavaOutputter#CallArguments()}.
      */
     @Test
-    public final void testMainOnly(){
-        doTestMiniAndMicroJava("MainOnly");
+    public final void testCallArguments(){
+        doTestMiniAndMicroJava("CallArguments");
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#DifferentPrints()}.
+     */
+    @Test
+    public final void testDifferentPrints(){
+        doTestMiniAndMicroJava("DifferentPrints");
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#Factorial()}.
+     */
+    @Test
+    public final void testFactorial(){
+        doTestMiniAndMicroJava("Factorial");
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#IfCheck()}.
+     */
+    @Test
+    public final void testIfCheck(){
+        doTestMiniAndMicroJava("IfCheck");
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#LinearSearch()}.
+     */
+    @Test
+    public final void testLinearSearch(){
+        doTestMiniAndMicroJava("LinearSearch");
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#LinkedList()}.
+     */
+    @Test
+    public final void testLinkedList(){
+        doTestMiniAndMicroJava("LinkedList");
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#MainDefaultPrint()}.
+     */
+    @Test
+    public final void testMainDefaultPrint(){
+        doTestMiniAndMicroJava("MainDefaultPrint");
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#MainPrint()}.
+     */
+    @Test
+    public final void testMainPrint(){
+        doTestMiniAndMicroJava("MainPrint");
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#MethodReturn()}.
+     */
+    @Test
+    public final void testMethodReturn(){
+        doTestMiniAndMicroJava("MethodReturn");
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#MethodReturnMore()}.
+     */
+    @Test
+    public final void testMethodReturnMore(){
+        doTestMiniAndMicroJava("MethodReturnMore");
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#MethodType()}.
+     */
+    @Test
+    public final void testMethodType(){
+        doTestMiniAndMicroJava("MethodType");
+    }
+
+    /**
+     * Test method for {@link MicroJavaOutputter#MoreThan4()}.
+     */
+    @Test
+    public final void testMoreThan4(){
+        doTestMiniAndMicroJava("MoreThan4");
     }
 
     /**
@@ -1519,37 +1624,55 @@ public class MicroJavaOutputterTest {
     }
 
     /**
-     * Test method for {@link MicroJavaOutputter#LinearSearch()}.
+     * Test method for {@link MicroJavaOutputter#RandomChecks()}.
      */
     @Test
-    public final void testLinearSearch(){
-        doTestMiniAndMicroJava("LinearSearch");
+    public final void testRandomChecks(){
+        doTestMiniAndMicroJava("RandomChecks");
     }
 
+    /**
+     * Test method for {@link MicroJavaOutputter#ReturnCalls()}.
+     */
+    @Test
+    public final void testReturnCalls(){
+        doTestMiniAndMicroJava("ReturnCalls");
+    }
 
-    // // NOT YET WORKING
+    /**
+     * Test method for {@link MicroJavaOutputter#SimpleArrayAssignment()}.
+     */
+    @Test
+    public final void testSimpleArrayAssignment(){
+        doTestMiniAndMicroJava("SimpleArrayAssignment");
+    }
 
-    // /**
-    //  * Test method for {@link MicroJavaOutputter#BinaryTree()}.
-    //  */
-    // @Test
-    // public final void testBinaryTree(){
-    //     doTestMiniAndMicroJava("BinaryTree");
-    // }
+    /**
+     * Test method for {@link MicroJavaOutputter#WhileTest()}.
+     */
+    @Test
+    public final void testWhileTest(){
+        doTestMiniAndMicroJava("WhileTest");
+    }
 
-    // /**
-    //  * Test method for {@link MicroJavaOutputter#LinkedList()}.
-    //  */
-    // @Test
-    // public final void testLinkedList(){
-    //     doTestMiniAndMicroJava("LinkedList");
-    // }
+    // Runtime error - I think it's cos my while loops don't reassign
+    // the condition variable.
+    /**
+     * Test method for {@link MicroJavaOutputter#BinaryTree()}.
+     */
+    @Test
+    public final void testBinaryTree(){
+        doTestMiniAndMicroJava("BinaryTree");
+    }
 
-    // /**
-    //  * Test method for {@link MicroJavaOutputter#TreeVisitor()}.
-    //  */
-    // @Test
-    // public final void testTreeVisitor(){
-    //     doTestMiniAndMicroJava("TreeVisitor");
-    // }
+    // Compile-time error cos I need to carry over the Base Class'
+    // declarations to the Subclass.
+
+    /**
+     * Test method for {@link MicroJavaOutputter#TreeVisitor()}.
+     */
+    @Test
+    public final void testTreeVisitor(){
+        doTestMiniAndMicroJava("TreeVisitor");
+    }
 }
