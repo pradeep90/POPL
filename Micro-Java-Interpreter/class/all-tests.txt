@@ -1,6 +1,6 @@
+tests/BooleanValueTest.java
+tests/StoreTest.java
+tests/ResultTest.java
 tests/EnvironmentTest.java
 tests/InterpreterTest.java
-tests/ResultTest.java
-tests/BooleanValueTest.java
 tests/LocationTest.java
-tests/StoreTest.java

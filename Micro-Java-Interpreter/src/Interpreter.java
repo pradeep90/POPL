@@ -662,12 +662,14 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
         Result _ret=null;
         Result f0 = n.f0.accept(this, arg);
         // n.f1.accept(this, arg);
-        Result f1 = n.f2.accept(this, arg);
+        Result f2 = n.f2.accept(this, arg);
         // n.f3.accept(this, arg);
 
         int[] arr = ((ArrayValue) f0.value).arr;
-        int index = ((IntegerValue) f1.value).integerValue;
+        int index = ((IntegerValue) f2.value).integerValue;
 
+        System.out.println("((ArrayValue) f0.value).arr: " + ((ArrayValue) f0.value).arr);
+        System.out.println("arr: " + arr);
         System.out.println("index: " + index);
         Value value = new IntegerValue(arr[index]);
         return new Result(value, store);
@@ -799,6 +801,11 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
         n.f2.accept(this, arg);
         Result f3 = n.f3.accept(this, arg);
         n.f4.accept(this, arg);
+
+        Location location = new Location();
+        // TODO(spradeep): 
+        // store.put(location, );
+        
         Value value = new ArrayValue(((IntegerValue) f3.value).integerValue);
         return new Result(value, store);
     }

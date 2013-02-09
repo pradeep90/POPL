@@ -13,6 +13,21 @@
 ** VVIP Remember: you should keep passing the updated store in store-passing style (duh) for each successive sub-expression
 ** VVIP Remember to make a copy of Store or Environment so that the original instance doesn't get changed
 ** VVIP Choosing to consider all the VarDeclarations at the beginning of a method or a class as members of a let declaration (i.e., they extend the environment for the scope of the method)
+** Store: needed??
+*** <Location, Value>
+*** Updating value
+**** integer - no problem. Just update the original IntegerValue.
+**** boolean - ditto
+**** array access - just access the ArrayValue
+**** objects - 
+*** ULTIMATE Nope. The problem is: what do you return to the user so that he can modify the value later?
+**** You can return the Value itself. The object will be changed in the store and can be accessed there as needed. It is an object. Java has mutation, so you don't need to implement Boxes.
+*** The only reason I think we used a Store in PLAI was because we wanted to show that we could implement Mutation even in languages that didn't support mutation.
+*** In fact, I think you don't even need the Store. The Environment (this time - <String, Value>) will suffice.
+**** integer - modify the IntegerValue. Note: We're having IntegerValue instead of just int cos we want to subclass Value. Else, we could just have had ints.
+**** boolean - ditto
+**** array - ArrayValue
+**** object - ObjectValue
 * Plan of action
 ** DONE Build an Environment class
    CLOCK: [2013-02-06 Wed 09:31]--[2013-02-06 Wed 10:47] =>  1:16
@@ -62,6 +77,7 @@
 *** DONE testTimesExpression(){
     CLOCK: [2013-02-08 Fri 13:17]--[2013-02-08 Fri 13:22] =>  0:05
 *** TODO testArrayLookup(){
+    CLOCK: [2013-02-09 Sat 20:32]--[2013-02-09 Sat 20:57] =>  0:25
     CLOCK: [2013-02-08 Fri 14:26]--[2013-02-08 Fri 14:41] =>  0:15
 *** DONE testMinusExpression(){
     CLOCK: [2013-02-08 Fri 13:22]--[2013-02-08 Fri 13:23] =>  0:01

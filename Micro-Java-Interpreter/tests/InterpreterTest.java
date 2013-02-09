@@ -495,11 +495,12 @@ public class InterpreterTest{
     // @Test
     // public final void testArrayLookup(){
     //     Location location = new Location();
-    //     ArrayValue arrayValue = new ArrayValue(75);
+    //     ArrayValue arrayValue = arrayLookup.f0.f0.choice;
     //     arrayValue.arr[63] = 10001;
     //     store.put(location, arrayValue);
     //     env.extend(identifier, location);
 
+    //     System.out.println("arrayValue.arr: " + arrayValue.arr);
     //     assertEquals(new Result(new IntegerValue(10001), store),
     //                  interpreter.visit(arrayLookup, arg));
     // }
