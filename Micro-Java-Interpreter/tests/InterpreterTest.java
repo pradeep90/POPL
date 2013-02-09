@@ -31,6 +31,8 @@ public class InterpreterTest{
     PrimaryExpression primaryExpression2;
     PrimaryExpression primaryExpression3;
     PrimaryExpression primaryExpression4;
+    PrimaryExpression primaryExpression5;
+    PrimaryExpression primaryExpressionArrayAllocation;
     Expression expression;
     Expression expression2;
     Expression expression3;
@@ -57,6 +59,7 @@ public class InterpreterTest{
     NotExpression notExpression2;
     BracketExpression bracketExpression;
     
+    VarRef varRef;
     VarDeclaration varDeclaration;
     AssignmentStatement assignmentStatement;
     AssignmentStatement assignmentStatement2;
@@ -117,6 +120,8 @@ public class InterpreterTest{
             new NodeChoice(integerLiteral3, 0));
         primaryExpression4 = new PrimaryExpression(
             new NodeChoice(new TrueLiteral(), 1));
+        primaryExpression5 = new PrimaryExpression(
+            new NodeChoice(new FalseLiteral(), 2));
         expression = new Expression(
             new NodeChoice(primaryExpression, 6));
         expression2 = new Expression(
@@ -126,8 +131,6 @@ public class InterpreterTest{
         expression4 = new Expression(
             new NodeChoice(primaryExpression4, 6));
         printStatement = new PrintStatement(expression);
-        andExpression = new AndExpression(primaryExpression,
-                                          primaryExpression2);
         compareExpression = new CompareExpression(
             primaryExpression,
             primaryExpression2);
@@ -136,10 +139,12 @@ public class InterpreterTest{
         minusExpression = new MinusExpression(primaryExpression,
                                               primaryExpression2);
         timesExpression = new TimesExpression(primaryExpression, primaryExpression2);
-        arrayLookup = new ArrayLookup(primaryExpression, primaryExpression2);
         expressionRest = new ExpressionRest(expression);
         trueLiteral = new TrueLiteral(nodeToken);
         falseLiteral = new FalseLiteral(nodeToken);
+
+        andExpression = new AndExpression(primaryExpression4,
+                                          primaryExpression5);
         identifier = new Identifier(nodeToken);
         identifier2 = new Identifier(nodeToken2);
         identifier3 = new Identifier(nodeToken3);
@@ -147,6 +152,10 @@ public class InterpreterTest{
         thisExpression = new ThisExpression();
         arrayAssignmentStatement = new ArrayAssignmentStatement(identifier, expression, expression2);
         arrayAllocationExpression = new ArrayAllocationExpression(expression);
+        primaryExpressionArrayAllocation = new PrimaryExpression(new NodeChoice(
+            arrayAllocationExpression, 5));
+        arrayLookup = new ArrayLookup(primaryExpressionArrayAllocation,
+                                      primaryExpression3);
         allocationExpression = new AllocationExpression(identifier);
         notExpression = new NotExpression(expression);
         notExpression2 = new NotExpression(expression4);
@@ -255,6 +264,7 @@ public class InterpreterTest{
         //                 MicroJavaOutputter.getMethodName(identifier4)))),
         //     methodStatements);
 
+        varRef = new VarRef(new NodeChoice(identifier, 1));
     }
     
     @After
@@ -361,8 +371,136 @@ public class InterpreterTest{
      */
     @Test
     public final void testPrintStatement(){
-        interpreter.visit(printStatement, arg);
         assertEquals(new Result(null, store),
                      interpreter.visit(printStatement, arg));
     }
+
+    /**
+     * Test method for {@link Interpreter#TimesExpression()}.
+     */
+    @Test
+    public final void testTimesExpression(){
+        assertEquals(new Result(new IntegerValue(75 * 89), store),
+                     interpreter.visit(timesExpression, arg));
+    }
+
+    /**
+     * Test method for {@link Interpreter#MinusExpression()}.
+     */
+    @Test
+    public final void testMinusExpression(){
+        assertEquals(new Result(new IntegerValue(75 - 89), store),
+                     interpreter.visit(minusExpression, arg));
+    }
+
+    /**
+     * Test method for {@link Interpreter#PlusExpression()}.
+     */
+    @Test
+    public final void testPlusExpression(){
+        assertEquals(new Result(new IntegerValue(75 + 89), store),
+                     interpreter.visit(plusExpression, arg));
+    }
+
+    /**
+     * Test method for {@link Interpreter#CompareExpression()}.
+     */
+    @Test
+    public final void testCompareExpression(){
+        assertEquals(new Result(new BooleanValue(75 < 89), store),
+                     interpreter.visit(compareExpression, arg));
+    }
+
+    /**
+     * Test method for {@link Interpreter#AndExpression()}.
+     */
+    @Test
+    public final void testAndExpression(){
+        assertEquals(new Result(new BooleanValue(true && false), store),
+                     interpreter.visit(andExpression, arg));
+    }
+
+    /**
+     * Test method for {@link Interpreter#IntegerType()}.
+     */
+    @Test
+    public final void testIntegerType(){
+        assertEquals(new Result(null, store),
+                     interpreter.visit(integerType, arg));
+    }
+
+    /**
+     * Test method for {@link Interpreter#BooleanType()}.
+     */
+    @Test
+    public final void testBooleanType(){
+        assertEquals(new Result(null, store),
+                     interpreter.visit(booleanType, arg));
+    }
+
+    /**
+     * Test method for {@link Interpreter#ArrayType()}.
+     */
+    @Test
+    public final void testArrayType(){
+        assertEquals(new Result(null, store),
+                     interpreter.visit(arrayType, arg));
+    }
+
+    /**
+     * Test method for {@link Interpreter#Type()}.
+     */
+    @Test
+    public final void testType(){
+        Type type0 = new Type(new NodeChoice(arrayType, 0));
+        Type type1 = new Type(new NodeChoice(booleanType, 1));
+        Type type2 = new Type(new NodeChoice(integerType, 2));
+        Type type3 = new Type(new NodeChoice(identifier, 3));
+
+        assertEquals(new Result(null, store), interpreter.visit(type0, arg));
+        assertEquals(new Result(null, store), interpreter.visit(type1, arg));
+        assertEquals(new Result(null, store), interpreter.visit(type2, arg));
+        assertEquals(new Result(null, store), interpreter.visit(type3, arg));
+    }
+
+    // /**
+    //  * Test method for {@link Interpreter#VarDeclaration()}.
+    //  */
+    // @Test
+    // public final void testVarDeclaration(){
+    //     Result result = interpreter.visit(varDeclaration, arg);
+    //     Location location = new Location();
+    //     store.put(location, integerValue1);
+    //     env.extend(identifier, location);
+    //     assertEquals(new Result(null, store),
+    //                  result);
+    // }
+
+    /**
+     * Test method for {@link Interpreter#VarRef()}.
+     */
+    @Test
+    public final void testVarRef(){
+        Location location = new Location();
+        store.put(location, integerValue1);
+        env.extend(identifier, location);
+
+        assertEquals(new Result(integerValue1, store),
+                     interpreter.visit(varRef, arg));
+    }
+
+    // /**
+    //  * Test method for {@link Interpreter#ArrayLookup()}.
+    //  */
+    // @Test
+    // public final void testArrayLookup(){
+    //     Location location = new Location();
+    //     ArrayValue arrayValue = new ArrayValue(75);
+    //     arrayValue.arr[63] = 10001;
+    //     store.put(location, arrayValue);
+    //     env.extend(identifier, location);
+
+    //     assertEquals(new Result(new IntegerValue(10001), store),
+    //                  interpreter.visit(arrayLookup, arg));
+    // }
 }
