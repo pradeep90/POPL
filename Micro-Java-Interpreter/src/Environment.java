@@ -19,22 +19,22 @@ public class Environment {
         bindingList.add(0, newBinding);
     }
 
-    public void extend(String name, Location location){
-        extend(new Binding(name, location));
+    public void extend(String name, Value value){
+        extend(new Binding(name, value));
     }
 
-    public void extend(Identifier identifier, Location location){
-        extend(new Binding(getIdentifierName(identifier), location));
+    public void extend(Identifier identifier, Value value){
+        extend(new Binding(getIdentifierName(identifier), value));
     }
 
-    public void extend(ThisExpression thisExpression, Location location){
-        extend(new Binding("this", location));
+    public void extend(ThisExpression thisExpression, Value value){
+        extend(new Binding("this", value));
     }
 
     /** 
-     * @return Location corresponding to name in this environment.
+     * @return Value corresponding to name in this environment.
      */
-    public Location lookup(String name){
+    public Value lookup(String name){
         for (Binding b : bindingList){
             if (b.name.equals(name)){
                 return b.value;
@@ -47,11 +47,11 @@ public class Environment {
         return null;
     }
 
-    public Location lookup(Identifier identifier){
+    public Value lookup(Identifier identifier){
         return lookup(getIdentifierName(identifier));
     }
     
-    public Location lookup(ThisExpression thisExpression){
+    public Value lookup(ThisExpression thisExpression){
         return lookup("this");
     }
 

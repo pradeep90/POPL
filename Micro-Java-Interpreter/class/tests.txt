@@ -1,6 +1,3 @@
 BooleanValueTest
-StoreTest
-ResultTest
 EnvironmentTest
 InterpreterTest
-LocationTest

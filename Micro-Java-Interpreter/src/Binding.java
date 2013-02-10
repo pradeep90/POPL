@@ -2,9 +2,9 @@ import syntaxtree.*;
 
 public class Binding {
     String name;
-    Location value;
+    Value value;
 
-    public Binding(String name, Location value) {
+    public Binding(String name, Value value) {
         this.name = name;
         this.value = value;
     }

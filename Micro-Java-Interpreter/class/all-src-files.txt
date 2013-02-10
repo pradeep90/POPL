@@ -1,10 +1,6 @@
 src/IntegerValue.java
-src/Store.java
-src/Location.java
-src/Result.java
 src/Value.java
 src/Environment.java
-src/InterpreterArgument.java
 src/ArrayValue.java
 src/Binding.java
 src/MicroJavaParserConstants.java

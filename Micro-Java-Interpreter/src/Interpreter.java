@@ -5,70 +5,62 @@ import java.util.*;
 /**
  * Class to interpret a MicroJava parse tree.
  */
-public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
+public class Interpreter extends GJDepthFirst<Value,Environment> {
 
     //
     // Auto class visitors--probably don't need to be overridden.
     //
-    public Result visit(NodeList n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
+    public Value visit(NodeList n, Environment env) {
+        Value _ret=null;
         int _count=0;
         for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
-            e.nextElement().accept(this,arg);
+            e.nextElement().accept(this,env);
             _count++;
         }
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
-    public Result visit(NodeListOptional n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
+    public Value visit(NodeListOptional n, Environment env) {
         if ( n.present() ) {
-            Result _ret=null;
+            Value _ret=null;
             int _count=0;
             for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
-                e.nextElement().accept(this,arg);
+                e.nextElement().accept(this,env);
                 _count++;
             }
             Value value;
-            // return new Result(value, store);
+            // return new Value(value, store);
             return _ret;
         }
         else
             return null;
     }
 
-    public Result visit(NodeOptional n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
+    public Value visit(NodeOptional n, Environment env) {
         if ( n.present() )
-            return n.node.accept(this,arg);
+            return n.node.accept(this,env);
         else
             return null;
     }
 
-    public Result visit(NodeSequence n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
+    public Value visit(NodeSequence n, Environment env) {
+        Value _ret=null;
         int _count=0;
         for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
-            e.nextElement().accept(this,arg);
+            e.nextElement().accept(this,env);
             _count++;
         }
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
-    public Result visit(NodeToken n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store; return null; }
-
+    public Value visit(NodeToken n, Environment env) {
+        return null;
+    }
+    
     //
     // User-generated visitor methods below
     //
@@ -78,15 +70,13 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f1 -> ( TypeDeclaration() )*
      * f2 -> <EOF>
      */
-    public Result visit(Goal n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
-        n.f2.accept(this, arg);
+    public Value visit(Goal n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
+        n.f2.accept(this, env);
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
@@ -118,38 +108,36 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f24 -> "}"
      * f25 -> "}"
      */
-    public Result visit(MainClass n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
-        n.f2.accept(this, arg);
-        n.f3.accept(this, arg);
-        n.f4.accept(this, arg);
-        n.f5.accept(this, arg);
-        n.f6.accept(this, arg);
-        n.f7.accept(this, arg);
-        n.f8.accept(this, arg);
-        n.f9.accept(this, arg);
-        n.f10.accept(this, arg);
-        n.f11.accept(this, arg);
-        n.f12.accept(this, arg);
-        n.f13.accept(this, arg);
-        n.f14.accept(this, arg);
-        n.f15.accept(this, arg);
-        n.f16.accept(this, arg);
-        n.f17.accept(this, arg);
-        n.f18.accept(this, arg);
-        n.f19.accept(this, arg);
-        n.f20.accept(this, arg);
-        n.f21.accept(this, arg);
-        n.f22.accept(this, arg);
-        n.f23.accept(this, arg);
-        n.f24.accept(this, arg);
-        n.f25.accept(this, arg);
+    public Value visit(MainClass n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
+        n.f2.accept(this, env);
+        n.f3.accept(this, env);
+        n.f4.accept(this, env);
+        n.f5.accept(this, env);
+        n.f6.accept(this, env);
+        n.f7.accept(this, env);
+        n.f8.accept(this, env);
+        n.f9.accept(this, env);
+        n.f10.accept(this, env);
+        n.f11.accept(this, env);
+        n.f12.accept(this, env);
+        n.f13.accept(this, env);
+        n.f14.accept(this, env);
+        n.f15.accept(this, env);
+        n.f16.accept(this, env);
+        n.f17.accept(this, env);
+        n.f18.accept(this, env);
+        n.f19.accept(this, env);
+        n.f20.accept(this, env);
+        n.f21.accept(this, env);
+        n.f22.accept(this, env);
+        n.f23.accept(this, env);
+        n.f24.accept(this, env);
+        n.f25.accept(this, env);
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
@@ -157,13 +145,11 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f0 -> ClassDeclaration()
      *       | ClassExtendsDeclaration()
      */
-    public Result visit(TypeDeclaration n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
+    public Value visit(TypeDeclaration n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
@@ -175,18 +161,16 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f4 -> ( MethodDeclaration() )*
      * f5 -> "}"
      */
-    public Result visit(ClassDeclaration n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
-        n.f2.accept(this, arg);
-        n.f3.accept(this, arg);
-        n.f4.accept(this, arg);
-        n.f5.accept(this, arg);
+    public Value visit(ClassDeclaration n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
+        n.f2.accept(this, env);
+        n.f3.accept(this, env);
+        n.f4.accept(this, env);
+        n.f5.accept(this, env);
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
@@ -200,20 +184,18 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f6 -> ( MethodDeclaration() )*
      * f7 -> "}"
      */
-    public Result visit(ClassExtendsDeclaration n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
-        n.f2.accept(this, arg);
-        n.f3.accept(this, arg);
-        n.f4.accept(this, arg);
-        n.f5.accept(this, arg);
-        n.f6.accept(this, arg);
-        n.f7.accept(this, arg);
+    public Value visit(ClassExtendsDeclaration n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
+        n.f2.accept(this, env);
+        n.f3.accept(this, env);
+        n.f4.accept(this, env);
+        n.f5.accept(this, env);
+        n.f6.accept(this, env);
+        n.f7.accept(this, env);
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
@@ -222,19 +204,16 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f1 -> Identifier()
      * f2 -> ";"
      */
-    public Result visit(VarDeclaration n, InterpreterArgument arg) {
+    public Value visit(VarDeclaration n, Environment env) {
         // I'm choosing to extend the env with variable declarations
         // directly in the method definition (cos here you don't have
         // access to env).
 
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        // n.f0.accept(this, arg);
-        // n.f1.accept(this, arg);
-        // n.f2.accept(this, arg);
-        Value value;
-        return new Result(null, store);
+        Value _ret=null;
+        // n.f0.accept(this, env);
+        // n.f1.accept(this, env);
+        // n.f2.accept(this, env);
+        return _ret;
     }
 
     /**
@@ -249,22 +228,20 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f8 -> ( Statement() )*
      * f9 -> "}"
      */
-    public Result visit(MethodDeclaration n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
-        n.f2.accept(this, arg);
-        n.f3.accept(this, arg);
-        n.f4.accept(this, arg);
-        n.f5.accept(this, arg);
-        n.f6.accept(this, arg);
-        n.f7.accept(this, arg);
-        n.f8.accept(this, arg);
-        n.f9.accept(this, arg);
+    public Value visit(MethodDeclaration n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
+        n.f2.accept(this, env);
+        n.f3.accept(this, env);
+        n.f4.accept(this, env);
+        n.f5.accept(this, env);
+        n.f6.accept(this, env);
+        n.f7.accept(this, env);
+        n.f8.accept(this, env);
+        n.f9.accept(this, env);
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
@@ -272,14 +249,12 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f0 -> FormalParameter()
      * f1 -> ( FormalParameterRest() )*
      */
-    public Result visit(FormalParameterList n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
+    public Value visit(FormalParameterList n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
@@ -287,14 +262,12 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f0 -> Type()
      * f1 -> Identifier()
      */
-    public Result visit(FormalParameter n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
+    public Value visit(FormalParameter n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
@@ -302,14 +275,12 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f0 -> ","
      * f1 -> FormalParameter()
      */
-    public Result visit(FormalParameterRest n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
+    public Value visit(FormalParameterRest n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
@@ -319,18 +290,16 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      *       | IntegerType()
      *       | Identifier()
      */
-    public Result visit(Type n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
+    public Value visit(Type n, Environment env) {
+        Value _ret=null;
 
         // TODO(spradeep): Should this even call visit(Identifier)???
         // You don't really expect a Type to have a value, do you?
 
-        // Result f1 = n.f0.accept(this, arg);
+        // Value f1 = n.f0.accept(this, env);
 
         Value value;
-        return new Result(null, store);
+        return _ret;
     }
 
     /**
@@ -338,39 +307,33 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f1 -> "["
      * f2 -> "]"
      */
-    public Result visit(ArrayType n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        // n.f0.accept(this, arg);
-        // n.f1.accept(this, arg);
-        // n.f2.accept(this, arg);
+    public Value visit(ArrayType n, Environment env) {
+        Value _ret=null;
+        // n.f0.accept(this, env);
+        // n.f1.accept(this, env);
+        // n.f2.accept(this, env);
         Value value;
-        return new Result(null, store);
+        return _ret;
     }
 
     /**
      * f0 -> "boolean"
      */
-    public Result visit(BooleanType n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        // n.f0.accept(this, arg);
+    public Value visit(BooleanType n, Environment env) {
+        Value _ret=null;
+        // n.f0.accept(this, env);
         Value value;
-        return new Result(null, store);
+        return _ret;
     }
 
     /**
      * f0 -> "int"
      */
-    public Result visit(IntegerType n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        // n.f0.accept(this, arg);
+    public Value visit(IntegerType n, Environment env) {
+        Value _ret=null;
+        // n.f0.accept(this, env);
         Value value;
-        return new Result(null, store);
+        return _ret;
     }
 
     /**
@@ -382,13 +345,11 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      *       | PrintStatement()
      *       | MessageSendStatement()
      */
-    public Result visit(Statement n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
+    public Value visit(Statement n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
@@ -397,15 +358,13 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f1 -> ( Statement() )*
      * f2 -> "}"
      */
-    public Result visit(Block n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
-        n.f2.accept(this, arg);
+    public Value visit(Block n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
+        n.f2.accept(this, env);
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
@@ -415,16 +374,14 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f2 -> Expression()
      * f3 -> ";"
      */
-    public Result visit(AssignmentStatement n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
-        n.f2.accept(this, arg);
-        n.f3.accept(this, arg);
+    public Value visit(AssignmentStatement n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
+        n.f2.accept(this, env);
+        n.f3.accept(this, env);
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
@@ -437,19 +394,17 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f5 -> Expression()
      * f6 -> ";"
      */
-    public Result visit(ArrayAssignmentStatement n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        Result f0 = n.f0.accept(this, arg);
-        // Result f1 = n.f1.accept(this, arg);
-        Result f2 = n.f2.accept(this, arg);
-        // Result f3 = n.f3.accept(this, arg);
-        // Result f4 = n.f4.accept(this, arg);
-        Result f5 = n.f5.accept(this, arg);
-        // Result f6 = n.f6.accept(this, arg);
+    public Value visit(ArrayAssignmentStatement n, Environment env) {
+        Value _ret=null;
+        Value f0 = n.f0.accept(this, env);
+        // Value f1 = n.f1.accept(this, env);
+        Value f2 = n.f2.accept(this, env);
+        // Value f3 = n.f3.accept(this, env);
+        // Value f4 = n.f4.accept(this, env);
+        Value f5 = n.f5.accept(this, env);
+        // Value f6 = n.f6.accept(this, env);
         Value value;
-        return new Result(null, store);
+        return _ret;
     }
 
     /**
@@ -461,19 +416,17 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f5 -> "else"
      * f6 -> Statement()
      */
-    public Result visit(IfStatement n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
-        n.f2.accept(this, arg);
-        n.f3.accept(this, arg);
-        n.f4.accept(this, arg);
-        n.f5.accept(this, arg);
-        n.f6.accept(this, arg);
+    public Value visit(IfStatement n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
+        n.f2.accept(this, env);
+        n.f3.accept(this, env);
+        n.f4.accept(this, env);
+        n.f5.accept(this, env);
+        n.f6.accept(this, env);
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
@@ -484,17 +437,15 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f3 -> ")"
      * f4 -> Statement()
      */
-    public Result visit(WhileStatement n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
-        n.f2.accept(this, arg);
-        n.f3.accept(this, arg);
-        n.f4.accept(this, arg);
+    public Value visit(WhileStatement n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
+        n.f2.accept(this, env);
+        n.f3.accept(this, env);
+        n.f4.accept(this, env);
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
@@ -505,21 +456,19 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f3 -> ")"
      * f4 -> ";"
      */
-    public Result visit(PrintStatement n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
-        Result f2 = n.f2.accept(this, arg);
-        n.f3.accept(this, arg);
-        n.f4.accept(this, arg);
+    public Value visit(PrintStatement n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
+        Value f2 = n.f2.accept(this, env);
+        n.f3.accept(this, env);
+        n.f4.accept(this, env);
         Value value;
 
         // TODO(spradeep): Should I actually print here? 
-        System.out.println(((IntegerValue) f2.value).integerValue);
+        System.out.println(((IntegerValue) f2).integerValue);
         
-        return new Result(null, f2.store);
+        return _ret;
     }
 
     /**
@@ -531,19 +480,17 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f5 -> ")"
      * f6 -> ";"
      */
-    public Result visit(MessageSendStatement n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
-        n.f2.accept(this, arg);
-        n.f3.accept(this, arg);
-        n.f4.accept(this, arg);
-        n.f5.accept(this, arg);
-        n.f6.accept(this, arg);
+    public Value visit(MessageSendStatement n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
+        n.f2.accept(this, env);
+        n.f3.accept(this, env);
+        n.f4.accept(this, env);
+        n.f5.accept(this, env);
+        n.f6.accept(this, env);
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
@@ -556,12 +503,10 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      *       | ArrayLookup()
      *       | PrimaryExpression()
      */
-    public Result visit(Expression n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
+    public Value visit(Expression n, Environment env) {
+        Value _ret=null;
         Value value;
-        Result f0 = n.f0.accept(this, arg);
+        Value f0 = n.f0.accept(this, env);
         return f0;
     }
 
@@ -570,16 +515,14 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f1 -> "&"
      * f2 -> PrimaryExpression()
      */
-    public Result visit(AndExpression n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        Result f0 = n.f0.accept(this, arg);
-        // n.f1.accept(this, arg);
-        Result f2 = n.f2.accept(this, new InterpreterArgument(env, f0.store));
-        Value value = new BooleanValue(((BooleanValue) f0.value).booleanValue
-                                       && ((BooleanValue) f2.value).booleanValue);
-        return new Result(value, f2.store);
+    public Value visit(AndExpression n, Environment env) {
+        Value _ret=null;
+        Value f0 = n.f0.accept(this, env);
+        // n.f1.accept(this, env);
+        Value f2 = n.f2.accept(this, env);
+        _ret = new BooleanValue(((BooleanValue) f0).booleanValue
+                                       && ((BooleanValue) f2).booleanValue);
+        return _ret;
     }
 
     /**
@@ -587,16 +530,14 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f1 -> "<"
      * f2 -> PrimaryExpression()
      */
-    public Result visit(CompareExpression n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        Result f0 = n.f0.accept(this, arg);
-        // n.f1.accept(this, arg);
-        Result f2 = n.f2.accept(this, new InterpreterArgument(env, f0.store));
-        Value value = new BooleanValue(((IntegerValue) f0.value).integerValue
-                                       < ((IntegerValue) f2.value).integerValue);
-        return new Result(value, f2.store);
+    public Value visit(CompareExpression n, Environment env) {
+        Value _ret=null;
+        Value f0 = n.f0.accept(this, env);
+        // n.f1.accept(this, env);
+        Value f2 = n.f2.accept(this, env);
+        _ret = new BooleanValue(((IntegerValue) f0).integerValue
+                                       < ((IntegerValue) f2).integerValue);
+        return _ret;
     }
 
     /**
@@ -604,16 +545,14 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f1 -> "+"
      * f2 -> PrimaryExpression()
      */
-    public Result visit(PlusExpression n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        Result f0 = n.f0.accept(this, arg);
-        // n.f1.accept(this, arg);
-        Result f2 = n.f2.accept(this, new InterpreterArgument(env, f0.store));
-        Value value = new IntegerValue(((IntegerValue) f0.value).integerValue
-                                       + ((IntegerValue) f2.value).integerValue);
-        return new Result(value, f2.store);
+    public Value visit(PlusExpression n, Environment env) {
+        Value _ret=null;
+        Value f0 = n.f0.accept(this, env);
+        // n.f1.accept(this, env);
+        Value f2 = n.f2.accept(this, env);
+        _ret = new IntegerValue(((IntegerValue) f0).integerValue
+                                       + ((IntegerValue) f2).integerValue);
+        return _ret;
     }
 
     /**
@@ -621,16 +560,14 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f1 -> "-"
      * f2 -> PrimaryExpression()
      */
-    public Result visit(MinusExpression n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        Result f0 = n.f0.accept(this, arg);
-        // n.f1.accept(this, arg);
-        Result f2 = n.f2.accept(this, new InterpreterArgument(env, f0.store));
-        Value value = new IntegerValue(((IntegerValue) f0.value).integerValue
-                                       - ((IntegerValue) f2.value).integerValue);
-        return new Result(value, f2.store);
+    public Value visit(MinusExpression n, Environment env) {
+        Value _ret=null;
+        Value f0 = n.f0.accept(this, env);
+        // n.f1.accept(this, env);
+        Value f2 = n.f2.accept(this, env);
+        _ret = new IntegerValue(((IntegerValue) f0).integerValue
+                                       - ((IntegerValue) f2).integerValue);
+        return _ret;
     }
 
     /**
@@ -638,16 +575,14 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f1 -> "*"
      * f2 -> PrimaryExpression()
      */
-    public Result visit(TimesExpression n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        Result f0 = n.f0.accept(this, arg);
-        // n.f1.accept(this, arg);
-        Result f2 = n.f2.accept(this, new InterpreterArgument(env, f0.store));
-        Value value = new IntegerValue(((IntegerValue) f0.value).integerValue
-                                       * ((IntegerValue) f2.value).integerValue);
-        return new Result(value, f2.store);
+    public Value visit(TimesExpression n, Environment env) {
+        Value _ret=null;
+        Value f0 = n.f0.accept(this, env);
+        // n.f1.accept(this, env);
+        Value f2 = n.f2.accept(this, env);
+        _ret = new IntegerValue(((IntegerValue) f0).integerValue
+                                       * ((IntegerValue) f2).integerValue);
+        return _ret;
     }
 
     /**
@@ -656,37 +591,33 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f2 -> PrimaryExpression()
      * f3 -> "]"
      */
-    public Result visit(ArrayLookup n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        Result f0 = n.f0.accept(this, arg);
-        // n.f1.accept(this, arg);
-        Result f2 = n.f2.accept(this, arg);
-        // n.f3.accept(this, arg);
+    public Value visit(ArrayLookup n, Environment env) {
+        Value _ret=null;
+        Value f0 = n.f0.accept(this, env);
+        // n.f1.accept(this, env);
+        Value f2 = n.f2.accept(this, env);
+        // n.f3.accept(this, env);
 
-        int[] arr = ((ArrayValue) f0.value).arr;
-        int index = ((IntegerValue) f2.value).integerValue;
+        int[] arr = ((ArrayValue) f0).arr;
+        int index = ((IntegerValue) f2).integerValue;
 
-        System.out.println("((ArrayValue) f0.value).arr: " + ((ArrayValue) f0.value).arr);
+        System.out.println("((ArrayValue) f0).arr: " + ((ArrayValue) f0).arr);
         System.out.println("arr: " + arr);
         System.out.println("index: " + index);
-        Value value = new IntegerValue(arr[index]);
-        return new Result(value, store);
+        _ret = new IntegerValue(arr[index]);
+        return _ret;
     }
 
     /**
      * f0 -> Expression()
      * f1 -> ( ExpressionRest() )*
      */
-    public Result visit(ExpressionList n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
+    public Value visit(ExpressionList n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
@@ -694,14 +625,12 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f0 -> ","
      * f1 -> Expression()
      */
-    public Result visit(ExpressionRest n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
+    public Value visit(ExpressionRest n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
@@ -716,73 +645,61 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      *       | NotExpression()
      *       | BracketExpression()
      */
-    public Result visit(PrimaryExpression n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
+    public Value visit(PrimaryExpression n, Environment env) {
+        Value _ret=null;
         Value value;
-        Result f0 = n.f0.accept(this, arg);
+        Value f0 = n.f0.accept(this, env);
         return f0;
     }
 
     /**
      * f0 -> <INTEGER_LITERAL>
      */
-    public Result visit(IntegerLiteral n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        Value value = new IntegerValue(Integer.parseInt(n.f0.tokenImage));
-        return new Result(value, store);
+    public Value visit(IntegerLiteral n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        _ret = new IntegerValue(Integer.parseInt(n.f0.tokenImage));
+        return _ret;
     }
 
     /**
      * f0 -> "true"
      */
-    public Result visit(TrueLiteral n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        Value value = new BooleanValue(true);
-        return new Result(value, store);
+    public Value visit(TrueLiteral n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        _ret = new BooleanValue(true);
+        return _ret;
     }
 
     /**
      * f0 -> "false"
      */
-    public Result visit(FalseLiteral n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        Value value = new BooleanValue(false);
-        return new Result(value, store);
+    public Value visit(FalseLiteral n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        _ret = new BooleanValue(false);
+        return _ret;
     }
 
     /**
      * f0 -> <IDENTIFIER>
      */
-    public Result visit(Identifier n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        Value value = store.get(env.lookup(n));
-        return new Result(value, store);
+    public Value visit(Identifier n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        _ret = env.lookup(n);
+        return _ret;
     }
 
     /**
      * f0 -> "this"
      */
-    public Result visit(ThisExpression n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        Value value = store.get(env.lookup(n));
-        return new Result(value, store);
+    public Value visit(ThisExpression n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        _ret = env.lookup(n);
+        return _ret;
     }
 
     /**
@@ -792,22 +709,20 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f3 -> Expression()
      * f4 -> "]"
      */
-    public Result visit(ArrayAllocationExpression n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
-        n.f2.accept(this, arg);
-        Result f3 = n.f3.accept(this, arg);
-        n.f4.accept(this, arg);
+    public Value visit(ArrayAllocationExpression n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
+        n.f2.accept(this, env);
+        Value f3 = n.f3.accept(this, env);
+        n.f4.accept(this, env);
 
-        Location location = new Location();
+        Value value;
         // TODO(spradeep): 
-        // store.put(location, );
+        // store.put(value, );
         
-        Value value = new ArrayValue(((IntegerValue) f3.value).integerValue);
-        return new Result(value, store);
+        _ret = new ArrayValue(((IntegerValue) f3).integerValue);
+        return _ret;
     }
 
     /**
@@ -816,16 +731,14 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f2 -> "("
      * f3 -> ")"
      */
-    public Result visit(AllocationExpression n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
-        n.f2.accept(this, arg);
-        n.f3.accept(this, arg);
+    public Value visit(AllocationExpression n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
+        n.f2.accept(this, env);
+        n.f3.accept(this, env);
         Value value;
-        // return new Result(value, store);
+        // return new Value(value, store);
         return _ret;
     }
 
@@ -833,14 +746,12 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f0 -> "!"
      * f1 -> Expression()
      */
-    public Result visit(NotExpression n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        // n.f0.accept(this, arg);
-        Result f1 = n.f1.accept(this, arg);
-        Value value = new BooleanValue(!f1.value.isTrue());
-        return new Result(value, f1.store);
+    public Value visit(NotExpression n, Environment env) {
+        Value _ret=null;
+        // n.f0.accept(this, env);
+        Value f1 = n.f1.accept(this, env);
+        _ret = new BooleanValue(!f1.isTrue());
+        return _ret;
     }
 
     /**
@@ -848,13 +759,11 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f1 -> Expression()
      * f2 -> ")"
      */
-    public Result visit(BracketExpression n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        // n.f0.accept(this, arg);
-        Result f1 = n.f1.accept(this, arg);
-        // n.f2.accept(this, arg);
+    public Value visit(BracketExpression n, Environment env) {
+        Value _ret=null;
+        // n.f0.accept(this, env);
+        Value f1 = n.f1.accept(this, env);
+        // n.f2.accept(this, env);
         return f1;
     }
 
@@ -862,17 +771,15 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f0 -> DotExpression()
      *       | Identifier()
      */
-    public Result visit(VarRef n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
+    public Value visit(VarRef n, Environment env) {
+        Value _ret=null;
         Value value;
 
         if (n.f0.which == 0){
-            _ret = n.f0.accept(this, arg);
+            _ret = n.f0.accept(this, env);
         } else {
-            value = store.get(env.lookup((Identifier) n.f0.choice));
-            _ret = new Result(value, store);
+            value = env.lookup((Identifier) n.f0.choice);
+            _ret = value;
         }
         return _ret;
     }
@@ -882,16 +789,14 @@ public class Interpreter extends GJDepthFirst<Result,InterpreterArgument> {
      * f1 -> "."
      * f2 -> Identifier()
      */
-    public Result visit(DotExpression n, InterpreterArgument arg) {
-        Environment env = arg.env;
-        Store store = arg.store;
-        Result _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
-        n.f2.accept(this, arg);
+    public Value visit(DotExpression n, Environment env) {
+        Value _ret=null;
+        n.f0.accept(this, env);
+        n.f1.accept(this, env);
+        n.f2.accept(this, env);
         Value value;
-        // value = n.f0.accept(this, arg);
-        // return new Result(value, store);
+        // value = n.f0.accept(this, env);
+        // return new Value(value, store);
         return _ret;
     }
 }

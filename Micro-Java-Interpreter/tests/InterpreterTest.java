@@ -10,8 +10,6 @@ import static org.junit.Assert.assertTrue;
 
 public class InterpreterTest{
     Environment env;
-    Store store;
-    InterpreterArgument arg;
     Interpreter interpreter;
 
     IntegerValue integerValue1;
@@ -89,8 +87,6 @@ public class InterpreterTest{
     @Before
     public void setUp(){
         env = new Environment();
-        store = new Store();
-        arg = new InterpreterArgument(env, store);
         interpreter = new Interpreter();
 
         integerValue1 = new IntegerValue(75);
@@ -272,12 +268,19 @@ public class InterpreterTest{
     }
 
     /**
+     * Test method for {@link Interpreter#Foo()}.
+     */
+    @Test
+    public final void testFoo(){
+    }
+
+    /**
      * Test method for {@link Interpreter#TrueLiteral()}.
      */
     @Test
     public final void testTrueLiteral(){
-        assertEquals(new Result(new BooleanValue(true), store),
-                     interpreter.visit(trueLiteral, arg));
+        assertEquals(new BooleanValue(true),
+                     interpreter.visit(trueLiteral, env));
     }
 
     /**
@@ -285,8 +288,8 @@ public class InterpreterTest{
      */
     @Test
     public final void testFalseLiteral(){
-        assertEquals(new Result(new BooleanValue(false), store),
-                     interpreter.visit(falseLiteral, arg));
+        assertEquals(new BooleanValue(false),
+                     interpreter.visit(falseLiteral, env));
     }
 
     /**
@@ -294,12 +297,9 @@ public class InterpreterTest{
      */
     @Test
     public final void testIdentifier(){
-        Location location = new Location();
-        store.put(location, integerValue1);
-        env.extend(identifier, location);
+        env.extend(identifier, integerValue1);
 
-        assertEquals(new Result(integerValue1, store), 
-                     interpreter.visit(identifier, arg));
+        assertEquals(integerValue1, interpreter.visit(identifier, env));
     }
 
     /**
@@ -307,16 +307,11 @@ public class InterpreterTest{
      */
     @Test
     public final void testThisExpression(){
-        Location location = new Location();
-
         // TODO(spradeep): This integerValue is just for testing
         // purposes. Later test with actual object.
-        store.put(location, integerValue1);
-        env.extend("this",
-                   location);
+        env.extend("this", integerValue1);
 
-        assertEquals(new Result(integerValue1, store), 
-                     interpreter.visit(thisExpression, arg));
+        assertEquals(integerValue1, interpreter.visit(thisExpression, env));
     }
 
     /**
@@ -324,17 +319,17 @@ public class InterpreterTest{
      */
     @Test
     public final void testIntegerLiteral(){
-        assertEquals(new Result(new IntegerValue(75), store),
-                     interpreter.visit(integerLiteral, arg));
+        assertEquals(new IntegerValue(75),
+                     interpreter.visit(integerLiteral, env));
     }
 
     /**
      * Test method for {@link Interpreter#ArrayAllocationExpression()}.
      */
     @Test
-    public final void testArrayAllocationExpression(){
-        assertEquals(new Result(new ArrayValue(75), store),
-                     interpreter.visit(arrayAllocationExpression, arg));
+    public final void testArrayAlvalueExpression(){
+        assertEquals(new ArrayValue(75),
+                     interpreter.visit(arrayAllocationExpression, env));
     }
 
     /**
@@ -342,8 +337,8 @@ public class InterpreterTest{
      */
     @Test
     public final void testBracketExpression(){
-        assertEquals(new Result(new IntegerValue(75), store),
-                     interpreter.visit(bracketExpression, arg));
+        assertEquals(new IntegerValue(75),
+                     interpreter.visit(bracketExpression, env));
     }
 
     /**
@@ -351,28 +346,27 @@ public class InterpreterTest{
      */
     @Test
     public final void testNotExpression(){
-        assertEquals(new Result(new BooleanValue(false), store),
-                     interpreter.visit(notExpression2, arg));
+        assertEquals(new BooleanValue(false),
+                     interpreter.visit(notExpression2, env));
 
         // TODO(spradeep): Test for null objects being false 
     }
 
-    // /**
-    //  * Test method for {@link Interpreter#ExpressionRest()}.
-    //  */
-    // @Test
-    // public final void testExpressionRest(){
-    //     assertEquals(new Result(new BooleanValue(false), store),
-    //                  interpreter.visit(notExpression2, arg));
-    // }
+    // // /**
+    // //  * Test method for {@link Interpreter#ExpressionRest()}.
+    // //  */
+    // // @Test
+    // // public final void testExpressionRest(){
+    // //     assertEquals(new BooleanValue(false),
+    // //                  interpreter.visit(notExpression2, env));
+    // // }
 
     /**
      * Test method for {@link Interpreter#PrintStatement()}.
      */
     @Test
     public final void testPrintStatement(){
-        assertEquals(new Result(null, store),
-                     interpreter.visit(printStatement, arg));
+        assertEquals(null, interpreter.visit(printStatement, env));
     }
 
     /**
@@ -380,8 +374,8 @@ public class InterpreterTest{
      */
     @Test
     public final void testTimesExpression(){
-        assertEquals(new Result(new IntegerValue(75 * 89), store),
-                     interpreter.visit(timesExpression, arg));
+        assertEquals(new IntegerValue(75 * 89),
+                     interpreter.visit(timesExpression, env));
     }
 
     /**
@@ -389,8 +383,8 @@ public class InterpreterTest{
      */
     @Test
     public final void testMinusExpression(){
-        assertEquals(new Result(new IntegerValue(75 - 89), store),
-                     interpreter.visit(minusExpression, arg));
+        assertEquals(new IntegerValue(75 - 89),
+                     interpreter.visit(minusExpression, env));
     }
 
     /**
@@ -398,8 +392,8 @@ public class InterpreterTest{
      */
     @Test
     public final void testPlusExpression(){
-        assertEquals(new Result(new IntegerValue(75 + 89), store),
-                     interpreter.visit(plusExpression, arg));
+        assertEquals(new IntegerValue(75 + 89),
+                     interpreter.visit(plusExpression, env));
     }
 
     /**
@@ -407,8 +401,8 @@ public class InterpreterTest{
      */
     @Test
     public final void testCompareExpression(){
-        assertEquals(new Result(new BooleanValue(75 < 89), store),
-                     interpreter.visit(compareExpression, arg));
+        assertEquals(new BooleanValue(75 < 89),
+                     interpreter.visit(compareExpression, env));
     }
 
     /**
@@ -416,8 +410,8 @@ public class InterpreterTest{
      */
     @Test
     public final void testAndExpression(){
-        assertEquals(new Result(new BooleanValue(true && false), store),
-                     interpreter.visit(andExpression, arg));
+        assertEquals(new BooleanValue(true && false),
+                     interpreter.visit(andExpression, env));
     }
 
     /**
@@ -425,8 +419,7 @@ public class InterpreterTest{
      */
     @Test
     public final void testIntegerType(){
-        assertEquals(new Result(null, store),
-                     interpreter.visit(integerType, arg));
+        assertEquals(null, interpreter.visit(integerType, env));
     }
 
     /**
@@ -434,8 +427,7 @@ public class InterpreterTest{
      */
     @Test
     public final void testBooleanType(){
-        assertEquals(new Result(null, store),
-                     interpreter.visit(booleanType, arg));
+        assertEquals(null, interpreter.visit(booleanType, env));
     }
 
     /**
@@ -443,8 +435,7 @@ public class InterpreterTest{
      */
     @Test
     public final void testArrayType(){
-        assertEquals(new Result(null, store),
-                     interpreter.visit(arrayType, arg));
+        assertEquals(null, interpreter.visit(arrayType, env));
     }
 
     /**
@@ -457,51 +448,45 @@ public class InterpreterTest{
         Type type2 = new Type(new NodeChoice(integerType, 2));
         Type type3 = new Type(new NodeChoice(identifier, 3));
 
-        assertEquals(new Result(null, store), interpreter.visit(type0, arg));
-        assertEquals(new Result(null, store), interpreter.visit(type1, arg));
-        assertEquals(new Result(null, store), interpreter.visit(type2, arg));
-        assertEquals(new Result(null, store), interpreter.visit(type3, arg));
+        assertEquals(null, interpreter.visit(type0, env));
+        assertEquals(null, interpreter.visit(type1, env));
+        assertEquals(null, interpreter.visit(type2, env));
+        assertEquals(null, interpreter.visit(type3, env));
     }
 
-    // /**
-    //  * Test method for {@link Interpreter#VarDeclaration()}.
-    //  */
-    // @Test
-    // public final void testVarDeclaration(){
-    //     Result result = interpreter.visit(varDeclaration, arg);
-    //     Location location = new Location();
-    //     store.put(location, integerValue1);
-    //     env.extend(identifier, location);
-    //     assertEquals(new Result(null, store),
-    //                  result);
-    // }
-
-    /**
-     * Test method for {@link Interpreter#VarRef()}.
-     */
-    @Test
-    public final void testVarRef(){
-        Location location = new Location();
-        store.put(location, integerValue1);
-        env.extend(identifier, location);
-
-        assertEquals(new Result(integerValue1, store),
-                     interpreter.visit(varRef, arg));
-    }
+    // // /**
+    // //  * Test method for {@link Interpreter#VarDeclaration()}.
+    // //  */
+    // // @Test
+    // // public final void testVarDeclaration(){
+    // //     Result result = interpreter.visit(varDeclaration, env);
+    // //     env.extend(identifier, value);
+    // //     assertEquals(null,
+    // //                  result);
+    // // }
 
     // /**
-    //  * Test method for {@link Interpreter#ArrayLookup()}.
+    //  * Test method for {@link Interpreter#VarRef()}.
     //  */
     // @Test
-    // public final void testArrayLookup(){
-    //     Location location = new Location();
-    //     ArrayValue arrayValue = arrayLookup.f0.f0.choice;
-    //     arrayValue.arr[63] = 10001;
-    //     store.put(location, arrayValue);
-    //     env.extend(identifier, location);
+    // public final void testVarRef(){
+    //     env.extend(identifier, integerValue1);
 
-    //     System.out.println("arrayValue.arr: " + arrayValue.arr);
-    //     assertEquals(new Result(new IntegerValue(10001), store),
-    //                  interpreter.visit(arrayLookup, arg));
+    //     assertEquals(integerValue1,
+    //                  interpreter.visit(varRef, env));
     // }
+
+    // // /**
+    // //  * Test method for {@link Interpreter#ArrayLookup()}.
+    // //  */
+    // // @Test
+    // // public final void testArrayLookup(){
+    // //     ArrayValue arrayValue = arrayLookup.f0.f0.choice;
+    // //     arrayValue.arr[63] = 10001;
+    // //     env.extend(identifier, arrayValue);
+
+    // //     System.out.println("arrayValue.arr: " + arrayValue.arr);
+    // //     assertEquals(new IntegerValue(10001),
+    // //                  interpreter.visit(arrayLookup, env));
+    // // }
 }
