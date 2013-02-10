@@ -5,6 +5,8 @@ public class BooleanValue extends Value {
         this.booleanValue = booleanValue;
     }
 
+    public BooleanValue(){}
+
     @Override
     public void setValue(Value value){
         BooleanValue otherValue = (BooleanValue) value;

@@ -417,7 +417,7 @@ public class InterpreterTest{
      */
     @Test
     public final void testIntegerType(){
-        assertEquals(null, interpreter.visit(integerType, env));
+        assertEquals(new IntegerValue(), interpreter.visit(integerType, env));
     }
 
     /**
@@ -425,7 +425,7 @@ public class InterpreterTest{
      */
     @Test
     public final void testBooleanType(){
-        assertEquals(null, interpreter.visit(booleanType, env));
+        assertEquals(new BooleanValue(), interpreter.visit(booleanType, env));
     }
 
     /**
@@ -433,7 +433,7 @@ public class InterpreterTest{
      */
     @Test
     public final void testArrayType(){
-        assertEquals(null, interpreter.visit(arrayType, env));
+        assertEquals(new ArrayValue(), interpreter.visit(arrayType, env));
     }
 
     /**
@@ -446,9 +446,9 @@ public class InterpreterTest{
         Type type2 = new Type(new NodeChoice(integerType, 2));
         Type type3 = new Type(new NodeChoice(identifier, 3));
 
-        assertEquals(null, interpreter.visit(type0, env));
-        assertEquals(null, interpreter.visit(type1, env));
-        assertEquals(null, interpreter.visit(type2, env));
+        assertEquals(new ArrayValue(), interpreter.visit(type0, env));
+        assertEquals(new BooleanValue(), interpreter.visit(type1, env));
+        assertEquals(new IntegerValue(), interpreter.visit(type2, env));
         assertEquals(null, interpreter.visit(type3, env));
     }
 
@@ -457,7 +457,7 @@ public class InterpreterTest{
      */
     @Test
     public final void testVarDeclaration(){
-        Value expectedVarValue = new NullValue();
+        Value expectedVarValue = new IntegerValue();
         Value actual = interpreter.visit(varDeclaration, env);
 
         assertEquals(null, actual);
@@ -512,12 +512,56 @@ public class InterpreterTest{
      */
     @Test
     public final void testAssignmentStatement(){
-        ArrayValue arrayValue = new ArrayValue(75);
-        env.extend("FooBar", arrayValue);
-
-        assertEquals(null, interpreter.visit(arrayAssignmentStatement, env));
-
-        ArrayValue actual = (ArrayValue) env.lookup("FooBar");
-        assertEquals(75, actual.arr[63]);
+        IntegerValue expected = new IntegerValue();
+        env.extend("FooBar", expected);
+        assertEquals(null, interpreter.visit(assignmentStatement, env));
+        assertEquals(75, expected.integerValue);
     }
+
+    /**
+     * Test method for {@link Interpreter#IfStatement()}.
+     */
+    @Test
+    public final void testIfStatement_True(){
+        PrimaryExpression trueBooleanPrim = new PrimaryExpression(new NodeChoice(trueLiteral, 1));
+
+        Expression trueCondExpr = new Expression(new NodeChoice(trueBooleanPrim, 6));
+
+        IfStatement ifStatement1 = new IfStatement(trueCondExpr,
+                                                   statement,
+                                                   statement2);
+        IntegerValue integerValue1 = new IntegerValue();
+        IntegerValue integerValue2 = new IntegerValue();
+
+        env.extend(identifier, integerValue1);
+        env.extend(identifier2, integerValue2);
+
+        assertEquals(null, interpreter.visit(ifStatement1, env));
+        assertEquals(75, integerValue1.integerValue);
+        assertEquals(new IntegerValue(), integerValue2);
+    }
+
+    /**
+     * Test method for {@link Interpreter#IfStatement()}.
+     */
+    @Test
+    public final void testIfStatement_False(){
+        PrimaryExpression falseBooleanPrim = new PrimaryExpression(new NodeChoice(falseLiteral, 1));
+
+        Expression falseCondExpr = new Expression(new NodeChoice(falseBooleanPrim, 6));
+
+        IfStatement ifStatement1 = new IfStatement(falseCondExpr,
+                                                   statement,
+                                                   statement2);
+        IntegerValue integerValue1 = new IntegerValue();
+        IntegerValue integerValue2 = new IntegerValue();
+
+        env.extend(identifier, integerValue1);
+        env.extend(identifier2, integerValue2);
+
+        assertEquals(null, interpreter.visit(ifStatement1, env));
+        assertEquals(new IntegerValue(), integerValue1);
+        assertEquals(89, integerValue2.integerValue);
+    }
+
 }

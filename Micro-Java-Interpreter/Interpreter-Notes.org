@@ -53,6 +53,10 @@
    CLOCK: [2013-02-10 Sun 20:44]--[2013-02-10 Sun 21:17] =>  0:33
 ** DONE Have NullValue to represent semantic value of No Value
    CLOCK: [2013-02-10 Sun 21:20]--[2013-02-10 Sun 21:37] =>  0:17
+** DONE Make sure you are passing the environment in "store-passing" style => No need.
+    CLOCK: [2013-02-11 Mon 00:10]--[2013-02-11 Mon 00:13] =>  0:03
+*** There is only one "global" environment at any time. Cos of Java being mutation-friendly, it is already being passed in store-passing style.
+** TODO Learn the basics of using a Debugger
 * TODO Interpret trivial stuff using the environment
   CLOCK: [2013-02-06 Wed 11:16]--[2013-02-06 Wed 12:21] =>  1:05
 ** DONE identifier
@@ -72,9 +76,6 @@
    CLOCK: [2013-02-06 Wed 12:56]--[2013-02-06 Wed 12:58] =>  0:02
 ** DONE testNotExpression(){
    CLOCK: [2013-02-06 Wed 12:58]--[2013-02-06 Wed 13:19] =>  0:21
-** TODO testExpressionRest(){ [STUCK HERE - Figure out how to "interpret" expression lists, etc.]
-   CLOCK: [2013-02-06 Wed 13:19]--[2013-02-06 Wed 13:21] =>  0:02
-*** It is part of a message send (method call), so get the list of formal params from the method closure and bind each parameter to the corresponding argument value in the CLOSURE's environment
 ** DONE testPrintStatement(){
    CLOCK: [2013-02-06 Wed 13:42]--[2013-02-06 Wed 13:55] =>  0:13
 ** DONE testArrayAssignmentStatement(){
@@ -106,12 +107,17 @@
 ** DONE testArrayType(){
 ** DONE testType(){
    CLOCK: [2013-02-08 Fri 13:35]--[2013-02-08 Fri 13:44] =>  0:09
+** DONE testVarDeclaration(){
+   CLOCK: [2013-02-08 Fri 13:46]--[2013-02-08 Fri 14:01] =>  0:15
+** TODO testExpressionRest(){ [STUCK HERE - Figure out how to "interpret" expression lists, etc.]
+   CLOCK: [2013-02-06 Wed 13:19]--[2013-02-06 Wed 13:21] =>  0:02
+*** It is part of a message send (method call), so get the list of formal params from the method closure and bind each parameter to the corresponding argument value in the CLOSURE's environment
 ** testFormalParameter(){
 ** testFormalParameterRest(){
-** TODO testVarDeclaration(){
-   CLOCK: [2013-02-08 Fri 13:46]--[2013-02-08 Fri 14:01] =>  0:15
-** testWhileStatement(){
-** testIfStatement(){
+** TODO testWhileStatement(){
+** DONE testIfStatement(){
+   CLOCK: [2013-02-10 Sun 23:55]--[2013-02-11 Mon 00:10] =>  0:15
+   CLOCK: [2013-02-10 Sun 23:36]--[2013-02-10 Sun 23:39] =>  0:03
 ** testNodeOptional(){
 ** testNodeListOptional(){
 ** testBlock(){

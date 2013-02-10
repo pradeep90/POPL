@@ -7,6 +7,8 @@ public class ArrayValue extends Value {
         arr = new int[size];
     }
 
+    public ArrayValue(){}
+
     @Override
     public void setValue(Value value){
         ArrayValue otherValue = (ArrayValue) value;

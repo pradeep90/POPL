@@ -198,10 +198,8 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(VarDeclaration n, Environment env) {
         Value _ret=null;
-        // n.f0.accept(this, env);
-        // n.f1.accept(this, env);
-        // n.f2.accept(this, env);
-        env.extend(n.f1, new NullValue());
+        Value f0 = n.f0.accept(this, env);
+        env.extend(n.f1, f0);
         return _ret;
     }
 
@@ -278,11 +276,12 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
     public Value visit(Type n, Environment env) {
         Value _ret=null;
 
-        // TODO(spradeep): Should this even call visit(Identifier)???
-        // You don't really expect a Type to have a value, do you?
-
-        // Value f1 = n.f0.accept(this, env);
-
+        if (n.f0.which == 3){
+            // TODO(spradeep): Return ObjectValue of Identifier type.
+        }
+        else{
+            _ret = n.f0.accept(this, env);
+        }
         return _ret;
     }
 
@@ -293,9 +292,7 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(ArrayType n, Environment env) {
         Value _ret=null;
-        // n.f0.accept(this, env);
-        // n.f1.accept(this, env);
-        // n.f2.accept(this, env);
+        _ret = new ArrayValue();
         return _ret;
     }
 
@@ -304,7 +301,7 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(BooleanType n, Environment env) {
         Value _ret=null;
-        // n.f0.accept(this, env);
+        _ret = new BooleanValue();
         return _ret;
     }
 
@@ -313,7 +310,7 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(IntegerType n, Environment env) {
         Value _ret=null;
-        // n.f0.accept(this, env);
+        _ret = new IntegerValue();
         return _ret;
     }
 
@@ -391,14 +388,13 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(IfStatement n, Environment env) {
         Value _ret=null;
-        n.f0.accept(this, env);
-        n.f1.accept(this, env);
-        n.f2.accept(this, env);
-        n.f3.accept(this, env);
-        n.f4.accept(this, env);
-        n.f5.accept(this, env);
-        n.f6.accept(this, env);
-        // return new Value(value, store);
+        BooleanValue ifCond = (BooleanValue) n.f2.accept(this, env);
+        if (ifCond.booleanValue){
+            n.f4.accept(this, env);
+        }
+        else{
+            n.f6.accept(this, env);
+        }
         return _ret;
     }
 
@@ -489,7 +485,7 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
         // n.f1.accept(this, env);
         Value f2 = n.f2.accept(this, env);
         _ret = new BooleanValue(((BooleanValue) f0).booleanValue
-                                       && ((BooleanValue) f2).booleanValue);
+                                && ((BooleanValue) f2).booleanValue);
         return _ret;
     }
 
@@ -504,7 +500,7 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
         // n.f1.accept(this, env);
         Value f2 = n.f2.accept(this, env);
         _ret = new BooleanValue(((IntegerValue) f0).integerValue
-                                       < ((IntegerValue) f2).integerValue);
+                                < ((IntegerValue) f2).integerValue);
         return _ret;
     }
 
@@ -519,7 +515,7 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
         // n.f1.accept(this, env);
         Value f2 = n.f2.accept(this, env);
         _ret = new IntegerValue(((IntegerValue) f0).integerValue
-                                       + ((IntegerValue) f2).integerValue);
+                                + ((IntegerValue) f2).integerValue);
         return _ret;
     }
 
@@ -534,7 +530,7 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
         // n.f1.accept(this, env);
         Value f2 = n.f2.accept(this, env);
         _ret = new IntegerValue(((IntegerValue) f0).integerValue
-                                       - ((IntegerValue) f2).integerValue);
+                                - ((IntegerValue) f2).integerValue);
         return _ret;
     }
 
@@ -549,7 +545,7 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
         // n.f1.accept(this, env);
         Value f2 = n.f2.accept(this, env);
         _ret = new IntegerValue(((IntegerValue) f0).integerValue
-                                       * ((IntegerValue) f2).integerValue);
+                                * ((IntegerValue) f2).integerValue);
         return _ret;
     }
 

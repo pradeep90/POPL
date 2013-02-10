@@ -5,6 +5,8 @@ public class IntegerValue extends Value {
         this.integerValue = integerValue;
     }
 
+    public IntegerValue(){}
+
     @Override
     public void setValue(Value value){
         IntegerValue otherValue = (IntegerValue) value;
