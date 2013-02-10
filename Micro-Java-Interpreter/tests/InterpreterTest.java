@@ -146,7 +146,8 @@ public class InterpreterTest{
         identifier3 = new Identifier(nodeToken3);
         identifier4 = new Identifier(nodeToken4);
         thisExpression = new ThisExpression();
-        arrayAssignmentStatement = new ArrayAssignmentStatement(identifier, expression, expression2);
+        arrayAssignmentStatement = new ArrayAssignmentStatement(identifier, expression3,
+                                                                expression);
         arrayAllocationExpression = new ArrayAllocationExpression(expression);
         primaryExpressionArrayAllocation = new PrimaryExpression(new NodeChoice(
             arrayAllocationExpression, 5));
@@ -267,11 +268,8 @@ public class InterpreterTest{
     public void tearDown(){
     }
 
-    /**
-     * Test method for {@link Interpreter#Foo()}.
-     */
-    @Test
-    public final void testFoo(){
+    public Identifier getNewIdentifier(String name){
+        return new Identifier(new NodeToken(name));
     }
 
     /**
@@ -327,7 +325,7 @@ public class InterpreterTest{
      * Test method for {@link Interpreter#ArrayAllocationExpression()}.
      */
     @Test
-    public final void testArrayAlvalueExpression(){
+    public final void testArrayAllocationExpression(){
         assertEquals(new ArrayValue(75),
                      interpreter.visit(arrayAllocationExpression, env));
     }
@@ -454,39 +452,72 @@ public class InterpreterTest{
         assertEquals(null, interpreter.visit(type3, env));
     }
 
-    // // /**
-    // //  * Test method for {@link Interpreter#VarDeclaration()}.
-    // //  */
-    // // @Test
-    // // public final void testVarDeclaration(){
-    // //     Result result = interpreter.visit(varDeclaration, env);
-    // //     env.extend(identifier, value);
-    // //     assertEquals(null,
-    // //                  result);
-    // // }
+    /**
+     * Test method for {@link Interpreter#VarDeclaration()}.
+     */
+    @Test
+    public final void testVarDeclaration(){
+        Value expectedVarValue = new NullValue();
+        Value actual = interpreter.visit(varDeclaration, env);
 
-    // /**
-    //  * Test method for {@link Interpreter#VarRef()}.
-    //  */
-    // @Test
-    // public final void testVarRef(){
-    //     env.extend(identifier, integerValue1);
+        assertEquals(null, actual);
+        assertEquals(expectedVarValue, env.lookup(identifier));
+    }
 
-    //     assertEquals(integerValue1,
-    //                  interpreter.visit(varRef, env));
-    // }
+    /**
+     * Test method for {@link Interpreter#VarRef()}.
+     */
+    @Test
+    public final void testVarRef(){
+        env.extend(identifier, integerValue1);
+        assertEquals(integerValue1, interpreter.visit(varRef, env));
 
-    // // /**
-    // //  * Test method for {@link Interpreter#ArrayLookup()}.
-    // //  */
-    // // @Test
-    // // public final void testArrayLookup(){
-    // //     ArrayValue arrayValue = arrayLookup.f0.f0.choice;
-    // //     arrayValue.arr[63] = 10001;
-    // //     env.extend(identifier, arrayValue);
+        // TODO(spradeep): Test for dot expression
+    }
 
-    // //     System.out.println("arrayValue.arr: " + arrayValue.arr);
-    // //     assertEquals(new IntegerValue(10001),
-    // //                  interpreter.visit(arrayLookup, env));
-    // // }
+    /**
+     * Test method for {@link Interpreter#ArrayLookup()}.
+     */
+    @Test
+    public final void testArrayLookup(){
+        ArrayValue arrayValue = new ArrayValue(75);
+        env.extend("foo", arrayValue);
+        arrayValue.arr[63] = 10001;
+
+        VarRef varRef = new VarRef(new NodeChoice(getNewIdentifier("foo"), 1));
+        PrimaryExpression arrayPrimaryExpression = new PrimaryExpression(new NodeChoice(
+            varRef, 3));
+
+        ArrayLookup arrayLookup = new ArrayLookup(arrayPrimaryExpression,
+                                                  primaryExpression3);
+        assertEquals(new IntegerValue(10001),
+                     interpreter.visit(arrayLookup, env));
+    }
+
+    /**
+     * Test method for {@link Interpreter#ArrayAssignmentStatement()}.
+     */
+    @Test
+    public final void testArrayAssignmentStatement(){
+        ArrayValue arrayValue = new ArrayValue(75);
+        env.extend("FooBar", arrayValue);
+
+        assertEquals(null, interpreter.visit(arrayAssignmentStatement, env));
+        ArrayValue actual = (ArrayValue) env.lookup("FooBar");
+        assertEquals(75, actual.arr[63]);
+    }
+
+    /**
+     * Test method for {@link Interpreter#AssignmentStatement()}.
+     */
+    @Test
+    public final void testAssignmentStatement(){
+        ArrayValue arrayValue = new ArrayValue(75);
+        env.extend("FooBar", arrayValue);
+
+        assertEquals(null, interpreter.visit(arrayAssignmentStatement, env));
+
+        ArrayValue actual = (ArrayValue) env.lookup("FooBar");
+        assertEquals(75, actual.arr[63]);
+    }
 }

@@ -6,6 +6,12 @@ public class IntegerValue extends Value {
     }
 
     @Override
+    public void setValue(Value value){
+        IntegerValue otherValue = (IntegerValue) value;
+        this.integerValue = otherValue.integerValue;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o instanceof IntegerValue) {
             IntegerValue other = (IntegerValue) o;
@@ -17,5 +23,10 @@ public class IntegerValue extends Value {
     @Override
     public boolean isFalse(){
         return true;
+    }
+
+    public String toString(){
+        String result = "" + integerValue;
+        return result;
     }
 }

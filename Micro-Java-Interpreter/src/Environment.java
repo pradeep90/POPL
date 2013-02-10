@@ -58,4 +58,14 @@ public class Environment {
     public String getIdentifierName(Identifier identifier){
         return identifier.f0.tokenImage;
     }
+
+    public String toString(){
+        String result = "{";
+        for (Binding binding : bindingList){
+            result += binding + ", ";
+        }
+        result += "}";
+
+        return result;
+    }
 }

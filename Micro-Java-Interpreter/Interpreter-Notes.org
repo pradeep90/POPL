@@ -49,25 +49,25 @@
 ** DONE lookup symbol * env => Location
 ** DONE fetch Location * Store => Value
 ** DONE new-loc
-** TODO Move to Interpreter <Value, Environment>
-   CLOCK: [2013-02-10 Sun 20:44]
-** TODO Have NullValue to represent semantic value of No Value
+** DONE Move to Interpreter <Value, Environment>
+   CLOCK: [2013-02-10 Sun 20:44]--[2013-02-10 Sun 21:17] =>  0:33
+** DONE Have NullValue to represent semantic value of No Value
+   CLOCK: [2013-02-10 Sun 21:20]--[2013-02-10 Sun 21:37] =>  0:17
 * TODO Interpret trivial stuff using the environment
   CLOCK: [2013-02-06 Wed 11:16]--[2013-02-06 Wed 12:21] =>  1:05
-** TODO identifier
+** DONE identifier
    CLOCK: [2013-02-10 Sun 20:40]--[2013-02-10 Sun 20:43] =>  0:03
    CLOCK: [2013-02-06 Wed 12:23]--[2013-02-06 Wed 12:32] =>  0:09
 ** ??? testNodeToken(){
-** TODO testThisExpression(){
+** DONE testThisExpression(){
    CLOCK: [2013-02-06 Wed 12:36]--[2013-02-06 Wed 12:46] =>  0:10
 ** DONE testIdentifier(){
 ** DONE testFalseLiteral(){
 ** DONE testTrueLiteral(){
 ** DONE testIntegerLiteral(){
    CLOCK: [2013-02-06 Wed 12:46]--[2013-02-06 Wed 12:50] =>  0:04
-** TODO testArrayAllocationExpression(){
+** DONE testArrayAllocationExpression(){
    CLOCK: [2013-02-06 Wed 12:50]--[2013-02-06 Wed 12:55] =>  0:05
-** TODO testAllocationExpression(){ (wait for class implementation)
 ** DONE testBracketExpression(){
    CLOCK: [2013-02-06 Wed 12:56]--[2013-02-06 Wed 12:58] =>  0:02
 ** DONE testNotExpression(){
@@ -77,11 +77,13 @@
 *** It is part of a message send (method call), so get the list of formal params from the method closure and bind each parameter to the corresponding argument value in the CLOSURE's environment
 ** DONE testPrintStatement(){
    CLOCK: [2013-02-06 Wed 13:42]--[2013-02-06 Wed 13:55] =>  0:13
-** TODO testArrayAssignmentStatement(){
+** DONE testArrayAssignmentStatement(){
+   CLOCK: [2013-02-10 Sun 22:12]--[2013-02-10 Sun 22:20] =>  0:08
    CLOCK: [2013-02-08 Fri 13:11]--[2013-02-08 Fri 13:17] =>  0:06
 ** DONE testTimesExpression(){
    CLOCK: [2013-02-08 Fri 13:17]--[2013-02-08 Fri 13:22] =>  0:05
-** TODO testArrayLookup(){
+** DONE testArrayLookup(){
+   CLOCK: [2013-02-10 Sun 21:39]--[2013-02-10 Sun 22:12] =>  0:33
    CLOCK: [2013-02-09 Sat 20:32]--[2013-02-09 Sat 20:57] =>  0:25
    CLOCK: [2013-02-08 Fri 14:26]--[2013-02-08 Fri 14:41] =>  0:15
 ** DONE testMinusExpression(){
@@ -92,9 +94,11 @@
    CLOCK: [2013-02-08 Fri 13:25]--[2013-02-08 Fri 13:26] =>  0:01
 ** DONE testAndExpression(){
    CLOCK: [2013-02-08 Fri 13:26]--[2013-02-08 Fri 13:31] =>  0:05
-** TODO testVarRef()
+** DONE testVarRef()
    CLOCK: [2013-02-08 Fri 14:04]--[2013-02-08 Fri 14:24] =>  0:20
-** TODO testAssignmentStatement(){
+** DONE testAssignmentStatement(){
+   CLOCK: [2013-02-10 Sun 22:20]--[2013-02-10 Sun 22:29] =>  0:09
+   CLOCK: [2013-02-10 Sun 21:38]--[2013-02-10 Sun 21:38] =>  0:00
 ** DONE testIntegerType(){
    CLOCK: [2013-02-08 Fri 13:32]--[2013-02-08 Fri 13:34] =>  0:02
 ** DONE testBooleanType(){
@@ -119,9 +123,6 @@
 ** testClassExtendsDeclaration(){
 ** testTypeDeclaration(){
 ** testStatement(){
-** TODO testExpression(){
-   CLOCK: [2013-02-08 Fri 14:26]--[2013-02-08 Fri 14:26] =>  0:00
-** testPrimaryExpression(){
 ** testMainClass(){
 ** testArrayLength_ArrayAllocationExpression(){
 ** testArrayLength_Identifier(){
@@ -134,4 +135,6 @@
 * Mutually recursive methods
 * Class class
 * Class declaration
+** TODO testAllocationExpression(){ (wait for class implementation)
+** TODO test dot expression VarRef
 * Inheritance

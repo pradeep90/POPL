@@ -8,6 +8,12 @@ public class ArrayValue extends Value {
     }
 
     @Override
+    public void setValue(Value value){
+        ArrayValue otherValue = (ArrayValue) value;
+        this.arr = otherValue.arr;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o instanceof ArrayValue) {
             ArrayValue other = (ArrayValue) o;

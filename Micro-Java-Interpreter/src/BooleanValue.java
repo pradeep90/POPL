@@ -6,6 +6,12 @@ public class BooleanValue extends Value {
     }
 
     @Override
+    public void setValue(Value value){
+        BooleanValue otherValue = (BooleanValue) value;
+        this.booleanValue = otherValue.booleanValue;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o instanceof BooleanValue) {
             BooleanValue other = (BooleanValue) o;
@@ -17,6 +23,11 @@ public class BooleanValue extends Value {
     @Override
     public boolean isFalse(){
         return !booleanValue;
+    }
+
+    public String toString(){
+        String result = "" + booleanValue;
+        return result;
     }
 }
 

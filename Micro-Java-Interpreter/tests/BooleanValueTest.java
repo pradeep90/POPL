@@ -32,4 +32,13 @@ public class BooleanValueTest{
         Value value = new BooleanValue(true);
         assertEquals(booleanValue1, value);
     }
+
+    /**
+     * Test method for {@link BooleanValue#toString()}.
+     */
+    @Test
+    public final void testToString(){
+        assertEquals("true", booleanValue1.toString());
+        assertEquals("false", booleanValue2.toString());
+    }
 }
