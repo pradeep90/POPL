@@ -564,4 +564,96 @@ public class InterpreterTest{
         assertEquals(89, integerValue2.integerValue);
     }
 
+    /**
+     * Test method for {@link Interpreter#WhileStatement()}.
+     */
+    @Test
+    public final void testWhileStatement_NormalExecution(){
+        IntegerValue integerValue = new IntegerValue();
+        env.extend("foo", integerValue);
+
+        
+        VarRef varRef = new VarRef(new NodeChoice(getNewIdentifier("foo"), 1));
+        PrimaryExpression varRefPrimaryExpression = new PrimaryExpression(new NodeChoice(
+            varRef, 3));
+        
+        Expression compareExpression = new Expression(new NodeChoice(new CompareExpression(
+            varRefPrimaryExpression,
+            primaryExpression2), 1));
+
+        // Creating another copy so that TreeFormatter doesn't give an error
+        VarRef sameVarRef = new VarRef(new NodeChoice(getNewIdentifier("foo"), 1));
+        PrimaryExpression sameVarRefPrimaryExpression = new PrimaryExpression(new NodeChoice(
+            sameVarRef, 3));
+
+        IntegerLiteral oneIntegerLiteral = new IntegerLiteral(new NodeToken("1"));
+        PrimaryExpression incrPrimaryExpression = new PrimaryExpression(
+            new NodeChoice(oneIntegerLiteral, 0));
+
+        Expression plusExpression = new Expression(new NodeChoice(
+            new PlusExpression(sameVarRefPrimaryExpression,
+                               incrPrimaryExpression), 2));
+        Statement incrStatement = new Statement(new NodeChoice(new AssignmentStatement(
+            sameVarRef, plusExpression), 1));
+
+        WhileStatement whileStatement = new WhileStatement(compareExpression,
+                                                           incrStatement);
+
+        assertEquals(null, interpreter.visit(whileStatement, env));
+        assertEquals(89, integerValue.integerValue);
+    }
+
+    /**
+     * Test method for {@link Interpreter#WhileStatement()}.
+     */
+    @Test
+    public final void testWhileStatement_NoExecution(){
+        IntegerValue integerValue = new IntegerValue(300);
+        env.extend("foo", integerValue);
+
+        
+        VarRef varRef = new VarRef(new NodeChoice(getNewIdentifier("foo"), 1));
+        PrimaryExpression varRefPrimaryExpression = new PrimaryExpression(new NodeChoice(
+            varRef, 3));
+        
+        Expression compareExpression = new Expression(new NodeChoice(new CompareExpression(
+            varRefPrimaryExpression,
+            primaryExpression2), 1));
+
+        // Creating another copy so that TreeFormatter doesn't give an error
+        VarRef sameVarRef = new VarRef(new NodeChoice(getNewIdentifier("foo"), 1));
+        PrimaryExpression sameVarRefPrimaryExpression = new PrimaryExpression(new NodeChoice(
+            sameVarRef, 3));
+
+        IntegerLiteral oneIntegerLiteral = new IntegerLiteral(new NodeToken("1"));
+        PrimaryExpression incrPrimaryExpression = new PrimaryExpression(
+            new NodeChoice(oneIntegerLiteral, 0));
+
+        Expression plusExpression = new Expression(new NodeChoice(
+            new PlusExpression(sameVarRefPrimaryExpression,
+                               incrPrimaryExpression), 2));
+        Statement incrStatement = new Statement(new NodeChoice(new AssignmentStatement(
+            sameVarRef, plusExpression), 1));
+
+        WhileStatement whileStatement = new WhileStatement(compareExpression,
+                                                           incrStatement);
+
+        assertEquals(null, interpreter.visit(whileStatement, env));
+        assertEquals(300, integerValue.integerValue);
+    }
+
+    /**
+     * Test method for {@link Interpreter#Block()}.
+     */
+    @Test
+    public final void testBlock(){
+        IntegerValue integerValue0 = new IntegerValue();
+        IntegerValue integerValue1 = new IntegerValue();
+        env.extend(identifier, integerValue0);
+        env.extend(identifier2, integerValue1);
+
+        assertEquals(null, interpreter.visit(block, env));
+        assertEquals(75, integerValue0.integerValue);
+        assertEquals(89, integerValue1.integerValue);
+    }
 }

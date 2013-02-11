@@ -57,6 +57,7 @@
     CLOCK: [2013-02-11 Mon 00:10]--[2013-02-11 Mon 00:13] =>  0:03
 *** There is only one "global" environment at any time. Cos of Java being mutation-friendly, it is already being passed in store-passing style.
 ** TODO Learn the basics of using a Debugger
+** TODO Handle array.length separately, if needed
 * TODO Interpret trivial stuff using the environment
   CLOCK: [2013-02-06 Wed 11:16]--[2013-02-06 Wed 12:21] =>  1:05
 ** DONE identifier
@@ -109,18 +110,23 @@
    CLOCK: [2013-02-08 Fri 13:35]--[2013-02-08 Fri 13:44] =>  0:09
 ** DONE testVarDeclaration(){
    CLOCK: [2013-02-08 Fri 13:46]--[2013-02-08 Fri 14:01] =>  0:15
+** DONE testWhileStatement(){
+   CLOCK: [2013-02-11 Mon 11:55]--[2013-02-11 Mon 12:14] =>  0:19
+** DONE testIfStatement(){
+   CLOCK: [2013-02-10 Sun 23:55]--[2013-02-11 Mon 00:10] =>  0:15
+   CLOCK: [2013-02-10 Sun 23:36]--[2013-02-10 Sun 23:39] =>  0:03
+** DONE testNodeOptional(){
+   CLOCK: [2013-02-11 Mon 12:14]--[2013-02-11 Mon 12:15] =>  0:01
+** DONE testNodeListOptional(){
+   CLOCK: [2013-02-11 Mon 12:15]--[2013-02-11 Mon 12:15] =>  0:00
+** DONE testBlock(){
+   CLOCK: [2013-02-11 Mon 12:16]--[2013-02-11 Mon 12:20] =>  0:04
+** DONE testStatement(){
 ** TODO testExpressionRest(){ [STUCK HERE - Figure out how to "interpret" expression lists, etc.]
    CLOCK: [2013-02-06 Wed 13:19]--[2013-02-06 Wed 13:21] =>  0:02
 *** It is part of a message send (method call), so get the list of formal params from the method closure and bind each parameter to the corresponding argument value in the CLOSURE's environment
 ** testFormalParameter(){
 ** testFormalParameterRest(){
-** TODO testWhileStatement(){
-** DONE testIfStatement(){
-   CLOCK: [2013-02-10 Sun 23:55]--[2013-02-11 Mon 00:10] =>  0:15
-   CLOCK: [2013-02-10 Sun 23:36]--[2013-02-10 Sun 23:39] =>  0:03
-** testNodeOptional(){
-** testNodeListOptional(){
-** testBlock(){
 ** testExpressionList(){
 ** testFormalParameterList(){
 ** testGetNewMainClass(){
@@ -128,11 +134,7 @@
 ** testClassDeclaration(){
 ** testClassExtendsDeclaration(){
 ** testTypeDeclaration(){
-** testStatement(){
 ** testMainClass(){
-** testArrayLength_ArrayAllocationExpression(){
-** testArrayLength_Identifier(){
-** testConcateNodeLists(){
 ** testMethodDeclaration(){
 ** testMessageSend(){
 ** testMainOnly(){
@@ -143,4 +145,6 @@
 * Class declaration
 ** TODO testAllocationExpression(){ (wait for class implementation)
 ** TODO test dot expression VarRef
+** TODO testArrayLength_ArrayAllocationExpression(){
+** TODO testArrayLength_Identifier(){
 * Inheritance
