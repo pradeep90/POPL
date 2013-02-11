@@ -1,12 +1,16 @@
 src/IntegerValue.java
+src/ObjectValue.java
 src/Value.java
+src/ClosureValue.java
 src/Environment.java
 src/ArrayValue.java
 src/Binding.java
+src/MicroJavaHelper.java
 src/MicroJavaParserConstants.java
 src/BooleanValue.java
 src/ParseException.java
 src/TokenMgrError.java
+src/ClassValue.java
 src/MicroJavaParser.java
 src/MicroJavaParserTokenManager.java
 src/syntaxtree/VarDeclaration.java

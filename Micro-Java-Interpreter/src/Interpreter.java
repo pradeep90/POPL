@@ -7,6 +7,8 @@ import java.util.*;
  */
 public class Interpreter extends GJDepthFirst<Value,Environment> {
 
+    HashMap<String, ClassValue> symbolTable = new HashMap<String, ClassValue>();
+
     //
     // Auto class visitors--probably don't need to be overridden.
     //
@@ -138,6 +140,8 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
     public Value visit(TypeDeclaration n, Environment env) {
         Value _ret=null;
         n.f0.accept(this, env);
+        // TODO(spradeep): 
+        // symbolTable.put(MicroJavaHelper.getIdentifierName(n.f1), classValue);
         return _ret;
     }
 
@@ -151,12 +155,18 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(ClassDeclaration n, Environment env) {
         Value _ret=null;
-        n.f0.accept(this, env);
         n.f1.accept(this, env);
-        n.f2.accept(this, env);
         n.f3.accept(this, env);
-        n.f4.accept(this, env);
-        n.f5.accept(this, env);
+
+        Environment methodTable = new Environment();
+
+        for (Node node : n.f4.nodes){
+            MethodDeclaration currMethodDeclaration = (MethodDeclaration) node;
+            methodTable.extend(MicroJavaHelper.getIdentifierName(currMethodDeclaration.f2),
+                               currMethodDeclaration.accept(this, env));
+        }
+
+        // ClassValue classValue = new ClassValue(n, methodTable);
         return _ret;
     }
 
@@ -208,17 +218,13 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      * f9 -> "}"
      */
     public Value visit(MethodDeclaration n, Environment env) {
+        // Return ClosureValue corresponding to this MethodDeclaration.
+        
+        // Note: Not using env cos we'll just use the class' env when
+        // applying the closure.
+
         Value _ret=null;
-        n.f0.accept(this, env);
-        n.f1.accept(this, env);
-        n.f2.accept(this, env);
-        n.f3.accept(this, env);
-        n.f4.accept(this, env);
-        n.f5.accept(this, env);
-        n.f6.accept(this, env);
-        n.f7.accept(this, env);
-        n.f8.accept(this, env);
-        n.f9.accept(this, env);
+        _ret = new ClosureValue(n);
         return _ret;
     }
 

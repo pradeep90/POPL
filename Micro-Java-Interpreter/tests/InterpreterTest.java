@@ -656,4 +656,41 @@ public class InterpreterTest{
         assertEquals(75, integerValue0.integerValue);
         assertEquals(89, integerValue1.integerValue);
     }
+
+    /**
+     * Test method for {@link Interpreter#MethodDeclaration()}.
+     */
+    @Test
+    public final void testMethodDeclaration(){
+        String body = "";
+        String codeString =
+                "class MainOnly {" +
+                "   public static void main(String [] a){" +
+                "      new ____NewMainClass____().fooMethod();" +
+                "   }" +
+                "}" +
+                "" +
+                "class ____NewMainClass____{" +
+                "" +
+                "   public void fooMethod(){" +
+                "" +
+                body +
+                "   }" +
+                "}";
+
+        Goal goal = (Goal)
+                MicroJavaHelper.getMicroJavaNodeFromString(codeString);
+        TypeDeclaration typeDeclaration =
+                (TypeDeclaration) goal.f1.nodes.get(0);
+        ClassDeclaration classDeclaration =
+                (ClassDeclaration)
+                typeDeclaration.f0.choice;
+        MethodDeclaration methodDeclaration = (MethodDeclaration)
+                classDeclaration.f4.nodes.get(0);
+
+        System.out.println("MicroJavaHelper.getFormattedString(methodDeclaration): " + MicroJavaHelper.getFormattedString(methodDeclaration));
+
+        ClosureValue expected = new ClosureValue(methodDeclaration);
+        assertEquals(expected, interpreter.visit(methodDeclaration, env));
+    }
 }

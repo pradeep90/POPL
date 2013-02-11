@@ -10,6 +10,17 @@ public class Environment {
     }
 
     /** 
+     * Create a new Environment with parentEnvironment.
+     *
+     * Ensure that extensions to this environment will not make
+     * extensions to the parentEnvironment. However, changing values
+     * of pre-existing bindings in the parentEnvironment is OK.
+     */
+    public Environment(Environment parentEnvironment){
+        bindingList = new LinkedList<Binding>(parentEnvironment.bindingList);
+    }
+
+    /** 
      * Extend this environment with newBinding.
      *
      * For now, just put newBinding at the front of the list of
@@ -68,4 +79,16 @@ public class Environment {
 
         return result;
     }
+
+    public boolean equals(Object o) {
+        if (o instanceof Environment) {
+            Environment other = (Environment) o;
+            for (int i = 0; i < this.bindingList.size(); i++)
+                if (!this.bindingList.get(i).equals(other.bindingList.get(i)))
+                    return false;
+            return true;
+        }
+        return false;
+    }
+
 }

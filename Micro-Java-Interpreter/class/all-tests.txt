@@ -1,3 +1,4 @@
 tests/BooleanValueTest.java
+tests/MicroJavaHelperTest.java
 tests/EnvironmentTest.java
 tests/InterpreterTest.java

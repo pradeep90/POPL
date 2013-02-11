@@ -14,4 +14,13 @@ public class Binding {
         result += name + ": " + value;
         return result;
     }
+
+    public boolean equals(Object o) {
+        if (o instanceof Binding) {
+            Binding other = (Binding) o;
+            return this.name.equals(other.name) && this.value.equals(other.value);
+        }
+        return false;
+    }
+
 }
