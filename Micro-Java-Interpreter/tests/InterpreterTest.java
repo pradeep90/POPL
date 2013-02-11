@@ -268,6 +268,36 @@ public class InterpreterTest{
     public void tearDown(){
     }
 
+    public Goal getTestGoal(String body){
+        String codeString =
+                "class MainOnly {" +
+                "   public static void main(String [] a){" +
+                "      new ____NewMainClass____().fooMethod();" +
+                "   }" +
+                "}" +
+                "" +
+                "class ____NewMainClassNormal____{" +
+                "   int x;" +
+                "   public void fooMethod(){" +
+                body +
+                "" +
+                "   }" +
+                "}" +
+                "class ____NewMainClassExtends____ extends ____NewMainClassNormal____{" +
+                "" +
+                "   public void fooMethod(){" +
+                "" +
+                "   }" +
+                "}";
+
+        return (Goal) MicroJavaHelper.getMicroJavaNodeFromString(codeString);
+    }
+
+    public Goal getTestGoal(){
+        return getTestGoal("");
+    }
+
+
     public Identifier getNewIdentifier(String name){
         return new Identifier(new NodeToken(name));
     }
@@ -349,15 +379,6 @@ public class InterpreterTest{
 
         // TODO(spradeep): Test for null objects being false 
     }
-
-    // // /**
-    // //  * Test method for {@link Interpreter#ExpressionRest()}.
-    // //  */
-    // // @Test
-    // // public final void testExpressionRest(){
-    // //     assertEquals(new BooleanValue(false),
-    // //                  interpreter.visit(notExpression2, env));
-    // // }
 
     /**
      * Test method for {@link Interpreter#PrintStatement()}.
@@ -449,7 +470,7 @@ public class InterpreterTest{
         assertEquals(new ArrayValue(), interpreter.visit(type0, env));
         assertEquals(new BooleanValue(), interpreter.visit(type1, env));
         assertEquals(new IntegerValue(), interpreter.visit(type2, env));
-        assertEquals(null, interpreter.visit(type3, env));
+        assertEquals(new ObjectValue(), interpreter.visit(type3, env));
     }
 
     /**
@@ -662,24 +683,7 @@ public class InterpreterTest{
      */
     @Test
     public final void testMethodDeclaration(){
-        String body = "";
-        String codeString =
-                "class MainOnly {" +
-                "   public static void main(String [] a){" +
-                "      new ____NewMainClass____().fooMethod();" +
-                "   }" +
-                "}" +
-                "" +
-                "class ____NewMainClass____{" +
-                "" +
-                "   public void fooMethod(){" +
-                "" +
-                body +
-                "   }" +
-                "}";
-
-        Goal goal = (Goal)
-                MicroJavaHelper.getMicroJavaNodeFromString(codeString);
+        Goal goal = getTestGoal();
         TypeDeclaration typeDeclaration =
                 (TypeDeclaration) goal.f1.nodes.get(0);
         ClassDeclaration classDeclaration =
@@ -699,23 +703,7 @@ public class InterpreterTest{
      */
     @Test
     public final void testClassDeclaration(){
-        String body = "";
-        String codeString =
-                "class MainOnly {" +
-                "   public static void main(String [] a){" +
-                "      new ____NewMainClass____().fooMethod();" +
-                "   }" +
-                "}" +
-                "" +
-                "class ____NewMainClass____{" +
-                "" +
-                "   public void fooMethod(){" +
-                "" +
-                body +
-                "   }" +
-                "}";
-
-        Goal goal = (Goal) MicroJavaHelper.getMicroJavaNodeFromString(codeString);
+        Goal goal = getTestGoal();
         TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(0);
         ClassDeclaration classDeclaration = (ClassDeclaration) typeDeclaration.f0.choice;
         System.out.println("MicroJavaHelper.getFormattedString(classDeclaration): " + MicroJavaHelper.getFormattedString(classDeclaration));
@@ -733,24 +721,8 @@ public class InterpreterTest{
      */
     @Test
     public final void testClassExtendsDeclaration(){
-        String body = "";
-        String codeString =
-                "class MainOnly {" +
-                "   public static void main(String [] a){" +
-                "      new ____NewMainClass____().fooMethod();" +
-                "   }" +
-                "}" +
-                "" +
-                "class ____NewMainClass____ extends MainOnly{" +
-                "" +
-                "   public void fooMethod(){" +
-                "" +
-                body +
-                "   }" +
-                "}";
-
-        Goal goal = (Goal) MicroJavaHelper.getMicroJavaNodeFromString(codeString);
-        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(0);
+        Goal goal = getTestGoal();
+        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(1);
         ClassExtendsDeclaration classExtendsDeclaration =
                 (ClassExtendsDeclaration) typeDeclaration.f0.choice;
         System.out.println("MicroJavaHelper.getFormattedString(classExtendsDeclaration): " + MicroJavaHelper.getFormattedString(classExtendsDeclaration));
@@ -769,24 +741,8 @@ public class InterpreterTest{
      */
     @Test
     public final void testTypeDeclaration(){
-        String body = "";
-        String codeString =
-                "class MainOnly {" +
-                "   public static void main(String [] a){" +
-                "      new ____NewMainClass____().fooMethod();" +
-                "   }" +
-                "}" +
-                "" +
-                "class ____NewMainClass____ extends MainOnly{" +
-                "" +
-                "   public void fooMethod(){" +
-                "" +
-                body +
-                "   }" +
-                "}";
-
-        Goal goal = (Goal) MicroJavaHelper.getMicroJavaNodeFromString(codeString);
-        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(0);
+        Goal goal = getTestGoal();
+        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(1);
         ClassExtendsDeclaration classExtendsDeclaration =
                 (ClassExtendsDeclaration) typeDeclaration.f0.choice;
         MethodDeclaration methodDeclaration = (MethodDeclaration)
@@ -796,7 +752,40 @@ public class InterpreterTest{
         methodTable.extend("fooMethod", new ClosureValue(methodDeclaration));
         ClassValue expected = new ClassValue(classExtendsDeclaration, methodTable);
         assertEquals(null, interpreter.visit(typeDeclaration, env));
-        assertEquals(expected, interpreter.symbolTable.get("____NewMainClass____"));
+        assertEquals(expected, interpreter.symbolTable.get("____NewMainClassExtends____"));
+    }
+
+    /**
+     * Test method for {@link Interpreter#FormalParameter()}.
+     */
+    @Test
+    public final void testFormalParameter(){
+        Value expectedVarValue = new IntegerValue();
+        Value actual = interpreter.visit(formalParameter, env);
+
+        assertEquals(null, actual);
+        assertEquals(expectedVarValue, env.lookup(identifier));
+    }
+
+    /**
+     * Test method for {@link Interpreter#AllocationExpression()}.
+     */
+    @Test
+    public final void testAllocationExpression(){
+        String body = "____NewMainClassNormal____ foo;" +
+                "foo = new ____NewMainClassNormal____();";
+        Goal goal = getTestGoal();
+        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(0);
+        interpreter.visit(typeDeclaration, env);
+
+        ObjectValue expected = new ObjectValue(interpreter.symbolTable.get(
+            "____NewMainClassNormal____"));
+
+        ObjectValue actual = (ObjectValue) interpreter.visit(new AllocationExpression(
+            getNewIdentifier("____NewMainClassNormal____")), env);
+
+        assertEquals(expected, actual);
+        assertEquals(new IntegerValue(), actual.env.lookup("x"));
     }
 }
 

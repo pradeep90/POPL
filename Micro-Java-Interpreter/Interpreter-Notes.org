@@ -29,6 +29,7 @@
 **** array - ArrayValue
 **** object - ObjectValue
 *** Note: In PLAI, we also used the Store to keep track of Values that weren't bound to some variable. Cos the interpreter is in Java here, we don't need to do that extra book-keeping. We use Java's Store as our Store.
+** I'm doing env.extend(identifier, type) in VarDeclaration, etc. Might lead to the same identifier instance coming up everywhere and then TreeFormatter would crash. Check it out if needed.
 * Plan of action
 ** DONE Build an Environment class
    CLOCK: [2013-02-06 Wed 09:31]--[2013-02-06 Wed 10:47] =>  1:16
@@ -145,22 +146,25 @@
   CLOCK: [2013-02-11 Mon 14:19]--[2013-02-11 Mon 14:40] =>  0:21
 * TODO Mutually recursive methods
 * Class ObjectValue
+  CLOCK: [2013-02-11 Mon 19:08]--[2013-02-11 Mon 19:31] =>  0:23
+  CLOCK: [2013-02-11 Mon 19:01]--[2013-02-11 Mon 19:03] =>  0:02
   CLOCK: [2013-02-11 Mon 15:14]--[2013-02-11 Mon 15:22] =>  0:08
 ** new FooClass()
 *** get FooClass from the symbol table
 *** Fill env with the FooClass' VarDeclarations
 *** Put ("this", self) in the environment
-*** VVIP Create vtable filled with all the closures in FooClass' method table => Pass in the current environment to be the closure's environment
-**** VVIP Design choice: I'm not using real Closures here (sending functions around as values). Instead, I'm storing a function in a central location and merely looking it up when I want to run it.
 ** foo.baz
 *** look it up in env
 ** foo.bar(params)
-*** runClosure on bar with env and params as arguments
+*** runClosure on bar with "this", env, and params as arguments
+*** VVIP Pass in the current environment to be the closure's environment
+**** VVIP Design choice: I'm not using real Closures here (sending functions around as values). Instead, I'm storing a function in a central location and merely looking it up when I want to run it.
 * DONE Class declaration
-  CLOCK: [2013-02-11 Mon 17:59]--[2013-02-11 Mon 18:27] =>  0:28
   CLOCK: [2013-02-11 Mon 16:59]--[2013-02-11 Mon 17:59] =>  1:00
-* TODO Class extends
-* TODO testAllocationExpression(){ (wait for class implementation)
+* DONE Class extends
+  CLOCK: [2013-02-11 Mon 17:59]--[2013-02-11 Mon 18:27] =>  0:28
+* DONE testAllocationExpression(){ (wait for class implementation)
+  CLOCK: [2013-02-11 Mon 18:44]--[2013-02-11 Mon 18:58] =>  0:14
 * TODO test dot expression VarRef
 * TODO testArrayLength_ArrayAllocationExpression(){
 * TODO testArrayLength_Identifier(){
@@ -168,10 +172,12 @@
 * TODO testExpressionRest(){ [STUCK HERE - Figure out how to "interpret" expression lists, etc.]
   CLOCK: [2013-02-06 Wed 13:19]--[2013-02-06 Wed 13:21] =>  0:02
 ** It is part of a message send (method call), so get the list of formal params from the method closure and bind each parameter to the corresponding argument value in the CLOSURE's environment
-* testFormalParameter(){
-* testFormalParameterRest(){
 * testExpressionList(){
-* testFormalParameterList(){
+* DONE testFormalParameter(){
+  CLOCK: [2013-02-11 Mon 18:40]--[2013-02-11 Mon 18:43] =>  0:03
+* DONE testFormalParameterRest(){
+  CLOCK: [2013-02-11 Mon 18:43]--[2013-02-11 Mon 18:44] =>  0:01
+* DONE testFormalParameterList(){
 * testGetNewMainClass(){
 * testGoal(){
 * testClassDeclaration(){

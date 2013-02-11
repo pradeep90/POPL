@@ -251,8 +251,10 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(FormalParameter n, Environment env) {
         Value _ret=null;
-        n.f0.accept(this, env);
-        n.f1.accept(this, env);
+
+        Value f0 = n.f0.accept(this, env);
+        env.extend(n.f1, f0);
+
         return _ret;
     }
 
@@ -262,7 +264,6 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(FormalParameterRest n, Environment env) {
         Value _ret=null;
-        n.f0.accept(this, env);
         n.f1.accept(this, env);
         return _ret;
     }
@@ -277,7 +278,9 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
         Value _ret=null;
 
         if (n.f0.which == 3){
-            // TODO(spradeep): Return ObjectValue of Identifier type.
+            // Sending a generic ObjectValue => Means this is like
+            // Python... Values have types... Variables don't.
+            _ret = new ObjectValue();
         }
         else{
             _ret = n.f0.accept(this, env);
@@ -679,11 +682,11 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      * f3 -> ")"
      */
     public Value visit(AllocationExpression n, Environment env) {
+        // TODO(spradeep): Testing
+
         Value _ret=null;
-        n.f0.accept(this, env);
-        n.f1.accept(this, env);
-        n.f2.accept(this, env);
-        n.f3.accept(this, env);
+        ClassValue classValue = symbolTable.get(MicroJavaHelper.getIdentifierName(n.f1));
+        _ret = new ObjectValue(classValue);
         return _ret;
     }
 
