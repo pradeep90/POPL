@@ -1,4 +1,5 @@
 tests/BooleanValueTest.java
+tests/ClosureValueTest.java
 tests/MicroJavaHelperTest.java
 tests/EnvironmentTest.java
 tests/InterpreterTest.java

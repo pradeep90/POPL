@@ -9,6 +9,8 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
 
     HashMap<String, ClassValue> symbolTable = new HashMap<String, ClassValue>();
 
+    Identifier thisIdentifier;
+
     //
     // Auto class visitors--probably don't need to be overridden.
     //
@@ -569,6 +571,9 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      * f1 -> ( ExpressionRest() )*
      */
     public Value visit(ExpressionList n, Environment env) {
+        // TODO(spradeep): Extract values of all the Expressions into
+        // a list. Then, bind them to the FormalParameters.
+
         Value _ret=null;
         n.f0.accept(this, env);
         n.f1.accept(this, env);
@@ -722,11 +727,7 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
     public Value visit(VarRef n, Environment env) {
         Value _ret=null;
 
-        if (n.f0.which == 0){
-            _ret = n.f0.accept(this, env);
-        } else {
-            _ret = env.lookup((Identifier) n.f0.choice);
-        }
+        _ret = n.f0.accept(this, env);
         return _ret;
     }
 
@@ -737,10 +738,8 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(DotExpression n, Environment env) {
         Value _ret=null;
-        n.f0.accept(this, env);
-        n.f1.accept(this, env);
-        n.f2.accept(this, env);
-        // value = n.f0.accept(this, env);
+        ObjectValue object = (ObjectValue) n.f0.accept(this, env);
+        _ret = object.env.lookup(MicroJavaHelper.getIdentifierName(n.f2));
         return _ret;
     }
 }

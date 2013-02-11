@@ -83,12 +83,14 @@ public class Environment {
     public boolean equals(Object o) {
         if (o instanceof Environment) {
             Environment other = (Environment) o;
-            for (int i = 0; i < this.bindingList.size(); i++)
-                if (!this.bindingList.get(i).equals(other.bindingList.get(i)))
+            for (int i = 0; i < this.bindingList.size(); i++){
+                Binding currBinding = this.bindingList.get(i);
+                Binding otherBinding = other.bindingList.get(i);
+                if (!currBinding.equals(otherBinding))
                     return false;
+            }
             return true;
         }
         return false;
     }
-
 }

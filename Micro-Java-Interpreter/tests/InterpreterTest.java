@@ -278,9 +278,13 @@ public class InterpreterTest{
                 "" +
                 "class ____NewMainClassNormal____{" +
                 "   int x;" +
+                "   int ____1234barMethod4321____;" +
                 "   public void fooMethod(){" +
                 body +
                 "" +
+                "   }" +
+                "   public void plusMethod(){" +
+                "      ____1234barMethod4321____ = 70 + 80;" +
                 "   }" +
                 "}" +
                 "class ____NewMainClassExtends____ extends ____NewMainClassNormal____{" +
@@ -489,11 +493,9 @@ public class InterpreterTest{
      * Test method for {@link Interpreter#VarRef()}.
      */
     @Test
-    public final void testVarRef(){
+    public final void testVarRef_Identifier(){
         env.extend(identifier, integerValue1);
         assertEquals(integerValue1, interpreter.visit(varRef, env));
-
-        // TODO(spradeep): Test for dot expression
     }
 
     /**
@@ -709,9 +711,12 @@ public class InterpreterTest{
         System.out.println("MicroJavaHelper.getFormattedString(classDeclaration): " + MicroJavaHelper.getFormattedString(classDeclaration));
         MethodDeclaration methodDeclaration = (MethodDeclaration)
                 classDeclaration.f4.nodes.get(0);
+        MethodDeclaration methodDeclaration2 = (MethodDeclaration)
+                classDeclaration.f4.nodes.get(1);
 
         Environment methodTable = new Environment();
         methodTable.extend("fooMethod", new ClosureValue(methodDeclaration));
+        methodTable.extend("plusMethod", new ClosureValue(methodDeclaration2));
         ClassValue expected = new ClassValue(classDeclaration, methodTable);
         assertEquals(expected, interpreter.visit(classDeclaration, env));
     }
@@ -786,6 +791,32 @@ public class InterpreterTest{
 
         assertEquals(expected, actual);
         assertEquals(new IntegerValue(), actual.env.lookup("x"));
+    }
+
+    /**
+     * Test method for {@link Interpreter#VarRef()}.
+     */
+    @Test
+    public final void testVarRef_DotExpression(){
+        String body = "____NewMainClassNormal____ foo;" +
+                "foo = new ____NewMainClassNormal____();";
+
+        Goal goal = getTestGoal();
+        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(0);
+        interpreter.visit(typeDeclaration, env);
+
+        ObjectValue actual = (ObjectValue) interpreter.visit(new AllocationExpression(
+            getNewIdentifier("____NewMainClassNormal____")), env);
+
+        env.extend("foo", actual);
+
+        IntegerValue xValue = (IntegerValue) actual.env.lookup("x");
+        xValue.integerValue = 30303;
+
+        DotExpression dotExpression = new DotExpression(getNewIdentifier("foo"),
+                                                        getNewIdentifier("x"));
+        
+        assertEquals(new IntegerValue(30303), interpreter.visit(dotExpression, env));
     }
 }
 

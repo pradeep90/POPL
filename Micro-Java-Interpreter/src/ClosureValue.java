@@ -71,7 +71,22 @@ public class ClosureValue extends Value {
      * @param thisIdentifier instance on which to run the closure
      * @param optionalParamList params for the method
      */
-    public void runClosure(Identifier thisIdentifier, Environment env, NodeOptional optionalParamList){
+    public void runClosure(Interpreter interpreter,
+                           Identifier thisIdentifier,
+                           Environment givenEnv,
+                           NodeOptional argList){
         
+        // TODO(spradeep): Test runClosure
+
+        Environment env = new Environment(givenEnv);
+
+        interpreter.thisIdentifier = thisIdentifier;
+
+        interpreter.visit(method.f4, env);
+
+        // TODO(spradeep): Interpret argList here
+
+        interpreter.visit(method.f7, env);
+        interpreter.visit(method.f8, env);
     }
 }

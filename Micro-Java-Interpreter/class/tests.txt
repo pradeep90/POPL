@@ -1,4 +1,5 @@
 BooleanValueTest
+ClosureValueTest
 MicroJavaHelperTest
 EnvironmentTest
 InterpreterTest
