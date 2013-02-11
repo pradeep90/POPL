@@ -693,4 +693,39 @@ public class InterpreterTest{
         ClosureValue expected = new ClosureValue(methodDeclaration);
         assertEquals(expected, interpreter.visit(methodDeclaration, env));
     }
+
+    /**
+     * Test method for {@link Interpreter#ClassDeclaration()}.
+     */
+    @Test
+    public final void testClassDeclaration(){
+        String body = "";
+        String codeString =
+                "class MainOnly {" +
+                "   public static void main(String [] a){" +
+                "      new ____NewMainClass____().fooMethod();" +
+                "   }" +
+                "}" +
+                "" +
+                "class ____NewMainClass____{" +
+                "" +
+                "   public void fooMethod(){" +
+                "" +
+                body +
+                "   }" +
+                "}";
+
+        Goal goal = (Goal) MicroJavaHelper.getMicroJavaNodeFromString(codeString);
+        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(0);
+        ClassDeclaration classDeclaration = (ClassDeclaration) typeDeclaration.f0.choice;
+        System.out.println("MicroJavaHelper.getFormattedString(classDeclaration): " + MicroJavaHelper.getFormattedString(classDeclaration));
+        MethodDeclaration methodDeclaration = (MethodDeclaration)
+                classDeclaration.f4.nodes.get(0);
+
+        Environment methodTable = new Environment();
+        methodTable.extend("fooMethod", new ClosureValue(methodDeclaration));
+        ClassValue expected = new ClassValue(classDeclaration, methodTable);
+        assertEquals(expected, interpreter.visit(classDeclaration, env));
+    }
 }
+

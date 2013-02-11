@@ -7,6 +7,8 @@ import syntaxtree.*;
  */
 public class ClassValue extends Value {
     TypeDeclaration typeDeclaration;
+    ClassDeclaration classDeclaration;
+    ClassExtendsDeclaration classExtendsDeclaration;
     Environment methodTable;
     
     public ClassValue(TypeDeclaration typeDeclaration, Environment methodTable) {
@@ -14,16 +16,23 @@ public class ClassValue extends Value {
         this.methodTable = methodTable;
     }
 
+    public ClassValue(ClassDeclaration classDeclaration, Environment methodTable) {
+        this.classDeclaration = classDeclaration;
+        this.methodTable = methodTable;
+    }
+
+    public ClassValue(ClassExtendsDeclaration classExtendsDeclaration,
+                      Environment methodTable) {
+        this.classExtendsDeclaration = classExtendsDeclaration;
+        this.methodTable = methodTable;
+    }
+
     public boolean equals(Object o) {
         if (o instanceof ClassValue) {
             ClassValue other = (ClassValue) o;
-            if (typeDeclaration.f0.which == 0){
-                return true;
-
-                // TODO(spradeep): 
-                // return MicroJavaHelper.getIdentifierName(
-                //     ((ClassDeclaration) typeDeclaration.f0.choice).f1);
-            }
+            String thisClass = MicroJavaHelper.getFormattedString(this.classDeclaration);
+            String otherClass = MicroJavaHelper.getFormattedString(other.classDeclaration);
+            return thisClass.equals(otherClass);
         }
         return false;
     }

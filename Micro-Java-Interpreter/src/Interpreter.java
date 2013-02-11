@@ -165,8 +165,7 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
             methodTable.extend(MicroJavaHelper.getIdentifierName(currMethodDeclaration.f2),
                                currMethodDeclaration.accept(this, env));
         }
-
-        // ClassValue classValue = new ClassValue(n, methodTable);
+        _ret = new ClassValue(n, methodTable);
         return _ret;
     }
 

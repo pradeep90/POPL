@@ -171,8 +171,8 @@
 *** look it up in env
 ** foo.bar(params)
 *** runClosure on bar with env and params as arguments
-* TODO Class declaration
-  CLOCK: [2013-02-11 Mon 16:59]
+* DONE Class declaration
+  CLOCK: [2013-02-11 Mon 16:59]--[2013-02-11 Mon 17:59] =>  1:00
 * TODO testAllocationExpression(){ (wait for class implementation)
 * TODO test dot expression VarRef
 * TODO testArrayLength_ArrayAllocationExpression(){
