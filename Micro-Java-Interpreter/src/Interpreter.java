@@ -130,6 +130,15 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
         n.f23.accept(this, env);
         n.f24.accept(this, env);
         n.f25.accept(this, env);
+
+        // TODO(spradeep): Just make a MessageSendStatement out of
+        // this and run it.
+
+        // tmp = new Foo();
+        // tmp.bar(args);
+
+        // MessageSendStatement messageSendStatement = new MessageSendStatement(n.f19, n.f21);
+
         return _ret;
     }
 
@@ -139,9 +148,8 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(TypeDeclaration n, Environment env) {
         Value _ret=null;
-        n.f0.accept(this, env);
-        // TODO(spradeep): 
-        // symbolTable.put(MicroJavaHelper.getIdentifierName(n.f1), classValue);
+        ClassValue classValue = (ClassValue) n.f0.accept(this, env);
+        symbolTable.put(classValue.name, classValue);
         return _ret;
     }
 
@@ -155,8 +163,6 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(ClassDeclaration n, Environment env) {
         Value _ret=null;
-        n.f1.accept(this, env);
-        n.f3.accept(this, env);
 
         Environment methodTable = new Environment();
 
@@ -181,14 +187,15 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(ClassExtendsDeclaration n, Environment env) {
         Value _ret=null;
-        n.f0.accept(this, env);
-        n.f1.accept(this, env);
-        n.f2.accept(this, env);
-        n.f3.accept(this, env);
-        n.f4.accept(this, env);
-        n.f5.accept(this, env);
-        n.f6.accept(this, env);
-        n.f7.accept(this, env);
+
+        Environment methodTable = new Environment();
+
+        for (Node node : n.f6.nodes){
+            MethodDeclaration currMethodDeclaration = (MethodDeclaration) node;
+            methodTable.extend(MicroJavaHelper.getIdentifierName(currMethodDeclaration.f2),
+                               currMethodDeclaration.accept(this, env));
+        }
+        _ret = new ClassValue(n, methodTable);
         return _ret;
     }
 

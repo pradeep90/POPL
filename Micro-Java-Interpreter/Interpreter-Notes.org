@@ -68,7 +68,7 @@
 ***** their methods (as Closures)
 *** Go to the Main Class and execute its main method.
 **** i.e., call applyClosure on its main method
-* TODO Interpret trivial stuff using the environment
+* DONE Interpret trivial stuff using the environment
   CLOCK: [2013-02-06 Wed 11:16]--[2013-02-06 Wed 12:21] =>  1:05
 ** DONE identifier
    CLOCK: [2013-02-10 Sun 20:40]--[2013-02-10 Sun 20:43] =>  0:03
@@ -132,28 +132,13 @@
 ** DONE testBlock(){
    CLOCK: [2013-02-11 Mon 12:16]--[2013-02-11 Mon 12:20] =>  0:04
 ** DONE testStatement(){
-** TODO testExpressionRest(){ [STUCK HERE - Figure out how to "interpret" expression lists, etc.]
-   CLOCK: [2013-02-06 Wed 13:19]--[2013-02-06 Wed 13:21] =>  0:02
-*** It is part of a message send (method call), so get the list of formal params from the method closure and bind each parameter to the corresponding argument value in the CLOSURE's environment
-** testFormalParameter(){
-** testFormalParameterRest(){
-** testExpressionList(){
-** testFormalParameterList(){
-** testGetNewMainClass(){
-** testGoal(){
-** testClassDeclaration(){
-** testClassExtendsDeclaration(){
-** testTypeDeclaration(){
-** testMainClass(){
-** testMessageSend(){
-** testMainOnly(){
 * DONE Closure
   CLOCK: [2013-02-11 Mon 13:53]--[2013-02-11 Mon 14:19] =>  0:26
   CLOCK: [2013-02-11 Mon 12:29]--[2013-02-11 Mon 12:52] =>  0:23
 ** Environment
 ** this
 ** MethodDeclaration
-* Methods
+* DONE Methods
 ** DONE testMethodDeclaration(){
   CLOCK: [2013-02-11 Mon 15:03]--[2013-02-11 Mon 15:14] =>  0:11
   CLOCK: [2013-02-11 Mon 14:52]--[2013-02-11 Mon 14:58] =>  0:06
@@ -172,9 +157,26 @@
 ** foo.bar(params)
 *** runClosure on bar with env and params as arguments
 * DONE Class declaration
+  CLOCK: [2013-02-11 Mon 17:59]--[2013-02-11 Mon 18:27] =>  0:28
   CLOCK: [2013-02-11 Mon 16:59]--[2013-02-11 Mon 17:59] =>  1:00
+* TODO Class extends
 * TODO testAllocationExpression(){ (wait for class implementation)
 * TODO test dot expression VarRef
 * TODO testArrayLength_ArrayAllocationExpression(){
 * TODO testArrayLength_Identifier(){
 * Inheritance
+* TODO testExpressionRest(){ [STUCK HERE - Figure out how to "interpret" expression lists, etc.]
+  CLOCK: [2013-02-06 Wed 13:19]--[2013-02-06 Wed 13:21] =>  0:02
+** It is part of a message send (method call), so get the list of formal params from the method closure and bind each parameter to the corresponding argument value in the CLOSURE's environment
+* testFormalParameter(){
+* testFormalParameterRest(){
+* testExpressionList(){
+* testFormalParameterList(){
+* testGetNewMainClass(){
+* testGoal(){
+* testClassDeclaration(){
+* testClassExtendsDeclaration(){
+* testTypeDeclaration(){
+* testMainClass(){
+* testMessageSend(){
+* testMainOnly(){

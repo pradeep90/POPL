@@ -727,5 +727,76 @@ public class InterpreterTest{
         ClassValue expected = new ClassValue(classDeclaration, methodTable);
         assertEquals(expected, interpreter.visit(classDeclaration, env));
     }
+
+    /**
+     * Test method for {@link Interpreter#ClassExtendsDeclaration()}.
+     */
+    @Test
+    public final void testClassExtendsDeclaration(){
+        String body = "";
+        String codeString =
+                "class MainOnly {" +
+                "   public static void main(String [] a){" +
+                "      new ____NewMainClass____().fooMethod();" +
+                "   }" +
+                "}" +
+                "" +
+                "class ____NewMainClass____ extends MainOnly{" +
+                "" +
+                "   public void fooMethod(){" +
+                "" +
+                body +
+                "   }" +
+                "}";
+
+        Goal goal = (Goal) MicroJavaHelper.getMicroJavaNodeFromString(codeString);
+        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(0);
+        ClassExtendsDeclaration classExtendsDeclaration =
+                (ClassExtendsDeclaration) typeDeclaration.f0.choice;
+        System.out.println("MicroJavaHelper.getFormattedString(classExtendsDeclaration): " + MicroJavaHelper.getFormattedString(classExtendsDeclaration));
+
+        MethodDeclaration methodDeclaration = (MethodDeclaration)
+                classExtendsDeclaration.f6.nodes.get(0);
+
+        Environment methodTable = new Environment();
+        methodTable.extend("fooMethod", new ClosureValue(methodDeclaration));
+        ClassValue expected = new ClassValue(classExtendsDeclaration, methodTable);
+        assertEquals(expected, interpreter.visit(classExtendsDeclaration, env));
+    }
+
+    /**
+     * Test method for {@link Interpreter#TypeDeclaration()}.
+     */
+    @Test
+    public final void testTypeDeclaration(){
+        String body = "";
+        String codeString =
+                "class MainOnly {" +
+                "   public static void main(String [] a){" +
+                "      new ____NewMainClass____().fooMethod();" +
+                "   }" +
+                "}" +
+                "" +
+                "class ____NewMainClass____ extends MainOnly{" +
+                "" +
+                "   public void fooMethod(){" +
+                "" +
+                body +
+                "   }" +
+                "}";
+
+        Goal goal = (Goal) MicroJavaHelper.getMicroJavaNodeFromString(codeString);
+        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(0);
+        ClassExtendsDeclaration classExtendsDeclaration =
+                (ClassExtendsDeclaration) typeDeclaration.f0.choice;
+        MethodDeclaration methodDeclaration = (MethodDeclaration)
+                classExtendsDeclaration.f6.nodes.get(0);
+
+        Environment methodTable = new Environment();
+        methodTable.extend("fooMethod", new ClosureValue(methodDeclaration));
+        ClassValue expected = new ClassValue(classExtendsDeclaration, methodTable);
+        assertEquals(null, interpreter.visit(typeDeclaration, env));
+        assertEquals(expected, interpreter.symbolTable.get("____NewMainClass____"));
+    }
 }
 
