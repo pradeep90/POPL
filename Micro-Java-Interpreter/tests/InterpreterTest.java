@@ -3,6 +3,8 @@ import syntaxtree.*;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -296,6 +298,36 @@ public class InterpreterTest{
                 "   public void fooMethod(){" +
                 "" +
                 "   }" +
+                "}" +
+                "" +
+                "class BazClass{" +
+                "   int x;" +
+                "   int ____1234bazMethod14321____;" +
+                "   int ____1234bazMethod24321____;" +
+                "   int ____1234bazMethod34321____;" +
+                "   int ____1234fact4321____;" +
+                "   public void bazMethod1(){" +
+                "" +
+                "   }" +
+                "   public void bazMethod2(){" +
+                "      ____1234bazMethod24321____ = 70 + 80;" +
+                "   }" +
+                "   public void bazMethod3(int arg1, int arg2){" +
+                "      BazClass test1;" +
+                "      test1 = this;" +
+                "      test1.x = 9991;" +
+                "      ____1234bazMethod34321____ = arg1 * arg2;" +
+                "   }" +
+                "   public void fact(int n, int acc){" +
+                "      BazClass test1;" +
+                "      if (n < 1)" +
+                "         ____1234fact4321____ = acc;" +
+                "      else {" +
+                "         test1 = this;" +
+                "         test1.fact(n - 1, acc * n);" +
+                "         ____1234fact4321____ = ____1234fact4321____;" +
+                "      }" +
+                "   }" +
                 "}";
 
         return (Goal) MicroJavaHelper.getMicroJavaNodeFromString(codeString);
@@ -308,6 +340,29 @@ public class InterpreterTest{
 
     public Identifier getNewIdentifier(String name){
         return new Identifier(new NodeToken(name));
+    }
+
+    /**
+     * Test method for {@link Interpreter#expressionListToValues()}.
+     */
+    @Test
+    public final void testExpressionListToValues(){
+        List<Value> expected = new LinkedList<Value>();
+        expected.add(new IntegerValue(89));
+        expected.add(new IntegerValue(75));
+        
+        assertEquals(expected, interpreter.expressionListToValues(expressionList, env));
+    }
+
+    /**
+     * Test method for {@link Interpreter#formalParameterListToValues()}.
+     */
+    @Test
+    public final void testFormalParameterListToValues(){
+        List<Identifier> expected = new LinkedList<Identifier>();
+        expected.add(identifier);
+
+        assertEquals(expected, Interpreter.formalParameterListToValues(formalParameterList));
     }
 
     /**
@@ -336,18 +391,6 @@ public class InterpreterTest{
         env.extend(identifier, integerValue1);
 
         assertEquals(integerValue1, interpreter.visit(identifier, env));
-    }
-
-    /**
-     * Test method for {@link Interpreter#ThisExpression()}.
-     */
-    @Test
-    public final void testThisExpression(){
-        // TODO(spradeep): This integerValue is just for testing
-        // purposes. Later test with actual object.
-        env.extend("this", integerValue1);
-
-        assertEquals(integerValue1, interpreter.visit(thisExpression, env));
     }
 
     /**
@@ -830,7 +873,7 @@ public class InterpreterTest{
      * Test method for {@link ClosureValue#runClosure()}.
      */
     @Test
-    public final void testRunClosure(){
+    public final void testRunClosure_NoArgs(){
         Goal goal = getTestGoal();
         TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(0);
 
@@ -848,11 +891,155 @@ public class InterpreterTest{
 
         env.extend("foo", actual);
 
-        interpreter.thisIdentifier = getNewIdentifier("this");
+        // interpreter.thisValue = getNewIdentifier("this");
 
-        plusClosure.runClosure(interpreter, interpreter.thisIdentifier, actual.env, new NodeOptional());
+        plusClosure.runClosure(interpreter, interpreter.thisValue, actual.env, new LinkedList<Value>());
 
         assertEquals(new IntegerValue(150), actual.env.lookup("____1234barMethod4321____"));
+    }
+
+    /**
+     * Test method for {@link ClosureValue#runClosure()}.
+     */
+    @Test
+    public final void testRunClosure_Args(){
+        Goal goal = getTestGoal();
+        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(0);
+
+        // Build the symbol table
+        interpreter.visit(typeDeclaration, env);
+
+        ClassDeclaration classDeclaration = (ClassDeclaration) typeDeclaration.f0.choice;
+        MethodDeclaration methodDeclaration3 = (MethodDeclaration)
+                classDeclaration.f4.nodes.get(2);
+
+        ClosureValue multClosure = new ClosureValue(methodDeclaration3);
+
+        ObjectValue actual = (ObjectValue) interpreter.visit(new AllocationExpression(
+            getNewIdentifier("____NewMainClassNormal____")), env);
+
+        env.extend("foo", actual);
+
+        multClosure.runClosure(interpreter, actual, actual.env,
+                               interpreter.expressionListToValues(expressionList, env));
+
+        assertEquals(new IntegerValue(89 * 75), actual.env.lookup("____1234multMethod4321____"));
+    }
+
+    /**
+     * Test method for {@link Interpreter#MessageSendStatement()}.
+     */
+    @Test
+    public final void testMessageSendStatement(){
+        Goal goal = getTestGoal();
+        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(0);
+
+        // Build the symbol table
+        interpreter.visit(typeDeclaration, env);
+
+        ClassDeclaration classDeclaration = (ClassDeclaration) typeDeclaration.f0.choice;
+        MethodDeclaration methodDeclaration3 = (MethodDeclaration)
+                classDeclaration.f4.nodes.get(2);
+
+        ClosureValue multClosure = new ClosureValue(methodDeclaration3);
+
+        ObjectValue actual = (ObjectValue) interpreter.visit(new AllocationExpression(
+            getNewIdentifier("____NewMainClassNormal____")), env);
+
+        env.extend("foo", actual);
+
+        MessageSendStatement messageSendStatement = new MessageSendStatement(
+            getNewIdentifier("foo"),
+            getNewIdentifier("multMethod"),
+            new NodeOptional(expressionList));
+
+        IntegerValue xValue = (IntegerValue) actual.env.lookup("x");
+        xValue.integerValue = 30303;
+
+        assertEquals(null, interpreter.visit(messageSendStatement, env));
+        assertEquals(new IntegerValue(89 * 75),
+                     actual.env.lookup("____1234multMethod4321____"));
+    }
+
+    /**
+     * Test method for {@link Interpreter#ThisExpression()}.
+     */
+    @Test
+    public final void testThisExpression(){
+        Goal goal = getTestGoal();
+        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(2);
+
+        // Build the symbol table
+        interpreter.visit(typeDeclaration, env);
+
+        ClassDeclaration classDeclaration = (ClassDeclaration) typeDeclaration.f0.choice;
+        MethodDeclaration methodDeclaration3 = (MethodDeclaration)
+                classDeclaration.f4.nodes.get(2);
+
+        ClosureValue bazMethodClosure3 = new ClosureValue(methodDeclaration3);
+
+        ObjectValue actual = (ObjectValue) interpreter.visit(new AllocationExpression(
+            getNewIdentifier("BazClass")), env);
+
+        env.extend("foo", actual);
+
+        MessageSendStatement messageSendStatement = new MessageSendStatement(
+            getNewIdentifier("foo"),
+            getNewIdentifier("bazMethod3"),
+            new NodeOptional(expressionList));
+
+        assertEquals(null, interpreter.visit(messageSendStatement, env));
+        assertEquals(new IntegerValue(89 * 75),
+                     actual.env.lookup("____1234bazMethod34321____"));
+        assertEquals(new IntegerValue(9991), actual.env.lookup("x"));
+    }
+
+    @Test
+    public final void testRecursion(){
+        Goal goal = getTestGoal();
+        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(2);
+
+        // Build the symbol table
+        interpreter.visit(typeDeclaration, env);
+
+        ClassDeclaration classDeclaration = (ClassDeclaration) typeDeclaration.f0.choice;
+        MethodDeclaration factMethod = (MethodDeclaration)
+                classDeclaration.f4.nodes.get(3);
+
+        ClosureValue factClosure = new ClosureValue(factMethod);
+
+        ObjectValue actual = (ObjectValue) interpreter.visit(new AllocationExpression(
+            getNewIdentifier("BazClass")), env);
+
+        env.extend("foo", actual);
+
+        IntegerLiteral integerLiteral1 = new IntegerLiteral(
+            new NodeToken("7"));
+        PrimaryExpression primaryExpression1 = new PrimaryExpression(
+            new NodeChoice(integerLiteral1, 0));
+
+        IntegerLiteral integerLiteral2 = new IntegerLiteral(
+            new NodeToken("1"));
+        PrimaryExpression primaryExpression2 = new PrimaryExpression(
+            new NodeChoice(integerLiteral2, 0));
+
+        Expression expression1 = new Expression(
+            new NodeChoice(primaryExpression1, 6));
+        Expression expression2 = new Expression(
+            new NodeChoice(primaryExpression2, 6));
+
+        ExpressionList expressionList = new ExpressionList(
+            expression1,
+            new NodeListOptional(new ExpressionRest(expression2)));
+
+        MessageSendStatement messageSendStatement = new MessageSendStatement(
+            getNewIdentifier("foo"),
+            getNewIdentifier("fact"),
+            new NodeOptional(expressionList));
+
+        assertEquals(null, interpreter.visit(messageSendStatement, env));
+        assertEquals(new IntegerValue(5040),
+                     actual.env.lookup("____1234fact4321____"));
     }
 }
 

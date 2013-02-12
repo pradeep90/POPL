@@ -9,7 +9,31 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
 
     HashMap<String, ClassValue> symbolTable = new HashMap<String, ClassValue>();
 
-    Identifier thisIdentifier;
+    ObjectValue thisValue;
+
+    public List<Value> expressionListToValues(ExpressionList n, Environment env){
+        List<Value> argList = new LinkedList<Value>();
+
+        argList.add(n.f0.accept(this, env));
+        
+        for (Node node : n.f1.nodes){
+            ExpressionRest curr = (ExpressionRest) node;
+            argList.add(curr.f1.accept(this, env));
+        }
+        return argList;
+    }
+
+    public static List<Identifier> formalParameterListToValues(FormalParameterList n){
+        List<Identifier> argList = new LinkedList<Identifier>();
+
+        argList.add(n.f0.f1);
+
+        for (Node node : n.f1.nodes){
+            FormalParameterRest curr = (FormalParameterRest) node;
+            argList.add(curr.f1.f1);
+        }
+        return argList;
+    }
 
     //
     // Auto class visitors--probably don't need to be overridden.
@@ -446,13 +470,16 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(MessageSendStatement n, Environment env) {
         Value _ret=null;
-        n.f0.accept(this, env);
-        n.f1.accept(this, env);
-        n.f2.accept(this, env);
-        n.f3.accept(this, env);
-        n.f4.accept(this, env);
-        n.f5.accept(this, env);
-        n.f6.accept(this, env);
+
+        ObjectValue object = (ObjectValue) n.f0.accept(this, env);
+        ClosureValue methodClosure = (ClosureValue) object.classValue.methodTable.lookup(n.f2);
+
+        List<Value> args = new LinkedList<Value>();
+        if (n.f4.present()){
+            args = expressionListToValues((ExpressionList) n.f4.node, env);
+        }
+
+        methodClosure.runClosure(this, object, object.env, args);
         return _ret;
     }
 
@@ -571,12 +598,8 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      * f1 -> ( ExpressionRest() )*
      */
     public Value visit(ExpressionList n, Environment env) {
-        // TODO(spradeep): Extract values of all the Expressions into
-        // a list. Then, bind them to the FormalParameters.
-
         Value _ret=null;
-        n.f0.accept(this, env);
-        n.f1.accept(this, env);
+
         return _ret;
     }
 
@@ -653,8 +676,7 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(ThisExpression n, Environment env) {
         Value _ret=null;
-        n.f0.accept(this, env);
-        _ret = env.lookup(n);
+        _ret = thisValue;
         return _ret;
     }
 

@@ -57,8 +57,6 @@
 ** DONE Make sure you are passing the environment in "store-passing" style => No need.
     CLOCK: [2013-02-11 Mon 00:10]--[2013-02-11 Mon 00:13] =>  0:03
 *** There is only one "global" environment at any time. Cos of Java being mutation-friendly, it is already being passed in store-passing style.
-** TODO Learn the basics of using a Debugger
-** TODO Handle array.length separately, if needed
 ** DONE Overall execution plan					    :ARCHIVE:
    CLOCK: [2013-02-11 Mon 15:32]--[2013-02-11 Mon 16:00] =>  0:28
    CLOCK: [2013-02-11 Mon 15:23]--[2013-02-11 Mon 15:32] =>  0:09
@@ -69,12 +67,12 @@
 ***** their methods (as Closures)
 *** Go to the Main Class and execute its main method.
 **** i.e., call applyClosure on its main method
-** TODO Closure
+** DONE Closure
 *** DONE without arguments
     CLOCK: [2013-02-12 Tue 19:54]--[2013-02-12 Tue 20:14] =>  0:20
-*** expression list
-** TODO Main class
-** TODO Add a global variable for "this"
+*** DONE expression list
+    CLOCK: [2013-02-12 Tue 20:42]--[2013-02-12 Tue 21:03] =>  0:21
+    CLOCK: [2013-02-12 Tue 20:14]--[2013-02-12 Tue 20:30] =>  0:16
 * DONE Interpret trivial stuff using the environment
   CLOCK: [2013-02-06 Wed 11:16]--[2013-02-06 Wed 12:21] =>  1:05
 ** DONE identifier
@@ -159,8 +157,7 @@
    CLOCK: [2013-02-11 Mon 15:03]--[2013-02-11 Mon 15:14] =>  0:11
    CLOCK: [2013-02-11 Mon 14:52]--[2013-02-11 Mon 14:58] =>  0:06
    CLOCK: [2013-02-11 Mon 14:19]--[2013-02-11 Mon 14:40] =>  0:21
-** TODO Mutually recursive methods
-** Class ObjectValue
+** DONE Class ObjectValue
    CLOCK: [2013-02-11 Mon 20:28]--[2013-02-11 Mon 20:55] =>  0:27
    CLOCK: [2013-02-11 Mon 19:08]--[2013-02-11 Mon 19:31] =>  0:23
    CLOCK: [2013-02-11 Mon 19:01]--[2013-02-11 Mon 19:03] =>  0:02
@@ -172,27 +169,34 @@
 ***** Not doing this cos testing equality (not identicality) for environment becomes impossible (as a consequence of the self-reference)
 *** DONE foo.baz
 **** look it up in env
-*** foo.bar(params)
+*** DONE foo.bar(params)
 **** runClosure on bar with "this", env, and params as arguments
 **** VVIP Pass in the current environment to be the closure's environment
 ***** VVIP Design choice: I'm not using real Closures here (sending functions around as values). Instead, I'm storing a function in a central location and merely looking it up when I want to run it.
-** TODO testArrayLength_ArrayAllocationExpression(){
-** TODO testArrayLength_Identifier(){
-** Inheritance
-** TODO testExpressionRest(){ [STUCK HERE - Figure out how to "interpret" expression lists, etc.]
+** DONE testExpressionRest(){ [STUCK HERE - Figure out how to "interpret" expression lists, etc.]
    CLOCK: [2013-02-06 Wed 13:19]--[2013-02-06 Wed 13:21] =>  0:02
 *** It is part of a message send (method call), so get the list of formal params from the method closure and bind each parameter to the corresponding argument value in the CLOSURE's environment
-** testExpressionList(){
+** DONE testExpressionList(){
 ** DONE testFormalParameter(){
    CLOCK: [2013-02-11 Mon 18:40]--[2013-02-11 Mon 18:43] =>  0:03
 ** DONE testFormalParameterRest(){
    CLOCK: [2013-02-11 Mon 18:43]--[2013-02-11 Mon 18:44] =>  0:01
 ** DONE testFormalParameterList(){
+** DONE testMessageSend(){
+   CLOCK: [2013-02-12 Tue 21:04]--[2013-02-12 Tue 21:15] =>  0:11
+** DONE Add a global variable for "this"
+   CLOCK: [2013-02-12 Tue 21:15]--[2013-02-12 Tue 21:38] =>  0:23
+** DONE Recursive method
+   CLOCK: [2013-02-12 Tue 21:38]--[2013-02-12 Tue 22:15] =>  0:37
 ** testGetNewMainClass(){
 ** testGoal(){
 ** testClassDeclaration(){
 ** testClassExtendsDeclaration(){
 ** testTypeDeclaration(){
 ** testMainClass(){
-** testMessageSend(){
 ** testMainOnly(){
+** TODO Inheritance
+** TODO testArrayLength_ArrayAllocationExpression(){
+** TODO testArrayLength_Identifier(){
+** TODO Handle array.length separately, if needed
+** TODO Learn the basics of using a Debugger
