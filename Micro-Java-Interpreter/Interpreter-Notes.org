@@ -59,7 +59,7 @@
 *** There is only one "global" environment at any time. Cos of Java being mutation-friendly, it is already being passed in store-passing style.
 ** TODO Learn the basics of using a Debugger
 ** TODO Handle array.length separately, if needed
-** DONE Overall execution plan
+** DONE Overall execution plan					    :ARCHIVE:
    CLOCK: [2013-02-11 Mon 15:32]--[2013-02-11 Mon 16:00] =>  0:28
    CLOCK: [2013-02-11 Mon 15:23]--[2013-02-11 Mon 15:32] =>  0:09
 *** Build a symbol table containing the class and method definitions
@@ -69,6 +69,11 @@
 ***** their methods (as Closures)
 *** Go to the Main Class and execute its main method.
 **** i.e., call applyClosure on its main method
+** TODO Closure
+*** DONE without arguments
+    CLOCK: [2013-02-12 Tue 19:54]--[2013-02-12 Tue 20:14] =>  0:20
+*** expression list
+** TODO Main class
 ** TODO Add a global variable for "this"
 * DONE Interpret trivial stuff using the environment
   CLOCK: [2013-02-06 Wed 11:16]--[2013-02-06 Wed 12:21] =>  1:05

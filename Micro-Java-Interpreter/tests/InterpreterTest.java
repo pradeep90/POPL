@@ -279,12 +279,16 @@ public class InterpreterTest{
                 "class ____NewMainClassNormal____{" +
                 "   int x;" +
                 "   int ____1234barMethod4321____;" +
+                "   int ____1234multMethod4321____;" +
                 "   public void fooMethod(){" +
                 body +
                 "" +
                 "   }" +
-                "   public void plusMethod(){" +
+                "   public void barMethod(){" +
                 "      ____1234barMethod4321____ = 70 + 80;" +
+                "   }" +
+                "   public void multMethod(int arg1, int arg2){" +
+                "      ____1234multMethod4321____ = arg1 * arg2;" +
                 "   }" +
                 "}" +
                 "class ____NewMainClassExtends____ extends ____NewMainClassNormal____{" +
@@ -713,10 +717,13 @@ public class InterpreterTest{
                 classDeclaration.f4.nodes.get(0);
         MethodDeclaration methodDeclaration2 = (MethodDeclaration)
                 classDeclaration.f4.nodes.get(1);
+        MethodDeclaration methodDeclaration3 = (MethodDeclaration)
+                classDeclaration.f4.nodes.get(2);
 
         Environment methodTable = new Environment();
         methodTable.extend("fooMethod", new ClosureValue(methodDeclaration));
-        methodTable.extend("plusMethod", new ClosureValue(methodDeclaration2));
+        methodTable.extend("barMethod", new ClosureValue(methodDeclaration2));
+        methodTable.extend("multMethod", new ClosureValue(methodDeclaration3));
         ClassValue expected = new ClassValue(classDeclaration, methodTable);
         assertEquals(expected, interpreter.visit(classDeclaration, env));
     }
@@ -817,6 +824,35 @@ public class InterpreterTest{
                                                         getNewIdentifier("x"));
         
         assertEquals(new IntegerValue(30303), interpreter.visit(dotExpression, env));
+    }
+
+    /**
+     * Test method for {@link ClosureValue#runClosure()}.
+     */
+    @Test
+    public final void testRunClosure(){
+        Goal goal = getTestGoal();
+        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(0);
+
+        // Build the symbol table
+        interpreter.visit(typeDeclaration, env);
+
+        ClassDeclaration classDeclaration = (ClassDeclaration) typeDeclaration.f0.choice;
+        MethodDeclaration methodDeclaration2 = (MethodDeclaration)
+                classDeclaration.f4.nodes.get(1);
+
+        ClosureValue plusClosure = new ClosureValue(methodDeclaration2);
+
+        ObjectValue actual = (ObjectValue) interpreter.visit(new AllocationExpression(
+            getNewIdentifier("____NewMainClassNormal____")), env);
+
+        env.extend("foo", actual);
+
+        interpreter.thisIdentifier = getNewIdentifier("this");
+
+        plusClosure.runClosure(interpreter, interpreter.thisIdentifier, actual.env, new NodeOptional());
+
+        assertEquals(new IntegerValue(150), actual.env.lookup("____1234barMethod4321____"));
     }
 }
 

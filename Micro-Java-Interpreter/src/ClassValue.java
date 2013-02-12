@@ -41,4 +41,17 @@ public class ClassValue extends Value {
     public boolean isFalse(){
         return false;
     }
+
+    public String toString(){
+        String result = "";
+        result += "name: " + name;
+        result += "\n";
+        result += "baseClassName: " + baseClassName;
+        result += "\n";
+        result += "varDeclarations: " + MicroJavaHelper.getFormattedString(varDeclarations);
+        result += "\n";
+        result += "methodTable: " + methodTable;
+        result += "\n";
+        return result;
+    }
 }

@@ -45,4 +45,13 @@ public class ObjectValue extends Value{
         // This is where you'd do type-checking, if needed.
         this.classValue = otherObjectValue.classValue;
     }
+
+    public String toString(){
+        String result = "";
+        result += "env: " + env;
+        result += "\n";
+        result += "classValue: " + classValue;
+        result += "\n";
+        return result;
+    }
 }
