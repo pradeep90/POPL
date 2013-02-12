@@ -83,4 +83,7 @@ public class MicroJavaHelper {
         return methodIdentifier.f0.tokenImage;
     }
 
+    public static Identifier getNewIdentifier(String name){
+        return new Identifier(new NodeToken(name));
+    }
 }

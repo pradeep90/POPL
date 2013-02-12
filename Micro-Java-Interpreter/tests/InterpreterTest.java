@@ -274,7 +274,7 @@ public class InterpreterTest{
         String codeString =
                 "class MainOnly {" +
                 "   public static void main(String [] a){" +
-                "      new ____NewMainClass____().fooMethod();" +
+                "      new BazClass().printFact(7, 1);" +
                 "   }" +
                 "}" +
                 "" +
@@ -328,18 +328,19 @@ public class InterpreterTest{
                 "         ____1234fact4321____ = ____1234fact4321____;" +
                 "      }" +
                 "   }" +
+                "   public void printFact(int n, int acc){" +
+                "      BazClass test1;" +
+                "      test1 = this;" +
+                "      test1.fact(n - 1, acc * n);" +
+                "      System.out.println(test1.____1234fact4321____);" +
+                "   }" +
                 "}";
-
+;  
         return (Goal) MicroJavaHelper.getMicroJavaNodeFromString(codeString);
     }
 
     public Goal getTestGoal(){
         return getTestGoal("");
-    }
-
-
-    public Identifier getNewIdentifier(String name){
-        return new Identifier(new NodeToken(name));
     }
 
     /**
@@ -554,7 +555,7 @@ public class InterpreterTest{
         env.extend("foo", arrayValue);
         arrayValue.arr[63] = 10001;
 
-        VarRef varRef = new VarRef(new NodeChoice(getNewIdentifier("foo"), 1));
+        VarRef varRef = new VarRef(new NodeChoice(MicroJavaHelper.getNewIdentifier("foo"), 1));
         PrimaryExpression arrayPrimaryExpression = new PrimaryExpression(new NodeChoice(
             varRef, 3));
 
@@ -643,7 +644,7 @@ public class InterpreterTest{
         env.extend("foo", integerValue);
 
         
-        VarRef varRef = new VarRef(new NodeChoice(getNewIdentifier("foo"), 1));
+        VarRef varRef = new VarRef(new NodeChoice(MicroJavaHelper.getNewIdentifier("foo"), 1));
         PrimaryExpression varRefPrimaryExpression = new PrimaryExpression(new NodeChoice(
             varRef, 3));
         
@@ -652,7 +653,7 @@ public class InterpreterTest{
             primaryExpression2), 1));
 
         // Creating another copy so that TreeFormatter doesn't give an error
-        VarRef sameVarRef = new VarRef(new NodeChoice(getNewIdentifier("foo"), 1));
+        VarRef sameVarRef = new VarRef(new NodeChoice(MicroJavaHelper.getNewIdentifier("foo"), 1));
         PrimaryExpression sameVarRefPrimaryExpression = new PrimaryExpression(new NodeChoice(
             sameVarRef, 3));
 
@@ -682,7 +683,7 @@ public class InterpreterTest{
         env.extend("foo", integerValue);
 
         
-        VarRef varRef = new VarRef(new NodeChoice(getNewIdentifier("foo"), 1));
+        VarRef varRef = new VarRef(new NodeChoice(MicroJavaHelper.getNewIdentifier("foo"), 1));
         PrimaryExpression varRefPrimaryExpression = new PrimaryExpression(new NodeChoice(
             varRef, 3));
         
@@ -691,7 +692,7 @@ public class InterpreterTest{
             primaryExpression2), 1));
 
         // Creating another copy so that TreeFormatter doesn't give an error
-        VarRef sameVarRef = new VarRef(new NodeChoice(getNewIdentifier("foo"), 1));
+        VarRef sameVarRef = new VarRef(new NodeChoice(MicroJavaHelper.getNewIdentifier("foo"), 1));
         PrimaryExpression sameVarRefPrimaryExpression = new PrimaryExpression(new NodeChoice(
             sameVarRef, 3));
 
@@ -837,7 +838,7 @@ public class InterpreterTest{
             "____NewMainClassNormal____"));
 
         ObjectValue actual = (ObjectValue) interpreter.visit(new AllocationExpression(
-            getNewIdentifier("____NewMainClassNormal____")), env);
+            MicroJavaHelper.getNewIdentifier("____NewMainClassNormal____")), env);
 
         assertEquals(expected, actual);
         assertEquals(new IntegerValue(), actual.env.lookup("x"));
@@ -856,15 +857,15 @@ public class InterpreterTest{
         interpreter.visit(typeDeclaration, env);
 
         ObjectValue actual = (ObjectValue) interpreter.visit(new AllocationExpression(
-            getNewIdentifier("____NewMainClassNormal____")), env);
+            MicroJavaHelper.getNewIdentifier("____NewMainClassNormal____")), env);
 
         env.extend("foo", actual);
 
         IntegerValue xValue = (IntegerValue) actual.env.lookup("x");
         xValue.integerValue = 30303;
 
-        DotExpression dotExpression = new DotExpression(getNewIdentifier("foo"),
-                                                        getNewIdentifier("x"));
+        DotExpression dotExpression = new DotExpression(MicroJavaHelper.getNewIdentifier("foo"),
+                                                        MicroJavaHelper.getNewIdentifier("x"));
         
         assertEquals(new IntegerValue(30303), interpreter.visit(dotExpression, env));
     }
@@ -887,11 +888,11 @@ public class InterpreterTest{
         ClosureValue plusClosure = new ClosureValue(methodDeclaration2);
 
         ObjectValue actual = (ObjectValue) interpreter.visit(new AllocationExpression(
-            getNewIdentifier("____NewMainClassNormal____")), env);
+            MicroJavaHelper.getNewIdentifier("____NewMainClassNormal____")), env);
 
         env.extend("foo", actual);
 
-        // interpreter.thisValue = getNewIdentifier("this");
+        // interpreter.thisValue = MicroJavaHelper.getNewIdentifier("this");
 
         plusClosure.runClosure(interpreter, interpreter.thisValue, actual.env, new LinkedList<Value>());
 
@@ -916,7 +917,7 @@ public class InterpreterTest{
         ClosureValue multClosure = new ClosureValue(methodDeclaration3);
 
         ObjectValue actual = (ObjectValue) interpreter.visit(new AllocationExpression(
-            getNewIdentifier("____NewMainClassNormal____")), env);
+            MicroJavaHelper.getNewIdentifier("____NewMainClassNormal____")), env);
 
         env.extend("foo", actual);
 
@@ -944,13 +945,13 @@ public class InterpreterTest{
         ClosureValue multClosure = new ClosureValue(methodDeclaration3);
 
         ObjectValue actual = (ObjectValue) interpreter.visit(new AllocationExpression(
-            getNewIdentifier("____NewMainClassNormal____")), env);
+            MicroJavaHelper.getNewIdentifier("____NewMainClassNormal____")), env);
 
         env.extend("foo", actual);
 
         MessageSendStatement messageSendStatement = new MessageSendStatement(
-            getNewIdentifier("foo"),
-            getNewIdentifier("multMethod"),
+            MicroJavaHelper.getNewIdentifier("foo"),
+            MicroJavaHelper.getNewIdentifier("multMethod"),
             new NodeOptional(expressionList));
 
         IntegerValue xValue = (IntegerValue) actual.env.lookup("x");
@@ -979,13 +980,13 @@ public class InterpreterTest{
         ClosureValue bazMethodClosure3 = new ClosureValue(methodDeclaration3);
 
         ObjectValue actual = (ObjectValue) interpreter.visit(new AllocationExpression(
-            getNewIdentifier("BazClass")), env);
+            MicroJavaHelper.getNewIdentifier("BazClass")), env);
 
         env.extend("foo", actual);
 
         MessageSendStatement messageSendStatement = new MessageSendStatement(
-            getNewIdentifier("foo"),
-            getNewIdentifier("bazMethod3"),
+            MicroJavaHelper.getNewIdentifier("foo"),
+            MicroJavaHelper.getNewIdentifier("bazMethod3"),
             new NodeOptional(expressionList));
 
         assertEquals(null, interpreter.visit(messageSendStatement, env));
@@ -1009,7 +1010,7 @@ public class InterpreterTest{
         ClosureValue factClosure = new ClosureValue(factMethod);
 
         ObjectValue actual = (ObjectValue) interpreter.visit(new AllocationExpression(
-            getNewIdentifier("BazClass")), env);
+            MicroJavaHelper.getNewIdentifier("BazClass")), env);
 
         env.extend("foo", actual);
 
@@ -1033,13 +1034,45 @@ public class InterpreterTest{
             new NodeListOptional(new ExpressionRest(expression2)));
 
         MessageSendStatement messageSendStatement = new MessageSendStatement(
-            getNewIdentifier("foo"),
-            getNewIdentifier("fact"),
+            MicroJavaHelper.getNewIdentifier("foo"),
+            MicroJavaHelper.getNewIdentifier("fact"),
             new NodeOptional(expressionList));
 
         assertEquals(null, interpreter.visit(messageSendStatement, env));
         assertEquals(new IntegerValue(5040),
                      actual.env.lookup("____1234fact4321____"));
+    }
+
+    /**
+     * Test method for {@link Interpreter#MainClass()}.
+     */
+    @Test
+    public final void testMainClass(){
+        Goal goal = getTestGoal();
+
+        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(2);
+
+        // Build the symbol table
+        interpreter.visit(typeDeclaration, env);
+
+        System.out.println("MainClass"); 
+        MainClass mainClass = goal.f0;
+        interpreter.visit(mainClass, env);
+        ObjectValue objectValue = (ObjectValue) env.lookup(Interpreter.INITIAL_OBJECT_NAME);
+        assertEquals(new IntegerValue(5040),
+                     objectValue.env.lookup("____1234fact4321____"));
+    }
+
+    /**
+     * Test method for {@link Interpreter#Goal()}.
+     */
+    @Test
+    public final void testGoal(){
+        Goal goal = getTestGoal();
+        interpreter.visit(goal, env);
+        ObjectValue objectValue = (ObjectValue) env.lookup(Interpreter.INITIAL_OBJECT_NAME);
+        assertEquals(new IntegerValue(5040),
+                     objectValue.env.lookup("____1234fact4321____"));
     }
 }
 

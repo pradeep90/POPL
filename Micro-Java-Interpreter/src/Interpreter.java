@@ -10,6 +10,7 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
     HashMap<String, ClassValue> symbolTable = new HashMap<String, ClassValue>();
 
     ObjectValue thisValue;
+    public final static String INITIAL_OBJECT_NAME = "INITIAL_OBJECT";
 
     public List<Value> expressionListToValues(ExpressionList n, Environment env){
         List<Value> argList = new LinkedList<Value>();
@@ -94,9 +95,12 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(Goal n, Environment env) {
         Value _ret=null;
-        n.f0.accept(this, env);
+
+        // Build the symbol table
         n.f1.accept(this, env);
-        n.f2.accept(this, env);
+
+        // Interpret the program
+        n.f0.accept(this, env);
         return _ret;
     }
 
@@ -130,40 +134,16 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(MainClass n, Environment env) {
         Value _ret=null;
-        n.f0.accept(this, env);
-        n.f1.accept(this, env);
-        n.f2.accept(this, env);
-        n.f3.accept(this, env);
-        n.f4.accept(this, env);
-        n.f5.accept(this, env);
-        n.f6.accept(this, env);
-        n.f7.accept(this, env);
-        n.f8.accept(this, env);
-        n.f9.accept(this, env);
-        n.f10.accept(this, env);
-        n.f11.accept(this, env);
-        n.f12.accept(this, env);
-        n.f13.accept(this, env);
-        n.f14.accept(this, env);
-        n.f15.accept(this, env);
-        n.f16.accept(this, env);
-        n.f17.accept(this, env);
-        n.f18.accept(this, env);
-        n.f19.accept(this, env);
-        n.f20.accept(this, env);
-        n.f21.accept(this, env);
-        n.f22.accept(this, env);
-        n.f23.accept(this, env);
-        n.f24.accept(this, env);
-        n.f25.accept(this, env);
 
-        // TODO(spradeep): Just make a MessageSendStatement out of
-        // this and run it.
+        ObjectValue objectValue = (ObjectValue) this.visit(new AllocationExpression(n.f15),
+                                                           env);
+        env.extend(INITIAL_OBJECT_NAME, objectValue);
+        MessageSendStatement messageSendStatement = new MessageSendStatement(
+            MicroJavaHelper.getNewIdentifier(INITIAL_OBJECT_NAME),
+            n.f19,
+            n.f21);
 
-        // tmp = new Foo();
-        // tmp.bar(args);
-
-        // MessageSendStatement messageSendStatement = new MessageSendStatement(n.f19, n.f21);
+        visit(messageSendStatement, env);
 
         return _ret;
     }
