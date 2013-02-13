@@ -195,8 +195,8 @@
 ** DONE testMainClass(){
    CLOCK: [2013-02-12 Tue 23:02]--[2013-02-12 Tue 23:16] =>  0:14
    CLOCK: [2013-02-12 Tue 22:39]--[2013-02-12 Tue 23:02] =>  0:23
-** TODO Inheritance
 ** DONE testArrayLength
    CLOCK: [2013-02-13 Wed 09:13]--[2013-02-13 Wed 09:44] =>  0:31
-** TODO Handle array.length separately, if needed
+** DONE Inheritance
+   CLOCK: [2013-02-13 Wed 09:44]--[2013-02-13 Wed 10:50] =>  1:06
 ** TODO Learn the basics of using a Debugger

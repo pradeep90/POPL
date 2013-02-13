@@ -169,15 +169,7 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(ClassDeclaration n, Environment env) {
         Value _ret=null;
-
-        Environment methodTable = new Environment();
-
-        for (Node node : n.f4.nodes){
-            MethodDeclaration currMethodDeclaration = (MethodDeclaration) node;
-            methodTable.extend(MicroJavaHelper.getIdentifierName(currMethodDeclaration.f2),
-                               currMethodDeclaration.accept(this, env));
-        }
-        _ret = new ClassValue(n, methodTable);
+        _ret = new ClassValue(n);
         return _ret;
     }
 
@@ -194,14 +186,9 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
     public Value visit(ClassExtendsDeclaration n, Environment env) {
         Value _ret=null;
 
-        Environment methodTable = new Environment();
-
-        for (Node node : n.f6.nodes){
-            MethodDeclaration currMethodDeclaration = (MethodDeclaration) node;
-            methodTable.extend(MicroJavaHelper.getIdentifierName(currMethodDeclaration.f2),
-                               currMethodDeclaration.accept(this, env));
-        }
-        _ret = new ClassValue(n, methodTable);
+        ClassValue baseClassValue = symbolTable.get(
+            MicroJavaHelper.getIdentifierName(n.f3));
+        _ret = new ClassValue(n, baseClassValue);
         return _ret;
     }
 

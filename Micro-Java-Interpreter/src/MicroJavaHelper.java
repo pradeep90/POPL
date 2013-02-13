@@ -86,4 +86,21 @@ public class MicroJavaHelper {
     public static Identifier getNewIdentifier(String name){
         return new Identifier(new NodeToken(name));
     }
+
+    /** 
+     * @return NodeListOptional containing nodes of list1 and list2.
+     */
+    public static NodeListOptional concatenateNodeLists(NodeListOptional list1,
+                                                        NodeListOptional list2){
+        NodeListOptional result = new NodeListOptional();
+
+        for (Node node : list1.nodes){
+            result.addNode(node);
+        }
+
+        for (Node node : list2.nodes){
+            result.addNode(node);
+        }
+        return result;
+    }
 }

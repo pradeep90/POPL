@@ -6,23 +6,47 @@ import syntaxtree.*;
  * i.e., the result of interpretation of a Class.
  */
 public class ClassValue extends Value {
-    String name;
-    String baseClassName;
-    NodeListOptional varDeclarations;
-    Environment methodTable;
+    public String name;
+    public String baseClassName;
+    public NodeListOptional varDeclarations;
+    public Environment methodTable;
     
-    public ClassValue(ClassDeclaration classDeclaration, Environment methodTable) {
+    public ClassValue(ClassDeclaration classDeclaration) {
         this.name = MicroJavaHelper.getIdentifierName(classDeclaration.f1);
         this.varDeclarations = classDeclaration.f3;
-        this.methodTable = methodTable;
+        this.methodTable = getMethodTable(classDeclaration.f4);
     }
 
     public ClassValue(ClassExtendsDeclaration classExtendsDeclaration,
-                      Environment methodTable) {
+                      ClassValue baseClassValue) {
         this.name = MicroJavaHelper.getIdentifierName(classExtendsDeclaration.f1);
-        this.baseClassName = MicroJavaHelper.getIdentifierName(classExtendsDeclaration.f3);
-        this.varDeclarations = classExtendsDeclaration.f5;
-        this.methodTable = methodTable;
+        this.baseClassName = baseClassValue.name;
+        this.varDeclarations = MicroJavaHelper.concatenateNodeLists(
+            baseClassValue.varDeclarations,
+            classExtendsDeclaration.f5);
+
+        Environment derivedClassMethodTable = getMethodTable(
+            classExtendsDeclaration.f6);
+
+        this.methodTable = new Environment(baseClassValue.methodTable);
+        for (Binding binding : derivedClassMethodTable.bindingList){
+            this.methodTable.extend(binding);
+        }
+    }
+
+    public Environment getMethodTable(NodeListOptional methodDeclarations){
+        Environment methodTable = new Environment();
+
+        Interpreter tempInterpreter = new Interpreter();
+        Environment tempEnv = new Environment();
+
+        for (Node node : methodDeclarations.nodes){
+            MethodDeclaration currMethodDeclaration = (MethodDeclaration) node;
+            methodTable.extend(
+                MicroJavaHelper.getIdentifierName(currMethodDeclaration.f2),
+                currMethodDeclaration.accept(tempInterpreter, tempEnv));
+        }
+        return methodTable;
     }
 
     public boolean equals(Object o) {
