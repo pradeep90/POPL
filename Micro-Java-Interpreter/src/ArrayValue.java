@@ -1,3 +1,4 @@
+import syntaxtree.*;
 import java.util.Arrays;
 
 public class ArrayValue extends Value {
@@ -8,6 +9,16 @@ public class ArrayValue extends Value {
     }
 
     public ArrayValue(){}
+
+    @Override
+    public Value getFieldValue(Identifier field){
+        // Assuming that field = "length"
+        if (MicroJavaHelper.getIdentifierName(field).equals("length")){
+            return new IntegerValue(arr.length);
+        }
+        else
+            return null;
+    }
 
     @Override
     public void setValue(Value value){

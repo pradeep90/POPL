@@ -1,8 +1,7 @@
 #!/bin/bash
 
-code_dir=/home/pradeep/Dropbox/Acads/POPL/Code/Micro-Java-Interpreter/gen_microjava/
-
-prog_dir=/home/pradeep/Dropbox/Acads/POPL/Code/Micro-Java-Interpreter
+code_dir=/home/spradeep/Downloads/POPL/Micro-Java-Interpreter/gen_microjava/
+prog_dir=/home/spradeep/Downloads/POPL/Micro-Java-Interpreter/
 
 cd $code_dir
 

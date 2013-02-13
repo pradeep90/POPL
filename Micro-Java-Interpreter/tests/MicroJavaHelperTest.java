@@ -34,9 +34,9 @@ public class MicroJavaHelperTest{
     public final void testGetFormattedString()
             throws FileNotFoundException, ParseException{
         InputStream in1 = new FileInputStream(
-            "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.microjava");
+            "/home/spradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.microjava");
         InputStream in2 = new FileInputStream(
-            "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.WithWhitespace.microjava");
+            "/home/spradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.WithWhitespace.microjava");
         syntaxtree.Node root1 = new MicroJavaParser(in1).Goal();
 
         syntaxtree.Node root2 = new MicroJavaParser(in2).Goal();
@@ -63,6 +63,6 @@ public class MicroJavaHelperTest{
      */
     @Test
     public final void testGetMicroJavaNodeFromFileNoException(){
-        MicroJavaHelper.getMicroJavaNodeFromFile("/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.microjava");
+        MicroJavaHelper.getMicroJavaNodeFromFile("/home/spradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.microjava");
     }
 }

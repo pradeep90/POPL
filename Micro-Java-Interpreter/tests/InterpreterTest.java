@@ -335,7 +335,7 @@ public class InterpreterTest{
                 "      System.out.println(test1.____1234fact4321____);" +
                 "   }" +
                 "}";
-;  
+        ;  
         return (Goal) MicroJavaHelper.getMicroJavaNodeFromString(codeString);
     }
 
@@ -868,6 +868,15 @@ public class InterpreterTest{
                                                         MicroJavaHelper.getNewIdentifier("x"));
         
         assertEquals(new IntegerValue(30303), interpreter.visit(dotExpression, env));
+
+        ArrayValue arrayValue = new ArrayValue(75);
+        env.extend("bar", arrayValue);
+
+        DotExpression arrayLengthDotExpression = new DotExpression(
+            MicroJavaHelper.getNewIdentifier("bar"),
+            MicroJavaHelper.getNewIdentifier("length"));
+        assertEquals(new IntegerValue(75), interpreter.visit(arrayLengthDotExpression,
+                                                             env));
     }
 
     /**
@@ -1073,6 +1082,13 @@ public class InterpreterTest{
         ObjectValue objectValue = (ObjectValue) env.lookup(Interpreter.INITIAL_OBJECT_NAME);
         assertEquals(new IntegerValue(5040),
                      objectValue.env.lookup("____1234fact4321____"));
+    }
+
+    /**
+     * Test method for {@link Interpreter#DotExpression()}.
+     */
+    @Test
+    public final void testDotExpression(){
     }
 }
 

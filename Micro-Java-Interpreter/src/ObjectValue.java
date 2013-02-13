@@ -1,4 +1,5 @@
 import syntaxtree.*;
+import java.util.*;
 
 public class ObjectValue extends Value{
     public Environment env;
@@ -14,6 +15,20 @@ public class ObjectValue extends Value{
 
     public ObjectValue(){
         this.env = new Environment();
+    }
+
+    /** 
+     * Run methodIdentifier method with args.
+     */
+    public void runMethod(Identifier methodIdentifier, List<Value> args,
+                          Interpreter interpreter){
+        ClosureValue methodClosure = (ClosureValue) classValue.methodTable.lookup(methodIdentifier);
+        methodClosure.runClosure(interpreter, this, this.env, args);
+    }
+
+    @Override
+    public Value getFieldValue(Identifier field){
+        return env.lookup(field);
     }
 
     @Override
