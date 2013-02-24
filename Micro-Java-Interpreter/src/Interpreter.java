@@ -169,15 +169,7 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(ClassDeclaration n, Environment env) {
         Value _ret=null;
-
-        Environment methodTable = new Environment();
-
-        for (Node node : n.f4.nodes){
-            MethodDeclaration currMethodDeclaration = (MethodDeclaration) node;
-            methodTable.extend(MicroJavaHelper.getIdentifierName(currMethodDeclaration.f2),
-                               currMethodDeclaration.accept(this, env));
-        }
-        _ret = new ClassValue(n, methodTable);
+        _ret = new ClassValue(n);
         return _ret;
     }
 
@@ -194,14 +186,9 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
     public Value visit(ClassExtendsDeclaration n, Environment env) {
         Value _ret=null;
 
-        Environment methodTable = new Environment();
-
-        for (Node node : n.f6.nodes){
-            MethodDeclaration currMethodDeclaration = (MethodDeclaration) node;
-            methodTable.extend(MicroJavaHelper.getIdentifierName(currMethodDeclaration.f2),
-                               currMethodDeclaration.accept(this, env));
-        }
-        _ret = new ClassValue(n, methodTable);
+        ClassValue baseClassValue = symbolTable.get(
+            MicroJavaHelper.getIdentifierName(n.f3));
+        _ret = new ClassValue(n, baseClassValue);
         return _ret;
     }
 
@@ -452,14 +439,13 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
         Value _ret=null;
 
         ObjectValue object = (ObjectValue) n.f0.accept(this, env);
-        ClosureValue methodClosure = (ClosureValue) object.classValue.methodTable.lookup(n.f2);
 
         List<Value> args = new LinkedList<Value>();
         if (n.f4.present()){
             args = expressionListToValues((ExpressionList) n.f4.node, env);
         }
 
-        methodClosure.runClosure(this, object, object.env, args);
+        object.runMethod(n.f2, args, this);
         return _ret;
     }
 
@@ -740,8 +726,8 @@ public class Interpreter extends GJDepthFirst<Value,Environment> {
      */
     public Value visit(DotExpression n, Environment env) {
         Value _ret=null;
-        ObjectValue object = (ObjectValue) n.f0.accept(this, env);
-        _ret = object.env.lookup(MicroJavaHelper.getIdentifierName(n.f2));
+        Value value = n.f0.accept(this, env);
+        _ret = value.getFieldValue(n.f2);
         return _ret;
     }
 }

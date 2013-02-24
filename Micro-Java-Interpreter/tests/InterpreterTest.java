@@ -9,6 +9,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 public class InterpreterTest{
     Environment env;
@@ -293,9 +294,19 @@ public class InterpreterTest{
                 "      ____1234multMethod4321____ = arg1 * arg2;" +
                 "   }" +
                 "}" +
-                "class ____NewMainClassExtends____ extends ____NewMainClassNormal____{" +
                 "" +
-                "   public void fooMethod(){" +
+                "class BaseClass{" +
+                "" +
+                "   int ____1234baseMethod4321____;" +
+                "   public void baseMethod(){" +
+                "" +
+                "   }" +
+                "}" +
+                "" +
+                "class ____NewMainClassExtends____ extends BaseClass{" +
+                "" +
+                "   int ____1234derivedMethod4321____;" +
+                "   public void derivedMethod(){" +
                 "" +
                 "   }" +
                 "}" +
@@ -335,7 +346,7 @@ public class InterpreterTest{
                 "      System.out.println(test1.____1234fact4321____);" +
                 "   }" +
                 "}";
-;  
+        ;  
         return (Goal) MicroJavaHelper.getMicroJavaNodeFromString(codeString);
     }
 
@@ -757,18 +768,7 @@ public class InterpreterTest{
         TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(0);
         ClassDeclaration classDeclaration = (ClassDeclaration) typeDeclaration.f0.choice;
         System.out.println("MicroJavaHelper.getFormattedString(classDeclaration): " + MicroJavaHelper.getFormattedString(classDeclaration));
-        MethodDeclaration methodDeclaration = (MethodDeclaration)
-                classDeclaration.f4.nodes.get(0);
-        MethodDeclaration methodDeclaration2 = (MethodDeclaration)
-                classDeclaration.f4.nodes.get(1);
-        MethodDeclaration methodDeclaration3 = (MethodDeclaration)
-                classDeclaration.f4.nodes.get(2);
-
-        Environment methodTable = new Environment();
-        methodTable.extend("fooMethod", new ClosureValue(methodDeclaration));
-        methodTable.extend("barMethod", new ClosureValue(methodDeclaration2));
-        methodTable.extend("multMethod", new ClosureValue(methodDeclaration3));
-        ClassValue expected = new ClassValue(classDeclaration, methodTable);
+        ClassValue expected = new ClassValue(classDeclaration);
         assertEquals(expected, interpreter.visit(classDeclaration, env));
     }
 
@@ -778,17 +778,18 @@ public class InterpreterTest{
     @Test
     public final void testClassExtendsDeclaration(){
         Goal goal = getTestGoal();
-        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(1);
+        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(2);
         ClassExtendsDeclaration classExtendsDeclaration =
                 (ClassExtendsDeclaration) typeDeclaration.f0.choice;
         System.out.println("MicroJavaHelper.getFormattedString(classExtendsDeclaration): " + MicroJavaHelper.getFormattedString(classExtendsDeclaration));
 
-        MethodDeclaration methodDeclaration = (MethodDeclaration)
-                classExtendsDeclaration.f6.nodes.get(0);
-
-        Environment methodTable = new Environment();
-        methodTable.extend("fooMethod", new ClosureValue(methodDeclaration));
-        ClassValue expected = new ClassValue(classExtendsDeclaration, methodTable);
+        TypeDeclaration baseTypeDeclaration = (TypeDeclaration) goal.f1.nodes.get(1);
+        ClassDeclaration baseClassDeclaration =
+                (ClassDeclaration) baseTypeDeclaration.f0.choice;
+        ClassValue baseClassValue = new ClassValue(baseClassDeclaration);
+        ClassValue expected = new ClassValue(classExtendsDeclaration,
+                                             baseClassValue);
+        interpreter.symbolTable.put("BaseClass", baseClassValue);
         assertEquals(expected, interpreter.visit(classExtendsDeclaration, env));
     }
 
@@ -798,15 +799,17 @@ public class InterpreterTest{
     @Test
     public final void testTypeDeclaration(){
         Goal goal = getTestGoal();
-        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(1);
+        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(2);
         ClassExtendsDeclaration classExtendsDeclaration =
                 (ClassExtendsDeclaration) typeDeclaration.f0.choice;
-        MethodDeclaration methodDeclaration = (MethodDeclaration)
-                classExtendsDeclaration.f6.nodes.get(0);
 
-        Environment methodTable = new Environment();
-        methodTable.extend("fooMethod", new ClosureValue(methodDeclaration));
-        ClassValue expected = new ClassValue(classExtendsDeclaration, methodTable);
+        TypeDeclaration baseTypeDeclaration = (TypeDeclaration) goal.f1.nodes.get(1);
+        ClassDeclaration baseClassDeclaration =
+                (ClassDeclaration) baseTypeDeclaration.f0.choice;
+        ClassValue baseClassValue = new ClassValue(baseClassDeclaration);
+        ClassValue expected = new ClassValue(classExtendsDeclaration,
+                                             baseClassValue);
+        interpreter.symbolTable.put("BaseClass", baseClassValue);
         assertEquals(null, interpreter.visit(typeDeclaration, env));
         assertEquals(expected, interpreter.symbolTable.get("____NewMainClassExtends____"));
     }
@@ -868,6 +871,15 @@ public class InterpreterTest{
                                                         MicroJavaHelper.getNewIdentifier("x"));
         
         assertEquals(new IntegerValue(30303), interpreter.visit(dotExpression, env));
+
+        ArrayValue arrayValue = new ArrayValue(75);
+        env.extend("bar", arrayValue);
+
+        DotExpression arrayLengthDotExpression = new DotExpression(
+            MicroJavaHelper.getNewIdentifier("bar"),
+            MicroJavaHelper.getNewIdentifier("length"));
+        assertEquals(new IntegerValue(75), interpreter.visit(arrayLengthDotExpression,
+                                                             env));
     }
 
     /**
@@ -968,7 +980,7 @@ public class InterpreterTest{
     @Test
     public final void testThisExpression(){
         Goal goal = getTestGoal();
-        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(2);
+        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(3);
 
         // Build the symbol table
         interpreter.visit(typeDeclaration, env);
@@ -998,7 +1010,7 @@ public class InterpreterTest{
     @Test
     public final void testRecursion(){
         Goal goal = getTestGoal();
-        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(2);
+        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(3);
 
         // Build the symbol table
         interpreter.visit(typeDeclaration, env);
@@ -1050,7 +1062,7 @@ public class InterpreterTest{
     public final void testMainClass(){
         Goal goal = getTestGoal();
 
-        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(2);
+        TypeDeclaration typeDeclaration = (TypeDeclaration) goal.f1.nodes.get(3);
 
         // Build the symbol table
         interpreter.visit(typeDeclaration, env);
@@ -1073,6 +1085,13 @@ public class InterpreterTest{
         ObjectValue objectValue = (ObjectValue) env.lookup(Interpreter.INITIAL_OBJECT_NAME);
         assertEquals(new IntegerValue(5040),
                      objectValue.env.lookup("____1234fact4321____"));
+    }
+
+    /**
+     * Test method for {@link Interpreter#DotExpression()}.
+     */
+    @Test
+    public final void testDotExpression(){
     }
 }
 

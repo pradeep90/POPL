@@ -1,3 +1,5 @@
+import syntaxtree.*;
+
 /** 
  * Abstract Class to represent the Value of an Expression.
  */
@@ -11,7 +13,11 @@ public abstract class Value {
     public abstract boolean isFalse();
 
     public void setValue(Value value){}
-    
+
+    public Value getFieldValue(Identifier field){
+        return null;
+    }
+
     public boolean isTrue(){
         return !isFalse();
     }
