@@ -19,6 +19,8 @@
 **** VVIP Note: there is no name for the ->. It is all structural! We don't compare by name, we compare by structure. We don't care if you have the same name or not.
 *** \delta (->, 0) = input type
 *** \delta (->, 1) = return type
+*** VVIP I think that if the input or return type is another Interface, you have to add in all the states, methods, and edges of that Interface's Automaton
+**** VVIP It's ok if that interface has a method with the same name as one of your methods but with a different type. Anyway, Interface only goes to "->" state.
 ** term automaton * term automaton -> Product Automaton
 *** Given two term automata M and N, we will construct a product automata (non-deterministic?)
 *** We want to check whether M < N
@@ -41,6 +43,14 @@
 **** TODO F A = {(p, q, b)|lM (p) ≤b lN (q)} l gives the label of that node.
 ***** TODO Not sure what they mean by the label - ???. I'm assuming it is simply the state's name
 ** DFS: Can you reach some final state?
+* Notes
+** ULTIMATE TermAutomaton equals() BUG: Comparing the two deltaAdjacencyLists was causing the problem cos I hadn't defined hashCode for Symbol and State.
+*** => "equal" States/Symbols were being hashed to different buckets.
+*** This cost me 42 minutes and a lot of tension
+** To run jdb on a test class
+#+begin_example
+jdb -sourcepathtests -classpathclass:class/tests:/usr/share/java/junit4-4.8.2.jar:/usr/share/java/hamcrest-core-1.1.jar org.junit.runner.JUnitCore TermAutomatonTest
+#+end_example
 * Code
 ** DONE Generate all the auxiliary JTB and JavaCC files
    CLOCK: [2013-02-24 Sun 21:44]--[2013-02-24 Sun 21:46] =>  0:02
@@ -50,7 +60,33 @@
    CLOCK: [2013-02-24 Sun 21:56]--[2013-02-24 Sun 23:02] =>  1:06
 ** DONE Add a trivial test file
    CLOCK: [2013-02-24 Sun 23:02]--[2013-02-24 Sun 23:02] =>  0:00
-
 ** TODO Extend GJVoidDepthFirst
+   CLOCK: [2013-02-25 Mon 18:41]--[2013-02-25 Mon 19:04] =>  0:23
    CLOCK: [2013-02-24 Sun 23:09]--[2013-02-24 Sun 23:13] =>  0:04
+*** DONE Look at Interface output of pub0.java
+    CLOCK: [2013-02-25 Mon 19:05]--[2013-02-25 Mon 19:09] =>  0:04
+*** TODO Think about design
+    CLOCK: [2013-02-25 Mon 19:09]--[2013-02-25 Mon 19:28] =>  0:19
+*** DONE Add global hash table of {interface name => Automaton}
+    CLOCK: [2013-02-25 Mon 19:29]--[2013-02-25 Mon 19:30] =>  0:01
+*** DONE Think about design
+    CLOCK: [2013-02-25 Mon 19:31]--[2013-02-25 Mon 19:37] =>  0:06
+*** DONE Fill out InterfaceMember
+    CLOCK: [2013-02-25 Mon 21:27]--[2013-02-25 Mon 21:48] =>  0:21
+    CLOCK: [2013-02-25 Mon 19:38]--[2013-02-25 Mon 19:47] =>  0:09
+**** DONE addMethodTypeEdge in TermAutomaton
+     CLOCK: [2013-02-25 Mon 20:29]--[2013-02-25 Mon 20:40] =>  0:11
+***** DONE addEdge
+      CLOCK: [2013-02-25 Mon 20:04]--[2013-02-25 Mon 20:29] =>  0:25
+      CLOCK: [2013-02-25 Mon 19:47]--[2013-02-25 Mon 19:55] =>  0:08
+***** DONE equals method for State and Symbol
+      CLOCK: [2013-02-25 Mon 19:55]--[2013-02-25 Mon 20:01] =>  0:06
+***** DONE debug equals method for TermAutomaton
+      CLOCK: [2013-02-25 Mon 21:07]--[2013-02-25 Mon 21:19] =>  0:12
+      CLOCK: [2013-02-25 Mon 20:40]--[2013-02-25 Mon 21:00] =>  0:20
+****** DONE add toString methods to aid debugging 
+       CLOCK: [2013-02-25 Mon 21:00]--[2013-02-25 Mon 21:07] =>  0:07
+****** DONE Add hashCode to State
+       CLOCK: [2013-02-25 Mon 21:20]--[2013-02-25 Mon 21:23] =>  0:03
+****** DONE Add hashCode to Symbol
 ** TODO Write trivial test case
