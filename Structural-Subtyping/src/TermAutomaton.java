@@ -18,6 +18,8 @@ public class TermAutomaton {
     public static final State INT_STATE = new State("Int", "Int");
     public static final State BOOL_STATE = new State("Bool", "Bool");
     public static final State VOID_STATE = new State("Void", "Void");
+
+    public static final String INTERFACE_LABEL = "Interface";
     
     public TermAutomaton() {
         inputAlphabet = new TreeSet<Symbol>();

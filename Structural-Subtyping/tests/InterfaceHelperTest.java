@@ -34,9 +34,9 @@ public class InterfaceHelperTest{
     public final void testGetFormattedString()
             throws FileNotFoundException, ParseException{
         InputStream in1 = new FileInputStream(
-            "/home/spradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub0.java");
+            "/home/pradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub0.java");
         InputStream in2 = new FileInputStream(
-            "/home/spradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub0.java");
+            "/home/pradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub0.java");
         syntaxtree.Node root1 = new InterfaceParser(in1).Goal();
         syntaxtree.Node root2 = new InterfaceParser(in2).Goal();
 
@@ -63,6 +63,6 @@ public class InterfaceHelperTest{
     @Test
     public final void testGetInterfaceNodeFromFileNoException(){
         InterfaceHelper.getInterfaceNodeFromFile(
-            "/home/spradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub0.java");
+            "/home/pradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub0.java");
     }
 }

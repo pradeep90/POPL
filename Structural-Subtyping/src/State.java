@@ -13,7 +13,7 @@ public class State implements Comparable<State> {
         this(label, name, false);
     }
 
-    // TODO: Should this consider id too??
+    // TODO: Should this consider name too??
     public boolean equals(Object o) {
         if (o instanceof State) {
             State other = (State) o;

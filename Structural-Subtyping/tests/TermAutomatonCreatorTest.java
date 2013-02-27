@@ -17,7 +17,7 @@ public class TermAutomatonCreatorTest{
     @Before
     public void setUp(){
         root0 = InterfaceHelper.getInterfaceNodeFromFile(
-            "/home/spradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub0.java");
+            "/home/pradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub0.java");
 
         termAutomatonCreator = new TermAutomatonCreator();
         arrowState = new State("->", "temp");
@@ -33,7 +33,7 @@ public class TermAutomatonCreatorTest{
     @Test
     public final void testGoal(){
         Node root = InterfaceHelper.getInterfaceNodeFromFile(
-            "/home/spradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub0.java");
+            "/home/pradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub0.java");
         System.out.println("InterfaceHelper.getFormattedString(root): " + InterfaceHelper.getFormattedString(root));
         root.accept(new TermAutomatonCreator(), null);
     }
@@ -52,7 +52,7 @@ public class TermAutomatonCreatorTest{
         expectedAutomatonA.inputAlphabet.add(new Symbol("b"));
         expectedAutomatonA.inputAlphabet.add(new Symbol("c"));
 
-        State interfaceStateA = new State("interface", "A");
+        State interfaceStateA = new State(TermAutomaton.INTERFACE_LABEL, "A");
         expectedAutomatonA.startState = interfaceStateA;
 
         State aMethodState = new State("->", "a");
@@ -86,7 +86,7 @@ public class TermAutomatonCreatorTest{
         expectedAutomatonB.inputAlphabet.add(new Symbol("x"));
         expectedAutomatonB.inputAlphabet.add(new Symbol("y"));
 
-        State interfaceStateB = new State("interface", "B");
+        State interfaceStateB = new State(TermAutomaton.INTERFACE_LABEL, "B");
         expectedAutomatonB.startState = interfaceStateB;
 
         State xMethodState = new State("->", "x");
@@ -113,95 +113,131 @@ public class TermAutomatonCreatorTest{
         assertEquals(expectedAutomatonB, automatonB);
     }
 
-    // @Test
-    // public final void testSelfRecursiveInterfaceType(){
+    @Test
+    public final void testSelfRecursiveInterfaceType(){
+        Node root = InterfaceHelper.getInterfaceNodeFromFile(
+            "/home/pradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub1.java");
 
-    //     Node root = InterfaceHelper.getInterfaceNodeFromFile(
-    //         "/home/spradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub1.java");
+        root.accept(termAutomatonCreator, null);
 
-    //     root.accept(termAutomatonCreator, null);
+        TermAutomaton automatonA =
+                termAutomatonCreator.partialAutomatonHashTable.get("A");
+        TermAutomaton automatonB =
+                termAutomatonCreator.partialAutomatonHashTable.get("B");
 
-    //     TermAutomaton automatonA =
-    //             termAutomatonCreator.partialAutomatonHashTable.get("A");
-    //     TermAutomaton automatonB =
-    //             termAutomatonCreator.partialAutomatonHashTable.get("B");
+        TermAutomaton expectedAutomatonA = new TermAutomaton();
+        expectedAutomatonA.inputAlphabet.add(new Symbol("m"));
 
-    //     TermAutomaton expectedAutomatonA = new TermAutomaton();
-    //     expectedAutomatonA.inputAlphabet.add(new Symbol("m"));
+        State interfaceStateA = new State(TermAutomaton.INTERFACE_LABEL, "A");
+        expectedAutomatonA.startState = interfaceStateA;
 
-    //     expectedAutomatonA.states.add(TermAutomaton.INT_STATE);
-    //     expectedAutomatonA.states.add(TermAutomaton.INTERFACE_STATE);
-    //     expectedAutomatonA.states.add(TermAutomaton.ARROW_STATE);
-    //     // expectedAutomatonA.states.add(new State("A"));
+        State mMethodState = new State("->", "m");
 
-    //     expectedAutomatonA.addMethodTypeEdge(TermAutomaton.INT_STATE, 0);
-    //     expectedAutomatonA.addMethodTypeEdge(new State("A"), 1);
+        expectedAutomatonA.states.add(TermAutomaton.INT_STATE);
+        expectedAutomatonA.states.add(interfaceStateA);
 
-    //     expectedAutomatonA.addEdge(TermAutomaton.INTERFACE_STATE, TermAutomaton.ARROW_STATE, new Symbol("m"));
+        expectedAutomatonA.states.add(mMethodState);
+
+        TermAutomaton testAutomatonA = new TermAutomaton();
+
+        testAutomatonA.addMethodTypeEdge(mMethodState, TermAutomaton.INT_STATE, 0);
+        testAutomatonA.addMethodTypeEdge(mMethodState, interfaceStateA, 1);
+        testAutomatonA.addEdge(interfaceStateA,
+                                   mMethodState, new Symbol("m"));
+
+        expectedAutomatonA.addMethodTypeEdge(mMethodState, TermAutomaton.INT_STATE, 0);
+        expectedAutomatonA.addMethodTypeEdge(mMethodState, interfaceStateA, 1);
+
+        expectedAutomatonA.addEdge(interfaceStateA,
+                                   mMethodState, new Symbol("m"));
+
+        assertEquals(testAutomatonA.deltaAdjacencyList, expectedAutomatonA.deltaAdjacencyList);
+
+        TermAutomaton expectedAutomatonB = new TermAutomaton();
+        expectedAutomatonB.inputAlphabet.add(new Symbol("m"));
+        expectedAutomatonB.inputAlphabet.add(new Symbol("p"));
+
+        State interfaceStateB = new State(TermAutomaton.INTERFACE_LABEL, "B");
+        expectedAutomatonB.startState = interfaceStateB;
+
+        State mMethodStateB = new State("->", "m");
+        State pMethodState = new State("->", "p");
+
+        expectedAutomatonB.states.add(TermAutomaton.INT_STATE);
+        expectedAutomatonB.states.add(TermAutomaton.VOID_STATE);
+        expectedAutomatonB.states.add(TermAutomaton.BOOL_STATE);
+        expectedAutomatonB.states.add(interfaceStateB);
+
+        expectedAutomatonB.states.add(mMethodStateB);
+        expectedAutomatonB.states.add(pMethodState);
+
+        expectedAutomatonB.addMethodTypeEdge(mMethodStateB, TermAutomaton.INT_STATE, 0);
+        expectedAutomatonB.addMethodTypeEdge(mMethodStateB, interfaceStateB, 1);
+
+        expectedAutomatonB.addMethodTypeEdge(pMethodState, TermAutomaton.BOOL_STATE, 0);
+        expectedAutomatonB.addMethodTypeEdge(pMethodState, TermAutomaton.VOID_STATE, 1);
+
+        expectedAutomatonB.addEdge(interfaceStateB,
+                                   mMethodStateB, new Symbol("m"));
+        expectedAutomatonB.addEdge(interfaceStateB,
+                                   pMethodState, new Symbol("p"));
         
-    //     TermAutomaton expectedAutomatonB = new TermAutomaton();
-    //     expectedAutomatonB.inputAlphabet.add(new Symbol("m"));
-    //     expectedAutomatonB.inputAlphabet.add(new Symbol("p"));
+        assertEquals(expectedAutomatonA, automatonA);
+        assertEquals(expectedAutomatonB, automatonB);
+    }
 
-    //     expectedAutomatonB.states.add(TermAutomaton.INT_STATE);
-    //     expectedAutomatonB.states.add(TermAutomaton.VOID_STATE);
-    //     expectedAutomatonB.states.add(TermAutomaton.BOOL_STATE);
-    //     expectedAutomatonB.states.add(TermAutomaton.INTERFACE_STATE);
-    //     expectedAutomatonB.states.add(TermAutomaton.ARROW_STATE);
-    //     // expectedAutomatonB.states.add(new State("B"));
+    @Test
+    public final void testMutuallyRecursiveInterfaceType(){
+        Node root = InterfaceHelper.getInterfaceNodeFromFile(
+            "/home/pradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub4.java");
 
-    //     expectedAutomatonB.addMethodTypeEdge(TermAutomaton.INT_STATE, 0);
-    //     expectedAutomatonB.addMethodTypeEdge(new State("B"), 1);
-    //     expectedAutomatonB.addMethodTypeEdge(TermAutomaton.BOOL_STATE, 0);
-    //     expectedAutomatonB.addMethodTypeEdge(TermAutomaton.VOID_STATE, 1);
+        root.accept(termAutomatonCreator, null);
 
-    //     expectedAutomatonB.addEdge(TermAutomaton.INTERFACE_STATE, TermAutomaton.ARROW_STATE, new Symbol("m"));
-    //     expectedAutomatonB.addEdge(TermAutomaton.INTERFACE_STATE, TermAutomaton.ARROW_STATE, new Symbol("p"));
+        TermAutomaton automatonA =
+                termAutomatonCreator.partialAutomatonHashTable.get("A");
+        TermAutomaton automatonB =
+                termAutomatonCreator.partialAutomatonHashTable.get("B");
 
-    //     assertEquals(expectedAutomatonA, automatonA);
-    //     assertEquals(expectedAutomatonB, automatonB);
-    // }
+        TermAutomaton expectedAutomatonA = new TermAutomaton();
+        expectedAutomatonA.inputAlphabet.add(new Symbol("m"));
 
-    // @Test
-    // public final void testMutuallyRecursiveInterfaceType(){
+        State interfaceStateA = new State(TermAutomaton.INTERFACE_LABEL, "A");
+        State interfaceStateB = new State(TermAutomaton.INTERFACE_LABEL, "B");
+        expectedAutomatonA.startState = interfaceStateA;
 
-    //     Node root = InterfaceHelper.getInterfaceNodeFromFile(
-    //         "/home/spradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub4.java");
+        State mMethodState = new State("->", "m");
 
-    //     root.accept(termAutomatonCreator, null);
+        expectedAutomatonA.states.add(TermAutomaton.INT_STATE);
+        expectedAutomatonA.states.add(interfaceStateA);
+        expectedAutomatonA.states.add(interfaceStateB);
 
-    //     TermAutomaton automatonA =
-    //             termAutomatonCreator.partialAutomatonHashTable.get("A");
-    //     TermAutomaton automatonB =
-    //             termAutomatonCreator.partialAutomatonHashTable.get("B");
+        expectedAutomatonA.states.add(mMethodState);
 
-    //     TermAutomaton expectedAutomatonA = new TermAutomaton();
-    //     expectedAutomatonA.inputAlphabet.add(new Symbol("m"));
+        expectedAutomatonA.addMethodTypeEdge(mMethodState, interfaceStateB, 0);
+        expectedAutomatonA.addMethodTypeEdge(mMethodState, TermAutomaton.INT_STATE, 1);
 
-    //     expectedAutomatonA.states.add(TermAutomaton.INT_STATE);
-    //     expectedAutomatonA.states.add(TermAutomaton.INTERFACE_STATE);
-    //     expectedAutomatonA.states.add(TermAutomaton.ARROW_STATE);
-    //     // expectedAutomatonA.states.add(new State("A"));
+        expectedAutomatonA.addEdge(interfaceStateA,
+                                   mMethodState, new Symbol("m"));
 
-    //     expectedAutomatonA.addMethodTypeEdge(new State("B"), 0);
-    //     expectedAutomatonA.addMethodTypeEdge(TermAutomaton.INT_STATE, 1);
+        TermAutomaton expectedAutomatonB = new TermAutomaton();
+        expectedAutomatonB.inputAlphabet.add(new Symbol("m"));
+        expectedAutomatonB.startState = interfaceStateB;
 
-    //     expectedAutomatonA.addEdge(TermAutomaton.INTERFACE_STATE, TermAutomaton.ARROW_STATE, new Symbol("m"));
+        State mMethodStateB = new State("->", "m");
+
+        expectedAutomatonB.states.add(TermAutomaton.VOID_STATE);
+        expectedAutomatonB.states.add(interfaceStateA);
+        expectedAutomatonB.states.add(interfaceStateB);
+
+        expectedAutomatonB.states.add(mMethodStateB);
+
+        expectedAutomatonB.addMethodTypeEdge(mMethodStateB, TermAutomaton.VOID_STATE, 1);
+        expectedAutomatonB.addMethodTypeEdge(mMethodStateB, interfaceStateA, 0);
+
+        expectedAutomatonB.addEdge(interfaceStateB,
+                                   mMethodStateB, new Symbol("m"));
         
-    //     TermAutomaton expectedAutomatonB = new TermAutomaton();
-    //     expectedAutomatonB.inputAlphabet.add(new Symbol("m"));
-
-    //     // expectedAutomatonB.states.add(new State("B"));
-    //     expectedAutomatonB.states.add(TermAutomaton.VOID_STATE);
-    //     expectedAutomatonB.states.add(TermAutomaton.INTERFACE_STATE);
-    //     expectedAutomatonB.states.add(TermAutomaton.ARROW_STATE);
-
-    //     expectedAutomatonB.addMethodTypeEdge(new State("A"), 0);
-    //     expectedAutomatonB.addMethodTypeEdge(TermAutomaton.VOID_STATE, 1);
-
-    //     expectedAutomatonB.addEdge(TermAutomaton.INTERFACE_STATE, TermAutomaton.ARROW_STATE, new Symbol("m"));
-
-    //     assertEquals(expectedAutomatonA, automatonA);
-    //     assertEquals(expectedAutomatonB, automatonB);
-    // }
+        assertEquals(expectedAutomatonA, automatonA);
+        assertEquals(expectedAutomatonB, automatonB);
+    }
 }

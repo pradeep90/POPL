@@ -71,8 +71,8 @@
 ***** In the definition of "type ordering", they say that \alpha \in D(s) \cup D(t)
 ***** Let's try both and stick with the one that answers the test data
 **** Goal: create an automata, where final states are denoted by states that will lead to ≤.
-**** TODO F A = {(p, q, b)|lM (p) ≤b lN (q)} l gives the label of that node.
-***** TODO Not sure what they mean by the label - ???. I'm assuming it is simply the state's name
+**** F A = {(p, q, b)|lM (p) ≤b lN (q)} l gives the label of that node.
+***** OUTDATED Not sure what they mean by the label - ???. I'm assuming it is simply the state's name
 ** DFS: Can you reach some final state?
 * Notes
 ** ULTIMATE TermAutomaton equals() BUG: Comparing the two deltaAdjacencyLists was causing the problem cos I hadn't defined hashCode for Symbol and State.
@@ -82,6 +82,26 @@
 #+begin_example
 jdb -sourcepathtests -classpathclass:class/tests:/usr/share/java/junit4-4.8.2.jar:/usr/share/java/hamcrest-core-1.1.jar org.junit.runner.JUnitCore TermAutomatonTest
 #+end_example
+* Test cases
+** Pub0
+*** A <= B ? // Yes
+*** B <= A ? // No
+** Pub1
+*** A <= B ? // No
+*** B <= A ? // Yes
+** Pub2
+*** C <= D ? // No
+*** D <= C ? // Yes
+** Pub3
+*** I1 <= I2 ? // Yes
+*** I2 <= I1 ? // Yes
+*** I3 <= I4 ? // Yes
+*** I5 <= I6 ? // Yes
+*** I1 <= I5 ? // No
+*** I3 <= I1 ? // No
+** Pub4
+*** A <= B ? // No
+*** B <= A ? // No
 * Code
 ** DONE Generate all the auxiliary JTB and JavaCC files
    CLOCK: [2013-02-24 Sun 21:44]--[2013-02-24 Sun 21:46] =>  0:02
@@ -133,7 +153,7 @@ jdb -sourcepathtests -classpathclass:class/tests:/usr/share/java/junit4-4.8.2.ja
 ***** DONE implement comparable for Symbol
       CLOCK: [2013-02-26 Tue 15:56]--[2013-02-26 Tue 16:02] =>  0:06
 ***** DONE implement comparable for State
-      CLOCK: [2013-02-25 Mon 16:00]--[2013-02-26 Tue 16:15] => 24:15
+      CLOCK: [2013-02-26 Tue 16:00]--[2013-02-26 Tue 16:15] =>  0:15
 ***** DONE make inputAlphabet a set
       CLOCK: [2013-02-26 Tue 16:19]--[2013-02-26 Tue 16:23] =>  0:04
 ***** DONE Make states a set
@@ -156,5 +176,25 @@ jdb -sourcepathtests -classpathclass:class/tests:/usr/share/java/junit4-4.8.2.ja
    CLOCK: [2013-02-27 Wed 12:22]--[2013-02-27 Wed 12:33] =>  0:11
 *** DONE don't use id in hashCode
     CLOCK: [2013-02-27 Wed 13:04]--[2013-02-27 Wed 13:05] =>  0:01
-** TODO Build full term automata
+** DONE Update self-recursive test
+   CLOCK: [2013-02-27 Wed 21:56]--[2013-02-27 Wed 22:40] =>  0:44
+   :PROPERTIES:
+   :Effort:   10
+   :END:
+*** what took me so long?
+*** major bug with the strings "interface" vs "Interface"
+** DONE Update mutually-recursive test
+   CLOCK: [2013-02-27 Wed 22:41]--[2013-02-27 Wed 22:48] =>  0:07
+   :PROPERTIES:
+   :Effort:   10
+   :END:
+** TODO Build full term automata by replacing one automaton in another
    CLOCK: [2013-02-26 Tue 16:35]--[2013-02-26 Tue 16:46] =>  0:11
+** TODO Build product automata
+   :PROPERTIES:
+   :Effort:   1h
+   :END:
+** TODO DFS on the product automata
+   :PROPERTIES:
+   :Effort:   1h
+   :END:

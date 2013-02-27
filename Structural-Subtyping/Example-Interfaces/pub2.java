@@ -2,14 +2,16 @@ C <= D ?
 D <= C ?
 
 interface A {
-  A m(int a);
+    A m(int a);
 }                                                                                                                                                                                             
 interface B {
-  B m(int a);
-  void p(boolean a);
+    B m(int a);
+    void p(boolean a);
 }                                                                                                                                                                                             
-interface C {                                                                                                                                                                                   int q(B a);
+interface C {
+    int q(B a);
 }                                                                                                                                                                                             
 interface D {
-  int q(A a);                                                                                                                                                                                   void r(int a);
+    int q(A a);
+    void r(int a);
 }

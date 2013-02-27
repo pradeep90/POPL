@@ -60,7 +60,7 @@ public class TermAutomatonCreator extends GJVoidDepthFirst<TermAutomaton> {
         // n.f1.accept(this, arg);
 
         TermAutomaton currTermAutomaton = new TermAutomaton();
-        currInterfaceState = new State("interface",
+        currInterfaceState = new State(TermAutomaton.INTERFACE_LABEL,
                                        InterfaceHelper.getIdentifierName(n.f1));
         currTermAutomaton.states.add(currInterfaceState);
         currTermAutomaton.startState = currInterfaceState;
@@ -155,8 +155,8 @@ public class TermAutomatonCreator extends GJVoidDepthFirst<TermAutomaton> {
      * f0 -> <IDENTIFIER>
      */
     public void visit(Identifier n, TermAutomaton arg) {
-        State interfaceState = new State("Interface",
-                                        InterfaceHelper.getIdentifierName(n));
+        State interfaceState = new State(TermAutomaton.INTERFACE_LABEL,
+                                         InterfaceHelper.getIdentifierName(n));
 
         arg.states.add(interfaceState);
 
