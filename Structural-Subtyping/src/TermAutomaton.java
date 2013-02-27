@@ -1,3 +1,5 @@
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -6,12 +8,12 @@ import java.util.HashMap;
 
 public class TermAutomaton {
     // TODO: Make this a Set
-    List<Symbol> inputAlphabet;
-    List<State> states;
-    State startState;
+    public Set<Symbol> inputAlphabet;
+    public Set<State> states;
+    public State startState;
     // Not really needed
-    State finalState;
-    HashMap<State, HashMap<Symbol, State> > deltaAdjacencyList; 
+    public State finalState;
+    public HashMap<State, HashMap<Symbol, State> > deltaAdjacencyList; 
 
     public static final State INT_STATE = new State("Int");
     public static final State BOOL_STATE = new State("Bool");
@@ -20,11 +22,11 @@ public class TermAutomaton {
     public static final State INTERFACE_STATE = new State("Interface");
     
     public TermAutomaton() {
-        inputAlphabet = new ArrayList<Symbol>();
+        inputAlphabet = new TreeSet<Symbol>();
         inputAlphabet.add(new Symbol("0"));
         inputAlphabet.add(new Symbol("1"));
 
-        states = new ArrayList<State>();
+        states = new TreeSet<State>();
         states.add(new State("Int"));
         states.add(new State("Bool"));
         states.add(new State("Void"));
@@ -36,8 +38,8 @@ public class TermAutomaton {
         deltaAdjacencyList = new HashMap<State, HashMap<Symbol, State> >();
     }
 
-    public TermAutomaton(List<Symbol> inputAlphabet,
-                         List<State> states,
+    public TermAutomaton(TreeSet<Symbol> inputAlphabet,
+                         Set<State> states,
                          State startState,
                          State finalState,
                          HashMap<State, HashMap<Symbol, State> > deltaAdjacencyList) {
@@ -97,6 +99,18 @@ public class TermAutomaton {
         result += deltaAdjacencyList.toString();
         result += ">";
         return result;
+    }
+
+    /** 
+     * Include the definition of other in this automaton.
+     *
+     * Basically replace State "J" with the automaton for J.
+     */
+    public void includeOtherAutomatonDefinition(TermAutomaton other){
+        // TODO: 
+        // inputAlphabet.addAll(other.inputAlphabet);
+        // states.addAll(other.states);
+        // deltaAdjacencyList;.addAll(other.);
     }
 }
 

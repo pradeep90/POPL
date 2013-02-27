@@ -1,4 +1,4 @@
-public class State {
+public class State implements Comparable<State> {
     String label;
     boolean isNamedInterface;
 
@@ -34,5 +34,13 @@ public class State {
         hash += label != null? label.hashCode(): 0;
         hash += new Boolean(isNamedInterface).hashCode();
         return hash;
+    }
+
+    public int compareTo(State other){
+        if (this.label.compareTo(other.label) == 0){
+            return new Boolean(this.isNamedInterface).compareTo(
+                new Boolean(other.isNamedInterface));
+        }
+        return this.label.compareTo(other.label);
     }
 }

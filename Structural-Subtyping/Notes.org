@@ -9,6 +9,10 @@
   CLOCK: [2013-02-23 Sat 23:06]--[2013-02-23 Sat 23:49] =>  0:43
   CLOCK: [2013-02-22 Fri 13:19]--[2013-02-22 Fri 13:57] =>  0:38
   CLOCK: [2013-02-22 Fri 13:00]--[2013-02-22 Fri 13:10] =>  0:10
+** ULTIMATE Path in the Interface tree
+*** methodx-0 + methody-0 + methody-0
+*** methody-0 + methodx-1 + methody-0
+** TODO This calls for a MAJOR Rewrite!
 ** interface -> term automaton
 *** Term Automaton = (\Sigma, Q, start, \delta, F)
 *** \Sigma (input alphabet) = {0, 1} \cup {set of method names}
@@ -60,12 +64,12 @@ jdb -sourcepathtests -classpathclass:class/tests:/usr/share/java/junit4-4.8.2.ja
    CLOCK: [2013-02-24 Sun 21:56]--[2013-02-24 Sun 23:02] =>  1:06
 ** DONE Add a trivial test file
    CLOCK: [2013-02-24 Sun 23:02]--[2013-02-24 Sun 23:02] =>  0:00
-** TODO Extend GJVoidDepthFirst
+** DONE Extend GJVoidDepthFirst
    CLOCK: [2013-02-25 Mon 18:41]--[2013-02-25 Mon 19:04] =>  0:23
    CLOCK: [2013-02-24 Sun 23:09]--[2013-02-24 Sun 23:13] =>  0:04
 *** DONE Look at Interface output of pub0.java
     CLOCK: [2013-02-25 Mon 19:05]--[2013-02-25 Mon 19:09] =>  0:04
-*** TODO Think about design
+*** DONE Think about design
     CLOCK: [2013-02-25 Mon 19:09]--[2013-02-25 Mon 19:28] =>  0:19
 *** DONE Add global hash table of {interface name => Automaton}
     CLOCK: [2013-02-25 Mon 19:29]--[2013-02-25 Mon 19:30] =>  0:01
@@ -89,4 +93,37 @@ jdb -sourcepathtests -classpathclass:class/tests:/usr/share/java/junit4-4.8.2.ja
 ****** DONE Add hashCode to State
        CLOCK: [2013-02-25 Mon 21:20]--[2013-02-25 Mon 21:23] =>  0:03
 ****** DONE Add hashCode to Symbol
-** TODO Write trivial test case
+** DONE Test simple interface
+   CLOCK: [2013-02-26 Tue 15:37]--[2013-02-26 Tue 15:42] =>  0:05
+*** get the generated Automata
+    CLOCK: [2013-02-26 Tue 15:42]--[2013-02-26 Tue 15:43] =>  0:01
+*** build expected automata
+    CLOCK: [2013-02-26 Tue 15:44]--[2013-02-26 Tue 15:52] =>  0:08
+*** DONE test equality
+    CLOCK: [2013-02-26 Tue 15:52]--[2013-02-26 Tue 15:53] =>  0:01
+**** DONE Make the Lists in TermAutomaton into Sets
+     CLOCK: [2013-02-26 Tue 15:53]--[2013-02-26 Tue 15:56] =>  0:03
+***** DONE implement comparable for Symbol
+      CLOCK: [2013-02-26 Tue 15:56]--[2013-02-26 Tue 16:02] =>  0:06
+***** DONE implement comparable for State
+      CLOCK: [2013-02-25 Mon 16:00]--[2013-02-26 Tue 16:15] => 24:15
+***** DONE make inputAlphabet a set
+      CLOCK: [2013-02-26 Tue 16:19]--[2013-02-26 Tue 16:23] =>  0:04
+***** DONE Make states a set
+      CLOCK: [2013-02-26 Tue 16:24]--[2013-02-26 Tue 16:24] =>  0:00
+** DONE Test self-recursive interface
+   CLOCK: [2013-02-26 Tue 16:28]--[2013-02-26 Tue 16:28] =>  0:00
+*** DONE build expected interface
+    CLOCK: [2013-02-26 Tue 16:28]--[2013-02-26 Tue 16:32] =>  0:04
+** DONE Test mutually recursive interface
+   CLOCK: [2013-02-26 Tue 16:32]--[2013-02-26 Tue 16:35] =>  0:03
+** TODO STUCK: How can one arrow have multiple 0s and 1s going out of it (as it has in the current definition)?
+*** Should we have multiple arrows (one for each method)?
+*** But then, what happens to only comparing by structure??
+*** VVIP Maybe, here we give it a bit of leeway cos this is Structural Subtyping in Java. It's basically comparing by name (at least for method names)
+*** So, maybe this is the solution: do structural subtyping for the INTERFACE, but nominal AND structural subtyping for methods
+**** for method X to be a subtype of method Y, X and Y must have the same name
+**** Further, the usual contravariant and covariant conditions must hold
+** TODO Build full term automata
+   CLOCK: [2013-02-26 Tue 16:35]--[2013-02-26 Tue 16:46] =>  0:11
+

@@ -1,4 +1,4 @@
-public class Symbol {
+public class Symbol implements Comparable<Symbol> {
     String name;
     
     public Symbol(String name) {
@@ -21,5 +21,9 @@ public class Symbol {
 
     public int hashCode(){
         return name == null? 0: name.hashCode();
+    }
+
+    public int compareTo(Symbol other){
+        return this.name.compareTo(other.name);
     }
 }

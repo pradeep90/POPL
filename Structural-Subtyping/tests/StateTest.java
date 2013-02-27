@@ -44,4 +44,19 @@ public class StateTest{
     public final void testHashCode(){
         assertEquals(4101, "Yo".hashCode() + new Boolean(true).hashCode());
     }
+
+    /**
+     * Test method for {@link State#compareTo()}.
+     */
+    @Test
+    public final void testCompareTo(){
+        assertTrue(state1.compareTo(state4) > 0); 
+        assertTrue(state4.compareTo(state1) < 0); 
+
+        assertTrue(state1.compareTo(state2) == 0); 
+        assertTrue(state2.compareTo(state1) == 0); 
+
+        assertTrue(state1.compareTo(state3) > 0); 
+        assertTrue(state3.compareTo(state1) < 0); 
+    }
 }

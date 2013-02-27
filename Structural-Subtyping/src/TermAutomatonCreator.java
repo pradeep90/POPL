@@ -8,9 +8,15 @@ import java.util.HashMap;
  * corresponding TermAutomaton.
  */
 public class TermAutomatonCreator extends GJVoidDepthFirst<TermAutomaton> {
-    HashMap<String, TermAutomaton> interfaceAutomatonHashTable =
+    // This will contain the Automaton for each Interface defined in
+    // terms of other Interfaces (hence partial)
+    public HashMap<String, TermAutomaton> partialAutomatonHashTable =
             new HashMap<String, TermAutomaton>();
 
+    // This will contain the final Automaton for each Interface
+    public HashMap<String, TermAutomaton> finalAutomatonHashTable =
+            new HashMap<String, TermAutomaton>();
+    
     int globalParity = 0;
 
     public TermAutomatonCreator() {
@@ -24,8 +30,9 @@ public class TermAutomatonCreator extends GJVoidDepthFirst<TermAutomaton> {
     public void visit(Goal n, TermAutomaton arg) {
         n.f1.accept(this, null);
 
-        // Do post-processing to include definitions of other
-        // interfaces in each interface.
+        // TODO: Do post-processing to include definitions of other
+        // interfaces in each interface and fill up
+        // finalAutomatonHashTable.
     }
 
     /**
@@ -50,8 +57,8 @@ public class TermAutomatonCreator extends GJVoidDepthFirst<TermAutomaton> {
         // n.f0.accept(this, arg);
         // n.f1.accept(this, arg);
         TermAutomaton currTermAutomaton = new TermAutomaton();
-        interfaceAutomatonHashTable.put(InterfaceHelper.getIdentifierName(n.f1),
-                                        currTermAutomaton);
+        partialAutomatonHashTable.put(InterfaceHelper.getIdentifierName(n.f1),
+                                      currTermAutomaton);
 
         n.f2.accept(this, currTermAutomaton);
     }
