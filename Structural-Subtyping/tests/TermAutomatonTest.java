@@ -58,12 +58,17 @@ public class TermAutomatonTest{
      */
     @Test
     public final void testAddMethodTypeEdge(){
-        // TODO: 
-        // termAutomaton.addMethodTypeEdge(state3, state0, 0);
-        // TermAutomaton expectedAutomaton = new TermAutomaton();
-        // expectedAutomaton.addEdge(state3, state0, new Symbol("0"));
-        // assertEquals(expectedAutomaton, termAutomaton);
-        // System.out.println("expectedAutomaton: " + expectedAutomaton);
+        State interfaceState = new State("interface", "foo");
+
+        TermAutomaton expectedAutomaton = new TermAutomaton();
+        expectedAutomaton.startState = interfaceState;
+        
+        expectedAutomaton.addEdge(state3, state0, new Symbol("0"));
+
+        termAutomaton.startState = interfaceState;
+        termAutomaton.addMethodTypeEdge(state3, state0, 0);
+        assertEquals(expectedAutomaton, termAutomaton);
+        System.out.println("expectedAutomaton: " + expectedAutomaton);
     }
 
     @Test

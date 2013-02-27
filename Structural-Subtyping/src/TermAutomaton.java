@@ -18,7 +18,6 @@ public class TermAutomaton {
     public static final State INT_STATE = new State("Int", "Int");
     public static final State BOOL_STATE = new State("Bool", "Bool");
     public static final State VOID_STATE = new State("Void", "Void");
-    // public static final State INTERFACE_STATE = new State("Interface", "Interface");
     
     public TermAutomaton() {
         inputAlphabet = new TreeSet<Symbol>();
@@ -26,13 +25,7 @@ public class TermAutomaton {
         inputAlphabet.add(new Symbol("1"));
 
         states = new TreeSet<State>();
-        states.add(INT_STATE);
-        states.add(BOOL_STATE);
-        states.add(VOID_STATE);
-        // states.add(ARROW_STATE);
-        // states.add(INTERFACE_STATE);
-        
-        // startState = INTERFACE_STATE;
+ 
         finalState = null;
         deltaAdjacencyList = new HashMap<State, HashMap<Symbol, State> >();
     }

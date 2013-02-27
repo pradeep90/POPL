@@ -53,6 +53,7 @@ public class TermAutomatonCreatorTest{
         expectedAutomatonA.inputAlphabet.add(new Symbol("c"));
 
         State interfaceStateA = new State("interface", "A");
+        expectedAutomatonA.startState = interfaceStateA;
 
         State aMethodState = new State("->", "a");
         State bMethodState = new State("->", "b");
@@ -86,6 +87,7 @@ public class TermAutomatonCreatorTest{
         expectedAutomatonB.inputAlphabet.add(new Symbol("y"));
 
         State interfaceStateB = new State("interface", "B");
+        expectedAutomatonB.startState = interfaceStateB;
 
         State xMethodState = new State("->", "x");
         State yMethodState = new State("->", "y");
@@ -107,8 +109,8 @@ public class TermAutomatonCreatorTest{
         expectedAutomatonB.addEdge(interfaceStateB,
                                    yMethodState, new Symbol("y"));
         
-        // assertEquals(expectedAutomatonA, automatonA);
-        // assertEquals(expectedAutomatonB, automatonB);
+        assertEquals(expectedAutomatonA, automatonA);
+        assertEquals(expectedAutomatonB, automatonB);
     }
 
     // @Test
