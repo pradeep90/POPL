@@ -9,14 +9,37 @@
   CLOCK: [2013-02-23 Sat 23:06]--[2013-02-23 Sat 23:49] =>  0:43
   CLOCK: [2013-02-22 Fri 13:19]--[2013-02-22 Fri 13:57] =>  0:38
   CLOCK: [2013-02-22 Fri 13:00]--[2013-02-22 Fri 13:10] =>  0:10
-** ULTIMATE Path in the Interface tree
-*** methodx-0 + methody-0 + methody-0
-*** methody-0 + methodx-1 + methody-0
-** TODO This calls for a MAJOR Rewrite!
+** This calls for a MAJOR Rewrite! (Yes and No.)
+** ULTIMATE There are states and there are labels for states
+*** labels \in set of labels, e.g., Int, Bool, Void
+*** VVIP You could have many different states having the SAME label! 
+*** NOW you have something powerful enough to REPRESENT a type.
+*** TODO So, does this mean a term automaton represents one and only one type?
+*** Isn't that required when we youse 2 term automaton to DECIDE subtyping?
+*** Anyway, this is a REALLY subtle point. Only if you look at the mathematical definition carefully and puzzle over it for a while will you get it.
+** example of many states having the same label
+*** basically, a regular type is one that has a finite number of subterms
+*** for each subterm have a state
+*** \mu.v((v -> \perp) -> T)
+**** one state A for the first arrow =>  0: v-state, 1: \perp
+**** one state B for the second arrow => 0: A, 1: T
+** How to convert a regular type to a term automaton (for simple regular types as in the paper, not interfaces)
+*** Q = one state for each subterm t \darr \alpha
+*** q_0 = t
+*** l(s) = s(\epsilon)
+*** \delta(s, i) = (type for s)(i) (the notation in the paper is a bit hard to understand here, but I think this is the general idea)
 ** interface -> term automaton
 *** Term Automaton = (\Sigma, Q, start, \delta, F)
 *** \Sigma (input alphabet) = {0, 1} \cup {set of method names}
-*** Set of states Q = {Int, Bool, Void, ->, Interface}
+*** VVIP Set of labels = {Int, Bool, Void, ->, Interface}
+*** VVIP Set of states = as many as there are subterms
+**** so if you have int, etc. as an input or return type, you'll have a state for int (with label as Int, obviously)
+**** one state (with label ->) for each method's arrow (cos each is a potentially different subterm)
+***** of course, if you have methods p and q with type (for example)
+****** p: int -> int
+****** q: int -> int
+***** they both are the some subterm, but still have different states for them, just in case
+**** one state for each interface (with label Interface)
 *** start = Interface
 *** F is not needed as of now
 *** VVIP \delta (Interface, method) = ->
@@ -24,7 +47,8 @@
 *** \delta (->, 0) = input type
 *** \delta (->, 1) = return type
 *** VVIP I think that if the input or return type is another Interface, you have to add in all the states, methods, and edges of that Interface's Automaton
-**** VVIP It's ok if that interface has a method with the same name as one of your methods but with a different type. Anyway, Interface only goes to "->" state.
+**** OUTDATED It's ok if that interface has a method with the same name as one of your methods but with a different type. Anyway, Interface only goes to "->" state.
+*** So, you'll basically add in that interface's automaton, but whatever it refers to [your interface] just make it point to your Main Interface state
 ** term automaton * term automaton -> Product Automaton
 *** Given two term automata M and N, we will construct a product automata (non-deterministic?)
 *** We want to check whether M < N
