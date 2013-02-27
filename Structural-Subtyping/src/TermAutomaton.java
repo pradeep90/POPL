@@ -1,5 +1,5 @@
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -16,17 +16,17 @@ public class TermAutomaton {
     public HashMap<State, HashMap<Symbol, State> > deltaAdjacencyList; 
 
     public TermAutomaton() {
-        inputAlphabet = new TreeSet<Symbol>();
+        inputAlphabet = new HashSet<Symbol>();
         inputAlphabet.add(new Symbol("0"));
         inputAlphabet.add(new Symbol("1"));
 
-        states = new TreeSet<State>();
+        states = new HashSet<State>();
  
         finalState = null;
         deltaAdjacencyList = new HashMap<State, HashMap<Symbol, State> >();
     }
 
-    public TermAutomaton(TreeSet<Symbol> inputAlphabet,
+    public TermAutomaton(Set<Symbol> inputAlphabet,
                          Set<State> states,
                          State startState,
                          State finalState,
@@ -37,6 +37,23 @@ public class TermAutomaton {
         this.startState = startState;
         this.finalState = finalState;
         this.deltaAdjacencyList = deltaAdjacencyList;
+    }
+
+    public TermAutomaton(TermAutomaton other){
+        this.inputAlphabet = new HashSet<Symbol>(other.inputAlphabet);
+        this.states = new HashSet<State>(other.states);
+        this.startState = new State(other.startState);
+        // this.finalState = finalState;
+        this.deltaAdjacencyList = new HashMap<State, HashMap<Symbol, State>>();
+        for (Map.Entry<State, HashMap<Symbol, State>> entry :
+                     other.deltaAdjacencyList.entrySet()){
+            State sourceState = new State(entry.getKey());
+            for (Map.Entry<Symbol, State> edgeEntry : entry.getValue().entrySet()){
+                Symbol edgeSymbol = edgeEntry.getKey();
+                State targetState = new State(edgeEntry.getValue());
+                addEdge(sourceState, targetState, edgeSymbol);
+            }
+        }
     }
     
     /** 
@@ -104,7 +121,6 @@ public class TermAutomaton {
      * an Identifier(name: X, automaton: A)
      */
     public void includeOtherAutomatonDefinition(TermAutomaton other){
-        // TODO: 
         inputAlphabet.addAll(other.inputAlphabet);
         for (State state : other.states){
             State copiedState = new State(state);

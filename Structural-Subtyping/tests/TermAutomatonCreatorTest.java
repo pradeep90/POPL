@@ -301,4 +301,52 @@ public class TermAutomatonCreatorTest{
         assertEquals(expectedAutomatonA, automatonA);
         assertEquals(expectedAutomatonB, automatonB);
     }
+
+    @Test
+    public final void testPub0(){
+        Node root = InterfaceHelper.getInterfaceNodeFromFile(
+            "/home/pradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub0.java");
+
+        root.accept(termAutomatonCreator, null);
+
+        System.out.println("pub0: " + termAutomatonCreator.finalAutomatonHashTable);
+    }
+
+    @Test
+    public final void testPub1(){
+        Node root = InterfaceHelper.getInterfaceNodeFromFile(
+            "/home/pradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub1.java");
+
+        root.accept(termAutomatonCreator, null);
+
+        System.out.println("pub1: " + termAutomatonCreator.finalAutomatonHashTable);
+    }
+
+    @Test
+    public final void testPub2(){
+        Node root = InterfaceHelper.getInterfaceNodeFromFile(
+            "/home/pradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub2.java");
+
+        root.accept(termAutomatonCreator, null);
+
+        System.out.println("pub2: " + termAutomatonCreator.finalAutomatonHashTable);
+    }
+    @Test
+    public final void testPub3(){
+        Node root = InterfaceHelper.getInterfaceNodeFromFile(
+            "/home/pradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub3.java");
+
+        root.accept(termAutomatonCreator, null);
+
+        System.out.println("pub3: " + termAutomatonCreator.finalAutomatonHashTable);
+    }
+    @Test
+    public final void testPub4(){
+        Node root = InterfaceHelper.getInterfaceNodeFromFile(
+            "/home/pradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub4.java");
+
+        root.accept(termAutomatonCreator, null);
+
+        System.out.println("pub4: " + termAutomatonCreator.finalAutomatonHashTable);
+    }
 }

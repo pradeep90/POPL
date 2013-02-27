@@ -188,7 +188,7 @@ jdb -sourcepathtests -classpathclass:class/tests:/usr/share/java/junit4-4.8.2.ja
    :PROPERTIES:
    :Effort:   10
    :END:
-** TODO Build full term automata by replacing one automaton in another
+** DONE Build full term automata by replacing one automaton in another
    CLOCK: [2013-02-26 Tue 16:35]--[2013-02-26 Tue 16:46] =>  0:11
 *** DONE Think
     CLOCK: [2013-02-27 Wed 22:48]--[2013-02-27 Wed 23:18] =>  0:30
@@ -196,7 +196,7 @@ jdb -sourcepathtests -classpathclass:class/tests:/usr/share/java/junit4-4.8.2.ja
 **** Pack those states that are not connected to currInterfaceState.
 *** DONE Add currInterfaceName field to all states
     CLOCK: [2013-02-27 Wed 23:23]--[2013-02-27 Wed 23:56] =>  0:33
-*** TODO Put everything together
+*** DONE Put everything together
     CLOCK: [2013-02-28 Thu 00:10]--[2013-02-28 Thu 00:11] =>  0:01
     CLOCK: [2013-02-27 Wed 23:59]--[2013-02-28 Thu 00:06] =>  0:07
 **** DONE Making State equals() consider name as well
@@ -205,12 +205,24 @@ jdb -sourcepathtests -classpathclass:class/tests:/usr/share/java/junit4-4.8.2.ja
      CLOCK: [2013-02-28 Thu 00:13]--[2013-02-28 Thu 00:32] =>  0:19
 **** DONE Add a copy constructor in State
      CLOCK: [2013-02-28 Thu 00:32]--[2013-02-28 Thu 00:37] =>  0:05
-**** TODO includeOtherAutomatonDefinition
+**** DONE includeOtherAutomatonDefinition
      CLOCK: [2013-02-28 Thu 00:37]--[2013-02-28 Thu 01:29] =>  0:52
-***** TODO problem when adding State (m, ->, B) to this.states which has State (m, ->, A)
+***** DONE problem when adding State (m, ->, B) to this.states which has State (m, ->, A)
+      CLOCK: [2013-02-28 Thu 03:06]--[2013-02-28 Thu 03:39] =>  0:33
 ***** Why?
-*** TODO Do a DFS from currInterfaceState and change each visited node's currInterfaceName to currInterfaceState's name
-*** TODO Pack all non-visited nodes
+****** Goddamn! TreeSet - I'll find you... and I'll kill you!!! Goddamn!
+***** DONE Unit Test
+      CLOCK: [2013-02-28 Thu 03:40]--[2013-02-28 Thu 03:52] =>  0:12
+*** DONE +Do a DFS+ from currInterfaceState and change each visited node's currInterfaceName to currInterfaceState's name
+    CLOCK: [2013-02-28 Thu 04:02]--[2013-02-28 Thu 04:05] =>  0:03
+**** DONE copy constructor
+     CLOCK: [2013-02-28 Thu 04:08]--[2013-02-28 Thu 04:12] =>  0:04
+     CLOCK: [2013-02-28 Thu 04:05]--[2013-02-28 Thu 04:08] =>  0:03
+**** OUTDATED DFS
+**** DONE Just include all possible automata when needed
+     CLOCK: [2013-02-28 Thu 04:08]--[2013-02-28 Thu 04:59] =>  0:51
+***** i.e., when you have a state whose definition you haven't seen
+*** OUTDATED Pack all non-visited nodes
 ** TODO Build product automata
    :PROPERTIES:
    :Effort:   1h

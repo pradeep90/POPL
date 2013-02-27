@@ -1,6 +1,8 @@
 import visitor.*;
 import syntaxtree.*;
 
+import java.util.Set;
+import java.util.HashSet;
 import java.util.HashMap;
 
 /** 
@@ -25,6 +27,46 @@ public class TermAutomatonCreator extends GJVoidDepthFirst<TermAutomaton> {
     public TermAutomatonCreator() {
     }
 
+    /** 
+     * Keep including other Automata for which you have the Interface
+     * state but not the rest of the Automaton.
+     * 
+     * @return the complete Automaton for startInterfaceName
+     */
+    public TermAutomaton getCompleteAutomaton(String startInterfaceName){
+        TermAutomaton currAutomaton = new TermAutomaton(
+            partialAutomatonHashTable.get(startInterfaceName));
+        Set<String> seenInterfaces = new HashSet<String>();
+
+        // Get list of Interface states in your Automaton
+        // Pick one unseen state
+        // Include the Automaton for that Interface
+        // Mark that state as seen
+        while (getUnseenInterface(currAutomaton, seenInterfaces) != null){
+            String unseenInterfaceName = getUnseenInterface(currAutomaton, seenInterfaces);
+            seenInterfaces.add(unseenInterfaceName);
+            currAutomaton.includeOtherAutomatonDefinition(
+                partialAutomatonHashTable.get(unseenInterfaceName));
+        }
+        
+        return currAutomaton;
+    }
+
+    /** 
+     * @return an Interface needed by currAutomaton which isn't in seenInterfaces.
+     */
+    public String getUnseenInterface(TermAutomaton currAutomaton,
+                                     Set<String> seenInterfaces){
+        for (State state : currAutomaton.states){
+            if (state.label.equals(State.INTERFACE_LABEL)
+                && !seenInterfaces.contains(state.name)){
+                return state.name;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * f0 -> ( Query() )*
      * f1 -> ( InterfaceDeclaration() )*
@@ -36,6 +78,11 @@ public class TermAutomatonCreator extends GJVoidDepthFirst<TermAutomaton> {
         // TODO: Do post-processing to include definitions of other
         // interfaces in each interface and fill up
         // finalAutomatonHashTable.
+
+        // Do DFS, once with each Interface as the start state
+        for (String key : partialAutomatonHashTable.keySet()){
+            finalAutomatonHashTable.put(key, getCompleteAutomaton(key));
+        }
     }
 
     /**
@@ -178,7 +225,6 @@ public class TermAutomatonCreator extends GJVoidDepthFirst<TermAutomaton> {
      */
     public void visit(Identifier n, TermAutomaton arg) {
         State interfaceState = new State(State.INTERFACE_LABEL,
-
                                          InterfaceHelper.getIdentifierName(n),
                                          currInterfaceName);
 
