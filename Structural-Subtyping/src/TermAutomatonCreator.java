@@ -18,6 +18,8 @@ public class TermAutomatonCreator extends GJVoidDepthFirst<TermAutomaton> {
             new HashMap<String, TermAutomaton>();
     
     int globalParity = 0;
+    State currArrowState;
+    State currInterfaceState;
 
     public TermAutomatonCreator() {
     }
@@ -56,6 +58,10 @@ public class TermAutomatonCreator extends GJVoidDepthFirst<TermAutomaton> {
     public void visit(InterfaceDeclaration n, TermAutomaton arg) {
         // n.f0.accept(this, arg);
         // n.f1.accept(this, arg);
+
+        currInterfaceState = new State("interface",
+                                       InterfaceHelper.getIdentifierName(n.f1));
+
         TermAutomaton currTermAutomaton = new TermAutomaton();
         partialAutomatonHashTable.put(InterfaceHelper.getIdentifierName(n.f1),
                                       currTermAutomaton);
@@ -86,11 +92,14 @@ public class TermAutomatonCreator extends GJVoidDepthFirst<TermAutomaton> {
         globalParity = 1;
         n.f0.accept(this, arg);
 
+        // Create a state with arrow f1
+        currArrowState = new State("->", InterfaceHelper.getIdentifierName(n.f1));
+
         // Add f1 to input alphabet
         arg.inputAlphabet.add(new Symbol(InterfaceHelper.getIdentifierName(n.f1)));
 
         // Add an (f1) edge from Interface to ->
-        arg.addEdge(TermAutomaton.INTERFACE_STATE, TermAutomaton.ARROW_STATE,
+        arg.addEdge(currInterfaceState, currArrowState,
                     new Symbol(InterfaceHelper.getIdentifierName(n.f1)));
 
         // Add 0-edge from -> to f3
@@ -111,14 +120,14 @@ public class TermAutomatonCreator extends GJVoidDepthFirst<TermAutomaton> {
      * f0 -> "boolean"
      */
     public void visit(BooleanType n, TermAutomaton arg) {
-        arg.addMethodTypeEdge(TermAutomaton.BOOL_STATE, globalParity);
+        arg.addMethodTypeEdge(currArrowState, TermAutomaton.BOOL_STATE, globalParity);
     }
 
     /**
      * f0 -> "int"
      */
     public void visit(IntegerType n, TermAutomaton arg) {
-        arg.addMethodTypeEdge(TermAutomaton.INT_STATE, globalParity);
+        arg.addMethodTypeEdge(currArrowState, TermAutomaton.INT_STATE, globalParity);
     }
 
     /**
@@ -133,7 +142,7 @@ public class TermAutomatonCreator extends GJVoidDepthFirst<TermAutomaton> {
      * f0 -> "void"
      */
     public void visit(VoidType n, TermAutomaton arg) {
-        arg.addMethodTypeEdge(TermAutomaton.VOID_STATE, globalParity);
+        arg.addMethodTypeEdge(currArrowState, TermAutomaton.VOID_STATE, globalParity);
     }
 
     /**
@@ -142,7 +151,9 @@ public class TermAutomatonCreator extends GJVoidDepthFirst<TermAutomaton> {
     public void visit(Identifier n, TermAutomaton arg) {
         // Add a temporary state with n's name so that we can
         // substitute the Interface's actual definition later.
-        arg.addMethodTypeEdge(new State(InterfaceHelper.getIdentifierName(n)),
+        arg.addMethodTypeEdge(currArrowState,
+                              new State("Interface",
+                                        InterfaceHelper.getIdentifierName(n)),
                               globalParity);
     }
 

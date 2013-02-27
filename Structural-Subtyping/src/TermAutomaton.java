@@ -15,11 +15,10 @@ public class TermAutomaton {
     public State finalState;
     public HashMap<State, HashMap<Symbol, State> > deltaAdjacencyList; 
 
-    public static final State INT_STATE = new State("Int");
-    public static final State BOOL_STATE = new State("Bool");
-    public static final State VOID_STATE = new State("Void");
-    public static final State ARROW_STATE = new State("->");
-    public static final State INTERFACE_STATE = new State("Interface");
+    public static final State INT_STATE = new State("Int", "Int");
+    public static final State BOOL_STATE = new State("Bool", "Bool");
+    public static final State VOID_STATE = new State("Void", "Void");
+    // public static final State INTERFACE_STATE = new State("Interface", "Interface");
     
     public TermAutomaton() {
         inputAlphabet = new TreeSet<Symbol>();
@@ -27,13 +26,13 @@ public class TermAutomaton {
         inputAlphabet.add(new Symbol("1"));
 
         states = new TreeSet<State>();
-        states.add(new State("Int"));
-        states.add(new State("Bool"));
-        states.add(new State("Void"));
-        states.add(new State("->"));
-        states.add(new State("Interface"));
+        states.add(INT_STATE);
+        states.add(BOOL_STATE);
+        states.add(VOID_STATE);
+        // states.add(ARROW_STATE);
+        // states.add(INTERFACE_STATE);
         
-        startState = new State("Interface");
+        // startState = INTERFACE_STATE;
         finalState = null;
         deltaAdjacencyList = new HashMap<State, HashMap<Symbol, State> >();
     }
@@ -69,8 +68,8 @@ public class TermAutomaton {
     /** 
      * Add edge from -> to targetState with label parity.
      */
-    public void addMethodTypeEdge(State targetState, int parity){
-        addEdge(ARROW_STATE, targetState, new Symbol("" + parity));
+    public void addMethodTypeEdge(State arrowState, State targetState, int parity){
+        addEdge(arrowState, targetState, new Symbol("" + parity));
     }
 
     public boolean equals(Object o) {

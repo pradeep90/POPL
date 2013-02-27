@@ -9,7 +9,6 @@
   CLOCK: [2013-02-23 Sat 23:06]--[2013-02-23 Sat 23:49] =>  0:43
   CLOCK: [2013-02-22 Fri 13:19]--[2013-02-22 Fri 13:57] =>  0:38
   CLOCK: [2013-02-22 Fri 13:00]--[2013-02-22 Fri 13:10] =>  0:10
-** This calls for a MAJOR Rewrite! (Yes and No.)
 ** ULTIMATE There are states and there are labels for states
 *** labels \in set of labels, e.g., Int, Bool, Void
 *** VVIP You could have many different states having the SAME label! 
@@ -33,13 +32,17 @@
 *** \Sigma (input alphabet) = {0, 1} \cup {set of method names}
 *** VVIP Set of labels = {Int, Bool, Void, ->, Interface}
 *** VVIP Set of states = as many as there are subterms
-**** so if you have int, etc. as an input or return type, you'll have a state for int (with label as Int, obviously)
+**** so if you have int, etc. as an input or return type, you'll have a state for int (with label as Int, obviously). Name for a basic state like int will have name "int".
 **** one state (with label ->) for each method's arrow (cos each is a potentially different subterm)
+***** name: method name
+***** label: ->
 ***** of course, if you have methods p and q with type (for example)
 ****** p: int -> int
 ****** q: int -> int
 ***** they both are the some subterm, but still have different states for them, just in case
 **** one state for each interface (with label Interface)
+***** name: interface name
+***** label: Interface
 *** start = Interface
 *** F is not needed as of now
 *** VVIP \delta (Interface, method) = ->
@@ -141,13 +144,17 @@ jdb -sourcepathtests -classpathclass:class/tests:/usr/share/java/junit4-4.8.2.ja
     CLOCK: [2013-02-26 Tue 16:28]--[2013-02-26 Tue 16:32] =>  0:04
 ** DONE Test mutually recursive interface
    CLOCK: [2013-02-26 Tue 16:32]--[2013-02-26 Tue 16:35] =>  0:03
-** TODO STUCK: How can one arrow have multiple 0s and 1s going out of it (as it has in the current definition)?
+** OUTDATED STUCK: How can one arrow have multiple 0s and 1s going out of it (as it has in the current definition)?
 *** Should we have multiple arrows (one for each method)?
 *** But then, what happens to only comparing by structure??
 *** VVIP Maybe, here we give it a bit of leeway cos this is Structural Subtyping in Java. It's basically comparing by name (at least for method names)
 *** So, maybe this is the solution: do structural subtyping for the INTERFACE, but nominal AND structural subtyping for methods
 **** for method X to be a subtype of method Y, X and Y must have the same name
 **** Further, the usual contravariant and covariant conditions must hold
+** DONE Add id to State
+   CLOCK: [2013-02-27 Wed 13:04]--[2013-02-27 Wed 13:04] =>  0:00
+   CLOCK: [2013-02-27 Wed 12:22]--[2013-02-27 Wed 12:33] =>  0:11
+*** DONE don't use id in hashCode
+    CLOCK: [2013-02-27 Wed 13:04]--[2013-02-27 Wed 13:05] =>  0:01
 ** TODO Build full term automata
    CLOCK: [2013-02-26 Tue 16:35]--[2013-02-26 Tue 16:46] =>  0:11
-

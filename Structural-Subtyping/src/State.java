@@ -1,16 +1,19 @@
 public class State implements Comparable<State> {
+    String name;
     String label;
     boolean isNamedInterface;
 
-    public State(String label, boolean isNamedInterface){
+    public State(String label, String name, boolean isNamedInterface){
         this.label = label;
+        this.name = name;
         this.isNamedInterface = isNamedInterface;
     }
 
-    public State(String label) {
-        this(label, false);
+    public State(String label, String name) {
+        this(label, name, false);
     }
 
+    // TODO: Should this consider id too??
     public boolean equals(Object o) {
         if (o instanceof State) {
             State other = (State) o;
@@ -22,6 +25,8 @@ public class State implements Comparable<State> {
 
     public String toString(){
         String result = "<State: ";
+        result += name;
+        result += ", ";
         result += label;
         result += ", ";
         result += isNamedInterface;
@@ -29,6 +34,10 @@ public class State implements Comparable<State> {
         return result;
     }
 
+    /** 
+     * Note: Not using id in calculating hash cos we don't use it in
+     * equals().
+     */
     public int hashCode(){
         int hash = 0;
         hash += label != null? label.hashCode(): 0;
@@ -37,10 +46,6 @@ public class State implements Comparable<State> {
     }
 
     public int compareTo(State other){
-        if (this.label.compareTo(other.label) == 0){
-            return new Boolean(this.isNamedInterface).compareTo(
-                new Boolean(other.isNamedInterface));
-        }
-        return this.label.compareTo(other.label);
+        return this.name.compareTo(other.name);
     }
 }

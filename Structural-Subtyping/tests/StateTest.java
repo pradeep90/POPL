@@ -15,11 +15,11 @@ public class StateTest{
 
     @Before
     public void setUp(){
-        state1 = new State("Yo", true);
-        state2 = new State("Yo", true);
-        state3 = new State("Yo", false);
-        state4 = new State("Boyz");
-        state5 = new State("Yo");
+        state1 = new State("Yo", "Yo", true);
+        state2 = new State("Yo", "Yo", true);
+        state3 = new State("Yo", "Yo", false);
+        state4 = new State("Boyz", "Boyz");
+        state5 = new State("Yo", "Yo");
     }
     
     @After
@@ -55,8 +55,5 @@ public class StateTest{
 
         assertTrue(state1.compareTo(state2) == 0); 
         assertTrue(state2.compareTo(state1) == 0); 
-
-        assertTrue(state1.compareTo(state3) > 0); 
-        assertTrue(state3.compareTo(state1) < 0); 
     }
 }
