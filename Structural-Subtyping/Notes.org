@@ -190,6 +190,27 @@ jdb -sourcepathtests -classpathclass:class/tests:/usr/share/java/junit4-4.8.2.ja
    :END:
 ** TODO Build full term automata by replacing one automaton in another
    CLOCK: [2013-02-26 Tue 16:35]--[2013-02-26 Tue 16:46] =>  0:11
+*** DONE Think
+    CLOCK: [2013-02-27 Wed 22:48]--[2013-02-27 Wed 23:18] =>  0:30
+*** My technique: Put everything together. Do a DFS from the currInterfaceState.
+**** Pack those states that are not connected to currInterfaceState.
+*** DONE Add currInterfaceName field to all states
+    CLOCK: [2013-02-27 Wed 23:23]--[2013-02-27 Wed 23:56] =>  0:33
+*** TODO Put everything together
+    CLOCK: [2013-02-28 Thu 00:10]--[2013-02-28 Thu 00:11] =>  0:01
+    CLOCK: [2013-02-27 Wed 23:59]--[2013-02-28 Thu 00:06] =>  0:07
+**** DONE Making State equals() consider name as well
+     CLOCK: [2013-02-28 Thu 00:12]--[2013-02-28 Thu 00:13] =>  0:01
+**** DONE Think about how to include an automaton in another
+     CLOCK: [2013-02-28 Thu 00:13]--[2013-02-28 Thu 00:32] =>  0:19
+**** DONE Add a copy constructor in State
+     CLOCK: [2013-02-28 Thu 00:32]--[2013-02-28 Thu 00:37] =>  0:05
+**** TODO includeOtherAutomatonDefinition
+     CLOCK: [2013-02-28 Thu 00:37]--[2013-02-28 Thu 01:29] =>  0:52
+***** TODO problem when adding State (m, ->, B) to this.states which has State (m, ->, A)
+***** Why?
+*** TODO Do a DFS from currInterfaceState and change each visited node's currInterfaceName to currInterfaceState's name
+*** TODO Pack all non-visited nodes
 ** TODO Build product automata
    :PROPERTIES:
    :Effort:   1h

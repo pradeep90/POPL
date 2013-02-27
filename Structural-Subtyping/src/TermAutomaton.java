@@ -15,12 +15,6 @@ public class TermAutomaton {
     public State finalState;
     public HashMap<State, HashMap<Symbol, State> > deltaAdjacencyList; 
 
-    public static final State INT_STATE = new State("Int", "Int");
-    public static final State BOOL_STATE = new State("Bool", "Bool");
-    public static final State VOID_STATE = new State("Void", "Void");
-
-    public static final String INTERFACE_LABEL = "Interface";
-    
     public TermAutomaton() {
         inputAlphabet = new TreeSet<Symbol>();
         inputAlphabet.add(new Symbol("0"));
@@ -95,16 +89,42 @@ public class TermAutomaton {
         return result;
     }
 
+    public String getAutomatonName(){
+        return this.startState.name;
+    }
+
     /** 
-     * Include the definition of other in this automaton.
+     * Include the definition of other Automaton in this automaton
+     * (called A).
      *
      * Basically replace State "J" with the automaton for J.
+     * + First, add in all of J's states and symbols.
+     * + Then, add all of its edges (X, s, Y).
+     * If X or Y is an Identifier(name: X, automaton: Z), then make it
+     * an Identifier(name: X, automaton: A)
      */
     public void includeOtherAutomatonDefinition(TermAutomaton other){
         // TODO: 
-        // inputAlphabet.addAll(other.inputAlphabet);
-        // states.addAll(other.states);
-        // deltaAdjacencyList;.addAll(other.);
+        inputAlphabet.addAll(other.inputAlphabet);
+        for (State state : other.states){
+            State copiedState = new State(state);
+            copiedState.conformInterfaceAutomatonName(this.getAutomatonName());
+            this.states.add(copiedState);
+        }
+
+        for (Map.Entry<State, HashMap<Symbol, State>> entry :
+                     other.deltaAdjacencyList.entrySet()){
+            State sourceState = new State(entry.getKey());
+            sourceState.conformInterfaceAutomatonName(this.getAutomatonName());
+
+            for (Map.Entry<Symbol, State> edgeEntry : entry.getValue().entrySet()){
+                Symbol edgeSymbol = edgeEntry.getKey();
+                State targetState = new State(edgeEntry.getValue());
+                targetState.conformInterfaceAutomatonName(this.getAutomatonName());
+
+                addEdge(sourceState, targetState, edgeSymbol);
+            }
+        }
     }
 }
 

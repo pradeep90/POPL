@@ -1,24 +1,47 @@
 public class State implements Comparable<State> {
-    String name;
-    String label;
-    boolean isNamedInterface;
+    public String name;
+    public String label;
+    public String automatonName;
 
-    public State(String label, String name, boolean isNamedInterface){
+    public static final String INT_LABEL = "Int"; 
+    public static final String BOOL_LABEL = "Bool"; 
+    public static final String VOID_LABEL = "Void"; 
+    public static final String INTERFACE_LABEL = "Interface";
+    
+    public State(String label, String name, String automatonName){
         this.label = label;
         this.name = name;
-        this.isNamedInterface = isNamedInterface;
+        this.automatonName = automatonName;
     }
 
     public State(String label, String name) {
-        this(label, name, false);
+        this(label, name, "");
     }
+
+    public State(State other){
+        this.name = other.name;
+        this.label = other.label;
+        this.automatonName = other.automatonName;
+    }
+
+    /** 
+     * If this is an Interface state, make sure that
+     * this.automatonName is givenAutomatonName.
+     */
+    public void conformInterfaceAutomatonName(String givenAutomatonName){
+        if (label.equals(INTERFACE_LABEL)){
+            automatonName = givenAutomatonName;
+        }
+    }
+
 
     // TODO: Should this consider name too??
     public boolean equals(Object o) {
         if (o instanceof State) {
             State other = (State) o;
             return this.label.equals(other.label)
-                    && this.isNamedInterface == other.isNamedInterface;
+                    && this.name.equals(other.name)
+                    && this.automatonName.equals(other.automatonName);
         }
         return false;
     }
@@ -29,7 +52,7 @@ public class State implements Comparable<State> {
         result += ", ";
         result += label;
         result += ", ";
-        result += isNamedInterface;
+        result += automatonName;
         result += ">";
         return result;
     }
@@ -41,7 +64,8 @@ public class State implements Comparable<State> {
     public int hashCode(){
         int hash = 0;
         hash += label != null? label.hashCode(): 0;
-        hash += new Boolean(isNamedInterface).hashCode();
+        hash += name.hashCode();
+        hash += automatonName.hashCode();
         return hash;
     }
 

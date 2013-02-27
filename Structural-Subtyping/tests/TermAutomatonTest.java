@@ -68,7 +68,6 @@ public class TermAutomatonTest{
         termAutomaton.startState = interfaceState;
         termAutomaton.addMethodTypeEdge(state3, state0, 0);
         assertEquals(expectedAutomaton, termAutomaton);
-        System.out.println("expectedAutomaton: " + expectedAutomaton);
     }
 
     @Test
@@ -89,5 +88,72 @@ public class TermAutomatonTest{
         adjacencyHash1.put(state3, edgeHashMap0);
 
         assertEquals(adjacencyHash0, adjacencyHash1);
+    }
+
+    /**
+     * Test method for {@link TermAutomaton#includeOtherAutomatonDefinition()}.
+     */
+    @Test
+    public final void testIncludeOtherAutomatonDefinition(){
+        TermAutomaton expectedAutomatonA = new TermAutomaton();
+        expectedAutomatonA.inputAlphabet.add(new Symbol("m"));
+
+        State interfaceStateA = new State(State.INTERFACE_LABEL,
+                                          "A", "A");
+        State interfaceStateBInA = new State(State.INTERFACE_LABEL,
+                                             "B", "A");
+        expectedAutomatonA.startState = interfaceStateA;
+
+        State mMethodState = new State("->", "m", "A");
+
+        expectedAutomatonA.states.add(new State(State.INT_LABEL,
+                                                State.INT_LABEL,
+                                                "A"));
+        expectedAutomatonA.states.add(interfaceStateA);
+        expectedAutomatonA.states.add(interfaceStateBInA);
+
+        expectedAutomatonA.states.add(mMethodState);
+
+        expectedAutomatonA.addMethodTypeEdge(mMethodState, interfaceStateBInA, 0);
+        expectedAutomatonA.addMethodTypeEdge(mMethodState, new State(State.INT_LABEL,
+                                                                     State.INT_LABEL,
+                                                                     "A"), 1);
+
+        expectedAutomatonA.addEdge(interfaceStateA,
+                                   mMethodState, new Symbol("m"));
+
+        TermAutomaton expectedAutomatonB = new TermAutomaton();
+
+        State interfaceStateAInB = new State(State.INTERFACE_LABEL,
+                                             "A", "B");
+        State interfaceStateB = new State(State.INTERFACE_LABEL,
+                                          "B", "B");
+        expectedAutomatonB.inputAlphabet.add(new Symbol("m"));
+        expectedAutomatonB.startState = interfaceStateB;
+
+        State mMethodStateB = new State("->", "m", "B");
+
+        expectedAutomatonB.states.add(new State(State.VOID_LABEL,
+                                                State.VOID_LABEL,
+                                                "B"));
+        expectedAutomatonB.states.add(interfaceStateAInB);
+        expectedAutomatonB.states.add(interfaceStateB);
+
+        expectedAutomatonB.states.add(mMethodStateB);
+        
+        expectedAutomatonB.addMethodTypeEdge(mMethodStateB, new State(State.VOID_LABEL,
+                                                                      State.VOID_LABEL,
+                                                                      "B"), 1);
+        expectedAutomatonB.addMethodTypeEdge(mMethodStateB, interfaceStateAInB, 0);
+
+        expectedAutomatonB.addEdge(interfaceStateB,
+                                   mMethodStateB, new Symbol("m"));
+
+        System.out.println("expectedAutomatonA: " + expectedAutomatonA);
+        System.out.println("expectedAutomatonB: " + expectedAutomatonB);
+
+        // TODO: 
+        expectedAutomatonA.includeOtherAutomatonDefinition(expectedAutomatonB);
+        System.out.println("expectedAutomatonA: " + expectedAutomatonA);
     }
 }

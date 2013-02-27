@@ -15,15 +15,26 @@ public class StateTest{
 
     @Before
     public void setUp(){
-        state1 = new State("Yo", "Yo", true);
-        state2 = new State("Yo", "Yo", true);
-        state3 = new State("Yo", "Yo", false);
+        state1 = new State("Yo", "Yo", "foo1");
+        state2 = new State("Yo", "Yo", "foo1");
+        state3 = new State("Yo", "Yo", "foo2");
         state4 = new State("Boyz", "Boyz");
         state5 = new State("Yo", "Yo");
     }
     
     @After
     public void tearDown(){
+    }
+
+    /**
+     * Test method for {@link State#copyConstructor()}.
+     */
+    @Test
+    public final void testCopyConstructor(){
+        State copiedState = new State(state1);
+        assertEquals(state1, copiedState);
+        copiedState.automatonName = "Yo, boyz!";
+        assertFalse(copiedState.equals(state1));
     }
     
     /**
@@ -34,7 +45,7 @@ public class StateTest{
         assertTrue(state1.equals(state2)); 
         assertFalse(state1.equals(state3)); 
         assertFalse(state1.equals(state4)); 
-        assertTrue(state3.equals(state5)); 
+        assertFalse(state3.equals(state5)); 
     }
 
     /**
