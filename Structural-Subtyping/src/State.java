@@ -36,7 +36,7 @@ public class State implements Comparable<State> {
     }
 
     public boolean isNullState(){
-        return !label.equals(NULL_LABEL);
+        return label.equals(NULL_LABEL);
     }
 
     // TODO: Should this consider name too??

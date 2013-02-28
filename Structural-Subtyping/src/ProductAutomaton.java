@@ -34,22 +34,8 @@ public class ProductAutomaton extends Automaton<ProductState> {
         this.startState = new ProductState(automatonA.startState, automatonB.startState, 0);
         
         for (State stateB : automatonB.states){
-            System.out.println("stateB: " + stateB);
-            System.out.println("automatonB.getEdgeSymbols(stateB): " + automatonB.getEdgeSymbols(stateB));
             for (Symbol currSymbol : automatonB.getEdgeSymbols(stateB)){
                 for (State stateA : automatonA.states){
-                    // if (!automatonA.hasNeighbour(stateA, currSymbol)){
-                    //     if (stateA.label.equals(State.INTERFACE_LABEL)
-                    //         && stateB.label.equals(State.INTERFACE_LABEL)){
-
-                    //         // stateB's Interface has a method that
-                    //         // stateA's Interface doesn't.
-                    //         // TODO: 
-                    //         obviouslyNotSubtype = true;
-                    //     }
-                    //     continue;
-                    // }
-
                     for(int parity = 0; parity <= 1; parity++){
                         ProductState targetState = new ProductState(
                             automatonA.getNeighbour(stateA, currSymbol),
@@ -125,21 +111,7 @@ public class ProductAutomaton extends Automaton<ProductState> {
             return true;
         }
 
-        // Here, we'd only have (Interface, Interface), (Int, Int), etc.
-        // (Int, Int): No neighbours, so no final state.
-        // (->, ->): Go to each neighbour and check it out.
-        // (Interface, Interface): ??
-
-        Collection<ProductState> neighbours = getNeighbours(currState);
-        // Collection<ProductState> neighbours = getNeighboursBasedOnParity(currState);
-
-        // if (currState.areBothInterfaces() && neighbours.isEmpty()){
-        //     // TODO: 
-        //     // The two interfaces have no methods in common
-        //     // Therefore, not subtypes => Final state
-        //     System.out.println("here"); 
-        //     // return true;
-        // }
+        Collection<ProductState> neighbours = getNeighboursBasedOnParity(currState);
 
         for (ProductState neighbour : neighbours){
             if (seenStates.contains(neighbour)){

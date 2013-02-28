@@ -242,12 +242,12 @@ jdb -sourcepathtests -classpathclass:class/tests:/usr/share/java/junit4-4.8.2.ja
    :END:
 *** DONE Add unit test for verdicts
     CLOCK: [2013-03-01 Fri 03:56]--[2013-03-01 Fri 04:01] =>  0:05
-*** Debug DFS
+*** DONE Debug DFS
     CLOCK: [2013-03-01 Fri 02:47]--[2013-03-01 Fri 03:04] =>  0:17
     CLOCK: [2013-02-28 Thu 23:00]--[2013-02-28 Thu 23:58] =>  0:58
 **** It's giving right answers for some, wrong for others.
 **** Bloody hell! The parity DOES matter!!!
-***** When the parity is one, check whether B <= A instead of A <= B
+***** DONE When the parity is one, check whether B <= A instead of A <= B
       CLOCK: [2013-03-01 Fri 03:19]--[2013-03-01 Fri 03:46] =>  0:27
       CLOCK: [2013-03-01 Fri 03:04]--[2013-03-01 Fri 03:06] =>  0:02
 ****** Construct a ProductAutomaton normally
@@ -255,7 +255,7 @@ jdb -sourcepathtests -classpathclass:class/tests:/usr/share/java/junit4-4.8.2.ja
        CLOCK: [2013-03-01 Fri 04:02]--[2013-03-01 Fri 04:06] =>  0:04
        CLOCK: [2013-03-01 Fri 03:46]--[2013-03-01 Fri 03:55] =>  0:09
 ****** DONE If A doesn't have a particular edge, just put NULL in the edge's target state.
-****** TODO During DFS for A <= B, if parity is 0, getNeighbours will return those neighbours connected by edges of B. Else, those connected by edges of A.
+****** DONE During DFS for A <= B, if parity is 0, getNeighbours will return those neighbours connected by edges of B. Else, those connected by edges of A.
+       CLOCK: [2013-03-01 Fri 04:27]--[2013-03-01 Fri 04:33] =>  0:06
        CLOCK: [2013-03-01 Fri 04:13]--[2013-03-01 Fri 04:25] =>  0:12
        CLOCK: [2013-03-01 Fri 04:06]--[2013-03-01 Fri 04:11] =>  0:05
-******* 

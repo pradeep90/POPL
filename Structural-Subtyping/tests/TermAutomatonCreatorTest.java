@@ -332,8 +332,7 @@ public class TermAutomatonCreatorTest{
         System.out.println("pub2:"); 
         root.accept(termAutomatonCreator, null);
 
-        // TODO: 
-        assertEquals(Arrays.<String>asList("No", "No"), termAutomatonCreator.verdictList);
+        assertEquals(Arrays.<String>asList("No", "Yes"), termAutomatonCreator.verdictList);
     }
     @Test
     public final void testPub3(){
