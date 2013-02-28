@@ -223,10 +223,16 @@ jdb -sourcepathtests -classpathclass:class/tests:/usr/share/java/junit4-4.8.2.ja
      CLOCK: [2013-02-28 Thu 04:08]--[2013-02-28 Thu 04:59] =>  0:51
 ***** i.e., when you have a state whose definition you haven't seen
 *** OUTDATED Pack all non-visited nodes
-** TODO Build product automata
+** DONE Build product automata
+   CLOCK: [2013-02-28 Thu 21:57]--[2013-02-28 Thu 22:19] =>  0:22
+   CLOCK: [2013-02-28 Thu 20:17]--[2013-02-28 Thu 20:22] =>  0:05
    :PROPERTIES:
    :Effort:   1h
    :END:
+*** DONE Build generic class Automaton<S>
+    CLOCK: [2013-02-28 Thu 20:22]--[2013-02-28 Thu 20:48] =>  0:26
+*** DONE Build class ProductState
+    CLOCK: [2013-02-28 Thu 20:49]--[2013-02-28 Thu 21:49] =>  1:00
 ** TODO DFS on the product automata
    :PROPERTIES:
    :Effort:   1h

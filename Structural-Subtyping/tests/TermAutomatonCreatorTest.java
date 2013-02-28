@@ -32,7 +32,6 @@ public class TermAutomatonCreatorTest{
     public final void testGoal(){
         Node root = InterfaceHelper.getInterfaceNodeFromFile(
             "/home/pradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub0.java");
-        System.out.println("InterfaceHelper.getFormattedString(root): " + InterfaceHelper.getFormattedString(root));
         root.accept(new TermAutomatonCreator(), null);
     }
 
@@ -296,8 +295,6 @@ public class TermAutomatonCreatorTest{
         expectedAutomatonB.addEdge(interfaceStateB,
                                    mMethodStateB, new Symbol("m"));
         
-        System.out.println("automatonA: " + automatonA);
-        System.out.println("automatonB: " + automatonB);
         assertEquals(expectedAutomatonA, automatonA);
         assertEquals(expectedAutomatonB, automatonB);
     }
@@ -309,7 +306,7 @@ public class TermAutomatonCreatorTest{
 
         root.accept(termAutomatonCreator, null);
 
-        System.out.println("pub0: " + termAutomatonCreator.finalAutomatonHashTable);
+        // System.out.println("pub0: " + termAutomatonCreator.finalAutomatonHashTable);
     }
 
     @Test
@@ -319,7 +316,7 @@ public class TermAutomatonCreatorTest{
 
         root.accept(termAutomatonCreator, null);
 
-        System.out.println("pub1: " + termAutomatonCreator.finalAutomatonHashTable);
+        // System.out.println("pub1: " + termAutomatonCreator.finalAutomatonHashTable);
     }
 
     @Test
@@ -329,7 +326,7 @@ public class TermAutomatonCreatorTest{
 
         root.accept(termAutomatonCreator, null);
 
-        System.out.println("pub2: " + termAutomatonCreator.finalAutomatonHashTable);
+        // System.out.println("pub2: " + termAutomatonCreator.finalAutomatonHashTable);
     }
     @Test
     public final void testPub3(){
@@ -338,7 +335,7 @@ public class TermAutomatonCreatorTest{
 
         root.accept(termAutomatonCreator, null);
 
-        System.out.println("pub3: " + termAutomatonCreator.finalAutomatonHashTable);
+        // System.out.println("pub3: " + termAutomatonCreator.finalAutomatonHashTable);
     }
     @Test
     public final void testPub4(){
@@ -347,6 +344,6 @@ public class TermAutomatonCreatorTest{
 
         root.accept(termAutomatonCreator, null);
 
-        System.out.println("pub4: " + termAutomatonCreator.finalAutomatonHashTable);
+        // System.out.println("pub4: " + termAutomatonCreator.finalAutomatonHashTable);
     }
 }

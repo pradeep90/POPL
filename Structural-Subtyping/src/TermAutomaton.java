@@ -5,45 +5,17 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
-
-public class TermAutomaton {
-    // TODO: Make this a Set
-    public Set<Symbol> inputAlphabet;
-    public Set<State> states;
-    public State startState;
-    // Not really needed
-    public State finalState;
-    public HashMap<State, HashMap<Symbol, State> > deltaAdjacencyList; 
-
+public class TermAutomaton extends Automaton<State> {
     public TermAutomaton() {
-        inputAlphabet = new HashSet<Symbol>();
-        inputAlphabet.add(new Symbol("0"));
-        inputAlphabet.add(new Symbol("1"));
-
-        states = new HashSet<State>();
- 
-        finalState = null;
-        deltaAdjacencyList = new HashMap<State, HashMap<Symbol, State> >();
-    }
-
-    public TermAutomaton(Set<Symbol> inputAlphabet,
-                         Set<State> states,
-                         State startState,
-                         State finalState,
-                         HashMap<State, HashMap<Symbol, State> > deltaAdjacencyList) {
-
-        this.inputAlphabet = inputAlphabet;
-        this.states = states;
-        this.startState = startState;
-        this.finalState = finalState;
-        this.deltaAdjacencyList = deltaAdjacencyList;
+        super();
+        this.inputAlphabet.add(new Symbol("0"));
+        this.inputAlphabet.add(new Symbol("1"));
     }
 
     public TermAutomaton(TermAutomaton other){
         this.inputAlphabet = new HashSet<Symbol>(other.inputAlphabet);
         this.states = new HashSet<State>(other.states);
         this.startState = new State(other.startState);
-        // this.finalState = finalState;
         this.deltaAdjacencyList = new HashMap<State, HashMap<Symbol, State>>();
         for (Map.Entry<State, HashMap<Symbol, State>> entry :
                      other.deltaAdjacencyList.entrySet()){
@@ -54,56 +26,6 @@ public class TermAutomaton {
                 addEdge(sourceState, targetState, edgeSymbol);
             }
         }
-    }
-    
-    /** 
-     * Add edge from sourceState to targetState with label.
-     */
-    public void addEdge(State sourceState, State targetState, Symbol label){
-        HashMap<Symbol, State> edgesForSource = deltaAdjacencyList.get(sourceState);
-
-        if (edgesForSource == null){
-            // No edges for source yet. Add new hash map of edges.
-            edgesForSource = new HashMap<Symbol, State>();
-            deltaAdjacencyList.put(sourceState, edgesForSource);
-        }
-
-        edgesForSource.put(label, targetState);
-    }
-
-    /** 
-     * Add edge from -> to targetState with label parity.
-     */
-    public void addMethodTypeEdge(State arrowState, State targetState, int parity){
-        addEdge(arrowState, targetState, new Symbol("" + parity));
-    }
-
-    public boolean equals(Object o) {
-        if (o instanceof TermAutomaton) {
-            TermAutomaton other = (TermAutomaton) o;
-            return (this.states.equals(other.states))
-                    && (this.startState.equals(other.startState))
-                    && (this.inputAlphabet.equals(other.inputAlphabet))
-                    && (this.deltaAdjacencyList.equals(other.deltaAdjacencyList));
-        }
-        return false;
-    }
-
-    public String toString(){
-        String result = "<TermAutomaton: ";
-        result += inputAlphabet.toString();
-        result += "\n";
-        result += states.toString();
-        result += "\n";
-        result += startState.toString();
-        result += "\n";
-        if (finalState != null){
-            result += finalState.toString();
-            result += "\n";
-        }
-        result += deltaAdjacencyList.toString();
-        result += ">";
-        return result;
     }
 
     public String getAutomatonName(){
@@ -143,4 +65,3 @@ public class TermAutomaton {
         }
     }
 }
-

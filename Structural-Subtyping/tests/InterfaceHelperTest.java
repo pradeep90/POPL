@@ -44,8 +44,6 @@ public class InterfaceHelperTest{
         String code2 = InterfaceHelper.getFormattedString(root2);
         
         assertEquals(code1, code2);
-        System.out.println("code1: " + code1);
-        System.out.println("code2: " + code2);
     }
 
     /** 
