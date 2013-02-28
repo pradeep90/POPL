@@ -1,6 +1,8 @@
 import visitor.*;
 import syntaxtree.*;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.HashMap;
@@ -23,8 +25,10 @@ public class TermAutomatonCreator extends GJVoidDepthFirst<TermAutomaton> {
     State currArrowState;
     State currInterfaceState;
     String currInterfaceName;
+    public List<String> verdictList;
 
     public TermAutomatonCreator() {
+        verdictList = new ArrayList<String>();
     }
 
     /** 
@@ -83,6 +87,8 @@ public class TermAutomatonCreator extends GJVoidDepthFirst<TermAutomaton> {
         for (String key : partialAutomatonHashTable.keySet()){
             finalAutomatonHashTable.put(key, getCompleteAutomaton(key));
         }
+
+        n.f0.accept(this, null);
     }
 
     /**
@@ -92,10 +98,24 @@ public class TermAutomatonCreator extends GJVoidDepthFirst<TermAutomaton> {
      * f3 -> "?"
      */
     public void visit(Query n, TermAutomaton arg) {
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
-        n.f2.accept(this, arg);
-        n.f3.accept(this, arg);
+        // n.f0.accept(this, arg);
+        // n.f1.accept(this, arg);
+        // n.f2.accept(this, arg);
+        // n.f3.accept(this, arg);
+        String interfaceA = InterfaceHelper.getIdentifierName(n.f0);
+        String interfaceB = InterfaceHelper.getIdentifierName(n.f2);
+        TermAutomaton automatonA = finalAutomatonHashTable.get(interfaceA);
+        TermAutomaton automatonB = finalAutomatonHashTable.get(interfaceB);
+        ProductAutomaton productAutomaton = new ProductAutomaton(automatonA, automatonB);
+
+        // System.out.println(interfaceA + " <= " + interfaceB);
+        // System.out.println("automatonA: " + automatonA);
+        // System.out.println("automatonB: " + automatonB);
+        // System.out.println("productAutomaton: " + productAutomaton);
+        System.out.println(interfaceA + " <= " + interfaceB);
+        String verdict = (productAutomaton.isSubtype()? "Yes": "No");
+        System.out.println("Verdict: " + verdict); 
+        verdictList.add(verdict);
     }
 
     /**

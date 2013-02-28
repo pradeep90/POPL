@@ -1,7 +1,7 @@
 public class ProductState {
-    State stateA;
-    State stateB;
-    int parity;
+    public State stateA;
+    public State stateB;
+    public int parity;
     
     public ProductState() {
         
@@ -11,6 +11,25 @@ public class ProductState {
         this.stateA = stateA;
         this.stateB = stateB;
         this.parity = parity;
+    }
+
+    /**
+     * Since there are no supertypes among the current set of labels,
+     * the only case in which stateA <= stateB is when label(stateA)
+     * == label(stateB)
+     * 
+     * @return false iff label(stateA) <=_parity label(stateB)
+     */
+    public boolean isFinalState(){
+        return !stateA.label.equals(stateB.label);
+    }
+
+    /** 
+     * @return true iff A and B are interfaces.
+     */
+    public boolean areBothInterfaces(){
+        return stateA.label.equals(State.INTERFACE_LABEL)
+                && stateB.label.equals(State.INTERFACE_LABEL);
     }
 
     public boolean equals(Object o) {

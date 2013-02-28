@@ -1,6 +1,8 @@
 import syntaxtree.*;
 import visitor.*;
 
+import java.util.Arrays;
+
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
@@ -304,9 +306,11 @@ public class TermAutomatonCreatorTest{
         Node root = InterfaceHelper.getInterfaceNodeFromFile(
             "/home/pradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub0.java");
 
+        System.out.println("pub0:"); 
         root.accept(termAutomatonCreator, null);
 
-        // System.out.println("pub0: " + termAutomatonCreator.finalAutomatonHashTable);
+        // TODO: 
+        assertEquals(Arrays.<String>asList("No", "No"), termAutomatonCreator.verdictList);
     }
 
     @Test
@@ -314,9 +318,10 @@ public class TermAutomatonCreatorTest{
         Node root = InterfaceHelper.getInterfaceNodeFromFile(
             "/home/pradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub1.java");
 
+        System.out.println("pub1:"); 
         root.accept(termAutomatonCreator, null);
-
-        // System.out.println("pub1: " + termAutomatonCreator.finalAutomatonHashTable);
+        
+        assertEquals(Arrays.<String>asList("No", "Yes"), termAutomatonCreator.verdictList);
     }
 
     @Test
@@ -324,26 +329,31 @@ public class TermAutomatonCreatorTest{
         Node root = InterfaceHelper.getInterfaceNodeFromFile(
             "/home/pradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub2.java");
 
+        System.out.println("pub2:"); 
         root.accept(termAutomatonCreator, null);
 
-        // System.out.println("pub2: " + termAutomatonCreator.finalAutomatonHashTable);
+        // TODO: 
+        assertEquals(Arrays.<String>asList("No", "No"), termAutomatonCreator.verdictList);
     }
     @Test
     public final void testPub3(){
         Node root = InterfaceHelper.getInterfaceNodeFromFile(
             "/home/pradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub3.java");
 
+        System.out.println("pub3:"); 
         root.accept(termAutomatonCreator, null);
 
-        // System.out.println("pub3: " + termAutomatonCreator.finalAutomatonHashTable);
+        assertEquals(Arrays.<String>asList("Yes", "Yes", "Yes", "Yes", "No", "No"),
+                     termAutomatonCreator.verdictList);
     }
     @Test
     public final void testPub4(){
         Node root = InterfaceHelper.getInterfaceNodeFromFile(
             "/home/pradeep/Dropbox/Acads/POPL/Code/Structural-Subtyping/Example-Interfaces/pub4.java");
 
+        System.out.println("pub4:"); 
         root.accept(termAutomatonCreator, null);
 
-        // System.out.println("pub4: " + termAutomatonCreator.finalAutomatonHashTable);
+        assertEquals(Arrays.<String>asList("No", "No"), termAutomatonCreator.verdictList);
     }
 }

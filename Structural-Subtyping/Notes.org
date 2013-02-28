@@ -52,6 +52,7 @@
 *** VVIP I think that if the input or return type is another Interface, you have to add in all the states, methods, and edges of that Interface's Automaton
 **** OUTDATED It's ok if that interface has a method with the same name as one of your methods but with a different type. Anyway, Interface only goes to "->" state.
 *** So, you'll basically add in that interface's automaton, but whatever it refers to [your interface] just make it point to your Main Interface state
+** VVIP Holy crap! Just realized I'd totally misunderstood the concept of parity. Parity is 0 when there are an even NUMBER of 0s.
 ** term automaton * term automaton -> Product Automaton
 *** Given two term automata M and N, we will construct a product automata (non-deterministic?)
 *** We want to check whether M < N
@@ -70,8 +71,8 @@
 ***** In the definition of "subtyping", they say that every value described by s should be described by t
 ***** In the definition of "type ordering", they say that \alpha \in D(s) \cup D(t)
 ***** Let's try both and stick with the one that answers the test data
-**** Goal: create an automata, where final states are denoted by states that will lead to ≤.
-**** F A = {(p, q, b)|lM (p) ≤b lN (q)} l gives the label of that node.
+**** Goal: create an automata, where final states are denoted by states that will lead to !≤.
+**** F A = {(p, q, b)|lM (p) !≤_b lN (q)} l gives the label of that node.
 ***** OUTDATED Not sure what they mean by the label - ???. I'm assuming it is simply the state's name
 ** DFS: Can you reach some final state?
 * Notes
@@ -84,14 +85,15 @@ jdb -sourcepathtests -classpathclass:class/tests:/usr/share/java/junit4-4.8.2.ja
 #+end_example
 * Test cases
 ** Pub0
-*** A <= B ? // Yes
+*** TODO A <= B ? // Yes
+**** My answer and the TA's answer don't match cos I assume that method name is significant
 *** B <= A ? // No
 ** Pub1
 *** A <= B ? // No
 *** B <= A ? // Yes
 ** Pub2
 *** C <= D ? // No
-*** D <= C ? // Yes
+*** TODO D <= C ? // Yes
 ** Pub3
 *** I1 <= I2 ? // Yes
 *** I2 <= I1 ? // Yes
@@ -234,6 +236,26 @@ jdb -sourcepathtests -classpathclass:class/tests:/usr/share/java/junit4-4.8.2.ja
 *** DONE Build class ProductState
     CLOCK: [2013-02-28 Thu 20:49]--[2013-02-28 Thu 21:49] =>  1:00
 ** TODO DFS on the product automata
+   CLOCK: [2013-02-28 Thu 22:21]--[2013-02-28 Thu 22:59] =>  0:38
    :PROPERTIES:
    :Effort:   1h
    :END:
+*** DONE Add unit test for verdicts
+    CLOCK: [2013-03-01 Fri 03:56]--[2013-03-01 Fri 04:01] =>  0:05
+*** Debug DFS
+    CLOCK: [2013-03-01 Fri 02:47]--[2013-03-01 Fri 03:04] =>  0:17
+    CLOCK: [2013-02-28 Thu 23:00]--[2013-02-28 Thu 23:58] =>  0:58
+**** It's giving right answers for some, wrong for others.
+**** Bloody hell! The parity DOES matter!!!
+***** When the parity is one, check whether B <= A instead of A <= B
+      CLOCK: [2013-03-01 Fri 03:19]--[2013-03-01 Fri 03:46] =>  0:27
+      CLOCK: [2013-03-01 Fri 03:04]--[2013-03-01 Fri 03:06] =>  0:02
+****** Construct a ProductAutomaton normally
+****** DONE When you're trying to add edges from (A, B, b), add edges for all methods of A *AND* B!
+       CLOCK: [2013-03-01 Fri 04:02]--[2013-03-01 Fri 04:06] =>  0:04
+       CLOCK: [2013-03-01 Fri 03:46]--[2013-03-01 Fri 03:55] =>  0:09
+****** DONE If A doesn't have a particular edge, just put NULL in the edge's target state.
+****** TODO During DFS for A <= B, if parity is 0, getNeighbours will return those neighbours connected by edges of B. Else, those connected by edges of A.
+       CLOCK: [2013-03-01 Fri 04:13]--[2013-03-01 Fri 04:25] =>  0:12
+       CLOCK: [2013-03-01 Fri 04:06]--[2013-03-01 Fri 04:11] =>  0:05
+******* 

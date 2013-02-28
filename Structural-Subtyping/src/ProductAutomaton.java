@@ -1,3 +1,11 @@
+import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Collection;
+
 /** 
  * Product of two Automata, A and B.
  *
@@ -5,6 +13,8 @@
  * i.e., B is assumed to be the super-class.
  */
 public class ProductAutomaton extends Automaton<ProductState> {
+    boolean obviouslyNotSubtype = false;
+    
     public ProductAutomaton() {
         super();
     }
@@ -24,12 +34,21 @@ public class ProductAutomaton extends Automaton<ProductState> {
         this.startState = new ProductState(automatonA.startState, automatonB.startState, 0);
         
         for (State stateB : automatonB.states){
+            System.out.println("stateB: " + stateB);
             System.out.println("automatonB.getEdgeSymbols(stateB): " + automatonB.getEdgeSymbols(stateB));
             for (Symbol currSymbol : automatonB.getEdgeSymbols(stateB)){
                 for (State stateA : automatonA.states){
-                    if (!automatonA.hasNeighbour(stateA, currSymbol)){
-                        continue;
-                    }
+                    // if (!automatonA.hasNeighbour(stateA, currSymbol)){
+                    //     if (stateA.label.equals(State.INTERFACE_LABEL)
+                    //         && stateB.label.equals(State.INTERFACE_LABEL)){
+
+                    //         // stateB's Interface has a method that
+                    //         // stateA's Interface doesn't.
+                    //         // TODO: 
+                    //         obviouslyNotSubtype = true;
+                    //     }
+                    //     continue;
+                    // }
 
                     for(int parity = 0; parity <= 1; parity++){
                         ProductState targetState = new ProductState(
@@ -46,14 +65,92 @@ public class ProductAutomaton extends Automaton<ProductState> {
     }
 
     /** 
-     * If symbol is a method or 0, return 0. Else, 1.
+     * If symbol is a "method" or 1, return parity 0.
+     * Else, parity 1.
+     *
+     * Reason: Even number of 0s => parity 0
      * 
      * @return parity of symbol.
      */
     public int getParity(Symbol symbol){
-        if (symbol.name.equals("1")){
+        if (symbol.name.equals("0")){
             return 1;
         }
         return 0;
+    }
+
+    /**
+     * A <= B iff you cannot reach any final state.
+     * 
+     * @return true iff A <= B.
+     */
+    public boolean isSubtype(){
+        if (obviouslyNotSubtype){
+            return false;
+        }
+
+        return !searchFinalState(startState, new HashSet<ProductState>());
+    }
+
+    /**
+     * If parity is 0 (covariant: A <= B), return neighbours along edges of stateB.
+     * Else (contravariant: B <= A), return neighbours along edges of stateA.
+     *
+     * Note: neighbouring states along edge of stateA would just be
+     * those that don't have NULL in the A position.
+     * 
+     * @param sourceState (stateA, stateB, parity)
+     */
+    public Collection<ProductState> getNeighboursBasedOnParity(ProductState sourceState){
+        Collection<ProductState> allNeighbours = getNeighbours(sourceState);
+        Collection<ProductState> parityBasedNeighbours = new ArrayList<ProductState>();
+        for (ProductState neighbour : allNeighbours){
+            State pertinentState =
+                    sourceState.parity == 0? neighbour.stateB: neighbour.stateA;
+            if (!pertinentState.isNullState()){
+                parityBasedNeighbours.add(neighbour);
+            }
+        }
+        return parityBasedNeighbours;
+    }
+
+    /** 
+     * Do DFS on the ProductAutomaton to search for any "Final" states.
+     * 
+     * @return true iff a Final state was found.
+     */
+    public boolean searchFinalState(ProductState currState, Set<ProductState> seenStates){
+        // Stop if you reach something like (Int, Bool) or (->, Void), etc.
+        if (currState.isFinalState()){
+            return true;
+        }
+
+        // Here, we'd only have (Interface, Interface), (Int, Int), etc.
+        // (Int, Int): No neighbours, so no final state.
+        // (->, ->): Go to each neighbour and check it out.
+        // (Interface, Interface): ??
+
+        Collection<ProductState> neighbours = getNeighbours(currState);
+        // Collection<ProductState> neighbours = getNeighboursBasedOnParity(currState);
+
+        // if (currState.areBothInterfaces() && neighbours.isEmpty()){
+        //     // TODO: 
+        //     // The two interfaces have no methods in common
+        //     // Therefore, not subtypes => Final state
+        //     System.out.println("here"); 
+        //     // return true;
+        // }
+
+        for (ProductState neighbour : neighbours){
+            if (seenStates.contains(neighbour)){
+                continue;
+            }
+            seenStates.add(neighbour);
+
+            if (searchFinalState(neighbour, seenStates)){
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -3,6 +3,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Collection;
 import java.util.HashMap;
 
 /** 
@@ -54,11 +55,24 @@ public class Automaton<T> {
         addEdge(arrowState, targetState, new Symbol("" + parity));
     }
 
-    /** 
+    /**
+     * If sourceState doesn't have a neighbour along edgeLabel, return
+     * NULL state.
+     * 
      * @return neighbour of sourceState along edgeLabel.
      */
     public T getNeighbour(T sourceState, Symbol edgeLabel){
         return deltaAdjacencyList.get(sourceState).get(edgeLabel);
+    }
+    
+    /** 
+     * @return set of neighbours of sourceState.
+     */
+    public Collection<T> getNeighbours(T sourceState){
+        if (deltaAdjacencyList.get(sourceState) != null){
+            return deltaAdjacencyList.get(sourceState).values(); 
+        }
+        return new ArrayList<T>();
     }
 
     /** 

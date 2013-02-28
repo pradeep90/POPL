@@ -7,6 +7,7 @@ public class State implements Comparable<State> {
     public static final String BOOL_LABEL = "Bool"; 
     public static final String VOID_LABEL = "Void"; 
     public static final String INTERFACE_LABEL = "Interface";
+    public static final String NULL_LABEL = "NULL";
     
     public State(String label, String name, String automatonName){
         this.label = label;
@@ -34,6 +35,9 @@ public class State implements Comparable<State> {
         }
     }
 
+    public boolean isNullState(){
+        return !label.equals(NULL_LABEL);
+    }
 
     // TODO: Should this consider name too??
     public boolean equals(Object o) {

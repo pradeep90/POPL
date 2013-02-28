@@ -28,6 +28,20 @@ public class TermAutomaton extends Automaton<State> {
         }
     }
 
+    /**
+     * If sourceState doesn't have a neighbour along edgeLabel, return
+     * NULL state.
+     * 
+     * @return neighbour of sourceState along edgeLabel.
+     */
+    @Override
+    public State getNeighbour(State sourceState, Symbol edgeLabel){
+        if (hasNeighbour(sourceState, edgeLabel)){
+            return deltaAdjacencyList.get(sourceState).get(edgeLabel);
+        }
+        return new State(State.NULL_LABEL, State.NULL_LABEL);
+    }
+
     public String getAutomatonName(){
         return this.startState.name;
     }
