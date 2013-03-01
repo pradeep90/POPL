@@ -93,7 +93,7 @@ jdb -sourcepathtests -classpathclass:class/tests:/usr/share/java/junit4-4.8.2.ja
 *** B <= A ? // Yes
 ** Pub2
 *** C <= D ? // No
-*** TODO D <= C ? // Yes
+*** D <= C ? // Yes
 ** Pub3
 *** I1 <= I2 ? // Yes
 *** I2 <= I1 ? // Yes

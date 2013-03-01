@@ -112,9 +112,10 @@ public class TermAutomatonCreator extends GJVoidDepthFirst<TermAutomaton> {
         // System.out.println("automatonA: " + automatonA);
         // System.out.println("automatonB: " + automatonB);
         // System.out.println("productAutomaton: " + productAutomaton);
-        System.out.println(interfaceA + " <= " + interfaceB);
+        // System.out.println(interfaceA + " <= " + interfaceB);
         String verdict = (productAutomaton.isSubtype()? "Yes": "No");
-        System.out.println("Verdict: " + verdict); 
+        // System.out.println("Verdict: " + verdict); 
+        System.out.println(verdict);
         verdictList.add(verdict);
     }
 
