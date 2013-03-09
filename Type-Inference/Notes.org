@@ -1,0 +1,116 @@
+				Notes
+
+* Test cases
+* My trials
+** pub1
+*** 
+* Grammar
+** Goal 	::= 	Expression <EOF>
+** Expression 	::= 	IntegerLiteral
+*** | 	TrueLiteral
+*** | 	FalseLiteral
+*** | 	PlusExpression
+*** | 	IfExpression
+*** | 	LetExpression
+*** | 	Identifier
+*** | 	Assignment
+*** | 	ProcedureExp
+*** | 	Application
+*** | 	RecExpression
+** IntegerLiteral 	::= 	<INTEGER_LITERAL>
+** TrueLiteral 	::= 	"#t"
+** FalseLiteral 	::= 	"#f"
+** PlusExpression 	::= 	"(" "+" Expression Expression ")"
+** IfExpression 	::= 	"(" "if" Expression Expression Expression ")"
+** LetExpression 	::= 	"(" "let" "(" ( Declaration )* ")" Expression ")"
+** Identifier 	::= 	<IDENTIFIER>
+** Assignment 	::= 	"(" "set!" Identifier Expression ")"
+** ProcedureExp 	::= 	"(" "lambda" "(" ( Identifier )* ")" Expression ")"
+** Application 	::= 	"(" Expression ( Expression )* ")"
+** RecExpression 	::= 	"(" "letrec" "(" ( RecDeclaration )* ")" Expression ")"
+** Declaration 	::= 	"(" Identifier Expression ")"
+** RecDeclaration 	::= 	"(" Identifier ProcedureExp ")"
+* Types
+** Goal
+** Expression
+*** | 	TrueLiteral
+*** | 	FalseLiteral
+*** | 	PlusExpression
+*** | 	IfExpression
+*** | 	LetExpression
+*** | 	Identifier
+*** | 	Assignment
+*** | 	ProcedureExp
+*** | 	Application
+*** | 	RecExpression
+** IntegerLiteral
+** TrueLiteral
+*** return boolean
+** FalseLiteral
+*** return boolean
+** PlusExpression
+*** return int
+*** add equations (type of expr1 = int), (type of expr2 = int)
+** IfExpression
+*** return new type t_k
+*** add equations
+**** type of clause = bool
+**** type of expr1 = t_k
+**** type of expr2 = t_k
+** LetExpression
+*** return t_k
+*** let the declarations do their business (in a copy of the type environment and with a copy of the id-list) 
+*** make sure the declarations can't get at each other or themselves. They can only refer to types in the parent environment
+*** add equation: type of expression = t_k
+** TODO Identifier - ?
+** TODO Assignment - (old type??)
+** ProcedureExp
+*** return t_k
+*** extend copy of the type environment with declarations' stuff
+*** add equation: t_k = type of expression
+** Application
+*** return t_k
+*** add equation: t_k = return type of function-expression
+*** add equation: argument type of function-expression = (type of expr1, ...)
+** RecExpression - 
+*** return t_k
+*** let the declarations do their business (in a copy of the type environment and with a copy of the id-list) 
+*** However, cos this is letrec, make nominal types for the declarations right at the beginning (and add them to the id list) so that they can refer to themselves and each other.
+**** I think you can do this in RecDeclaration
+*** add equation: type of expression = t_k
+** Declaration
+** RecDeclaration
+* Action Plan
+** I think you have to build up an Environment-like data structure as you traverse the parse tree
+** Parse Tree => Set of equations
+** Unification algorithm: Set of equations => Type for the top-level function (or "Does not type check")
+* Parse tree => Set of equations
+** Each node returns its type
+** Inside, it also adds a bunch of equations to G
+* Steps
+** DONE Set up the boiler-plate code
+   CLOCK: [2013-03-09 Sat 23:43]--[2013-03-09 Sat 23:50] =>  0:07
+** DONE Get a basic Parser running
+   CLOCK: [2013-03-09 Sat 23:51]--[2013-03-09 Sat 23:54] =>  0:03
+** DONE Type
+   CLOCK: [2013-03-10 Sun 00:02]--[2013-03-10 Sun 00:03] =>  0:01
+   :PROPERTIES:
+   :Effort:   15
+   :END:
+*** DONE Base class
+    CLOCK: [2013-03-10 Sun 00:03]--[2013-03-10 Sun 00:03] =>  0:00
+*** DONE int
+    CLOCK: [2013-03-10 Sun 00:04]--[2013-03-10 Sun 00:07] =>  0:03
+*** boolean
+*** unknown
+*** function
+** DONE TypeEnvironment - LinkedList
+   CLOCK: [2013-03-10 Sun 00:07]--[2013-03-10 Sun 00:10] =>  0:03
+   :PROPERTIES:
+   :Effort:   5
+   :END:
+*** identifier => Type
+** TODO Simple types
+   :PROPERTIES:
+   :Effort:   30
+   :END:
