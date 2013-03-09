@@ -44,6 +44,7 @@
 *** | 	Application
 *** | 	RecExpression
 ** IntegerLiteral
+*** return IntType
 ** TrueLiteral
 *** return boolean
 ** FalseLiteral
@@ -84,7 +85,7 @@
 ** I think you have to build up an Environment-like data structure as you traverse the parse tree
 ** Parse Tree => Set of equations
 ** Unification algorithm: Set of equations => Type for the top-level function (or "Does not type check")
-* Parse tree => Set of equations
+* VVIP Parse tree => Set of equations
 ** Each node returns its type
 ** Inside, it also adds a bunch of equations to G
 * Steps
@@ -110,7 +111,21 @@
    :Effort:   5
    :END:
 *** identifier => Type
-** TODO Simple types
+** DONE Simple types
+   CLOCK: [2013-03-10 Sun 00:12]--[2013-03-10 Sun 00:12] =>  0:00
    :PROPERTIES:
    :Effort:   30
    :END:
+*** DONE see if it reads stuff properly
+    CLOCK: [2013-03-10 Sun 00:25]--[2013-03-10 Sun 00:26] =>  0:01
+    CLOCK: [2013-03-10 Sun 00:12]--[2013-03-10 Sun 00:25] =>  0:13
+*** DONE TrueLiteral
+    CLOCK: [2013-03-10 Sun 00:28]--[2013-03-10 Sun 00:31] =>  0:03
+*** DONE FalseLiteral
+    CLOCK: [2013-03-10 Sun 00:31]--[2013-03-10 Sun 00:34] =>  0:03
+*** DONE IntegerLiteral
+    CLOCK: [2013-03-10 Sun 00:34]--[2013-03-10 Sun 00:38] =>  0:04
+
+** TypeEquation
+** TODO Make this just collect every TypeEquation (i.e., NOT TypeInferrer, just TypeEquationCollector)
+** Then, write a Unifier class
