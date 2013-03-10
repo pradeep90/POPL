@@ -11,10 +11,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class TypeEquationCollectorTest{
+    TypeEquationCollector typeInferrer;
     TrueLiteral trueLiteral;
     FalseLiteral falseLiteral;
     IntegerLiteral integerLiteral;
-    TypeEquationCollector typeInferrer;
+    IntegerLiteral integerLiteral2;
+    PlusExpression plusExpression;
+    Expression intExpression1;
+    Expression intExpression2;
     
     @Before
     public void setUp(){
@@ -22,6 +26,10 @@ public class TypeEquationCollectorTest{
         trueLiteral = new TrueLiteral();
         falseLiteral = new FalseLiteral();
         integerLiteral = new IntegerLiteral(new NodeToken("42"));
+        integerLiteral2 = new IntegerLiteral(new NodeToken("42"));
+        intExpression1 = new Expression(new NodeChoice(integerLiteral, 0));
+        intExpression2 = new Expression(new NodeChoice(integerLiteral2, 0));
+        plusExpression = new PlusExpression(intExpression1, intExpression2);
     }
     
     @After
@@ -53,5 +61,16 @@ public class TypeEquationCollectorTest{
     public final void testIntegerLiteral(){
         assertEquals(new IntType(),
                      typeInferrer.visit(integerLiteral, null));
+    }
+
+    /**
+     * Test method for {@link TypeEquationCollector#PlusExpression()}.
+     */
+    @Test
+    public final void testPlusExpression(){
+        assertEquals(new IntType(), typeInferrer.visit(plusExpression, null));
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new IntType(), new IntType())));
+        assertEquals(1, typeInferrer.allEquations.size());
     }
 }

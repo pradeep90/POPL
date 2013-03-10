@@ -126,6 +126,12 @@
 *** DONE IntegerLiteral
     CLOCK: [2013-03-10 Sun 00:34]--[2013-03-10 Sun 00:38] =>  0:04
 
-** TypeEquation
-** TODO Make this just collect every TypeEquation (i.e., NOT TypeInferrer, just TypeEquationCollector)
+** DONE Make this just collect every TypeEquation (i.e., NOT TypeInferrer, just TypeEquationCollector)
+** DONE TypeEquation
+   CLOCK: [2013-03-10 Sun 19:23]--[2013-03-10 Sun 19:26] =>  0:03
+** DONE PlusExpression
+   CLOCK: [2013-03-10 Sun 19:26]--[2013-03-10 Sun 19:52] =>  0:26
+   :PROPERTIES:
+   :Effort:   5
+   :END:
 ** Then, write a Unifier class

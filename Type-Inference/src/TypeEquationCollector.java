@@ -3,9 +3,18 @@ import visitor.*;
 import java.util.*;
 
 public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
+
+    Set<TypeEquation> allEquations = new HashSet<TypeEquation>();
     
     public TypeEquationCollector() {
         
+    }
+
+    /** 
+     * Add a TypeEquation (t1 = t2) to allEquations.
+     */
+    public void addEquation(Type t1, Type t2){
+        allEquations.add(new TypeEquation(t1, t2));
     }
 
    //
@@ -84,7 +93,7 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
     */
    public Type visit(Expression n, TypeEnvironment arg) {
       Type _ret=null;
-      n.f0.accept(this, arg);
+      _ret = n.f0.accept(this, arg);
       return _ret;
    }
 
@@ -124,11 +133,11 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
     */
    public Type visit(PlusExpression n, TypeEnvironment arg) {
       Type _ret=null;
-      n.f0.accept(this, arg);
-      n.f1.accept(this, arg);
-      n.f2.accept(this, arg);
-      n.f3.accept(this, arg);
-      n.f4.accept(this, arg);
+      Type t1 = n.f2.accept(this, arg);
+      Type t2 = n.f3.accept(this, arg);
+      addEquation(t1, new IntType());
+      addEquation(t2, new IntType());
+      _ret = new IntType();
       return _ret;
    }
 

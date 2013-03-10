@@ -5,4 +5,10 @@ import syntaxtree.*;
  */
 public abstract class Type {
     public abstract boolean equals(Object o);
+
+    public int hashCode(){
+        int hash = 0;
+        hash += this.getClass().getSimpleName().hashCode();
+        return hash;
+    }
 }
