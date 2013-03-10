@@ -2,9 +2,9 @@ import syntaxtree.*;
 import visitor.*;
 import java.util.*;
 
-public class TypeInferrer extends GJDepthFirst<Type, TypeEnvironment> {
+public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
     
-    public TypeInferrer() {
+    public TypeEquationCollector() {
         
     }
 

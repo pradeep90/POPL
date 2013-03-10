@@ -10,15 +10,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class TypeInferrerTest{
+public class TypeEquationCollectorTest{
     TrueLiteral trueLiteral;
     FalseLiteral falseLiteral;
     IntegerLiteral integerLiteral;
-    TypeInferrer typeInferrer;
+    TypeEquationCollector typeInferrer;
     
     @Before
     public void setUp(){
-        typeInferrer = new TypeInferrer();
+        typeInferrer = new TypeEquationCollector();
         trueLiteral = new TrueLiteral();
         falseLiteral = new FalseLiteral();
         integerLiteral = new IntegerLiteral(new NodeToken("42"));
@@ -29,7 +29,7 @@ public class TypeInferrerTest{
     }
     
     /**
-     * Test method for {@link TypeInferrer#TrueLiteral()}.
+     * Test method for {@link TypeEquationCollector#TrueLiteral()}.
      */
     @Test
     public final void testTrueLiteral(){
@@ -38,7 +38,7 @@ public class TypeInferrerTest{
     }
 
     /**
-     * Test method for {@link TypeInferrer#FalseLiteral()}.
+     * Test method for {@link TypeEquationCollector#FalseLiteral()}.
      */
     @Test
     public final void testFalseLiteral(){
@@ -47,7 +47,7 @@ public class TypeInferrerTest{
     }
 
     /**
-     * Test method for {@link TypeInferrer#IntegerLiteral()}.
+     * Test method for {@link TypeEquationCollector#IntegerLiteral()}.
      */
     @Test
     public final void testIntegerLiteral(){
