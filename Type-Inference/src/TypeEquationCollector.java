@@ -151,12 +151,14 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
     */
    public Type visit(IfExpression n, TypeEnvironment arg) {
       Type _ret=null;
-      n.f0.accept(this, arg);
-      n.f1.accept(this, arg);
-      n.f2.accept(this, arg);
-      n.f3.accept(this, arg);
-      n.f4.accept(this, arg);
-      n.f5.accept(this, arg);
+      Type f2 = n.f2.accept(this, arg);
+      Type f3 = n.f3.accept(this, arg);
+      Type f4 = n.f4.accept(this, arg);
+
+      _ret = new UnknownType();
+      addEquation(f2, new BooleanType());
+      addEquation(f3, _ret);
+      addEquation(f4, _ret);
       return _ret;
    }
 

@@ -17,8 +17,10 @@ public class TypeEquationCollectorTest{
     IntegerLiteral integerLiteral;
     IntegerLiteral integerLiteral2;
     PlusExpression plusExpression;
+    IfExpression ifExpression;
     Expression intExpression1;
     Expression intExpression2;
+    Expression boolExpression;
     
     @Before
     public void setUp(){
@@ -30,6 +32,8 @@ public class TypeEquationCollectorTest{
         intExpression1 = new Expression(new NodeChoice(integerLiteral, 0));
         intExpression2 = new Expression(new NodeChoice(integerLiteral2, 0));
         plusExpression = new PlusExpression(intExpression1, intExpression2);
+        boolExpression = new Expression(new NodeChoice(trueLiteral, 1));
+        ifExpression = new IfExpression(boolExpression, intExpression1, intExpression2);
     }
     
     @After
@@ -72,5 +76,18 @@ public class TypeEquationCollectorTest{
         assertTrue(typeInferrer.allEquations.contains(
             new TypeEquation(new IntType(), new IntType())));
         assertEquals(1, typeInferrer.allEquations.size());
+    }
+
+    /**
+     * Test method for {@link TypeEquationCollector#IfExpression()}.
+     */
+    @Test
+    public final void testIfExpression(){
+        assertEquals(new UnknownType(0), typeInferrer.visit(ifExpression, null));
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new IntType(), new UnknownType(0))));
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new BooleanType(), new BooleanType())));
+        assertEquals(2, typeInferrer.allEquations.size());
     }
 }

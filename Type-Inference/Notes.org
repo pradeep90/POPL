@@ -134,4 +134,10 @@
    :PROPERTIES:
    :Effort:   5
    :END:
+** DONE Add newUnknownType counter
+** DONE IfExpression
+   CLOCK: [2013-03-10 Sun 19:58]--[2013-03-10 Sun 20:05] =>  0:07
+   :PROPERTIES:
+   :Effort:   07
+   :END:
 ** Then, write a Unifier class
