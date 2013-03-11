@@ -63,8 +63,8 @@
 *** let the declarations do their business (in a copy of the type environment and with a copy of the id-list) 
 *** make sure the declarations can't get at each other or themselves. They can only refer to types in the parent environment
 *** add equation: type of expression = t_k
-** TODO Identifier - ?
-** TODO Assignment - (old type??)
+** Identifier - ?
+** Assignment - (old type??)
 ** ProcedureExp
 *** return t_k
 *** extend copy of the type environment with declarations' stuff
@@ -88,6 +88,15 @@
 * VVIP Parse tree => Set of equations
 ** Each node returns its type
 ** Inside, it also adds a bunch of equations to G
+* Lessons
+** Note: you won't be able to see the changes made by the declarations in a LetExpression cos they'll happen in an extended letTypeEnvironment.
+** I'm choosing to return the type of the expression in Declaration instead of extending the environment cos we don't want them to refer to the preceding declarations (which will happen if you let them extend the environment)
+** TODO what is the type of a function 
+*** (lambda (x y) (+ x y))
+*** Is it int -> int -> int
+*** But then, what is the type of (lambda (x) (lambda (y) (+ x y)))
+*** Isn't that also int -> int -> int
+*** No, I think that is int -> (int -> int)
 * Steps
 ** DONE Set up the boiler-plate code
    CLOCK: [2013-03-09 Sat 23:43]--[2013-03-09 Sat 23:50] =>  0:07
@@ -140,4 +149,28 @@
    :PROPERTIES:
    :Effort:   07
    :END:
+** DONE LetExpression
+   CLOCK: [2013-03-11 Mon 19:52]--[2013-03-11 Mon 20:07] =>  0:15
+   CLOCK: [2013-03-11 Mon 19:49]--[2013-03-11 Mon 19:52] =>  0:03
+   CLOCK: [2013-03-11 Mon 19:43]--[2013-03-11 Mon 19:47] =>  0:04
+   CLOCK: [2013-03-11 Mon 19:27]--[2013-03-11 Mon 19:30] =>  0:03
+** DONE Identifier
+   CLOCK: [2013-03-11 Mon 19:47]--[2013-03-11 Mon 19:49] =>  0:02
+** DONE Declaration
+   CLOCK: [2013-03-11 Mon 19:30]--[2013-03-11 Mon 19:43] =>  0:13
+** DONE Assignment
+   CLOCK: [2013-03-11 Mon 20:56]--[2013-03-11 Mon 21:02] =>  0:06
+** TODO RecExpression
+   CLOCK: [2013-03-11 Mon 22:15]
+   :PROPERTIES:
+   :Effort:   10
+   :END:
+** TODO ProcedureExp
+   CLOCK: [2013-03-11 Mon 21:03]--[2013-03-11 Mon 21:21] =>  0:18
+   :PROPERTIES:
+   :Effort:   15
+   :END:
+** TODO getFunctionType
+   CLOCK: [2013-03-11 Mon 21:21]--[2013-03-11 Mon 21:38] =>  0:17
+** TODO Take care of Application and ProcedureExp with no arguments
 ** Then, write a Unifier class

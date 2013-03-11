@@ -10,4 +10,10 @@ public class IntType extends Type {
         }
         return false;
     }
+
+    public String toString(){
+        String result = "";
+        result += "int";
+        return result;
+    }
 }

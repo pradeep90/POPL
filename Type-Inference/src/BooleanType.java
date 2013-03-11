@@ -11,4 +11,9 @@ public class BooleanType extends Type {
         return false;
     }
 
+    public String toString(){
+        String result = "";
+        result += "bool";
+        return result;
+    }
 }
