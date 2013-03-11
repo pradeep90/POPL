@@ -9,6 +9,23 @@ public class FunctionType extends Type {
         this.returnType = returnType;
     }
 
+    @Override
+    public boolean areSameBasicType(Type other){
+        // FunctionType is not a basic type
+        return false;
+    }
+
+    @Override
+    public boolean areIncompatibleTypes(Type other){
+        if (other instanceof IntType){
+            return true;
+        }
+        else if (other instanceof BooleanType){
+            return true;
+        }
+        return false;
+    }
+
     /** 
      * Construct a FunctionType out of the paramTypes and returnType.
      */
@@ -30,7 +47,13 @@ public class FunctionType extends Type {
         }
 
     }
-    
+
+    @Override
+    public Type substitute(TypeEnvironment unification){
+        return new FunctionType(paramType.substitute(unification),
+                                returnType.substitute(unification));
+    }
+
     public boolean equals(Object o) {
         if (o instanceof FunctionType) {
             FunctionType other = (FunctionType) o;
@@ -47,5 +70,12 @@ public class FunctionType extends Type {
         result += returnType;
         result += ")";
         return result;
+    }
+
+    public int hashCode(){
+        int hash = 0;
+        hash += paramType.hashCode();
+        hash += returnType.hashCode();
+        return hash;
     }
 }

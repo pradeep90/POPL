@@ -160,8 +160,8 @@
    CLOCK: [2013-03-11 Mon 19:30]--[2013-03-11 Mon 19:43] =>  0:13
 ** DONE Assignment
    CLOCK: [2013-03-11 Mon 20:56]--[2013-03-11 Mon 21:02] =>  0:06
-** TODO RecExpression
-   CLOCK: [2013-03-11 Mon 22:15]
+** DONE RecExpression
+   CLOCK: [2013-03-11 Mon 22:15]--[2013-03-11 Mon 22:27] =>  0:12
    :PROPERTIES:
    :Effort:   10
    :END:
@@ -173,4 +173,6 @@
 ** TODO getFunctionType
    CLOCK: [2013-03-11 Mon 21:21]--[2013-03-11 Mon 21:38] =>  0:17
 ** TODO Take care of Application and ProcedureExp with no arguments
-** Then, write a Unifier class
+** DONE Then, write a Unifier class
+   CLOCK: [2013-03-11 Mon 22:27]--[2013-03-11 Mon 23:25] =>  0:58
+** TODO Make sure that "Does not type check" in TypeEquationCollector (for recursive stuff in normal LetExpression) is ok when it usually comes in Unifier

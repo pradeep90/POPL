@@ -11,6 +11,27 @@ public class UnknownType extends Type {
         this.id = counter++;
     }
 
+    @Override
+    public boolean areSameBasicType(Type other){
+        if (other instanceof UnknownType){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean areIncompatibleTypes(Type other){
+        return false;
+    }
+
+    @Override
+    public Type substitute(TypeEnvironment unification){
+        if (unification.lookup("" + id) != null){
+            return unification.lookup("" + id);
+        }
+        return this;
+    }
+
     public boolean equals(Object o) {
         if (o instanceof UnknownType) {
             UnknownType other = (UnknownType) o;
@@ -24,5 +45,11 @@ public class UnknownType extends Type {
         result += id;
         result += ">";
         return result;
+    }
+
+    public int hashCode(){
+        int hash = 0;
+        hash += id;
+        return hash;
     }
 }

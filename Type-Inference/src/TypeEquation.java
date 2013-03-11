@@ -7,6 +7,12 @@ public class TypeEquation {
         this.type2 = type2;
     }
 
+    public TypeEquation substitute(TypeEnvironment unification){
+        Type newType1 = type1.substitute(unification);
+        Type newType2 = type2.substitute(unification);
+        return new TypeEquation(newType1, newType2);
+    }
+
     public boolean equals(Object o) {
         if (o instanceof TypeEquation) {
             TypeEquation other = (TypeEquation) o;
