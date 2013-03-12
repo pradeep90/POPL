@@ -134,7 +134,7 @@ javadoc: $(all_src_files)
         echo $(JAVADOC) $(JDFLAGS) @$<
 
 execute: compile
-	$(JAVA) $(RUN_FLAGS) P4 < Examples-Scheme/pub1.scm
+	$(JAVA) $(RUN_FLAGS) P4 < Examples-Scheme/pub5.scm
 
 $(all_generated_microjava_files):
 	$(MKDIR) $(GEN_MICROJAVA_OUTPUT_DIR)

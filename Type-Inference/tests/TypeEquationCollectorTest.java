@@ -147,10 +147,43 @@ public class TypeEquationCollectorTest{
      * Test method for {@link TypeEquationCollector#LetExpression()}.
      */
     @Test(expected = RuntimeException.class)
-    public final void testLetExpression_NotRecursive(){
+    public final void testLetExpression_Recursive(){
         String letString = "(let ((a 10) (b a)) (+ a b))";
         LetExpression letExpression = (LetExpression) getTopLevelNode(letString);
         Type type = typeInferrer.visit(letExpression, typeEnvironment);
+    }
+
+    /**
+     * Test method for {@link TypeEquationCollector#LetExpression()}.
+     */
+    @Test(expected = RuntimeException.class)
+    public final void testLetExpression_RecursiveFullProgram(){
+        String letString = "(let ((high
+	( lambda ( x )
+	  ( let (( q (lambda ( y )
+		       (lambda(z)
+                         (lambda(a)
+			   ( let(
+				 (b (lambda (c)
+				      ( + 1 2 )
+				      )
+				    )
+				 )
+			     (set! b 2)
+			     )
+			   )
+			 )
+		       )
+		     )
+		 )
+	    (q #f)
+	    )
+	  )
+
+	)
+) 3)";
+        Goal goal = (Goal) TypeHelper.getMiniSchemeNodeFromString(letString);
+        Type type = goal.accept(typeInferrer, typeEnvironment);
     }
 
     /**
@@ -254,6 +287,45 @@ public class TypeEquationCollectorTest{
                 new FunctionType(new UnknownType(0),
                                  new FunctionType(new UnknownType(1),
                                                   new IntType())))));
+    }
+    
+    /**
+     * Test method for {@link TypeEquationCollector#ProcedureExp()}.
+     */
+    @Test
+    public final void testProcedureExp_ZeroParams(){
+        String procedureString = "(lambda () (+ 3 5))";
+        ProcedureExp procedureExp = (ProcedureExp) getTopLevelNode(procedureString);
+        Type expected = new FunctionType(FunctionType.VOID_TYPE, new IntType());
+        assertEquals(expected, typeInferrer.visit(procedureExp, typeEnvironment));
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new IntType(), new IntType())));
+    }
+
+    /**
+     * Test method for {@link TypeEquationCollector#ProcedureExp()}.
+     */
+    @Test
+    public final void testProcedureExp_ZeroParamsFinalType(){
+        String procedureString = "(lambda () (+ 3 5))";
+        Goal goal = (Goal) TypeHelper.getMiniSchemeNodeFromString(procedureString);
+        Type expected = new FunctionType(FunctionType.VOID_TYPE, new IntType());
+        assertEquals(expected, goal.accept(typeInferrer, typeEnvironment));
+    }
+
+    /**
+     * Test method for {@link TypeEquationCollector#Application()}.
+     */
+    @Test
+    public final void testApplication_ZeroParams(){
+        String applicationString = "((lambda () (+ 3 5)))";
+        Application application = (Application) getTopLevelNode(applicationString);
+        Type expected = new UnknownType(0);
+        assertEquals(expected, typeInferrer.visit(application, typeEnvironment));
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(
+                new FunctionType(FunctionType.VOID_TYPE, new UnknownType(0)),
+                new FunctionType(FunctionType.VOID_TYPE, new IntType()))));
     }
 
     /**

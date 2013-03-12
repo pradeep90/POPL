@@ -278,6 +278,7 @@
 ** DONE Test with public cases
    CLOCK: [2013-03-12 Tue 21:00]--[2013-03-12 Tue 21:18] =>  0:18
    CLOCK: [2013-03-12 Tue 20:54]--[2013-03-12 Tue 20:59] =>  0:05
-** TODO See if (UnknownType, UnknownType) should be false in areSameBasicType
+** DONE See if (UnknownType, UnknownType) should be false in areSameBasicType
 ** TODO Take care of Application and ProcedureExp with no arguments
-** TODO Make sure that "Does not type check" in TypeEquationCollector (for recursive stuff in normal LetExpression) is ok when it usually comes in Unifier
+   CLOCK: [2013-03-12 Tue 22:25]
+** DONE Make sure that "Does not type check" in TypeEquationCollector (for recursive stuff in normal LetExpression) is ok when it usually comes in Unifier
