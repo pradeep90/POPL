@@ -137,13 +137,11 @@ public class TypeEquationCollectorTest{
     /**
      * Test method for {@link TypeEquationCollector#LetExpression()}.
      */
-    @Test
+    @Test(expected = RuntimeException.class)
     public final void testLetExpression_NotRecursive(){
         String letString = "(let ((a 10) (b a)) (+ a b))";
         LetExpression letExpression = (LetExpression) getTopLevelNode(letString);
         Type type = typeInferrer.visit(letExpression, typeEnvironment);
-        fail();
-        assertEquals(new IntType(), type);
     }
 
     /**
@@ -153,7 +151,7 @@ public class TypeEquationCollectorTest{
     public final void testAssignment(){
         String assignmentString = "(let ((a 10) (b #t)) (set! b a))";
         LetExpression letExpression = (LetExpression) getTopLevelNode(assignmentString);
-        Assignment assignment = (Assignment) letExpression.f5.f0.choice;
-        assertEquals(new BooleanType(), typeInferrer.visit(assignment, typeEnvironment));
+        assertEquals(new BooleanType(), typeInferrer.visit(letExpression,
+                                                           typeEnvironment));
     }
 }

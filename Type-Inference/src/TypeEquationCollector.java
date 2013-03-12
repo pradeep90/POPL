@@ -185,7 +185,8 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
             if (type == null){
                 // The declaration referred to other let identifiers
                 System.out.println("Does not Type Check"); 
-                System.exit(0);
+                // System.exit(0);
+                throw new RuntimeException("Does not Type Check");
             }
 
             letTypeEnvironment.extend(TypeHelper.getIdentifierName(currDeclaration.f1),
@@ -235,17 +236,20 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
     public Type visit(ProcedureExp n, TypeEnvironment arg) {
         Type _ret=null;
         TypeEnvironment lambdaTypeEnvironment = new TypeEnvironment(arg);
+        List<Type> paramTypes = new ArrayList<Type>();
       
         for (Node node : n.f3.nodes){
             Identifier currIdentifier = (Identifier) node;
-            lambdaTypeEnvironment.extend(TypeHelper.getIdentifierName(currIdentifier),
-                                         new UnknownType());
+            Type currType = new UnknownType();
+            lambdaTypeEnvironment.extend(
+                TypeHelper.getIdentifierName(currIdentifier),
+                currType);
+            paramTypes.add(currType);
         }
 
         Type returnType = n.f5.accept(this, lambdaTypeEnvironment);
-        Type paramType = null;
 
-        _ret = new FunctionType(paramType, returnType);
+        _ret = FunctionType.getFunctionType(paramTypes, returnType);
         return _ret;
     }
 

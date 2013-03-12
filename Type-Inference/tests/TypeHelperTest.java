@@ -34,9 +34,9 @@ public class TypeHelperTest{
     public final void testGetFormattedString()
             throws FileNotFoundException, ParseException{
         InputStream in1 = new FileInputStream(
-            "/home/pradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub1.scm");
+            "/home/spradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub1.scm");
         InputStream in2 = new FileInputStream(
-            "/home/pradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub1.scm");
+            "/home/spradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub1.scm");
         syntaxtree.Node root1 = new MiniSchemeParser(in1).Goal();
         syntaxtree.Node root2 = new MiniSchemeParser(in2).Goal();
 
@@ -61,6 +61,6 @@ public class TypeHelperTest{
     @Test
     public final void testGetMiniSchemeNodeFromFileNoException(){
         TypeHelper.getMiniSchemeNodeFromFile(
-            "/home/pradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub1.scm");
+            "/home/spradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub1.scm");
     }
 }
