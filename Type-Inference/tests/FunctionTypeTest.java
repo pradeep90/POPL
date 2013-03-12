@@ -22,15 +22,22 @@ public class FunctionTypeTest{
      */
     @Test
     public final void testGetFunctionType(){
-        // TODO: 
-        // List<Type> paramTypes = new ArrayList<Type>();
-        // paramTypes.add(new IntType());
-        // paramTypes.add(new BooleanType());
-        // paramTypes.add(new IntType());
-        // paramTypes.add(new UnknownType());
+        List<Type> paramTypes = new ArrayList<Type>();
+        paramTypes.add(new IntType());
+        paramTypes.add(new BooleanType());
+        paramTypes.add(new IntType());
+        paramTypes.add(new UnknownType(0));
 
-        // Type returnType = new IntType();
+        Type returnType = new IntType();
 
-        // System.out.println("FunctionType.getFunctionType(paramTypes, returnType): " + FunctionType.getFunctionType(paramTypes, returnType));
+        Type expected = new FunctionType(
+            new IntType(),
+            new FunctionType(new BooleanType(),
+                             new FunctionType(new IntType(),
+                                              new FunctionType(new UnknownType(0),
+                                                               new IntType()))));
+
+        assertEquals(expected,
+                     FunctionType.getFunctionType(paramTypes, returnType));
     }
 }

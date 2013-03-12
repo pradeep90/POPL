@@ -1,8 +1,8 @@
 import java.util.List;
 
 public class FunctionType extends Type {
-    Type paramType;
-    Type returnType;
+    public Type paramType;
+    public Type returnType;
     
     public FunctionType(Type paramType, Type returnType) {
         this.paramType = paramType;

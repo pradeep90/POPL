@@ -1,6 +1,6 @@
 public class TypeEquation {
-    Type type1;
-    Type type2;
+    public Type type1;
+    public Type type2;
     
     public TypeEquation(Type type1, Type type2) {
         this.type1 = type1;

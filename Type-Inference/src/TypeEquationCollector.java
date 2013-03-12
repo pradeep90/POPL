@@ -189,8 +189,8 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
                 throw new RuntimeException("Does not Type Check");
             }
 
-            letTypeEnvironment.extend(TypeHelper.getIdentifierName(currDeclaration.f1),
-                                      type);
+            letTypeEnvironment.extend(
+                TypeHelper.getIdentifierName(currDeclaration.f1), type);
         }
         Type f5 = n.f5.accept(this, letTypeEnvironment);
         _ret = f5;
@@ -261,10 +261,22 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
      */
     public Type visit(Application n, TypeEnvironment arg) {
         Type _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
-        n.f2.accept(this, arg);
-        n.f3.accept(this, arg);
+        Type f1 = n.f1.accept(this, arg);
+
+        // VVIP: The function (say int -> int -> int) could have
+        // multiple parameters (f 3) gives (int -> int) whereas (f 3
+        // 4) gives int. So, keep the return type a variable and unify
+        // it based on the number of arguments actually given.
+        _ret = new UnknownType();
+        List<Type> paramTypes = new ArrayList<Type>();
+        for (Node node : n.f2.nodes){
+            paramTypes.add(node.accept(this, arg));
+        }
+
+        // Construct a FunctionType out of the given argument types.
+        // Make sure it is of the same type as the actual function.
+        Type givenArgsType = FunctionType.getFunctionType(paramTypes, _ret);
+        addEquation(givenArgsType, f1);
         return _ret;
     }
 

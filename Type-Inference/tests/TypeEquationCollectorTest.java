@@ -31,6 +31,9 @@ public class TypeEquationCollectorTest{
         typeInferrer = new TypeEquationCollector();
         typeEnvironment = new TypeEnvironment();
 
+        // Reset it for each test case
+        UnknownType.counter = 0;
+
         trueLiteral = new TrueLiteral();
         falseLiteral = new FalseLiteral();
         integerLiteral = new IntegerLiteral(new NodeToken("42"));
@@ -153,5 +156,97 @@ public class TypeEquationCollectorTest{
         LetExpression letExpression = (LetExpression) getTopLevelNode(assignmentString);
         assertEquals(new BooleanType(), typeInferrer.visit(letExpression,
                                                            typeEnvironment));
+    }
+    
+    /**
+     * Test method for {@link TypeEquationCollector#ProcedureExp()}.
+     */
+    @Test
+    public final void testProcedureExp_OneParam(){
+        String procedureString = "(lambda (x) (+ x 5))";
+        ProcedureExp procedureExp = (ProcedureExp) getTopLevelNode(procedureString);
+        Type expected = new FunctionType(new UnknownType(0), new IntType());
+        assertEquals(expected, typeInferrer.visit(procedureExp,
+                                                  typeEnvironment));
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new UnknownType(0), new IntType())));
+    }
+
+    /**
+     * Test method for {@link TypeEquationCollector#ProcedureExp()}.
+     */
+    @Test
+    public final void testProcedureExp_TwoParam(){
+        String procedureString = "(lambda (x y) (+ x y))";
+        ProcedureExp procedureExp = (ProcedureExp) getTopLevelNode(procedureString);
+        Type expected = new FunctionType(
+            new UnknownType(0),
+            new FunctionType(new UnknownType(1), new IntType()));
+
+        assertEquals(expected, typeInferrer.visit(procedureExp,
+                                                  typeEnvironment));
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new UnknownType(0), new IntType())));
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new UnknownType(1), new IntType())));
+    }
+
+    /**
+     * Test method for {@link TypeEquationCollector#ProcedureExp()}.
+     */
+    @Test
+    public final void testProcedureExp_ThreeParam(){
+        String procedureString = "(lambda (f) (f 3))";
+        ProcedureExp procedureExp = (ProcedureExp) getTopLevelNode(procedureString);
+        Type expected = new FunctionType(
+            new UnknownType(0),
+            new UnknownType(1));
+
+        assertEquals(expected, typeInferrer.visit(procedureExp,
+                                                  typeEnvironment));
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new FunctionType(new IntType(), new UnknownType(1)),
+                             new UnknownType(0))));
+    }
+
+    /**
+     * Test method for {@link TypeEquationCollector#Application()}.
+     */
+    @Test
+    public final void testApplication_OneParam(){
+        String applicationString = "((lambda (x) (+ x 5)) 4)";
+        Application application = (Application) getTopLevelNode(applicationString);
+        Type expected = new UnknownType(1);
+        assertEquals(expected, typeInferrer.visit(application, typeEnvironment));
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new UnknownType(0), new IntType())));
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(
+                new FunctionType(new IntType(), new UnknownType(1)),
+                new FunctionType(new UnknownType(0), new IntType()))));
+    }
+
+    /**
+     * Test method for {@link TypeEquationCollector#Application()}.
+     */
+    @Test
+    public final void testApplication_TwoParam(){
+        String applicationString = "((lambda (x y) (+ x y)) 2 3)";
+        Application applicationExp = (Application) getTopLevelNode(applicationString);
+        Type expected = new UnknownType(2);
+        assertEquals(expected, typeInferrer.visit(applicationExp,
+                                                  typeEnvironment));
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new UnknownType(0), new IntType())));
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new UnknownType(1), new IntType())));
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(
+                new FunctionType(
+                    new IntType(), new FunctionType(new IntType(),
+                                                    new UnknownType(2))),
+                new FunctionType(new UnknownType(0),
+                                 new FunctionType(new UnknownType(1),
+                                                  new IntType())))));
     }
 }
