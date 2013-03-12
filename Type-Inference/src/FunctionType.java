@@ -3,6 +3,8 @@ import java.util.List;
 public class FunctionType extends Type {
     public Type paramType;
     public Type returnType;
+
+    public static final Type VOID_TYPE = new UnknownType(10001);
     
     public FunctionType(Type paramType, Type returnType) {
         this.paramType = paramType;
@@ -36,7 +38,7 @@ public class FunctionType extends Type {
         // TODO: What to do when paramTypes is empty?
 
         if (paramTypes.isEmpty()){
-            return null;
+            return new FunctionType(VOID_TYPE, returnType);
         }
 
         if (paramTypes.size() == 1){

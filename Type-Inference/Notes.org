@@ -145,7 +145,7 @@
 * Lessons
 ** Note: you won't be able to see the changes made by the declarations in a LetExpression cos they'll happen in an extended letTypeEnvironment.
 ** I'm choosing to return the type of the expression in Declaration instead of extending the environment cos we don't want them to refer to the preceding declarations (which will happen if you let them extend the environment)
-** TODO what is the type of a function 
+** DONE what is the type of a function 
 *** (lambda (x y) (+ x y))
 *** Is it int -> int -> int
 *** But then, what is the type of (lambda (x) (lambda (y) (+ x y)))
@@ -278,6 +278,7 @@
 ** DONE Test with public cases
    CLOCK: [2013-03-12 Tue 21:00]--[2013-03-12 Tue 21:18] =>  0:18
    CLOCK: [2013-03-12 Tue 20:54]--[2013-03-12 Tue 20:59] =>  0:05
-** TODO See if (UnknownType, UnknownType) should be false in areSameBasicType
-** TODO Take care of Application and ProcedureExp with no arguments
-** TODO Make sure that "Does not type check" in TypeEquationCollector (for recursive stuff in normal LetExpression) is ok when it usually comes in Unifier
+** DONE See if (UnknownType, UnknownType) should be false in areSameBasicType
+** DONE Take care of Application and ProcedureExp with no arguments
+   CLOCK: [2013-03-12 Tue 22:25]--[2013-03-12 Tue 23:48] =>  1:23
+** DONE Make sure that "Does not type check" in TypeEquationCollector (for recursive stuff in normal LetExpression) is ok when it usually comes in Unifier

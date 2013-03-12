@@ -74,20 +74,27 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
      */
     public Type visit(Goal n, TypeEnvironment arg) {
         Type _ret=null;
-        Type f0 = n.f0.accept(this, arg);
+        Type f0;
+        try {
+            f0 = n.f0.accept(this, arg);
+        } catch(RuntimeException e) {
+            System.out.println("Program does not type check"); 
+            return null;
+        }
 
         // System.out.println("f0: " + f0);
 
         // System.out.println("allEquations: " + allEquations);
         unifier = new Unifier(allEquations);
         if (!unifier.unify()){
-            System.out.println("Does not type check"); 
+            System.out.println("Program does not type check"); 
         }
         else {
             // substitute in f0 and write the result
-            System.out.println("f0.substitute(unifier.unification): " + f0.substitute(unifier.unification));
+            // System.out.println("f0.substitute(unifier.unification): " + f0.substitute(unifier.unification));
+            System.out.println(f0.substitute(unifier.unification));
         }
-        return _ret;
+        return f0.substitute(unifier.unification);
     }
 
     /**
@@ -195,10 +202,11 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
             Type type = this.visit(currDeclaration, arg);
 
             if (type == null){
-                // The declaration referred to other let identifiers
-                System.out.println("Does not Type Check"); 
+                // The declaration referred to one of the let identifiers
+                // System.out.println("Program does not type check"); 
+
                 // System.exit(0);
-                throw new RuntimeException("Does not Type Check");
+                throw new RuntimeException("Program does not type check");
             }
 
             letTypeEnvironment.extend(
@@ -328,7 +336,12 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
      */
     public Type visit(Declaration n, TypeEnvironment arg) {
         Type _ret=null;
-        Type f2 = n.f2.accept(this, arg);
+        Type f2 = null;
+        try {
+            f2 = n.f2.accept(this, arg);
+        } catch(Exception e) {
+            // e.printStackTrace();
+        }
         _ret = f2;
         return _ret;
     }
