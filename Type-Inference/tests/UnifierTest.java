@@ -20,8 +20,8 @@ public class UnifierTest{
     public void setUp(){
         equationSet = new HashSet<TypeEquation>();
         equation1 = new TypeEquation(new IntType(), new IntType());
-        equation2 = new TypeEquation(new IntType(), new UnknownType());
-        equation3 = new TypeEquation(new BooleanType(), new UnknownType());
+        equation2 = new TypeEquation(new IntType(), new UnknownType(0));
+        equation3 = new TypeEquation(new BooleanType(), new UnknownType(1));
         equationSet.add(equation1);
         equationSet.add(equation2);
         equationSet.add(equation3);
@@ -44,5 +44,26 @@ public class UnifierTest{
         assertEquals(1, equationSet.size());
         unifier.removeFromSet(equationSet);
         assertEquals(0, equationSet.size());
+    }
+
+    /**
+     * Test method for {@link Unifier#unify()}.
+     */
+    @Test
+    public final void testUnify_basic(){
+        assertEquals(true, unifier.unify());
+        // System.out.println("unifier.unification: " + unifier.unification);
+    }
+
+    
+    /**
+     * Test method for {@link Unifier#unify()}.
+     */
+    @Test
+    public final void testUnify_twoUnknownTypes(){
+        unifier.equationSet.add(new TypeEquation(new UnknownType(2),
+                                                 new UnknownType(3)));
+        assertEquals(true, unifier.unify());
+        // System.out.println("unifier.unification: " + unifier.unification);
     }
 }

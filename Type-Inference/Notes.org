@@ -140,6 +140,8 @@
     http://ideone.com/FoXNW
 ** TODO I have a question about Step 2 in the while loop: If both are variables, we pack the equation. But then, why do we have the condition in Step 7 saying s != t?
 *** VVIP Anyway, I'll just go ahead assuming that we don't pack if both are variables
+** DONE Test cases 1, 2, 3, 5 pass. 4 doesn't.
+*** DONE Now they all pass.
 * Lessons
 ** Note: you won't be able to see the changes made by the declarations in a LetExpression cos they'll happen in an extended letTypeEnvironment.
 ** I'm choosing to return the type of the expression in Declaration instead of extending the environment cos we don't want them to refer to the preceding declarations (which will happen if you let them extend the environment)
@@ -153,6 +155,7 @@
 ** VVIP Note: Here, compose (old-unification, (s := t)) is the same as extending the environment cos you do substitute (equation, old-unification) initially
 *** so, if variable type `s` were already in old-unification, you would have substituted it with it's type value in the first substitute step.
 *** => Contradiction
+** Make sure you update the existing unification using the new binding before adding the new binding
 * Steps
 ** DONE Set up the boiler-plate code
    CLOCK: [2013-03-09 Sat 23:43]--[2013-03-09 Sat 23:50] =>  0:07
@@ -260,15 +263,21 @@
    :PROPERTIES:
    :Effort:   10
    :END:
-** TODO Then, write a Unifier class
+** DONE Then, write a Unifier class
+   CLOCK: [2013-03-12 Tue 20:45]--[2013-03-12 Tue 20:53] =>  0:08
+   CLOCK: [2013-03-12 Tue 20:08]--[2013-03-12 Tue 20:21] =>  0:13
    CLOCK: [2013-03-12 Tue 17:03]--[2013-03-12 Tue 17:38] =>  0:35
    CLOCK: [2013-03-12 Tue 15:16]--[2013-03-12 Tue 15:38] =>  0:22
    CLOCK: [2013-03-12 Tue 13:45]--[2013-03-12 Tue 14:20] =>  0:35
    CLOCK: [2013-03-12 Tue 13:37]--[2013-03-12 Tue 13:45] =>  0:08
    CLOCK: [2013-03-11 Mon 22:27]--[2013-03-11 Mon 23:25] =>  0:58
-** TODO See if (UnknownType, UnknownType) should be false in areSameBasicType
-** TODO When extending unification (TypeEnvironment), make sure you update all existing bindings with the new substitution
+** DONE When extending unification (TypeEnvironment), make sure you update all existing bindings with the new substitution
+   CLOCK: [2013-03-12 Tue 20:25]--[2013-03-12 Tue 20:44] =>  0:19
    For algorithm, check out
    https://docs.google.com/viewer?a=v&q=cache:vaQBXC8lRUAJ:profs.sci.univr.it/~farinelli/courses/ar/slides/unification.pdf+&hl=en&gl=in&pid=bl&srcid=ADGEESgjxTXz_yN3H8U69Qqj69gevrYHO1mSSwXD3nP74veEzB4sTaU49XfFv_EvUImVYqrTx6-mLagBTsg97rp58y0aHe1CrLs4Jgh7iliKH7osk4oGuDJFkQJLvS_1wuyf9lsqZUb4&sig=AHIEtbTLN5AHNvHncMEI_GYZQD50mVCvOg
+** DONE Test with public cases
+   CLOCK: [2013-03-12 Tue 21:00]--[2013-03-12 Tue 21:18] =>  0:18
+   CLOCK: [2013-03-12 Tue 20:54]--[2013-03-12 Tue 20:59] =>  0:05
+** TODO See if (UnknownType, UnknownType) should be false in areSameBasicType
 ** TODO Take care of Application and ProcedureExp with no arguments
 ** TODO Make sure that "Does not type check" in TypeEquationCollector (for recursive stuff in normal LetExpression) is ok when it usually comes in Unifier

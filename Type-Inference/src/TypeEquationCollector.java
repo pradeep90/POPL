@@ -3,6 +3,7 @@ import visitor.*;
 import java.util.*;
 
 public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
+    Unifier unifier;
 
     Set<TypeEquation> allEquations = new HashSet<TypeEquation>();
     
@@ -75,9 +76,17 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
         Type _ret=null;
         Type f0 = n.f0.accept(this, arg);
 
-        // unify the types
+        // System.out.println("f0: " + f0);
 
-        // substitute in f0 and write the result
+        // System.out.println("allEquations: " + allEquations);
+        unifier = new Unifier(allEquations);
+        if (!unifier.unify()){
+            System.out.println("Does not type check"); 
+        }
+        else {
+            // substitute in f0 and write the result
+            System.out.println("f0.substitute(unifier.unification): " + f0.substitute(unifier.unification));
+        }
         return _ret;
     }
 

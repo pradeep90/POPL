@@ -21,6 +21,29 @@ public class TypeEnvironment {
     }
 
     /** 
+     * Update existing bindings (name, oldType) to be (name,
+     * substitute(oldType, newBinding))
+     */
+    public void update(Binding newBinding){
+        TypeEnvironment tempTypeEnvironment = new TypeEnvironment();
+        tempTypeEnvironment.extend(newBinding);
+
+        for (Binding binding : bindingList){
+            binding.type = binding.type.substitute(tempTypeEnvironment);
+        }
+    }
+
+    /** 
+     * Update existing bindings and then add the new binding.
+     */
+    public void updateAndExtend(String name, Type type){
+        Binding newBinding = new Binding(name, type);
+        update(newBinding);
+        extend(newBinding);
+    }
+
+
+    /** 
      * Extend this environment with newBinding.
      *
      * For now, just put newBinding at the front of the list of

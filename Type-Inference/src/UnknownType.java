@@ -57,9 +57,9 @@ public class UnknownType extends Type {
     }
 
     public String toString(){
-        String result = "<UnknownType: ";
+        String result = "t";
         result += id;
-        result += ">";
+        // result += ">";
         return result;
     }
 

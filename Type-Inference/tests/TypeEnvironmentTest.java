@@ -68,6 +68,17 @@ public class TypeEnvironmentTest{
         assertEquals(env.lookup("name1"), type1);
         assertEquals(env.lookup("name2"), type2);
 
-        // TODO(spradeep): Test for absent binding
+        // TODO(pradeep): Test for absent binding
+    }
+    
+    /**
+     * Test method for {@link TypeEnvironment#update()}.
+     */
+    @Test
+    public final void testUpdate(){
+        env.extend(binding1);
+        env.extend(binding2);
+        env.extend("1", new UnknownType(2));
+        env.update(new Binding("2", new UnknownType(1)));
     }
 }

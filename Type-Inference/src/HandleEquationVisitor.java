@@ -29,7 +29,7 @@ public class HandleEquationVisitor extends TripleDVisitor {
 
     @Override
     public void visit(IntType param1, UnknownType param2){
-        unifier.unification.extend(param2.id + "", param1);
+        unifier.unification.updateAndExtend(param2.id + "", param1);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class HandleEquationVisitor extends TripleDVisitor {
 
     @Override
     public void visit(BooleanType param1, UnknownType param2){
-        unifier.unification.extend(param2.id + "", param1);
+        unifier.unification.updateAndExtend(param2.id + "", param1);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class HandleEquationVisitor extends TripleDVisitor {
             return;
         }
 
-        unifier.unification.extend(param2.id + "", param1);
+        unifier.unification.updateAndExtend(param2.id + "", param1);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class HandleEquationVisitor extends TripleDVisitor {
             return;
         }
             
-        unifier.unification.extend(param1.id + "", param2);
-        unifier.unification.extend(param2.id + "", param1);
+        unifier.unification.updateAndExtend(param1.id + "", param2);
+        unifier.unification.updateAndExtend(param2.id + "", param1);
     }
 }

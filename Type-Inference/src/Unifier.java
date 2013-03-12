@@ -22,7 +22,7 @@ public class Unifier {
     /** 
      * @return true iff you can unify the equations in equationSet.
      */
-    public boolean unify(Set<TypeEquation> equationSet){
+    public boolean unify(){
         while(!equationSet.isEmpty() && !failure){
             TypeEquation currEquation = removeFromSet(equationSet).substitute(unification);
             Type s = currEquation.type1;
