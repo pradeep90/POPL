@@ -163,9 +163,10 @@
    CLOCK: [2013-03-12 Tue 11:02]--[2013-03-12 Tue 11:34] =>  0:32
    CLOCK: [2013-03-11 Mon 20:56]--[2013-03-11 Mon 21:02] =>  0:06
 ** DONE RecExpression
+   CLOCK: [2013-03-12 Tue 13:02]--[2013-03-12 Tue 13:27] =>  0:25
    CLOCK: [2013-03-11 Mon 22:15]--[2013-03-11 Mon 22:27] =>  0:12
    :PROPERTIES:
-   :Effort:   10
+   :Effort:   20
    :END:
 ** DONE getFunctionType
    CLOCK: [2013-03-12 Tue 11:54]--[2013-03-12 Tue 11:55] =>  0:01
@@ -184,7 +185,9 @@
    :PROPERTIES:
    :Effort:   20
    :END:
-** TODO Take care of Application and ProcedureExp with no arguments
 ** DONE Then, write a Unifier class
    CLOCK: [2013-03-11 Mon 22:27]--[2013-03-11 Mon 23:25] =>  0:58
+** TODO See if the public test cases give equations without error
+   CLOCK: [2013-03-12 Tue 13:28]
+** TODO Take care of Application and ProcedureExp with no arguments
 ** TODO Make sure that "Does not type check" in TypeEquationCollector (for recursive stuff in normal LetExpression) is ok when it usually comes in Unifier

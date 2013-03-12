@@ -249,4 +249,115 @@ public class TypeEquationCollectorTest{
                                  new FunctionType(new UnknownType(1),
                                                   new IntType())))));
     }
+
+    /**
+     * Test method for {@link TypeEquationCollector#RecDeclaration()}.
+     */
+    @Test
+    public final void testRecDeclaration(){
+        // Meaningless recursive function
+        String recString = "(letrec ((a (lambda (x) (a x)))) (a 4))";
+        RecExpression recExpression = (RecExpression) getTopLevelNode(recString);
+        assertEquals(new UnknownType(3),
+                     typeInferrer.visit(recExpression, typeEnvironment));
+        // a = (lambda ...)
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new UnknownType(0),
+                             new FunctionType(new UnknownType(1),
+                                              new UnknownType(2)))));
+        // (a x) should conform with a's type
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new FunctionType(new UnknownType(1),
+                                              new UnknownType(2)),
+                             new UnknownType(0))));
+        // (a 4) should conform with a's type
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new FunctionType(new IntType(),
+                                              new UnknownType(3)),
+                             new UnknownType(0))));
+    }
+
+    /**
+     * Test method for {@link TypeEquationCollector#RecExpression()}.
+     */
+    @Test
+    public final void testRecExpression_MutualRecursion(){
+        // Meaningless recursive function
+        String recString = "(letrec ((a (lambda (x) (b x)))"
+                + "(b (lambda (x) (a x)))) (a 4))";
+        RecExpression recExpression = (RecExpression) getTopLevelNode(recString);
+        assertEquals(new UnknownType(6),
+                     typeInferrer.visit(recExpression, typeEnvironment));
+        // a's definition
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new UnknownType(0),
+                             new FunctionType(new UnknownType(2),
+                                              new UnknownType(3)))));
+        // b's definition
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new UnknownType(1),
+                             new FunctionType(new UnknownType(4),
+                                              new UnknownType(5)))));
+        // a's body
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new FunctionType(new UnknownType(2),
+                                              new UnknownType(3)),
+                             new UnknownType(1))));
+        // b's body
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new FunctionType(new UnknownType(4),
+                                              new UnknownType(5)),
+                             new UnknownType(0))));
+        // letrec body
+        assertTrue(typeInferrer.allEquations.contains(
+            new TypeEquation(new FunctionType(new IntType(),
+                                              new UnknownType(6)),
+                             new UnknownType(0))));
+    }
+
+    // /**
+    //  * Test method for {@link TypeEquationCollector#pub1()}.
+    //  */
+    // @Test
+    // public final void testPub1(){
+    //     TypeHelper.getMiniSchemeNodeFromFile(
+    //         "/home/spradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub1.scm").accept(typeInferrer, typeEnvironment);
+    // }
+
+    // /**
+    //  * Test method for {@link TypeEquationCollector#pub2()}.
+    //  */
+    // @Test
+    // public final void testPub2(){
+    //     TypeHelper.getMiniSchemeNodeFromFile(
+    //         "/home/spradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub2.scm").accept(typeInferrer, typeEnvironment);
+    // }
+
+    // /**
+    //  * Test method for {@link TypeEquationCollector#pub3()}.
+    //  */
+    // @Test
+    // public final void testPub3(){
+    //     TypeHelper.getMiniSchemeNodeFromFile(
+    //         "/home/spradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub3.scm").accept(typeInferrer, typeEnvironment);
+    // }
+
+    // /**
+    //  * Test method for {@link TypeEquationCollector#pub4()}.
+    //  */
+    // @Test
+    // public final void testPub4(){
+    //     TypeHelper.getMiniSchemeNodeFromFile(
+    //         "/home/spradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub4.scm").accept(typeInferrer, typeEnvironment);
+    // }
+
+    // /**
+    //  * Test method for {@link TypeEquationCollector#pub5()}.
+    //  */
+    // @Test
+    // public final void testPub5(){
+    //     TypeHelper.getMiniSchemeNodeFromFile(
+    //         "/home/spradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub5.scm").accept(typeInferrer, typeEnvironment);
+    // }
+
 }
