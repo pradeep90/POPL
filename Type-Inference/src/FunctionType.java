@@ -8,22 +8,25 @@ public class FunctionType extends Type {
         this.paramType = paramType;
         this.returnType = returnType;
     }
-
-    @Override
-    public boolean areSameBasicType(Type other){
-        // FunctionType is not a basic type
-        return false;
+    
+    public void accept(TripleDVisitor visitor, Type other){
+        other.accept(visitor, this);
+    }
+    
+    public void accept(TripleDVisitor visitor, IntType other){
+        visitor.visit(this, other);
+    }
+    
+    public void accept(TripleDVisitor visitor, BooleanType other){
+        visitor.visit(this, other);
     }
 
-    @Override
-    public boolean areIncompatibleTypes(Type other){
-        if (other instanceof IntType){
-            return true;
-        }
-        else if (other instanceof BooleanType){
-            return true;
-        }
-        return false;
+    public void accept(TripleDVisitor visitor, FunctionType other){
+        visitor.visit(this, other);
+    }
+
+    public void accept(TripleDVisitor visitor, UnknownType other){
+        visitor.visit(this, other);
     }
 
     /** 

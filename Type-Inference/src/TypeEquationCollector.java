@@ -73,8 +73,11 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
      */
     public Type visit(Goal n, TypeEnvironment arg) {
         Type _ret=null;
-        n.f0.accept(this, arg);
-        n.f1.accept(this, arg);
+        Type f0 = n.f0.accept(this, arg);
+
+        // unify the types
+
+        // substitute in f0 and write the result
         return _ret;
     }
 

@@ -10,18 +10,34 @@ public class UnknownType extends Type {
     public UnknownType() {
         this.id = counter++;
     }
-
-    @Override
-    public boolean areSameBasicType(Type other){
-        if (other instanceof UnknownType){
-            return true;
-        }
-        return false;
+    
+    public void accept(TripleDVisitor visitor, Type other){
+        other.accept(visitor, this);
+    }
+    
+    public void accept(TripleDVisitor visitor, IntType other){
+        visitor.visit(this, other);
+    }
+    
+    public void accept(TripleDVisitor visitor, BooleanType other){
+        visitor.visit(this, other);
     }
 
-    @Override
-    public boolean areIncompatibleTypes(Type other){
-        return false;
+    public void accept(TripleDVisitor visitor, FunctionType other){
+        visitor.visit(this, other);
+    }
+
+    public void accept(TripleDVisitor visitor, UnknownType other){
+        visitor.visit(this, other);
+    }
+
+    /** 
+     * @return true iff `this` occurs in `other`.
+     */
+    public boolean occursIn(Type other){
+        FunctionType functionType = (FunctionType) other;
+        return occursIn(functionType.paramType)
+                || occursIn(functionType.returnType);
     }
 
     @Override

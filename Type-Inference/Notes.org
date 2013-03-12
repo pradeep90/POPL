@@ -88,6 +88,58 @@
 * VVIP Parse tree => Set of equations
 ** Each node returns its type
 ** Inside, it also adds a bunch of equations to G
+* Unification
+** Test cases
+*** pub1 - typeInferrer.allEquations:
+#+begin_example
+[
+<TypeEquation: <UnknownType: 1>, (<UnknownType: 2> -> int)>,
+<TypeEquation: <UnknownType: 3>, int>,
+<TypeEquation: (int -> <UnknownType: 3>), <UnknownType: 1>>,
+<TypeEquation: (<UnknownType: 0> -> <UnknownType: 4>), <UnknownType: 1>>,
+<TypeEquation: <UnknownType: 2>, int>,
+<TypeEquation: int, int>]
+#+end_example
+*** pub2 - typeInferrer.allEquations:
+#+begin_example
+[
+<TypeEquation: (<UnknownType: 1> -> <UnknownType: 7>), <UnknownType: 0>>,
+<TypeEquation: (<UnknownType: 2> -> <UnknownType: 8>), <UnknownType: 3>>,
+<TypeEquation: <UnknownType: 3>, (<UnknownType: 4> -> <UnknownType: 7>)>,
+<TypeEquation: (<UnknownType: 4> -> <UnknownType: 6>), <UnknownType: 5>>]
+#+end_example
+*** pub3 - typeInferrer.allEquations:
+#+begin_example
+[
+<TypeEquation: (<UnknownType: 5> -> <UnknownType: 7>), <UnknownType: 5>>,
+<TypeEquation: ((<UnknownType: 5> -> <UnknownType: 6>) -> <UnknownType: 4>), (<UnknownType: 1> -> <UnknownType: 2>)>,
+<TypeEquation: (<UnknownType: 3> -> <UnknownType: 2>), <UnknownType: 0>>,
+<TypeEquation: (<UnknownType: 1> -> <UnknownType: 3>), <UnknownType: 1>>,
+<TypeEquation: (<UnknownType: 7> -> <UnknownType: 6>), <UnknownType: 0>>]
+#+end_example
+*** pub4 - typeInferrer.allEquations:
+#+begin_example
+[
+<TypeEquation: (bool -> <UnknownType: 7>), (<UnknownType: 1> -> (<UnknownType: 2> -> (<UnknownType: 3> -> <UnknownType: 4>)))>,
+<TypeEquation: <UnknownType: 4>, (<UnknownType: 5> -> <UnknownType: 6>)>,
+<TypeEquation: (<UnknownType: 5> -> <UnknownType: 6>), <UnknownType: 4>>]
+#+end_example
+*** pub5 - typeInferrer.allEquations:
+#+begin_example
+[
+<TypeEquation: (bool -> <UnknownType: 10>), (<UnknownType: 6> -> (<UnknownType: 7> -> (<UnknownType: 8> -> int)))>,
+<TypeEquation: (bool -> <UnknownType: 5>), (<UnknownType: 1> -> (<UnknownType: 2> -> (<UnknownType: 3> -> (<UnknownType: 4> -> int))))>,
+<TypeEquation: (<UnknownType: 10> -> <UnknownType: 9>), (<UnknownType: 0> -> <UnknownType: 5>)>,
+<TypeEquation: int, int>]
+#+end_example
+** Visitor pattern? No. Triple Dispatch.
+*** (Type, Type, Operation)
+*** Fixed Type class hierarchy
+*** Operations that may change
+*** Example of implementation in C++/Java
+    http://ideone.com/FoXNW
+** TODO I have a question about Step 2 in the while loop: If both are variables, we pack the equation. But then, why do we have the condition in Step 7 saying s != t?
+*** VVIP Anyway, I'll just go ahead assuming that we don't pack if both are variables
 * Lessons
 ** Note: you won't be able to see the changes made by the declarations in a LetExpression cos they'll happen in an extended letTypeEnvironment.
 ** I'm choosing to return the type of the expression in Declaration instead of extending the environment cos we don't want them to refer to the preceding declarations (which will happen if you let them extend the environment)
@@ -98,6 +150,9 @@
 *** Isn't that also int -> int -> int
 *** No, I think that is int -> (int -> int)
 ** VVIP Make sure you reset static counters in setUp so that they start from 0 for every test case
+** VVIP Note: Here, compose (old-unification, (s := t)) is the same as extending the environment cos you do substitute (equation, old-unification) initially
+*** so, if variable type `s` were already in old-unification, you would have substituted it with it's type value in the first substitute step.
+*** => Contradiction
 * Steps
 ** DONE Set up the boiler-plate code
    CLOCK: [2013-03-09 Sat 23:43]--[2013-03-09 Sat 23:50] =>  0:07
@@ -185,9 +240,35 @@
    :PROPERTIES:
    :Effort:   20
    :END:
-** DONE Then, write a Unifier class
+** DONE See if the public test cases give equations without error
+   CLOCK: [2013-03-12 Tue 13:28]--[2013-03-12 Tue 13:34] =>  0:06
+** DONE Triple Dispatch Visitor
+   CLOCK: [2013-03-12 Tue 16:08]--[2013-03-12 Tue 16:26] =>  0:18
+   CLOCK: [2013-03-12 Tue 15:38]--[2013-03-12 Tue 15:48] =>  0:10
+   :PROPERTIES:
+   :Effort:   30
+   :END:
+** DONE areSameBasicType Visitor
+   CLOCK: [2013-03-12 Tue 16:26]--[2013-03-12 Tue 16:33] =>  0:07
+   :PROPERTIES:
+   :Effort:   8
+   :END:
+** DONE areIncompatibleTypes Visitor
+   CLOCK: [2013-03-12 Tue 16:33]--[2013-03-12 Tue 16:37] =>  0:04
+** DONE occursIn Visitor
+   CLOCK: [2013-03-12 Tue 16:38]--[2013-03-12 Tue 17:02] =>  0:24
+   :PROPERTIES:
+   :Effort:   10
+   :END:
+** TODO Then, write a Unifier class
+   CLOCK: [2013-03-12 Tue 17:03]--[2013-03-12 Tue 17:38] =>  0:35
+   CLOCK: [2013-03-12 Tue 15:16]--[2013-03-12 Tue 15:38] =>  0:22
+   CLOCK: [2013-03-12 Tue 13:45]--[2013-03-12 Tue 14:20] =>  0:35
+   CLOCK: [2013-03-12 Tue 13:37]--[2013-03-12 Tue 13:45] =>  0:08
    CLOCK: [2013-03-11 Mon 22:27]--[2013-03-11 Mon 23:25] =>  0:58
-** TODO See if the public test cases give equations without error
-   CLOCK: [2013-03-12 Tue 13:28]
+** TODO See if (UnknownType, UnknownType) should be false in areSameBasicType
+** TODO When extending unification (TypeEnvironment), make sure you update all existing bindings with the new substitution
+   For algorithm, check out
+   https://docs.google.com/viewer?a=v&q=cache:vaQBXC8lRUAJ:profs.sci.univr.it/~farinelli/courses/ar/slides/unification.pdf+&hl=en&gl=in&pid=bl&srcid=ADGEESgjxTXz_yN3H8U69Qqj69gevrYHO1mSSwXD3nP74veEzB4sTaU49XfFv_EvUImVYqrTx6-mLagBTsg97rp58y0aHe1CrLs4Jgh7iliKH7osk4oGuDJFkQJLvS_1wuyf9lsqZUb4&sig=AHIEtbTLN5AHNvHncMEI_GYZQD50mVCvOg
 ** TODO Take care of Application and ProcedureExp with no arguments
 ** TODO Make sure that "Does not type check" in TypeEquationCollector (for recursive stuff in normal LetExpression) is ok when it usually comes in Unifier

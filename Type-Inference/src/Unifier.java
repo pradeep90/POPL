@@ -2,12 +2,12 @@ import java.util.Set;
 
 public class Unifier {
     public boolean failure = false;
-    TypeEnvironment unification = new TypeEnvironment();
+    public TypeEnvironment unification = new TypeEnvironment();
 
-    Set<TypeEquation> allEquations;
+    public Set<TypeEquation> equationSet;
     
-    public Unifier(Set<TypeEquation> allEquations) {
-        this.allEquations = allEquations;
+    public Unifier(Set<TypeEquation> equationSet) {
+        this.equationSet = equationSet;
     }
 
     public TypeEquation removeFromSet(Set<TypeEquation> equationSet){
@@ -25,9 +25,11 @@ public class Unifier {
     public boolean unify(Set<TypeEquation> equationSet){
         while(!equationSet.isEmpty() && !failure){
             TypeEquation currEquation = removeFromSet(equationSet).substitute(unification);
+            Type s = currEquation.type1;
+            Type t = currEquation.type2;
 
+            new HandleEquationVisitor(this).runMultiMethod(s, t);
         }
-        return true;
+        return !failure;
     }
-
 }

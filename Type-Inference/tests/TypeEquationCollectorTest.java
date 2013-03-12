@@ -105,6 +105,12 @@ public class TypeEquationCollectorTest{
         assertTrue(typeInferrer.allEquations.contains(
             new TypeEquation(new BooleanType(), new BooleanType())));
         assertEquals(2, typeInferrer.allEquations.size());
+
+        String ifString = "(if #t 1 (if #t 2 3))";
+        ifExpression = (IfExpression) getTopLevelNode(ifString);
+        typeInferrer = new TypeEquationCollector();
+        typeInferrer.visit(ifExpression, null);
+        System.out.println("typeInferrer.allEquations: " + typeInferrer.allEquations);
     }
 
     /**
@@ -322,6 +328,7 @@ public class TypeEquationCollectorTest{
     // public final void testPub1(){
     //     TypeHelper.getMiniSchemeNodeFromFile(
     //         "/home/spradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub1.scm").accept(typeInferrer, typeEnvironment);
+    //     System.out.println("typeInferrer.allEquations: " + typeInferrer.allEquations);
     // }
 
     // /**
@@ -331,6 +338,7 @@ public class TypeEquationCollectorTest{
     // public final void testPub2(){
     //     TypeHelper.getMiniSchemeNodeFromFile(
     //         "/home/spradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub2.scm").accept(typeInferrer, typeEnvironment);
+    //     System.out.println("typeInferrer.allEquations: " + typeInferrer.allEquations);
     // }
 
     // /**
@@ -340,6 +348,8 @@ public class TypeEquationCollectorTest{
     // public final void testPub3(){
     //     TypeHelper.getMiniSchemeNodeFromFile(
     //         "/home/spradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub3.scm").accept(typeInferrer, typeEnvironment);
+    //     System.out.println("typeInferrer.allEquations: " + typeInferrer.allEquations);
+        
     // }
 
     // /**
@@ -349,6 +359,7 @@ public class TypeEquationCollectorTest{
     // public final void testPub4(){
     //     TypeHelper.getMiniSchemeNodeFromFile(
     //         "/home/spradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub4.scm").accept(typeInferrer, typeEnvironment);
+    //     System.out.println("typeInferrer.allEquations: " + typeInferrer.allEquations);
     // }
 
     // /**
@@ -358,6 +369,7 @@ public class TypeEquationCollectorTest{
     // public final void testPub5(){
     //     TypeHelper.getMiniSchemeNodeFromFile(
     //         "/home/spradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub5.scm").accept(typeInferrer, typeEnvironment);
+    //     System.out.println("typeInferrer.allEquations: " + typeInferrer.allEquations);
     // }
 
 }
