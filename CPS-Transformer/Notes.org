@@ -1,6 +1,57 @@
 				Notes
 
+* Plan
+** Have an interface for Continuation
+* Continuations
+** Identify Simple Expressions and Tail Expressions
+** My concern: how to make sure you can access the object's fields even in the continuation?
+** Simple expressions should have no side-effects
+** Expressions with side-effects - EOPL - pp 249
+*** e.g., print(foo(3)) => foo 3 k(v) {print(v)}
+*** Basically, print(simple expression) is fine
+** TODO Why is CPS supposed to be better than the normal way of doing stuff (which is???)?
+*** sure you get gotos at the end, but so does normal assembly language
+*** I think the main advantage is that you have a method for translating functional code into imperative code
+** Stack vs Tail-call optimization: My argument is that instead of growing the stack, you are growing the continuation structure...
+*** Your continuation recursively grows as large as the stack.
+*** I think it HAS to, if you want to remember all the context and shit.
+*** I think originally tail-recursive functions will have continuations that don't grow as you go deeper and deeper. And stuff that wasn't tail-recursive to begin with, will have growing continuations
+**** Check out the factorial example:
+http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
+**** VVIP Note that in CPS, there is no implicit continuation-every call is a tail call. There is no "magic" here, as the continuation is simply explicitly passed. Using CPS without tail call optimization (TCO) will cause not only the constructed continuation to potentially grow during recursion, but also the call stack.
+     http://en.wikipedia.org/wiki/Continuation-passing_style#CPS_and_tail_calls
+* Microjava -> Nanojava
+** Key idea: Nanojava programs are in tail-call style. However, that's not the same thing as CPS style.
+*** Why not? CPS => Tail call. Tail call need not => CPS
+*** Rather, CPS is a way of converting normal programs to Tail call style
+*** If your program were already in tail-call style, you wouldn't need to pass around continuations (i.e., stuff that comes after this function call)
+** Continuation: object, method name, arguments
+*** extract continuation method: extract method on a bunch of statements (or a block or whatever)
+*** get continuation class: get the class definition for the continuation
+*** get make continuation call: get the instantiation call (e.g., new A1(this, k, arguments)) we should put in the original location
+** Expression: All of them are Simple Expressions
+** Simple Statements:
+*** AssignmentStatement() - Simple expression => Nanojava statement
+*** ArrayAssignmentStatement() - simple expression => Nanojava statement
+*** PrintStatement() - simple expression => Nanojava statement
+** Tail form statements
+*** For each of the following, if you see code beyond them, make a continuation out of that code and pass it in here.
+*** Block() - 
+**** Keep going till the end of the block
+**** if you meet a jump, make a continuation from the rest of the block
+**** else, just have a simple MessageSendStatement to the current continuation
+*** IfStatement() - 
+**** make both the if and else parts into Blocks with a jump to the current continuation if there is no explicit MessageSendStatement. Else, just call the MessageSendStatement.
+*** WhileStatement() - extract the loop body into a method (and wrap that with the initial loop-expression IfStatement check) 
+**** => loop-method: Block {if (exp) loop-body; jump to loop-method; else: call current continuation();}
+*** MessageSendStatement() - Call it with the appropriate arguments (make it a Jump Point, btw)
 * Actions
 ** Set up basic files
    CLOCK: [2013-03-16 Sat 21:47]--[2013-03-16 Sat 22:05] =>  0:18
+** Think
+   CLOCK: [2013-03-17 Sun 23:27]--[2013-03-18 Mon 00:51] =>  1:24
+   CLOCK: [2013-03-17 Sun 23:02]--[2013-03-17 Sun 23:15] =>  0:13
+   CLOCK: [2013-03-17 Sun 17:50]--[2013-03-17 Sun 17:59] =>  0:09
+   CLOCK: [2013-03-17 Sun 16:14]--[2013-03-17 Sun 17:25] =>  1:11
+   CLOCK: [2013-03-16 Sat 22:08]--[2013-03-16 Sat 23:05] =>  0:57
 
