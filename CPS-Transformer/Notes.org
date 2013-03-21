@@ -28,9 +28,13 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 ** Continuation: object, method name, arguments
 *** extract continuation method: extract method on a bunch of statements (or a block or whatever)
 **** Just create a new method containing those statements and ask the Visitor to convert the new method to Nanojava.
+**** VVIP Make sure you pass OBJECTS as parameters instead of OBJECT.FIELD cos at the time of creating the continuation, the field may have some unknown value, whereas you want the field value at the time of execution of the continuation
+***** VVIP i.e., System.out.println(foo.bar) becomes void printMethod(Foo foo, Continuation k){ System.out.println(foo.bar); }
 *** get continuation class: get the class definition for the continuation
 **** Just create an auxiliary class implementing Continuation which has the call() method.
 *** get make continuation call: get the instantiation call (e.g., new A1(this, k, arguments)) we should put in the original location
+*** VVIP Big problem: Classes don't have constructors in Nanojava.
+**** VVIP Solution: Just set the fields directly.
 ** Expression: All of them are Simple Expressions
 ** Simple Statements:
 *** AssignmentStatement() - Simple expression => Nanojava statement
@@ -60,9 +64,13 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 ** DONE Make the package name "nano"
    CLOCK: [2013-03-21 Thu 17:14]--[2013-03-21 Thu 17:18] =>  0:04
 ** DONE GJ no argu
-** TODO Add CPSHelper stuff
+** DONE Add CPSHelper stuff
    CLOCK: [2013-03-21 Thu 17:33]--[2013-03-21 Thu 17:57] =>  0:24
-** TODO Add tests for Nano versions of CPSHelper methods
+** DONE Add tests for Nano versions of CPSHelper methods
+   CLOCK: [2013-03-22 Fri 02:02]--[2013-03-22 Fri 02:20] =>  0:18
+** DONE SimpleSum.java - Nanojava code
+   CLOCK: [2013-03-22 Fri 02:58]--[2013-03-22 Fri 04:07] =>  1:09
+   CLOCK: [2013-03-22 Fri 02:36]--[2013-03-22 Fri 02:58] =>  0:22
 ** TODO PrimaryExpression
    :PROPERTIES:
    :Effort:   15

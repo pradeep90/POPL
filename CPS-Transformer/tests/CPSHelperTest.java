@@ -2,6 +2,7 @@ import syntaxtree.*;
 import java.util.*;
 import visitor.TreeFormatter;
 import visitor.TreeDumper;
+import nano.*;
 
 // import java.text.ParseException;
 import java.io.FileInputStream;
@@ -29,15 +30,15 @@ public class CPSHelperTest{
     }
 
     /**
-     * Test method for {@link CPSHelper#getFormattedString()}.
+     * Test method for {@link CPSHelper#getMicroFormattedString()}.
      */
     @Test
-    public final void testGetFormattedString()
+    public final void testGetMicroFormattedString()
             throws FileNotFoundException, ParseException{
         InputStream in1 = new FileInputStream(
-            "/home/spradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Microjava/Factorial.java");
+            "/home/pradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Microjava/Factorial.java");
         InputStream in2 = new FileInputStream(
-            "/home/spradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Microjava/Factorial.java");
+            "/home/pradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Microjava/Factorial.java");
         syntaxtree.Node root1 = new MicroJavaParser(in1).Goal();
         syntaxtree.Node root2 = new MicroJavaParser(in2).Goal();
 
@@ -62,6 +63,43 @@ public class CPSHelperTest{
     @Test
     public final void testGetMicroJavaNodeFromFileNoException(){
         CPSHelper.getMicroJavaNodeFromFile(
-            "/home/spradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Microjava/Factorial.java");
+            "/home/pradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Microjava/Factorial.java");
     }
+
+    /**
+     * Test method for {@link CPSHelper#getFormattedString()}.
+     */
+    @Test
+    public final void testGetFormattedString()
+            throws FileNotFoundException, nano.ParseException{
+        InputStream in1 = new FileInputStream(
+            "/home/pradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Nanojava/SimpleSum.java");
+        InputStream in2 = new FileInputStream(
+            "/home/pradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Nanojava/SimpleSum.java");
+        nano.syntaxtree.Node root1 = new NanoJavaParser(in1).Goal();
+        nano.syntaxtree.Node root2 = new NanoJavaParser(in2).Goal();
+
+        String code1 = CPSHelper.getFormattedString(root1);
+        String code2 = CPSHelper.getFormattedString(root2);
+        
+        assertEquals(code1, code2);
+    }
+
+    /** 
+     * Assert that node1 and node2 are equal NanoJava nodes.
+     */
+    public void assertEqualNanoJavaNodes(nano.syntaxtree.Node expected,
+                                         nano.syntaxtree.Node actual){
+        assertEquals(CPSHelper.getFormattedString(expected),
+                     CPSHelper.getFormattedString(actual));
+    }
+
+    // /**
+    //  * Test method for {@link CPSHelper#getNanoJavaNodeFromFile()}.
+    //  */
+    // @Test
+    // public final void testGetNanoJavaNodeFromFileNoException(){
+    //     CPSHelper.getNanoJavaNodeFromFile(
+    //         "/home/pradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Nanojava/Factorial.java");
+    // }
 }
