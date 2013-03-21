@@ -59,5 +59,21 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 
 ** DONE Make the package name "nano"
    CLOCK: [2013-03-21 Thu 17:14]--[2013-03-21 Thu 17:18] =>  0:04
-** TODO GJ no argu
+** DONE GJ no argu
+** TODO Add CPSHelper stuff
+   CLOCK: [2013-03-21 Thu 17:33]--[2013-03-21 Thu 17:57] =>  0:24
+** TODO Add tests for Nano versions of CPSHelper methods
+** TODO PrimaryExpression
+   :PROPERTIES:
+   :Effort:   15
+   :END:
+*** IntegerLiteral()
+*** TrueLiteral()
+*** FalseLiteral()
+*** VarRef()
+*** ThisExpression()
+*** ArrayAllocationExpression()
+*** AllocationExpression()
+*** NotExpression()
+*** BracketExpression()
 ** TODO Expressions
