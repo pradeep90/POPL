@@ -48,12 +48,16 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 **** => loop-method: Block {if (exp) loop-body; jump to loop-method; else: call current continuation();}
 *** MessageSendStatement() - Call it with the appropriate arguments (make it a Jump Point, btw)
 * Actions
-** Set up basic files
+** DONE Set up basic files
    CLOCK: [2013-03-16 Sat 21:47]--[2013-03-16 Sat 22:05] =>  0:18
-** Think
+** DONE Think
    CLOCK: [2013-03-17 Sun 23:27]--[2013-03-18 Mon 00:51] =>  1:24
    CLOCK: [2013-03-17 Sun 23:02]--[2013-03-17 Sun 23:15] =>  0:13
    CLOCK: [2013-03-17 Sun 17:50]--[2013-03-17 Sun 17:59] =>  0:09
    CLOCK: [2013-03-17 Sun 16:14]--[2013-03-17 Sun 17:25] =>  1:11
    CLOCK: [2013-03-16 Sat 22:08]--[2013-03-16 Sat 23:05] =>  0:57
 
+** DONE Make the package name "nano"
+   CLOCK: [2013-03-21 Thu 17:14]--[2013-03-21 Thu 17:18] =>  0:04
+** TODO GJ no argu
+** TODO Expressions

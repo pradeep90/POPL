@@ -11,7 +11,7 @@ VERSION_NUMBER := 1.0
 SOURCE_DIR  := src
 OUTPUT_DIR  := class
 TEST_OUTPUT_DIR := class/tests
-NANO_JAVA_PARSER_DIR := $(SOURCE_DIR)/nanojavaparser
+NANO_JAVA_PARSER_DIR := $(SOURCE_DIR)/nano
 GEN_MICROJAVA_OUTPUT_DIR	:= bin
 GEN_MICROJAVA_INPUT_DIR	:= gen_microjava
 
@@ -88,7 +88,7 @@ javacc_stuff:
 	cd $(SOURCE_DIR) && $(JAVACC) $(JAVACC_FLAGS) jtb.out.jj
 
 nano_java_jtb_stuff:
-	cd $(NANO_JAVA_PARSER_DIR) && $(JTB) -printer nanojava.jj -p nanojavaparser
+	cd $(NANO_JAVA_PARSER_DIR) && $(JTB) -printer nanojava.jj -p nano
 
 nano_java_javacc_stuff:
 	cd $(NANO_JAVA_PARSER_DIR) && $(JAVACC) $(JAVACC_FLAGS) jtb.out.jj
