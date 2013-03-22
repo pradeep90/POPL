@@ -2,14 +2,20 @@ import visitor.*;
 import nano.syntaxtree.*;
 
 import java.util.Enumeration;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Transformer extends GJNoArguDepthFirst<Node> {
-    public String currentContinuationName = "k";
     public String CONTINUATION_BASE_CLASS_NAME = "Continuation";
 
-    public Transformer() {
-        
-    }
+    public String currentContinuationName = "k";
+
+    public List<MethodDeclaration> currentClassContinuationMethods =
+            new ArrayList<MethodDeclaration>();
+    public List<ClassDeclaration> continuationClasses =
+            new ArrayList<ClassDeclaration>();
+
+    public Transformer() {}
 
     public MessageSendStatement getDefaultContinuationCall(){
         return new MessageSendStatement(
@@ -25,6 +31,64 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         syntaxtree.Block tempBlock =
                 new syntaxtree.Block(new syntaxtree.NodeListOptional(statement));
         return (Block) tempBlock.accept(this);
+    }
+
+    /**
+     * Note: Considering MessageSendStatement to be a tailform statement.
+     * 
+     * @return true iff node is a non-tailform statement
+     */
+    public boolean isSimpleStatement(syntaxtree.Node node){
+        syntaxtree.Statement statement = (syntaxtree.Statement) node;
+
+        switch(statement.f0.which){
+            case 1:
+            case 2:
+            case 5:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /** 
+     * Make a ClassDeclaration to represent current Continuation.
+     */
+    public ClassDeclaration makeContinuationClass(MethodDeclaration continuationMethod){
+        return null;
+    }
+
+    /** 
+     * Make a continuation out of nodes and update the global variables.  
+     * 
+     * @param nodes Statements
+     * 
+     * @return the necessary NanoJava instantiation and initialization
+     * statements for the continuation.
+     */
+    public NodeListOptional makeContinuation(
+        syntaxtree.NodeListOptional nodes){
+        syntaxtree.MethodDeclaration tempMethod = new syntaxtree.MethodDeclaration(
+            CPSHelper.getNewMicroIdentifier("TEMP_METHOD"),
+            new syntaxtree.NodeOptional(),
+            new syntaxtree.NodeListOptional(),
+            nodes);
+
+        MethodDeclaration continuationMethodNano =
+                (MethodDeclaration) tempMethod.accept(this);
+
+        currentClassContinuationMethods.add(continuationMethodNano);
+
+        // TODO: Take all the params and local variables of the
+        // original method and make them fields in the Continuation
+        // class.
+        ClassDeclaration continuationClass = makeContinuationClass(
+            continuationMethodNano);
+        continuationClasses.add(continuationClass);
+
+        // TODO: Have a Statement to set each field of continuationClass.
+        NodeListOptional initStatements = new NodeListOptional();
+        return initStatements;
     }
 
     //
@@ -324,10 +388,41 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.Block n) {
         Node _ret=null;
-        NodeListOptional nodeListOptional = (NodeListOptional) n.f1.accept(this);
+        // TODO: Accept Simple statements till you get a Tail form statement
+        NodeListOptional finalStatementList = new NodeListOptional();
+        JumpPoint jumpPoint = null;
+        int i;
+
+        for (i = 0; i < n.f1.nodes.size(); i++){
+            syntaxtree.Node currNode = n.f1.nodes.get(i);
+            if (isSimpleStatement(currNode)){
+                finalStatementList.addNode(currNode.accept(this));
+            } else {
+                // Make a continuation out of the rest of the nodes  
+                syntaxtree.NodeListOptional remainingStatements = new syntaxtree.NodeListOptional();
+                remainingStatements.nodes.addAll(
+                    n.f1.nodes.subList(i + 1, n.f1.nodes.size()));
+                System.out.println("CPSHelper.getMicroFormattedString(remainingStatements): " + CPSHelper.getMicroFormattedString(remainingStatements));
+                NodeListOptional kInitializationStatements =
+                        makeContinuation(remainingStatements);
+                System.out.println("CPSHelper.getFormattedString(kInitializationStatements): " + CPSHelper.getFormattedString(kInitializationStatements));
+
+                finalStatementList.nodes.addAll(kInitializationStatements.nodes);
+
+                // TODO: Make the NanoJava version of the ith
+                // Statement into a JumpPoint.
+                // TODO: Make IfStatement and MessageSendStatement return a JumpPoint.
+                // jumpPoint = 
+                break;
+            }
+        }
+
+        if (jumpPoint == null){
+            jumpPoint = new JumpPoint(new NodeChoice(getDefaultContinuationCall(), 1));
+        }
+
         // TODO: Check for the actual JumpPoint.
-        _ret = new Block(nodeListOptional, new JumpPoint(new NodeChoice(
-            getDefaultContinuationCall(), 1)));
+        _ret = new Block(finalStatementList, jumpPoint);
         return _ret;
     }
 

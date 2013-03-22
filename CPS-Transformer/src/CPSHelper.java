@@ -153,6 +153,10 @@ public class CPSHelper {
         return new Identifier(new NodeToken(name));
     }
 
+    public static syntaxtree.Identifier getNewMicroIdentifier(String name){
+        return new syntaxtree.Identifier(new syntaxtree.NodeToken(name));
+    }
+
     public static Type getNewType(String typeName){
         return new Type(new NodeChoice(getNewIdentifier(typeName), 3));
     }
