@@ -71,7 +71,7 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 ** DONE SimpleSum.java - Nanojava code
    CLOCK: [2013-03-22 Fri 02:58]--[2013-03-22 Fri 04:07] =>  1:09
    CLOCK: [2013-03-22 Fri 02:36]--[2013-03-22 Fri 02:58] =>  0:22
-** TODO PrimaryExpression
+** DONE PrimaryExpression
    :PROPERTIES:
    :Effort:   15
    :END:
@@ -90,4 +90,13 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
     CLOCK: [2013-03-22 Fri 05:58]--[2013-03-22 Fri 05:58] =>  0:00
 *** DONE BracketExpression()
     CLOCK: [2013-03-22 Fri 05:58]--[2013-03-22 Fri 05:59] =>  0:01
-** TODO Expressions
+** DONE Expressions
+   CLOCK: [2013-03-22 Fri 06:02]--[2013-03-22 Fri 06:05] =>  0:03
+*** DONE AndExpression()
+    CLOCK: [2013-03-22 Fri 06:01]--[2013-03-22 Fri 06:02] =>  0:01
+*** CompareExpression()
+*** PlusExpression()
+*** MinusExpression()
+*** TimesExpression()
+*** ArrayLookup()
+*** PrimaryExpression()

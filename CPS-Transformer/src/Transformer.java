@@ -464,9 +464,9 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.AndExpression n) {
       Node _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
+      PrimaryExpression f0 = (PrimaryExpression) n.f0.accept(this);
+      PrimaryExpression f2 = (PrimaryExpression) n.f2.accept(this);
+      _ret = new AndExpression(f0, f2);
       return _ret;
    }
 
@@ -477,9 +477,9 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.CompareExpression n) {
       Node _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
+      PrimaryExpression f0 = (PrimaryExpression) n.f0.accept(this);
+      PrimaryExpression f2 = (PrimaryExpression) n.f2.accept(this);
+      _ret = new CompareExpression(f0, f2);
       return _ret;
    }
 
@@ -490,9 +490,9 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.PlusExpression n) {
       Node _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
+      PrimaryExpression f0 = (PrimaryExpression) n.f0.accept(this);
+      PrimaryExpression f2 = (PrimaryExpression) n.f2.accept(this);
+      _ret = new PlusExpression(f0, f2);
       return _ret;
    }
 
@@ -503,9 +503,9 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.MinusExpression n) {
       Node _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
+      PrimaryExpression f0 = (PrimaryExpression) n.f0.accept(this);
+      PrimaryExpression f2 = (PrimaryExpression) n.f2.accept(this);
+      _ret = new MinusExpression(f0, f2);
       return _ret;
    }
 
@@ -516,9 +516,9 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.TimesExpression n) {
       Node _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
+      PrimaryExpression f0 = (PrimaryExpression) n.f0.accept(this);
+      PrimaryExpression f2 = (PrimaryExpression) n.f2.accept(this);
+      _ret = new TimesExpression(f0, f2);
       return _ret;
    }
 
@@ -530,10 +530,9 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.ArrayLookup n) {
       Node _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
-      n.f3.accept(this);
+      PrimaryExpression f0 = (PrimaryExpression) n.f0.accept(this);
+      PrimaryExpression f2 = (PrimaryExpression) n.f2.accept(this);
+      _ret = new ArrayLookup(f0, f2);
       return _ret;
    }
 
@@ -572,7 +571,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.PrimaryExpression n) {
       Node _ret=null;
-      n.f0.accept(this);
+      Node f0 = n.f0.accept(this);
+      _ret = new PrimaryExpression(new NodeChoice(f0, n.f0.which));
       return _ret;
    }
 
