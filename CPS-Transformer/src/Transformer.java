@@ -15,6 +15,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     public List<ClassDeclaration> continuationClasses =
             new ArrayList<ClassDeclaration>();
 
+    public MethodDeclaration currMethod;
+
     public Transformer() {}
 
     public MessageSendStatement getDefaultContinuationCall(){
@@ -74,14 +76,12 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
             new syntaxtree.NodeListOptional(),
             nodes);
 
+        // TODO: Take all the params and local variables of the
+        // original method and make them params for the Continuation method
         MethodDeclaration continuationMethodNano =
                 (MethodDeclaration) tempMethod.accept(this);
 
         currentClassContinuationMethods.add(continuationMethodNano);
-
-        // TODO: Take all the params and local variables of the
-        // original method and make them fields in the Continuation
-        // class.
         ClassDeclaration continuationClass = makeContinuationClass(
             continuationMethodNano);
         continuationClasses.add(continuationClass);
