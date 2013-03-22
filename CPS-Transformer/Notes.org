@@ -75,13 +75,19 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
    :PROPERTIES:
    :Effort:   15
    :END:
-*** IntegerLiteral()
-*** TrueLiteral()
-*** FalseLiteral()
-*** VarRef()
-*** ThisExpression()
-*** ArrayAllocationExpression()
-*** AllocationExpression()
-*** NotExpression()
-*** BracketExpression()
+*** DONE IntegerLiteral()
+*** DONE TrueLiteral()
+    CLOCK: [2013-03-22 Fri 05:43]--[2013-03-22 Fri 05:49] =>  0:06
+*** DONE FalseLiteral()
+*** DONE VarRef()
+*** DONE ThisExpression()
+    CLOCK: [2013-03-22 Fri 05:55]--[2013-03-22 Fri 05:55] =>  0:00
+*** DONE ArrayAllocationExpression()
+    CLOCK: [2013-03-22 Fri 05:55]--[2013-03-22 Fri 05:57] =>  0:02
+*** DONE AllocationExpression()
+    CLOCK: [2013-03-22 Fri 05:57]--[2013-03-22 Fri 05:58] =>  0:01
+*** DONE NotExpression()
+    CLOCK: [2013-03-22 Fri 05:58]--[2013-03-22 Fri 05:58] =>  0:00
+*** DONE BracketExpression()
+    CLOCK: [2013-03-22 Fri 05:58]--[2013-03-22 Fri 05:59] =>  0:01
 ** TODO Expressions

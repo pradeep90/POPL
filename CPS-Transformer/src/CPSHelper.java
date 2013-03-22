@@ -145,6 +145,10 @@ public class CPSHelper {
         return identifier.f0.tokenImage;
     }
 
+    public static String getMicroIdentifierName(syntaxtree.Identifier identifier){
+        return identifier.f0.tokenImage;
+    }
+
     public static Identifier getNewIdentifier(String name){
         return new Identifier(new NodeToken(name));
     }

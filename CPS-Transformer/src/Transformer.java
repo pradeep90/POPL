@@ -452,7 +452,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.Expression n) {
       Node _ret=null;
-      n.f0.accept(this);
+      Node f0 = n.f0.accept(this);
+      _ret = new Expression(new NodeChoice(f0, n.f0.which));
       return _ret;
    }
 
@@ -590,7 +591,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.TrueLiteral n) {
       Node _ret=null;
-      n.f0.accept(this);
+      // n.f0.accept(this);
+      _ret = new TrueLiteral();
       return _ret;
    }
 
@@ -599,7 +601,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.FalseLiteral n) {
       Node _ret=null;
-      n.f0.accept(this);
+      // n.f0.accept(this);
+      _ret = new FalseLiteral();
       return _ret;
    }
 
@@ -608,7 +611,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.Identifier n) {
       Node _ret=null;
-      n.f0.accept(this);
+      _ret = CPSHelper.getNewIdentifier(CPSHelper.getMicroIdentifierName(n));
       return _ret;
    }
 
@@ -617,7 +620,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.ThisExpression n) {
       Node _ret=null;
-      n.f0.accept(this);
+      _ret = new ThisExpression();
       return _ret;
    }
 
@@ -630,11 +633,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.ArrayAllocationExpression n) {
       Node _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
-      n.f3.accept(this);
-      n.f4.accept(this);
+      Expression f3 = (Expression) n.f3.accept(this);
+      _ret = new ArrayAllocationExpression(f3);
       return _ret;
    }
 
@@ -646,10 +646,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.AllocationExpression n) {
       Node _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
-      n.f3.accept(this);
+      Identifier f1 = (Identifier) n.f1.accept(this);
+      _ret = new AllocationExpression(f1);
       return _ret;
    }
 
@@ -659,8 +657,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.NotExpression n) {
       Node _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
+      Expression f1 = (Expression) n.f1.accept(this);
+      _ret = new NotExpression(f1);
       return _ret;
    }
 
@@ -671,9 +669,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.BracketExpression n) {
       Node _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
+      Expression f1 = (Expression) n.f1.accept(this);
+      _ret = new BracketExpression(f1);
       return _ret;
    }
 
@@ -683,7 +680,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.VarRef n) {
       Node _ret=null;
-      n.f0.accept(this);
+      Node f0 = n.f0.accept(this);
+      _ret = new VarRef(new NodeChoice(f0, n.f0.which));
       return _ret;
    }
 
@@ -694,10 +692,9 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.DotExpression n) {
       Node _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
+      Identifier f0 = (Identifier) n.f0.accept(this);
+      Identifier f2 = (Identifier) n.f2.accept(this);
+      _ret = new DotExpression(f0, f2);
       return _ret;
    }
-
 }
