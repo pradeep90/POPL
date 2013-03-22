@@ -1,9 +1,9 @@
 import visitor.*;
-import syntaxtree.*;
+import nano.syntaxtree.*;
 
 import java.util.Enumeration;
 
-public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
+public class Transformer extends GJNoArguDepthFirst<Node> {
     
     public Transformer() {
         
@@ -12,21 +12,21 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
    //
    // Auto class visitors--probably don't need to be overridden.
    //
-   public nano.syntaxtree.Node visit(NodeList n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.NodeList n) {
+      Node _ret=null;
       int _count=0;
-      for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
+      for ( Enumeration<syntaxtree.Node> e = n.elements(); e.hasMoreElements(); ) {
          e.nextElement().accept(this);
          _count++;
       }
       return _ret;
    }
 
-   public nano.syntaxtree.Node visit(NodeListOptional n) {
+   public Node visit(syntaxtree.NodeListOptional n) {
       if ( n.present() ) {
-         nano.syntaxtree.Node _ret=null;
+         Node _ret=null;
          int _count=0;
-         for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
+         for ( Enumeration<syntaxtree.Node> e = n.elements(); e.hasMoreElements(); ) {
             e.nextElement().accept(this);
             _count++;
          }
@@ -36,25 +36,25 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
          return null;
    }
 
-   public nano.syntaxtree.Node visit(NodeOptional n) {
+   public Node visit(syntaxtree.NodeOptional n) {
       if ( n.present() )
          return n.node.accept(this);
       else
          return null;
    }
 
-   public nano.syntaxtree.Node visit(NodeSequence n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.NodeSequence n) {
+      Node _ret=null;
       int _count=0;
-      for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
+      for ( Enumeration<syntaxtree.Node> e = n.elements(); e.hasMoreElements(); ) {
          e.nextElement().accept(this);
          _count++;
       }
       return _ret;
    }
 
-   public nano.syntaxtree.Node visit(NodeToken n) {
-       return new nano.syntaxtree.NodeToken(n.tokenImage);
+   public Node visit(syntaxtree.NodeToken n) {
+       return new NodeToken(n.tokenImage);
    }
 
    //
@@ -66,8 +66,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f1 -> ( TypeDeclaration() )*
     * f2 -> <EOF>
     */
-   public nano.syntaxtree.Node visit(Goal n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.Goal n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -102,8 +102,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f24 -> "}"
     * f25 -> "}"
     */
-   public nano.syntaxtree.Node visit(MainClass n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.MainClass n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -137,8 +137,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f0 -> ClassDeclaration()
     *       | ClassExtendsDeclaration()
     */
-   public nano.syntaxtree.Node visit(TypeDeclaration n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.TypeDeclaration n) {
+      Node _ret=null;
       n.f0.accept(this);
       return _ret;
    }
@@ -151,8 +151,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f4 -> ( MethodDeclaration() )*
     * f5 -> "}"
     */
-   public nano.syntaxtree.Node visit(ClassDeclaration n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.ClassDeclaration n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -172,8 +172,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f6 -> ( MethodDeclaration() )*
     * f7 -> "}"
     */
-   public nano.syntaxtree.Node visit(ClassExtendsDeclaration n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.ClassExtendsDeclaration n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -190,8 +190,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f1 -> Identifier()
     * f2 -> ";"
     */
-   public nano.syntaxtree.Node visit(VarDeclaration n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.VarDeclaration n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -210,8 +210,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f8 -> ( Statement() )*
     * f9 -> "}"
     */
-   public nano.syntaxtree.Node visit(MethodDeclaration n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.MethodDeclaration n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -229,8 +229,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f0 -> FormalParameter()
     * f1 -> ( FormalParameterRest() )*
     */
-   public nano.syntaxtree.Node visit(FormalParameterList n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.FormalParameterList n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       return _ret;
@@ -240,8 +240,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f0 -> Type()
     * f1 -> Identifier()
     */
-   public nano.syntaxtree.Node visit(FormalParameter n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.FormalParameter n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       return _ret;
@@ -251,8 +251,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f0 -> ","
     * f1 -> FormalParameter()
     */
-   public nano.syntaxtree.Node visit(FormalParameterRest n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.FormalParameterRest n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       return _ret;
@@ -264,8 +264,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     *       | IntegerType()
     *       | Identifier()
     */
-   public nano.syntaxtree.Node visit(Type n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.Type n) {
+      Node _ret=null;
       n.f0.accept(this);
       return _ret;
    }
@@ -275,8 +275,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f1 -> "["
     * f2 -> "]"
     */
-   public nano.syntaxtree.Node visit(ArrayType n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.ArrayType n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -286,8 +286,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
    /**
     * f0 -> "boolean"
     */
-   public nano.syntaxtree.Node visit(BooleanType n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.BooleanType n) {
+      Node _ret=null;
       n.f0.accept(this);
       return _ret;
    }
@@ -295,8 +295,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
    /**
     * f0 -> "int"
     */
-   public nano.syntaxtree.Node visit(IntegerType n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.IntegerType n) {
+      Node _ret=null;
       n.f0.accept(this);
       return _ret;
    }
@@ -310,8 +310,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     *       | PrintStatement()
     *       | MessageSendStatement()
     */
-   public nano.syntaxtree.Node visit(Statement n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.Statement n) {
+      Node _ret=null;
       n.f0.accept(this);
       return _ret;
    }
@@ -321,8 +321,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f1 -> ( Statement() )*
     * f2 -> "}"
     */
-   public nano.syntaxtree.Node visit(Block n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.Block n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -335,8 +335,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f2 -> Expression()
     * f3 -> ";"
     */
-   public nano.syntaxtree.Node visit(AssignmentStatement n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.AssignmentStatement n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -353,8 +353,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f5 -> Expression()
     * f6 -> ";"
     */
-   public nano.syntaxtree.Node visit(ArrayAssignmentStatement n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.ArrayAssignmentStatement n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -374,8 +374,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f5 -> "else"
     * f6 -> Statement()
     */
-   public nano.syntaxtree.Node visit(IfStatement n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.IfStatement n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -393,8 +393,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f3 -> ")"
     * f4 -> Statement()
     */
-   public nano.syntaxtree.Node visit(WhileStatement n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.WhileStatement n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -410,8 +410,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f3 -> ")"
     * f4 -> ";"
     */
-   public nano.syntaxtree.Node visit(PrintStatement n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.PrintStatement n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -429,8 +429,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f5 -> ")"
     * f6 -> ";"
     */
-   public nano.syntaxtree.Node visit(MessageSendStatement n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.MessageSendStatement n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -450,8 +450,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     *       | ArrayLookup()
     *       | PrimaryExpression()
     */
-   public nano.syntaxtree.Node visit(Expression n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.Expression n) {
+      Node _ret=null;
       n.f0.accept(this);
       return _ret;
    }
@@ -461,8 +461,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f1 -> "&"
     * f2 -> PrimaryExpression()
     */
-   public nano.syntaxtree.Node visit(AndExpression n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.AndExpression n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -474,8 +474,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f1 -> "<"
     * f2 -> PrimaryExpression()
     */
-   public nano.syntaxtree.Node visit(CompareExpression n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.CompareExpression n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -487,8 +487,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f1 -> "+"
     * f2 -> PrimaryExpression()
     */
-   public nano.syntaxtree.Node visit(PlusExpression n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.PlusExpression n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -500,8 +500,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f1 -> "-"
     * f2 -> PrimaryExpression()
     */
-   public nano.syntaxtree.Node visit(MinusExpression n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.MinusExpression n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -513,8 +513,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f1 -> "*"
     * f2 -> PrimaryExpression()
     */
-   public nano.syntaxtree.Node visit(TimesExpression n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.TimesExpression n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -527,8 +527,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f2 -> PrimaryExpression()
     * f3 -> "]"
     */
-   public nano.syntaxtree.Node visit(ArrayLookup n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.ArrayLookup n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -540,8 +540,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f0 -> Expression()
     * f1 -> ( ExpressionRest() )*
     */
-   public nano.syntaxtree.Node visit(ExpressionList n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.ExpressionList n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       return _ret;
@@ -551,8 +551,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f0 -> ","
     * f1 -> Expression()
     */
-   public nano.syntaxtree.Node visit(ExpressionRest n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.ExpressionRest n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       return _ret;
@@ -569,8 +569,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     *       | NotExpression()
     *       | BracketExpression()
     */
-   public nano.syntaxtree.Node visit(PrimaryExpression n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.PrimaryExpression n) {
+      Node _ret=null;
       n.f0.accept(this);
       return _ret;
    }
@@ -578,17 +578,18 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
    /**
     * f0 -> <INTEGER_LITERAL>
     */
-   public nano.syntaxtree.Node visit(IntegerLiteral n) {
-      nano.syntaxtree.Node _ret=null;
-      n.f0.accept(this);
+   public Node visit(syntaxtree.IntegerLiteral n) {
+      Node _ret=null;
+      NodeToken f0 = (NodeToken) n.f0.accept(this);
+      _ret = new IntegerLiteral(f0);
       return _ret;
    }
 
    /**
     * f0 -> "true"
     */
-   public nano.syntaxtree.Node visit(TrueLiteral n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.TrueLiteral n) {
+      Node _ret=null;
       n.f0.accept(this);
       return _ret;
    }
@@ -596,8 +597,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
    /**
     * f0 -> "false"
     */
-   public nano.syntaxtree.Node visit(FalseLiteral n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.FalseLiteral n) {
+      Node _ret=null;
       n.f0.accept(this);
       return _ret;
    }
@@ -605,8 +606,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
    /**
     * f0 -> <IDENTIFIER>
     */
-   public nano.syntaxtree.Node visit(Identifier n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.Identifier n) {
+      Node _ret=null;
       n.f0.accept(this);
       return _ret;
    }
@@ -614,8 +615,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
    /**
     * f0 -> "this"
     */
-   public nano.syntaxtree.Node visit(ThisExpression n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.ThisExpression n) {
+      Node _ret=null;
       n.f0.accept(this);
       return _ret;
    }
@@ -627,8 +628,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f3 -> Expression()
     * f4 -> "]"
     */
-   public nano.syntaxtree.Node visit(ArrayAllocationExpression n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.ArrayAllocationExpression n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -643,8 +644,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f2 -> "("
     * f3 -> ")"
     */
-   public nano.syntaxtree.Node visit(AllocationExpression n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.AllocationExpression n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -656,8 +657,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f0 -> "!"
     * f1 -> Expression()
     */
-   public nano.syntaxtree.Node visit(NotExpression n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.NotExpression n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       return _ret;
@@ -668,8 +669,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f1 -> Expression()
     * f2 -> ")"
     */
-   public nano.syntaxtree.Node visit(BracketExpression n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.BracketExpression n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -680,8 +681,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f0 -> DotExpression()
     *       | Identifier()
     */
-   public nano.syntaxtree.Node visit(VarRef n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.VarRef n) {
+      Node _ret=null;
       n.f0.accept(this);
       return _ret;
    }
@@ -691,8 +692,8 @@ public class Transformer extends GJNoArguDepthFirst<nano.syntaxtree.Node> {
     * f1 -> "."
     * f2 -> Identifier()
     */
-   public nano.syntaxtree.Node visit(DotExpression n) {
-      nano.syntaxtree.Node _ret=null;
+   public Node visit(syntaxtree.DotExpression n) {
+      Node _ret=null;
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);

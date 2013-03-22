@@ -14,11 +14,15 @@ public class TransformerTest{
 
     NodeToken nodeToken;
     nano.syntaxtree.NodeToken nodeTokenNano;
+    IntegerLiteral integerLiteral;
+    nano.syntaxtree.IntegerLiteral integerLiteralNano;
 
     @Before
     public void setUp(){
         nodeToken = new NodeToken("foo");
         nodeTokenNano = new nano.syntaxtree.NodeToken("foo");
+        integerLiteral = new IntegerLiteral(nodeToken);
+        integerLiteralNano = new nano.syntaxtree.IntegerLiteral(nodeTokenNano);
         transformer = new Transformer();
     }
     
@@ -54,5 +58,13 @@ public class TransformerTest{
     @Test
     public final void testNodeToken(){
         assertEqualAfterTransform(nodeTokenNano, nodeToken);
+    }
+
+    /**
+     * Test method for {@link Transformer#IntegerLiteral()}.
+     */
+    @Test
+    public final void testIntegerLiteral(){
+        assertEqualAfterTransform(integerLiteralNano, integerLiteral);
     }
 }
