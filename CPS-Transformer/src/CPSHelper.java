@@ -152,4 +152,9 @@ public class CPSHelper {
     public static Identifier getNewIdentifier(String name){
         return new Identifier(new NodeToken(name));
     }
+
+    public static Type getNewType(String typeName){
+        return new Type(new NodeChoice(getNewIdentifier(typeName), 3));
+    }
+
 }

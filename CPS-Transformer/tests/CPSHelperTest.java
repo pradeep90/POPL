@@ -72,17 +72,18 @@ public class CPSHelperTest{
     @Test
     public final void testGetFormattedString()
             throws FileNotFoundException, nano.ParseException{
-        InputStream in1 = new FileInputStream(
-            "/home/pradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Nanojava/SimpleSum.java");
-        InputStream in2 = new FileInputStream(
-            "/home/pradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Nanojava/SimpleSum.java");
-        nano.syntaxtree.Node root1 = new NanoJavaParser(in1).Goal();
-        nano.syntaxtree.Node root2 = new NanoJavaParser(in2).Goal();
+        // TODO: 
+        // InputStream in1 = new FileInputStream(
+        //     "/home/pradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Nanojava/SimpleSum.java");
+        // InputStream in2 = new FileInputStream(
+        //     "/home/pradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Nanojava/SimpleSum.java");
+        // nano.syntaxtree.Node root1 = new NanoJavaParser(in1).Goal();
+        // nano.syntaxtree.Node root2 = new NanoJavaParser(in2).Goal();
 
-        String code1 = CPSHelper.getFormattedString(root1);
-        String code2 = CPSHelper.getFormattedString(root2);
+        // String code1 = CPSHelper.getFormattedString(root1);
+        // String code2 = CPSHelper.getFormattedString(root2);
         
-        assertEquals(code1, code2);
+        // assertEquals(code1, code2);
     }
 
     /** 

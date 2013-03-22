@@ -110,7 +110,7 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
    CLOCK: [2013-03-22 Fri 06:08]--[2013-03-22 Fri 06:08] =>  0:00
 ** DONE ExpressionList, etc.
    CLOCK: [2013-03-22 Fri 06:34]--[2013-03-22 Fri 06:42] =>  0:08
-** Basic versions of the Tail Form statements
+** DONE Basic versions of the Tail Form statements
 *** DONE Block
     CLOCK: [2013-03-22 Fri 06:46]--[2013-03-22 Fri 07:22] =>  0:36
     CLOCK: [2013-03-22 Fri 06:30]--[2013-03-22 Fri 06:33] =>  0:03
@@ -120,3 +120,16 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
     CLOCK: [2013-03-22 Fri 06:42]--[2013-03-22 Fri 06:46] =>  0:04
     CLOCK: [2013-03-22 Fri 06:33]--[2013-03-22 Fri 06:34] =>  0:01
 
+** DONE Type
+   CLOCK: [2013-03-22 Fri 08:00]--[2013-03-22 Fri 08:01] =>  0:01
+
+** DONE FormalParameterList
+   CLOCK: [2013-03-22 Fri 08:02]--[2013-03-22 Fri 08:06] =>  0:04
+
+** DONE MethodDeclaration
+   CLOCK: [2013-03-22 Fri 08:40]--[2013-03-22 Fri 08:59] =>  0:19
+   CLOCK: [2013-03-22 Fri 08:06]--[2013-03-22 Fri 08:36] =>  0:30
+
+** TODO ClassDeclaration
+   CLOCK: [2013-03-22 Fri 09:01]--[2013-03-22 Fri 09:25] =>  0:24
+*** TODO Check out why SimpleSum -> Nanojava -> string gives an error

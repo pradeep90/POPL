@@ -121,6 +121,7 @@ public class TransformerTest{
 
         NodeListOptional statementList = new NodeListOptional();
         statementList.addNode(statement);
+        // statementList.addNode(new Statement(new NodeChoice(messageSendStatement, 6)));
         block = new Block(statementList);
 
         nano.syntaxtree.NodeListOptional statementListNano =
@@ -257,5 +258,51 @@ public class TransformerTest{
     @Test
     public final void testIfStatement(){
         assertEqualAfterTransform(ifStatementNano, ifStatement);
+    }
+
+    /**
+     * Test method for {@link Transformer#MethodDeclaration()}.
+     */
+    @Test
+    public final void testMethodDeclaration(){
+        String code = "" +
+                "class MainClass {" +
+                "   public static void main(String [] a){" +
+                "      new ____NewMainClass____().____Main____(0);" +
+                "   }" +
+                "}" +
+                "class ____NewMainClass____{" +
+                "" +
+                "   public void ____Main____(int ____arg_length____){" +
+                "      int ____printMe____;" +
+                "      Fac ___tmp6;" +
+                "      int ___tmp5;" +
+                "" +
+                "      ___tmp6 =" +
+                "         new Fac();" +
+                "      ___tmp6.ComputeFac(10);" +
+                "      ___tmp5 = ___tmp6.____1234ComputeFac4321____;" +
+                "      ____printMe____ = ___tmp5;" +
+                "      System.out.println(____printMe____);" +
+                "   }" +
+                "   public void foo(){}" +
+                "}";
+        Goal goal = (Goal) CPSHelper.getMicroJavaNodeFromString(code);
+        ClassDeclaration classDeclaration = (ClassDeclaration)
+                ((TypeDeclaration) goal.f1.nodes.get(0)).f0.choice;
+        MethodDeclaration methodDeclaration = (MethodDeclaration)
+                classDeclaration.f4.nodes.get(0);
+
+        System.out.println("CPSHelper.getFormattedString(methodDeclaration.accept(transformer)): " + CPSHelper.getFormattedString(methodDeclaration.accept(transformer)));
+    }
+
+    /**
+     * Test method for {@link Transformer#Goal()}.
+     */
+    @Test
+    public final void testGoal(){
+        Goal goal = (Goal) CPSHelper.getMicroJavaNodeFromFile(
+            "/home/pradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Microjava/Factorial.java");
+        System.out.println("CPSHelper.getFormattedString(goal.accept(transformer)): " + CPSHelper.getFormattedString(goal.accept(transformer)));
     }
 }

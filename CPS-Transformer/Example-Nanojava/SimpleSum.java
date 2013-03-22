@@ -4,38 +4,20 @@ class SimpleSum {
     }
 }
 
-class Continuation {
-    
-    public void constructorContinuation() {
-        
-    }
-
-    public void call(){}
-}
+// class Continuation {
+//     public void call(){}
+// }
 
 
-class IdentityCont extends Continuation {
-    
-    public void constructorIdentityCont() {
-        
-    }
-
-    public void call(){}
-}
+// class IdentityCont extends Continuation {
+//     public void call(){}
+// }
 
 class SumCont1 extends Continuation{
     Sum object;
     Continuation k;
     int number;
     
-    public void constructorSumCont1(Sum object, Continuation k, int number) {
-        SumCont1 current;
-        current = this;
-        current.object = object;
-        current.k = k;
-        current.number = number;
-    }
-
     public void call(){
         object.continuationSumMethod(number, k);
     }
@@ -77,15 +59,6 @@ class PrintCont1 extends Continuation{
     Continuation k;
     Sum sum;
     
-    public void constructorPrintCont1(____NewMainClass____ object, Continuation k, Sum sum) {
-        PrintCont1 current;
-        current = this;
-        
-        current.object = object;
-        current.k = k;
-        current.sum = sum;
-    }
-
     public void call(){
         object.continuationPrintMethod(sum, k);
     }

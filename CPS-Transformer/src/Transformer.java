@@ -4,14 +4,16 @@ import nano.syntaxtree.*;
 import java.util.Enumeration;
 
 public class Transformer extends GJNoArguDepthFirst<Node> {
-    
+    public String currentContinuationName = "k";
+    public String CONTINUATION_BASE_CLASS_NAME = "Continuation";
+
     public Transformer() {
         
     }
 
     public MessageSendStatement getDefaultContinuationCall(){
         return new MessageSendStatement(
-            CPSHelper.getNewIdentifier("k"),
+            CPSHelper.getNewIdentifier(currentContinuationName),
             CPSHelper.getNewIdentifier("call"),
             new NodeOptional());
     }
@@ -54,7 +56,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         if ( n.present() )
             return n.node.accept(this);
         else
-            return new NodeOptional();
+            // Cos the caller is gonna do "new NodeOptional(return value)" anyway
+            return null;
     }
 
     public Node visit(syntaxtree.NodeSequence n) {
@@ -82,9 +85,9 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.Goal n) {
         Node _ret=null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
+        MainClass f0 = (MainClass) n.f0.accept(this);
+        NodeListOptional f1 = (NodeListOptional) n.f1.accept(this);
+        _ret = new Goal(f0, f1);
         return _ret;
     }
 
@@ -118,32 +121,12 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.MainClass n) {
         Node _ret=null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
-        n.f3.accept(this);
-        n.f4.accept(this);
-        n.f5.accept(this);
-        n.f6.accept(this);
-        n.f7.accept(this);
-        n.f8.accept(this);
-        n.f9.accept(this);
-        n.f10.accept(this);
-        n.f11.accept(this);
-        n.f12.accept(this);
-        n.f13.accept(this);
-        n.f14.accept(this);
-        n.f15.accept(this);
-        n.f16.accept(this);
-        n.f17.accept(this);
-        n.f18.accept(this);
-        n.f19.accept(this);
-        n.f20.accept(this);
-        n.f21.accept(this);
-        n.f22.accept(this);
-        n.f23.accept(this);
-        n.f24.accept(this);
-        n.f25.accept(this);
+        Identifier f1 = (Identifier) n.f1.accept(this);
+        Identifier f11 = (Identifier) n.f11.accept(this);
+        Identifier f15 = (Identifier) n.f15.accept(this);
+        Identifier f19 = (Identifier) n.f19.accept(this);
+        NodeOptional f21 = new NodeOptional(n.f21.accept(this));
+        _ret = new MainClass(f1, f11, f15, f19, f21);
         return _ret;
     }
 
@@ -153,7 +136,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.TypeDeclaration n) {
         Node _ret=null;
-        n.f0.accept(this);
+        _ret = new TypeDeclaration(new NodeChoice(n.f0.accept(this), n.f0.which));
         return _ret;
     }
 
@@ -167,12 +150,10 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.ClassDeclaration n) {
         Node _ret=null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
-        n.f3.accept(this);
-        n.f4.accept(this);
-        n.f5.accept(this);
+        Identifier f1 = (Identifier) n.f1.accept(this);
+        NodeListOptional f3 = (NodeListOptional) n.f3.accept(this);
+        NodeListOptional f4 = (NodeListOptional) n.f4.accept(this);
+        _ret = new ClassDeclaration(f1, f3, f4);
         return _ret;
     }
 
@@ -188,14 +169,11 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.ClassExtendsDeclaration n) {
         Node _ret=null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
-        n.f3.accept(this);
-        n.f4.accept(this);
-        n.f5.accept(this);
-        n.f6.accept(this);
-        n.f7.accept(this);
+        Identifier f1 = (Identifier) n.f1.accept(this);
+        Identifier f3 = (Identifier) n.f3.accept(this);
+        NodeListOptional f5 = (NodeListOptional) n.f3.accept(this);
+        NodeListOptional f6 = (NodeListOptional) n.f4.accept(this);
+        _ret = new ClassExtendsDeclaration(f1, f3, f5, f6);
         return _ret;
     }
 
@@ -206,9 +184,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.VarDeclaration n) {
         Node _ret=null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
+        _ret = new VarDeclaration((Type) n.f0.accept(this), (Identifier) n.f1.accept(this));
         return _ret;
     }
 
@@ -226,16 +202,29 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.MethodDeclaration n) {
         Node _ret=null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
-        n.f3.accept(this);
-        n.f4.accept(this);
-        n.f5.accept(this);
-        n.f6.accept(this);
-        n.f7.accept(this);
-        n.f8.accept(this);
-        n.f9.accept(this);
+        Identifier f2 = (Identifier) n.f2.accept(this);
+
+        NodeOptional f4 = new NodeOptional(n.f4.accept(this));
+        FormalParameter kParam = new FormalParameter(
+            CPSHelper.getNewType(CONTINUATION_BASE_CLASS_NAME),
+            CPSHelper.getNewIdentifier(currentContinuationName));
+
+        if (f4.present()){
+            FormalParameterRest restParam = new FormalParameterRest(kParam);
+            ((FormalParameterList) f4.node).f1.addNode(restParam);
+        }
+        else{
+            f4 = new NodeOptional(new FormalParameterList(kParam, new NodeListOptional()));
+        }
+
+        NodeListOptional f7 = (NodeListOptional) n.f7.accept(this);
+
+        // Make a new block out of the statement list and extract the
+        // resultant NanoJava statement list and JumpPoint.
+        Block tempBlock = (Block) (new syntaxtree.Block(n.f8)).accept(this);
+
+        _ret = new MethodDeclaration(f2, f4, f7, tempBlock.f1,
+                                     new NodeOptional(tempBlock.f2));
         return _ret;
     }
 
@@ -245,8 +234,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.FormalParameterList n) {
         Node _ret=null;
-        n.f0.accept(this);
-        n.f1.accept(this);
+        _ret = new FormalParameterList((FormalParameter) n.f0.accept(this),
+                                       (NodeListOptional) n.f1.accept(this));
         return _ret;
     }
 
@@ -256,8 +245,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.FormalParameter n) {
         Node _ret=null;
-        n.f0.accept(this);
-        n.f1.accept(this);
+        _ret = new FormalParameter((Type) n.f0.accept(this), (Identifier) n.f1.accept(this));
         return _ret;
     }
 
@@ -267,8 +255,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.FormalParameterRest n) {
         Node _ret=null;
-        n.f0.accept(this);
-        n.f1.accept(this);
+        _ret = new FormalParameterRest((FormalParameter) n.f1.accept(this));
         return _ret;
     }
 
@@ -280,7 +267,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.Type n) {
         Node _ret=null;
-        n.f0.accept(this);
+        Node f0 = n.f0.accept(this);
+        _ret = new Type(new NodeChoice(f0, n.f0.which));
         return _ret;
     }
 
@@ -291,9 +279,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.ArrayType n) {
         Node _ret=null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
+        _ret = new ArrayType();
         return _ret;
     }
 
@@ -302,7 +288,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.BooleanType n) {
         Node _ret=null;
-        n.f0.accept(this);
+        _ret = new BooleanType();
         return _ret;
     }
 
@@ -311,7 +297,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.IntegerType n) {
         Node _ret=null;
-        n.f0.accept(this);
+        _ret = new IntegerType();
         return _ret;
     }
 
@@ -402,6 +388,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      * f3 -> ")"
      * f4 -> Statement()
      */
+    // TODO: 
     public Node visit(syntaxtree.WhileStatement n) {
         Node _ret=null;
         n.f0.accept(this);
@@ -439,7 +426,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         Node _ret=null;
         Identifier f0 = (Identifier) n.f0.accept(this);
         Identifier f2 = (Identifier) n.f2.accept(this);
-        NodeOptional f4 = (NodeOptional) n.f4.accept(this);
+        NodeOptional f4 = new NodeOptional(n.f4.accept(this));
         _ret = new MessageSendStatement(f0, f2, f4);
         return _ret;
     }
