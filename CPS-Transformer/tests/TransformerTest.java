@@ -302,7 +302,7 @@ public class TransformerTest{
     @Test
     public final void testGoal(){
         Goal goal = (Goal) CPSHelper.getMicroJavaNodeFromFile(
-            "/home/pradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Microjava/Factorial.java");
+            "Example-Microjava/Factorial.java");
         System.out.println("CPSHelper.getFormattedString(goal.accept(transformer)): " + CPSHelper.getFormattedString(goal.accept(transformer)));
     }
 }

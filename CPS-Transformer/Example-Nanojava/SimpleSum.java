@@ -4,14 +4,14 @@ class SimpleSum {
     }
 }
 
-// class Continuation {
-//     public void call(){}
-// }
+class Continuation {
+    public void call(){
+    }
+}
 
-
-// class IdentityCont extends Continuation {
-//     public void call(){}
-// }
+class IdentityCont extends Continuation {
+    public void call(){}
+}
 
 class SumCont1 extends Continuation{
     Sum object;

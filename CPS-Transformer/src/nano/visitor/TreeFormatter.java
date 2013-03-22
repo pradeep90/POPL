@@ -300,7 +300,7 @@ public class TreeFormatter extends DepthFirstVisitor {
         add(space());
         if ( n.f21.present() ) {
             n.f21.accept(this);
-        add(space());
+            add(space());
         }
         n.f22.accept(this);
         add(space());
@@ -398,7 +398,8 @@ public class TreeFormatter extends DepthFirstVisitor {
      * f6 -> "{"
      * f7 -> ( VarDeclaration() )*
      * f8 -> ( Statement() )*
-     * f9 -> "}"
+     * f9 -> [ JumpPoint() ]
+     * f10 -> "}"
      */
     public void visit(MethodDeclaration n) {
         n.f0.accept(this);
@@ -411,7 +412,7 @@ public class TreeFormatter extends DepthFirstVisitor {
         add(space());
         if ( n.f4.present() ) {
             n.f4.accept(this);
-        add(space());
+            add(space());
         }
         n.f5.accept(this);
         add(space());
@@ -423,8 +424,12 @@ public class TreeFormatter extends DepthFirstVisitor {
         if ( n.f8.present() ) {
             processList(n.f8, space());
         }
-        n.f9.accept(this);
         add(space());
+        if ( n.f9.present() ) {
+            n.f9.accept(this);
+            add(space());
+        }
+        n.f10.accept(this);
     }
 
     /**
@@ -500,8 +505,15 @@ public class TreeFormatter extends DepthFirstVisitor {
     }
 
     /**
-     * f0 -> Block()
-     *       | AssignmentStatement()
+     * f0 -> IfStatement()
+     *       | MessageSendStatement()
+     */
+    public void visit(JumpPoint n) {
+        n.f0.accept(this);
+    }
+
+    /**
+     * f0 -> AssignmentStatement()
      *       | ArrayAssignmentStatement()
      *       | IfStatement()
      *       | WhileStatement()
@@ -637,7 +649,7 @@ public class TreeFormatter extends DepthFirstVisitor {
         add(space());
         if ( n.f4.present() ) {
             n.f4.accept(this);
-        add(space());
+            add(space());
         }
         n.f5.accept(this);
         add(space());

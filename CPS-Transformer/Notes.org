@@ -132,4 +132,7 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 
 ** TODO ClassDeclaration
    CLOCK: [2013-03-22 Fri 09:01]--[2013-03-22 Fri 09:25] =>  0:24
-*** TODO Check out why SimpleSum -> Nanojava -> string gives an error
+*** DONE Check out why SimpleSum -> Nanojava -> string gives an error
+    CLOCK: [2013-03-22 Fri 13:27]--[2013-03-22 Fri 13:28] =>  0:01
+    CLOCK: [2013-03-22 Fri 13:09]--[2013-03-22 Fri 13:27] =>  0:18
+

@@ -36,9 +36,9 @@ public class CPSHelperTest{
     public final void testGetMicroFormattedString()
             throws FileNotFoundException, ParseException{
         InputStream in1 = new FileInputStream(
-            "/home/pradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Microjava/Factorial.java");
+            "Example-Microjava/Factorial.java");
         InputStream in2 = new FileInputStream(
-            "/home/pradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Microjava/Factorial.java");
+            "Example-Microjava/Factorial.java");
         syntaxtree.Node root1 = new MicroJavaParser(in1).Goal();
         syntaxtree.Node root2 = new MicroJavaParser(in2).Goal();
 
@@ -62,8 +62,7 @@ public class CPSHelperTest{
      */
     @Test
     public final void testGetMicroJavaNodeFromFileNoException(){
-        CPSHelper.getMicroJavaNodeFromFile(
-            "/home/pradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Microjava/Factorial.java");
+        CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/Factorial.java");
     }
 
     /**
@@ -72,18 +71,17 @@ public class CPSHelperTest{
     @Test
     public final void testGetFormattedString()
             throws FileNotFoundException, nano.ParseException{
-        // TODO: 
-        // InputStream in1 = new FileInputStream(
-        //     "/home/pradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Nanojava/SimpleSum.java");
-        // InputStream in2 = new FileInputStream(
-        //     "/home/pradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Nanojava/SimpleSum.java");
-        // nano.syntaxtree.Node root1 = new NanoJavaParser(in1).Goal();
-        // nano.syntaxtree.Node root2 = new NanoJavaParser(in2).Goal();
+        InputStream in1 = new FileInputStream(
+            "Example-Nanojava/SimpleSum.java");
+        InputStream in2 = new FileInputStream(
+            "Example-Nanojava/SimpleSum.java");
+        nano.syntaxtree.Node root1 = new NanoJavaParser(in1).Goal();
+        nano.syntaxtree.Node root2 = new NanoJavaParser(in2).Goal();
 
-        // String code1 = CPSHelper.getFormattedString(root1);
-        // String code2 = CPSHelper.getFormattedString(root2);
+        String code1 = CPSHelper.getFormattedString(root1);
+        String code2 = CPSHelper.getFormattedString(root2);
         
-        // assertEquals(code1, code2);
+        assertEquals(code1, code2);
     }
 
     /** 
@@ -101,6 +99,6 @@ public class CPSHelperTest{
     // @Test
     // public final void testGetNanoJavaNodeFromFileNoException(){
     //     CPSHelper.getNanoJavaNodeFromFile(
-    //         "/home/pradeep/Dropbox/Acads/POPL/Code/CPS-Transformer/Example-Nanojava/Factorial.java");
+    //         "Example-Nanojava/Factorial.java");
     // }
 }
