@@ -52,6 +52,8 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 **** => loop-method: Block {if (exp) loop-body; jump to loop-method; else: call current continuation();}
 *** MessageSendStatement() - Call it with the appropriate arguments (make it a Jump Point, btw)
 ** TODO Maybe you have to pass in the current continuation's name??
+* Lessons
+** Sometimes the formatted code will be wrapped around so it might seem a bit arbit but there is a method behind the madness
 * Actions
 ** DONE Set up basic files
    CLOCK: [2013-03-16 Sat 21:47]--[2013-03-16 Sat 22:05] =>  0:18
@@ -139,6 +141,11 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 ** TODO Block => Transformation
    CLOCK: [2013-03-22 Fri 17:05]--[2013-03-22 Fri 17:09] =>  0:04
    CLOCK: [2013-03-22 Fri 13:34]--[2013-03-22 Fri 15:00] =>  1:26
-** TODO ContinuationMaker
+** DONE ContinuationMaker
+   CLOCK: [2013-03-22 Fri 21:41]--[2013-03-22 Fri 22:40] =>  0:59
    CLOCK: [2013-03-22 Fri 17:09]--[2013-03-22 Fri 17:44] =>  0:35
-
+*** DONE Test for different combos of parameters and local variables
+    CLOCK: [2013-03-22 Fri 22:40]--[2013-03-22 Fri 22:58] =>  0:18
+*** DONE Make class
+    CLOCK: [2013-03-22 Fri 22:58]--[2013-03-23 Sat 01:01] =>  2:03
+** TODO Add the Base Continuation class

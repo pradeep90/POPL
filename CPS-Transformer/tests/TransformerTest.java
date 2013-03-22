@@ -61,6 +61,8 @@ public class TransformerTest{
     @Before
     public void setUp(){
         transformer = new Transformer();
+        // For testing purposes
+        transformer.currClassName = "____NewMainClass____";
 
         nodeToken = new NodeToken("foo");
         nodeTokenNano = new nano.syntaxtree.NodeToken("foo");
@@ -359,7 +361,7 @@ public class TransformerTest{
         System.out.println("CPSHelper.getMicroFormattedString(block): "
                            + CPSHelper.getMicroFormattedString(block));
 
-        String expectedBlockString = "{ c = a + b ; k . call ( ) ; }";
+        String expectedBlockString = "{ c = a + b; k.call(); }";
         assertEquals(expectedBlockString, CPSHelper.getFormattedString(block.accept(transformer)));
     }
 
@@ -373,7 +375,169 @@ public class TransformerTest{
         System.out.println("CPSHelper.getMicroFormattedString(block): "
                            + CPSHelper.getMicroFormattedString(block));
 
-        String expectedBlockString = "{ c = a + b ;  d = 4 ; k . call ( ) ; }";
+        String expectedBlockString = "{ c = a + b;  d = 4; k.call(); }";
         assertEquals(expectedBlockString, CPSHelper.getFormattedString(block.accept(transformer)));
+    }
+
+    /**
+     * Test method for {@link Transformer#()}.
+     */
+    @Test
+    public final void testMakeContinuationMethod_localsNoParams(){
+        ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/BlockTest1.java"));
+        MethodDeclaration parentMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(4);
+        ContinuationMaker continuationMaker = new ContinuationMaker(
+            new NodeListOptional(),
+            parentMethod,
+            transformer,
+            "k",
+            "fooContinuation");
+        System.out.println("CPSHelper.getFormattedString(continuationMaker.continuationMethod): " + CPSHelper.getFormattedString(continuationMaker.continuationMethod));
+        String expected = "public void fooContinuation (int  x , boolean  y   , Continuation  k  ) { k.\n"
+                + "   call(); }";
+
+        assertEquals(expected,
+                     CPSHelper.getFormattedString(continuationMaker.continuationMethod));
+    }
+
+    /**
+     * Test method for {@link Transformer#()}.
+     */
+    @Test
+    public final void testMakeContinuationMethod_paramsNoLocals(){
+        ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/BlockTest1.java"));
+        MethodDeclaration parentMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(5);
+        ContinuationMaker continuationMaker = new ContinuationMaker(
+            new NodeListOptional(),
+            parentMethod,
+            transformer,
+            "k",
+            "fooContinuation");
+        System.out.println("CPSHelper.getFormattedString(continuationMaker.continuationMethod): " + CPSHelper.getFormattedString(continuationMaker.continuationMethod));
+        String expected = "public void fooContinuation (int  m , int  n   , Continuation  k  ) { k.call();\n"
+                + "   }";
+
+        assertEquals(expected,
+                     CPSHelper.getFormattedString(continuationMaker.continuationMethod));
+    }
+
+    /**
+     * Test method for {@link Transformer#()}.
+     */
+    @Test
+    public final void testMakeContinuationMethod_paramsAndLocals(){
+        ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/BlockTest1.java"));
+        MethodDeclaration parentMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(3);
+        ContinuationMaker continuationMaker = new ContinuationMaker(
+            new NodeListOptional(),
+            parentMethod,
+            transformer,
+            "k",
+            "fooContinuation");
+        System.out.println("CPSHelper.getFormattedString(continuationMaker.continuationMethod): " + CPSHelper.getFormattedString(continuationMaker.continuationMethod));
+        String expected = "public void fooContinuation (int  a , int  b   , int  c   , boolean  d   ,\n"
+                + "   Continuation  k  ) { k.call(); }";
+
+        assertEquals(expected,
+                     CPSHelper.getFormattedString(continuationMaker.continuationMethod));
+    }
+
+    /**
+     * Test method for {@link Transformer#()}.
+     */
+    @Test
+    public final void testMakeContinuationMethod_noParamsNoLocals(){
+        ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/BlockTest1.java"));
+        MethodDeclaration parentMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(6);
+        ContinuationMaker continuationMaker = new ContinuationMaker(
+            new NodeListOptional(),
+            parentMethod,
+            transformer,
+            "k",
+            "fooContinuation");
+        System.out.println("CPSHelper.getFormattedString(continuationMaker.continuationMethod): " + CPSHelper.getFormattedString(continuationMaker.continuationMethod));
+        String expected = "public void fooContinuation (Continuation  k ) { k.call(); }";
+
+        assertEquals(expected,
+                     CPSHelper.getFormattedString(continuationMaker.continuationMethod));
+    }
+
+    /**
+     * Test method for {@link Transformer#()}.
+     */
+    @Test
+    public final void testMakeContinuationMethod_simpleBody(){
+        ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/BlockTest1.java"));
+        MethodDeclaration parentMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(3);
+
+        NodeListOptional statementList = new NodeListOptional();
+        statementList.addNode(statement);
+        statementList.addNode(statement2);
+
+        ContinuationMaker continuationMaker = new ContinuationMaker(
+            statementList,
+            // new NodeListOptional(),
+            parentMethod,
+            transformer,
+            "k",
+            "fooContinuation");
+        System.out.println("CPSHelper.getFormattedString(continuationMaker.continuationMethod): " + CPSHelper.getFormattedString(continuationMaker.continuationMethod));
+        String expected = "public void fooContinuation (int  a , int  b   , int  c   , boolean  d   ,\n"
+                + "   Continuation  k  ) { foo = 81;  foo2 = 32; k.call(); }";
+
+        assertEquals(expected,
+                     CPSHelper.getFormattedString(continuationMaker.continuationMethod));
+    }
+
+    /**
+     * Test method for {@link Transformer#()}.
+     */
+    @Test
+    public final void testMakeContinuationClass(){
+        ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/BlockTest1.java"));
+        MethodDeclaration parentMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(4);
+
+        NodeListOptional statementList = new NodeListOptional();
+        statementList.addNode(statement);
+        statementList.addNode(statement2);
+
+        ContinuationMaker continuationMaker = new ContinuationMaker(
+            statementList,
+            // new NodeListOptional(),
+            parentMethod,
+            transformer,
+            "k2",
+            "fooContinuation");
+        System.out.println("CPSHelper.getFormattedString(continuationMaker.continuationMethod): " + CPSHelper.getFormattedString(continuationMaker.continuationMethod));
+
+        String expected = "class ContinuationClassfooContinuation extends Continuation { int  x ; boolean\n"
+                + "   y ; Continuation  k ; ____NewMainClass____  object ; public void call () {\n"
+                + "   object.fooContinuation(x , y , k); }}";
+        assertEquals(expected,
+                     CPSHelper.getFormattedString(continuationMaker.continuationClass));
+    }
+
+    /**
+     * Test method for {@link Transformer#()}.
+     */
+    @Test
+    public final void testMakeInitStatements(){
+        ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/BlockTest1.java"));
+        MethodDeclaration parentMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(4);
+
+        NodeListOptional statementList = new NodeListOptional();
+        statementList.addNode(statement);
+        statementList.addNode(statement2);
+
+        ContinuationMaker continuationMaker = new ContinuationMaker(
+            statementList,
+            parentMethod,
+            transformer,
+            "k2",
+            "fooContinuation");
+
+        String expected = "k2 = new ContinuationClassfooContinuation(); k2.x = x; k2.y = y; k2.k = k;";
+        assertEquals(expected,
+                     CPSHelper.getFormattedString(continuationMaker.initStatements));
     }
 }

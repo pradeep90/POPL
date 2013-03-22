@@ -16,6 +16,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
             new ArrayList<ClassDeclaration>();
 
     public MethodDeclaration currMethod;
+    public String currClassName;
 
     public Transformer() {}
 
@@ -215,6 +216,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     public Node visit(syntaxtree.ClassDeclaration n) {
         Node _ret=null;
         Identifier f1 = (Identifier) n.f1.accept(this);
+        currClassName = CPSHelper.getIdentifierName(f1);
         NodeListOptional f3 = (NodeListOptional) n.f3.accept(this);
         NodeListOptional f4 = (NodeListOptional) n.f4.accept(this);
         _ret = new ClassDeclaration(f1, f3, f4);
@@ -234,6 +236,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     public Node visit(syntaxtree.ClassExtendsDeclaration n) {
         Node _ret=null;
         Identifier f1 = (Identifier) n.f1.accept(this);
+        currClassName = CPSHelper.getIdentifierName(f1);
         Identifier f3 = (Identifier) n.f3.accept(this);
         NodeListOptional f5 = (NodeListOptional) n.f3.accept(this);
         NodeListOptional f6 = (NodeListOptional) n.f4.accept(this);

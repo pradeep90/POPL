@@ -409,10 +409,8 @@ public class TreeFormatter extends DepthFirstVisitor {
         n.f2.accept(this);
         add(space());
         n.f3.accept(this);
-        add(space());
         if ( n.f4.present() ) {
             n.f4.accept(this);
-            add(space());
         }
         n.f5.accept(this);
         add(space());
@@ -424,10 +422,10 @@ public class TreeFormatter extends DepthFirstVisitor {
         if ( n.f8.present() ) {
             processList(n.f8, space());
         }
-        add(space());
+        // add(space());
         if ( n.f9.present() ) {
             n.f9.accept(this);
-            add(space());
+            // add(space());
         }
         n.f10.accept(this);
     }
@@ -552,7 +550,6 @@ public class TreeFormatter extends DepthFirstVisitor {
         n.f1.accept(this);
         add(space());
         n.f2.accept(this);
-        add(space());
         n.f3.accept(this);
         add(space());
     }
@@ -568,17 +565,13 @@ public class TreeFormatter extends DepthFirstVisitor {
      */
     public void visit(ArrayAssignmentStatement n) {
         n.f0.accept(this);
-        add(space());
         n.f1.accept(this);
-        add(space());
         n.f2.accept(this);
-        add(space());
         n.f3.accept(this);
         add(space());
         n.f4.accept(this);
         add(space());
         n.f5.accept(this);
-        add(space());
         n.f6.accept(this);
         add(space());
     }
@@ -640,19 +633,13 @@ public class TreeFormatter extends DepthFirstVisitor {
      */
     public void visit(MessageSendStatement n) {
         n.f0.accept(this);
-        add(space());
         n.f1.accept(this);
-        add(space());
         n.f2.accept(this);
-        add(space());
         n.f3.accept(this);
-        add(space());
         if ( n.f4.present() ) {
             n.f4.accept(this);
-            add(space());
         }
         n.f5.accept(this);
-        add(space());
         n.f6.accept(this);
         add(space());
     }
@@ -835,11 +822,8 @@ public class TreeFormatter extends DepthFirstVisitor {
         n.f0.accept(this);
         add(space());
         n.f1.accept(this);
-        add(space());
         n.f2.accept(this);
-        add(space());
         n.f3.accept(this);
-        add(space());
         n.f4.accept(this);
     }
 
@@ -853,9 +837,7 @@ public class TreeFormatter extends DepthFirstVisitor {
         n.f0.accept(this);
         add(space());
         n.f1.accept(this);
-        add(space());
         n.f2.accept(this);
-        add(space());
         n.f3.accept(this);
     }
 
@@ -876,9 +858,7 @@ public class TreeFormatter extends DepthFirstVisitor {
      */
     public void visit(BracketExpression n) {
         n.f0.accept(this);
-        add(space());
         n.f1.accept(this);
-        add(space());
         n.f2.accept(this);
     }
 
@@ -897,9 +877,7 @@ public class TreeFormatter extends DepthFirstVisitor {
      */
     public void visit(DotExpression n) {
         n.f0.accept(this);
-        add(space());
         n.f1.accept(this);
-        add(space());
         n.f2.accept(this);
     }
 

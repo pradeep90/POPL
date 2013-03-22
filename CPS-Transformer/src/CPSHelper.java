@@ -153,6 +153,10 @@ public class CPSHelper {
         return new Identifier(new NodeToken(name));
     }
 
+    public static Identifier getCopy(Identifier identifier){
+        return getNewIdentifier(getIdentifierName(identifier));
+    }
+
     public static syntaxtree.Identifier getNewMicroIdentifier(String name){
         return new syntaxtree.Identifier(new syntaxtree.NodeToken(name));
     }
@@ -161,4 +165,19 @@ public class CPSHelper {
         return new Type(new NodeChoice(getNewIdentifier(typeName), 3));
     }
 
+    /** 
+     * @param type is of Identifier Type
+     */
+    public static Type getCopy(Type type){
+        switch(type.f0.which){
+            case 0:
+                return new Type(new NodeChoice(new ArrayType(), 0));
+            case 1:
+                return new Type(new NodeChoice(new BooleanType(), 1));
+            case 2:
+                return new Type(new NodeChoice(new IntegerType(), 2));
+            default:
+                return getNewType(getIdentifierName((Identifier) type.f0.choice));
+        }
+    }
 }

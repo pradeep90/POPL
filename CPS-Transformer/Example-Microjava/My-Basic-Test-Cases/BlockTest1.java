@@ -62,5 +62,27 @@ class ____NewMainClass____{
         d = a + b;
         foo.baz();
     }
+
+    public void method4(int a, int b){
+        int c;
+        boolean d;
+        
+        c = a + b;
+        d = true;
+    }
+
+    public void method5(){
+        int x;
+        boolean y;
+        // x = 3 + 5;
+    }
+
+    public void method6(int m, int n){
+        System.out.println(m + n);
+    }
+
+    public void method7(){
+        
+    }
 }
 
