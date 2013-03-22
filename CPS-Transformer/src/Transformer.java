@@ -15,7 +15,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     public List<ClassDeclaration> continuationClasses =
             new ArrayList<ClassDeclaration>();
 
-    public MethodDeclaration currMethod;
+    public syntaxtree.MethodDeclaration currMethod;
     public String currClassName;
 
     public Transformer() {}
@@ -268,9 +268,10 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      * f9 -> "}"
      */
     public Node visit(syntaxtree.MethodDeclaration n) {
+        currMethod = n;
+
         Node _ret=null;
         Identifier f2 = (Identifier) n.f2.accept(this);
-
         NodeOptional f4 = new NodeOptional(n.f4.accept(this));
         FormalParameter kParam = new FormalParameter(
             CPSHelper.getNewType(CONTINUATION_BASE_CLASS_NAME),
@@ -406,8 +407,18 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
                 remainingStatements.nodes.addAll(
                     n.f1.nodes.subList(i + 1, n.f1.nodes.size()));
                 System.out.println("CPSHelper.getMicroFormattedString(remainingStatements): " + CPSHelper.getMicroFormattedString(remainingStatements));
+                ContinuationMaker newContinuationMaker = new ContinuationMaker(
+                    remainingStatements,
+                    currMethod,
+                    this,
+                    "k2",
+                    CPSHelper.getMicroIdentifierName(currMethod.f2) + "Continuation");
+
+                // TODO: See if you need to abstract this more
+                currentContinuationName = "k2";
+
                 NodeListOptional kInitializationStatements =
-                        makeContinuation(remainingStatements);
+                        newContinuationMaker.initStatements;
                 System.out.println("CPSHelper.getFormattedString(kInitializationStatements): " + CPSHelper.getFormattedString(kInitializationStatements));
 
                 finalStatementList.nodes.addAll(kInitializationStatements.nodes);

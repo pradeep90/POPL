@@ -278,7 +278,7 @@ public class TransformerTest{
 
     /**
      * Test method for {@link Transformer#MessageSendStatement()}.
-    */
+     */
     @Test
     public final void testMessageSendStatement(){
         assertEqualAfterTransform(messageSendStatementNano, messageSendStatement);
@@ -357,12 +357,16 @@ public class TransformerTest{
     @Test
     public final void testBlock_createContinuationNoOriginalJumpPoint(){
         ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/BlockTest1.java"));
+        transformer.currMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(1);
         Block block = new Block(((MethodDeclaration) classDeclaration.f4.nodes.get(1)).f8);
         System.out.println("CPSHelper.getMicroFormattedString(block): "
                            + CPSHelper.getMicroFormattedString(block));
 
-        String expectedBlockString = "{ c = a + b; k.call(); }";
+        String expectedBlockString = "{ c = a + b;  k2 = new ContinuationClassmethod2Continuation();  k2.a = a;  k2.b\n"
+                + "   = b;  k2.c = c;  k2.d = d;  k2.foo = foo;  k2.k = k; k2.call(); }";
         assertEquals(expectedBlockString, CPSHelper.getFormattedString(block.accept(transformer)));
+
+        // TODO: Test the continuation method and class created
     }
 
     /**
@@ -371,11 +375,14 @@ public class TransformerTest{
     @Test
     public final void testBlock_JumpPointAtEnd(){
         ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/BlockTest1.java"));
+        transformer.currMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(2);
         Block block = new Block(((MethodDeclaration) classDeclaration.f4.nodes.get(2)).f8);
         System.out.println("CPSHelper.getMicroFormattedString(block): "
                            + CPSHelper.getMicroFormattedString(block));
 
-        String expectedBlockString = "{ c = a + b;  d = 4; k.call(); }";
+        // TODO: This is WRONG! It should be "foo.bar(k2);" at the end
+        String expectedBlockString = "{ c = a + b;  d = 4;  k2 = new ContinuationClassmethod3Continuation();  k2.a =\n"
+                + "   a;  k2.b = b;  k2.c = c;  k2.d = d;  k2.foo = foo;  k2.k = k; k2.call(); }";
         assertEquals(expectedBlockString, CPSHelper.getFormattedString(block.accept(transformer)));
     }
 
