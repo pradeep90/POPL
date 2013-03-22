@@ -337,10 +337,9 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.AssignmentStatement n) {
       Node _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
-      n.f3.accept(this);
+      VarRef f0 = (VarRef) n.f0.accept(this);
+      Expression f2 = (Expression) n.f2.accept(this);
+      _ret = new AssignmentStatement(f0, f2);
       return _ret;
    }
 
@@ -355,13 +354,10 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.ArrayAssignmentStatement n) {
       Node _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
-      n.f3.accept(this);
-      n.f4.accept(this);
-      n.f5.accept(this);
-      n.f6.accept(this);
+      Identifier f0 = (Identifier) n.f0.accept(this);
+      Expression f2 = (Expression) n.f2.accept(this);
+      Expression f5 = (Expression) n.f5.accept(this);
+      _ret = new ArrayAssignmentStatement(f0, f2, f5);
       return _ret;
    }
 
@@ -412,11 +408,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     */
    public Node visit(syntaxtree.PrintStatement n) {
       Node _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
-      n.f2.accept(this);
-      n.f3.accept(this);
-      n.f4.accept(this);
+      Expression f2 = (Expression) n.f2.accept(this);
+      _ret = new PrintStatement(f2);
       return _ret;
    }
 

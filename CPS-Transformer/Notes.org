@@ -100,3 +100,11 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 *** TimesExpression()
 *** ArrayLookup()
 *** PrimaryExpression()
+** DONE AssignmentStatement
+   CLOCK: [2013-03-22 Fri 06:06]--[2013-03-22 Fri 06:06] =>  0:00
+
+** DONE ArrayAssignmentStatement
+   CLOCK: [2013-03-22 Fri 06:07]--[2013-03-22 Fri 06:08] =>  0:01
+** DONE PrintStatement
+   CLOCK: [2013-03-22 Fri 06:08]--[2013-03-22 Fri 06:08] =>  0:00
+
