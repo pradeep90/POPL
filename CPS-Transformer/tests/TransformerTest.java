@@ -9,6 +9,8 @@ import static org.junit.Assert.assertTrue;
 
 import visitor.*;
 import syntaxtree.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class TransformerTest{
     Transformer transformer;
@@ -377,12 +379,14 @@ public class TransformerTest{
     @Test
     public final void testBlock_createContinuationNoOriginalJumpPoint(){
         ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/BlockTest1.java"));
+
+        // method2
         transformer.currMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(1);
         Block block = new Block(((MethodDeclaration) classDeclaration.f4.nodes.get(1)).f8);
         System.out.println("CPSHelper.getMicroFormattedString(block): "
                            + CPSHelper.getMicroFormattedString(block));
 
-        String expectedBlockString = "{ c = a + b;  k1 = new ContinuationClasscontinuationMethod0();  k1.a = a;  k1.b = b;  k1.c = c;  k1.d = d;  k1.foo = foo;  k1.k = k; k1.object = this; foo.bar(k1 ); }";
+        String expectedBlockString = "{ c = a + b;  k1 = new ContinuationClasscontinuationMethod0();  k1.a = a;  k1.b = b;  k1.c = c;  k1.foo = foo;  k1.k = k; k1.object = this; foo.bar(k1 ); }";
         assertBigStringEquals(expectedBlockString,
                               CPSHelper.getFormattedString(block.accept(transformer)));
     }
@@ -400,6 +404,10 @@ public class TransformerTest{
 
         String expectedBlockString = "{ c = a + b;  d = 4;  k1 = new ContinuationClasscontinuationMethod0();  k1.a = a;  k1.b = b;  k1.c = c;  k1.d = d;  k1.foo = foo;  k1.k = k; k1.object = this; foo.bar(k1 ); }";
         assertBigStringEquals(expectedBlockString, CPSHelper.getFormattedString(block.accept(transformer)));
+
+        String expectedDeclaration = "ContinuationClasscontinuationMethod0  k1 ;";
+        assertBigStringEquals(expectedDeclaration,
+                              CPSHelper.getFormattedString(transformer.currentMethodContinuationDeclarations.get(0)));
     }
 
     /**
@@ -408,14 +416,17 @@ public class TransformerTest{
     @Test
     public final void testMakeContinuationMethod_localsNoParams(){
         ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/BlockTest1.java"));
+
+        // method5
         MethodDeclaration parentMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(4);
         ContinuationMaker continuationMaker = new ContinuationMaker(
             new NodeListOptional(),
             parentMethod,
             transformer,
             "k",
-            "fooContinuation");
-        String expected = "public void fooContinuation (int  x , boolean  y   , Continuation  k  ) {   k.call(); }";
+            "fooContinuation",
+            new ArrayList<nano.syntaxtree.Identifier>());
+        String expected = "public void fooContinuation (Continuation  k  ) { int x; boolean y;   k.call(); }";
 
         assertBigStringEquals(expected,
                               CPSHelper.getFormattedString(continuationMaker.continuationMethod));
@@ -427,19 +438,20 @@ public class TransformerTest{
     @Test
     public final void testMakeContinuationMethod_paramsNoLocals(){
         ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/BlockTest1.java"));
+
+        // method6
         MethodDeclaration parentMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(5);
         ContinuationMaker continuationMaker = new ContinuationMaker(
             new NodeListOptional(),
             parentMethod,
             transformer,
             "k",
-            "fooContinuation");
+            "fooContinuation",
+            new ArrayList<nano.syntaxtree.Identifier>());
 
         String expected = "public void fooContinuation (int  m , int  n   , Continuation  k  ) { k.call();   }";
-
-        System.out.println("CPSHelper.getFormattedString(continuationMaker.continuationMethod).replace(, ): " + CPSHelper.getFormattedString(continuationMaker.continuationMethod).replaceAll("(\n|\\s)+", ""));
-        assertEquals(expected.replaceAll("(\n|\\s)+", ""),
-                     CPSHelper.getFormattedString(continuationMaker.continuationMethod).replaceAll("(\n|\\s)+", ""));
+        assertBigStringEquals(expected,
+                     CPSHelper.getFormattedString(continuationMaker.continuationMethod));
     }
 
     /**
@@ -448,16 +460,20 @@ public class TransformerTest{
     @Test
     public final void testMakeContinuationMethod_paramsAndLocals(){
         ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/BlockTest1.java"));
+
+        // method4
         MethodDeclaration parentMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(3);
+        List<nano.syntaxtree.Identifier> initializedVars = new ArrayList<nano.syntaxtree.Identifier>();
+        initializedVars.add(CPSHelper.getNewIdentifier("c"));
         ContinuationMaker continuationMaker = new ContinuationMaker(
             new NodeListOptional(),
             parentMethod,
             transformer,
             "k",
-            "fooContinuation");
+            "fooContinuation",
+            initializedVars);
 
-        String expected = "public void fooContinuation (int  a , int  b   , int  c   , boolean  d   ,\n"
-                + "   Continuation  k  ) { k.call(); }";
+        String expected = "public void fooContinuation (int  a , int  b, int c, Continuation  k  ) { boolean d;  k.call(); }";
 
         assertBigStringEquals(expected,
                               CPSHelper.getFormattedString(continuationMaker.continuationMethod));
@@ -475,7 +491,8 @@ public class TransformerTest{
             parentMethod,
             transformer,
             "k",
-            "fooContinuation");
+            "fooContinuation",
+            new ArrayList<nano.syntaxtree.Identifier>());
         // System.out.println("CPSHelper.getFormattedString(continuationMaker.continuationMethod): " + CPSHelper.getFormattedString(continuationMaker.continuationMethod));
         String expected = "public void fooContinuation (Continuation  k ) { k.call(); }";
 
@@ -489,6 +506,8 @@ public class TransformerTest{
     @Test
     public final void testMakeContinuationMethod_simpleBody(){
         ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/BlockTest1.java"));
+
+        // method4
         MethodDeclaration parentMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(3);
 
         NodeListOptional statementList = new NodeListOptional();
@@ -501,10 +520,10 @@ public class TransformerTest{
             parentMethod,
             transformer,
             "k",
-            "fooContinuation");
+            "fooContinuation",
+            new ArrayList<nano.syntaxtree.Identifier>());
         // System.out.println("CPSHelper.getFormattedString(continuationMaker.continuationMethod): " + CPSHelper.getFormattedString(continuationMaker.continuationMethod));
-        String expected = "public void fooContinuation (int  a , int  b   , int  c   , boolean  d   ,\n"
-                + "   Continuation  k  ) { foo = 81;  foo2 = 32; k.call(); }";
+        String expected = "public void fooContinuation (int  a , int  b   , Continuation  k  ) { int c; boolean d; foo = 81;  foo2 = 32; k.call(); }";
 
         assertBigStringEquals(expected,
                               CPSHelper.getFormattedString(continuationMaker.continuationMethod));
@@ -516,6 +535,7 @@ public class TransformerTest{
     @Test
     public final void testMakeContinuationClass(){
         ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/BlockTest1.java"));
+        // method5
         MethodDeclaration parentMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(4);
 
         NodeListOptional statementList = new NodeListOptional();
@@ -528,14 +548,13 @@ public class TransformerTest{
             parentMethod,
             transformer,
             "k2",
-            "fooContinuation");
+            "fooContinuation",
+            new ArrayList<nano.syntaxtree.Identifier>());
         // System.out.println("CPSHelper.getFormattedString(continuationMaker.continuationMethod): " + CPSHelper.getFormattedString(continuationMaker.continuationMethod));
 
-        String expected = "class ContinuationClassfooContinuation extends Continuation { int  x ; boolean\n"
-                + "   y ; Continuation  k ; ____NewMainClass____  object ; public void call () {\n"
-                + "   object.fooContinuation(x , y , k); }}";
-        assertEquals(expected,
-                     CPSHelper.getFormattedString(continuationMaker.continuationClass));
+        String expected = "class ContinuationClassfooContinuation extends Continuation { Continuation  k ; ____NewMainClass____  object ; public void call () { object.fooContinuation(k); }}";
+        assertBigStringEquals(expected,
+                              CPSHelper.getFormattedString(continuationMaker.continuationClass));
     }
 
     /**
@@ -555,9 +574,10 @@ public class TransformerTest{
             parentMethod,
             transformer,
             "k2",
-            "fooContinuation");
+            "fooContinuation",
+            new ArrayList<nano.syntaxtree.Identifier>());
 
-        String expected = "k2 = new ContinuationClassfooContinuation(); k2.x = x; k2.y = y; k2.k = k; k2.object = this;";
+        String expected = "k2 = new ContinuationClassfooContinuation(); k2.k = k; k2.object = this;";
         assertBigStringEquals(expected,
                      CPSHelper.getFormattedString(continuationMaker.initStatements));
     }

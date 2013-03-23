@@ -17,6 +17,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
 
     public List<VarDeclaration> currentMethodContinuationDeclarations =
             new ArrayList<VarDeclaration>();
+    public List<Identifier> currentMethodInitializedVariables =
+            new ArrayList<Identifier>();
 
     public int counter = 0;
     public int kNameCounter = 0;
@@ -104,19 +106,12 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         return null;
     }
 
-    /** 
-     * Make JumpPoint out of currStatement.
-     *
-     * If it is a WhileStatement, IfStatement, or
-     * MessageSendStatement, just return the output of visiting the
-     * node.
-     * 
-     * @param currStatement tail-form Statement
-     * 
-     * @return 
-     */
-    public JumpPoint getJumpPoint(Statement currStatement){
-        return null;
+    public List<Identifier> getIntersection(List<Identifier> list1, List<Identifier> list2){
+        List<Identifier> difference = new ArrayList<Identifier>(list1);
+        difference.removeAll(list2);
+        List<Identifier> intersection = new ArrayList<Identifier>(list1);
+        intersection.removeAll(difference);
+        return intersection;
     }
 
     //
@@ -323,7 +318,10 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.MethodDeclaration n) {
         List<VarDeclaration> prevMethodContinuationDeclarations = currentMethodContinuationDeclarations;
+        List<Identifier> prevMethodInitializedVariables = currentMethodInitializedVariables;
         currentMethodContinuationDeclarations = new ArrayList<VarDeclaration>();
+        currentMethodInitializedVariables = new ArrayList<Identifier>();
+
         syntaxtree.MethodDeclaration prevMethod = currMethod;
         currMethod = n;
 
@@ -359,6 +357,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         currMethod = prevMethod;
         kNameCounter = prevKNameCounter;
         currentMethodContinuationDeclarations = prevMethodContinuationDeclarations;
+        currentMethodInitializedVariables = prevMethodInitializedVariables;
         return _ret;
     }
 
@@ -511,7 +510,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
                         currMethod,
                         this,
                         currKName,
-                        "continuationMethod" + counter++);
+                        "continuationMethod" + counter++,
+                        currentMethodInitializedVariables);
 
                     currentClassContinuationMethods.add(
                         newContinuationMaker.continuationMethod);
@@ -558,6 +558,11 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     public Node visit(syntaxtree.AssignmentStatement n) {
         Node _ret=null;
         VarRef f0 = (VarRef) n.f0.accept(this);
+        if (f0.f0.which == 1){
+            // Add all identifiers which come in "foo = bar;"
+            currentMethodInitializedVariables.add(CPSHelper.getCopy(
+                (Identifier) f0.f0.choice));
+        }
         Expression f2 = (Expression) n.f2.accept(this);
         _ret = new AssignmentStatement(f0, f2);
         return _ret;
@@ -593,8 +598,26 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     public Node visit(syntaxtree.IfStatement n) {
         Node _ret=null;
         Expression f2 = (Expression) n.f2.accept(this);
+
+        List<Identifier> prevMethodInitializedVariables = currentMethodInitializedVariables;
+        List<Identifier> ifBlockInitializedVariables = new ArrayList<Identifier>();
+        List<Identifier> elseBlockInitializedVariables = new ArrayList<Identifier>();
+
+        // Get those variables initialized in the if Block
+        currentMethodInitializedVariables = new ArrayList<Identifier>();
         Block f4 = getNanoBlock(n.f4);
+        ifBlockInitializedVariables = currentMethodInitializedVariables;
+        
+        // Get those variables initialized in the else Block
+        currentMethodInitializedVariables = new ArrayList<Identifier>();
         Block f6 = getNanoBlock(n.f6);
+        elseBlockInitializedVariables = currentMethodInitializedVariables;
+
+        currentMethodInitializedVariables = prevMethodInitializedVariables;
+
+        currentMethodInitializedVariables.addAll(
+            getIntersection(ifBlockInitializedVariables,
+                            elseBlockInitializedVariables));
         _ret = new JumpPoint(new NodeChoice(new IfStatement(f2, f4, f6), 0));
         return _ret;
     }

@@ -223,4 +223,8 @@ public class CPSHelper {
         return new syntaxtree.FormalParameterList(getCopy(paramList.f0), restParams);
     }
 
+    public static syntaxtree.VarDeclaration getCopy(syntaxtree.VarDeclaration varDeclaration){
+        return new syntaxtree.VarDeclaration(getCopy(varDeclaration.f0),
+                                             getCopy(varDeclaration.f1));
+    }
 }

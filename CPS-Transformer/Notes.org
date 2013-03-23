@@ -173,7 +173,19 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 ** DONE Have proper types for the local continuation variables
    CLOCK: [2013-03-24 Sun 00:46]--[2013-03-24 Sun 01:06] =>  0:20
 ** TODO Only copy into the Continuation those fields that have been initialized
-*** TODO Have a new Visitor UsedVariablesFinder where you recurse and simply note down the +Identifiers+ VarRefs, etc. used.
+   CLOCK: [2013-03-24 Sun 01:06]--[2013-03-24 Sun 02:32] =>  1:26
+*** There are two things here:
+**** setting fields of the new continuation instance so that the values of the variables are carried forward
+**** having local variables in the new continuation method so that the code actually works 
+*** fields of the continuation = variables used in the remainingStatements && initialized before current statement
+**** This also includes the original method's parameters (cos they have been initialized)
+*** local variables of the continuation = variables used in the remainingStatements && not initialized before current statement
+*** VVIP For our purposes, I will assume that all variables are being used in remainingStatements (no need to check usage)
+*** VVIP So, take (parameters + local variables) for the original method. Those that have been initialized before current statement will be fields of the continuation. The rest are local variables in the continuation method.
+*** TODO Make Block save and restore currentMethodInitializedVariables so that "if (b) {x = 1} else{foo.bar();}" does not lead to "else" thinking that x has been initialized.
+    CLOCK: [2013-03-24 Sun 02:33]--[2013-03-24 Sun 02:50] =>  0:17
+**** My idea: get the initializedVars list for the if and else block separately and then say method's initializedVars list = intersection of those two
+**** Note: If some variable gets initialized in only one of the blocks, then it is illegal to refer to it after the if-else statement cos it could be undefined.
 ** DONE k2.object = this
 ** TODO Uniquify the class and method names for Continuations, plus the parameter names
 ** TODO While statement

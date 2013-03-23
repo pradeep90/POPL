@@ -6,6 +6,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.Set;
+import java.util.HashSet;
 
 public class ContinuationMaker {
     syntaxtree.NodeListOptional trailingStatements;
@@ -15,6 +17,9 @@ public class ContinuationMaker {
     MethodDeclaration continuationMethod;
     ClassExtendsDeclaration continuationClass;
     NodeListOptional initStatements;
+
+    List<Identifier> initializedVars;
+    Set<String> initializedVarNameSet;
 
     String kName;
     String continuationMethodName;
@@ -26,12 +31,19 @@ public class ContinuationMaker {
                              syntaxtree.MethodDeclaration parentMethod,
                              Transformer transformer,
                              String kName,
-                             String continuationMethodName) {
+                             String continuationMethodName,
+                             List<Identifier> initializedVars) {
         this.trailingStatements = trailingStatements;
         this.parentMethod = parentMethod;
         this.transformer = transformer;
         this.kName = kName;
         this.continuationMethodName = continuationMethodName;
+        this.initializedVars = initializedVars;
+
+        initializedVarNameSet = new HashSet<String>();
+        for (Identifier currIdentifier : initializedVars){
+            initializedVarNameSet.add(CPSHelper.getIdentifierName(currIdentifier));
+        }
 
         className = "ContinuationClass" + continuationMethodName;
 
@@ -49,15 +61,24 @@ public class ContinuationMaker {
             parameterList = CPSHelper.getCopy(parentParameterList);
         }
 
-        // Local VarDeclarations
+        // Local VarDeclarations which have been initialized before current statement
         syntaxtree.NodeListOptional restParameters = new syntaxtree.NodeListOptional();
+        // Uninitialized local variables
+        syntaxtree.NodeListOptional localVars = new syntaxtree.NodeListOptional();
+
         for (syntaxtree.Node node : parentMethod.f7.nodes){
             syntaxtree.VarDeclaration currVarDeclaration = (syntaxtree.VarDeclaration) node;
-            restParameters.addNode(new syntaxtree.FormalParameterRest(
-                getFormalParameter(currVarDeclaration)));
+            if (initializedVarNameSet.contains(
+                    CPSHelper.getIdentifierName(currVarDeclaration.f1))){
+                restParameters.addNode(new syntaxtree.FormalParameterRest(
+                    getFormalParameter(currVarDeclaration)));
+            }
+            else {
+                localVars.addNode(CPSHelper.getCopy(currVarDeclaration));
+            }
         }
 
-        // Add local variables to the parameters
+        // Add initialized local variables to the parameters
         if (parameterList != null){
             parameterList.f1.nodes.addAll(restParameters.nodes);
         } else {
@@ -77,7 +98,8 @@ public class ContinuationMaker {
         syntaxtree.MethodDeclaration tempMethod = new syntaxtree.MethodDeclaration(
             CPSHelper.getNewMicroIdentifier(continuationMethodName),
             parameters,
-            new syntaxtree.NodeListOptional(),
+            localVars,
+            // new syntaxtree.NodeListOptional(),
             trailingStatements);
 
         // System.out.println("CPSHelper.getMicroFormattedString(tempMethod): " + CPSHelper.getMicroFormattedString(tempMethod));
