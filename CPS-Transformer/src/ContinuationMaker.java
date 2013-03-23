@@ -47,8 +47,7 @@ public class ContinuationMaker {
         if (parentMethod.f4.present()){
             syntaxtree.FormalParameterList parentParameterList =
                     (syntaxtree.FormalParameterList) parentMethod.f4.node;
-            parameterList = new syntaxtree.FormalParameterList(parentParameterList.f0,
-                                                               parentParameterList.f1);
+            parameterList = CPSHelper.getCopy(parentParameterList);
         }
 
         // Local VarDeclarations
@@ -56,7 +55,7 @@ public class ContinuationMaker {
         for (syntaxtree.Node node : parentMethod.f7.nodes){
             syntaxtree.VarDeclaration currVarDeclaration = (syntaxtree.VarDeclaration) node;
             restParameters.addNode(new syntaxtree.FormalParameterRest(
-                new syntaxtree.FormalParameter(currVarDeclaration.f0, currVarDeclaration.f1)));
+                getFormalParameter(currVarDeclaration)));
         }
 
         // Add local variables to the parameters
@@ -96,7 +95,7 @@ public class ContinuationMaker {
             CPSHelper.getNewType(transformer.currClassName),
             CPSHelper.getNewIdentifier(ORIG_OBJECT_NAME)));
 
-        System.out.println("CPSHelper.getFormattedString(varDeclarations): " + CPSHelper.getFormattedString(varDeclarations));
+        // System.out.println("CPSHelper.getFormattedString(varDeclarations): " + CPSHelper.getFormattedString(varDeclarations));
 
         MethodDeclaration callMethod = new MethodDeclaration(
             CPSHelper.getNewIdentifier(CALL_METHOD_NAME),
@@ -200,5 +199,12 @@ public class ContinuationMaker {
         }
         return new NodeOptional(new ExpressionList(getExpression(actualParams.f0),
                                                    restExpressions));
+    }
+
+    public syntaxtree.FormalParameter getFormalParameter(
+        syntaxtree.VarDeclaration varDeclaration){
+
+        return new syntaxtree.FormalParameter(CPSHelper.getCopy(varDeclaration.f0),
+                                              CPSHelper.getCopy(varDeclaration.f1));
     }
 }

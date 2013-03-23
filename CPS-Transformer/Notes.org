@@ -55,6 +55,8 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 ** TODO Maybe you have to pass in the current continuation's name??
 * Lessons
 ** Sometimes the formatted code will be wrapped around so it might seem a bit arbit but there is a method behind the madness
+** Huge BUG: I never cleared currentClassContinuationMethods when visiting a new class. Damn!
+*** Moral of the Story: Never use Globals when you can pass stuff along as parameters.
 * Actions
 ** DONE Set up basic files
    CLOCK: [2013-03-16 Sat 21:47]--[2013-03-16 Sat 22:05] =>  0:18
@@ -155,7 +157,9 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
     CLOCK: [2013-03-22 Fri 22:58]--[2013-03-23 Sat 01:01] =>  2:03
 ** DONE Add the Base Continuation class
    CLOCK: [2013-03-23 Sat 10:38]--[2013-03-23 Sat 10:40] =>  0:02
-** TODO Make makeContinuationMethod deepcopy Nodes
+** DONE Fix currentClassContinuationMethods BUG
+   CLOCK: [2013-03-23 Sat 10:45]--[2013-03-23 Sat 11:59] =>  1:14
+*** Make makeContinuationMethod deepcopy Nodes
 ** TODO Pass current continuation around in an environment
 *** current method name too
 *** current class too for the heck of it

@@ -145,7 +145,7 @@ public class CPSHelper {
         return identifier.f0.tokenImage;
     }
 
-    public static String getMicroIdentifierName(syntaxtree.Identifier identifier){
+    public static String getIdentifierName(syntaxtree.Identifier identifier){
         return identifier.f0.tokenImage;
     }
 
@@ -157,12 +157,20 @@ public class CPSHelper {
         return getNewIdentifier(getIdentifierName(identifier));
     }
 
+    public static syntaxtree.Identifier getCopy(syntaxtree.Identifier identifier){
+        return getNewMicroIdentifier(getIdentifierName(identifier));
+    }
+
     public static syntaxtree.Identifier getNewMicroIdentifier(String name){
         return new syntaxtree.Identifier(new syntaxtree.NodeToken(name));
     }
 
     public static Type getNewType(String typeName){
         return new Type(new NodeChoice(getNewIdentifier(typeName), 3));
+    }
+
+    public static syntaxtree.Type getNewMicroType(String typeName){
+        return new syntaxtree.Type(new syntaxtree.NodeChoice(getNewMicroIdentifier(typeName), 3));
     }
 
     /** 
@@ -180,4 +188,39 @@ public class CPSHelper {
                 return getNewType(getIdentifierName((Identifier) type.f0.choice));
         }
     }
+
+    /** 
+     * @param type is of Identifier Type
+     */
+    public static syntaxtree.Type getCopy(syntaxtree.Type type){
+        switch(type.f0.which){
+            case 0:
+                return new syntaxtree.Type(new syntaxtree.NodeChoice(new syntaxtree.ArrayType(), 0));
+            case 1:
+                return new syntaxtree.Type(new syntaxtree.NodeChoice(new syntaxtree.BooleanType(), 1));
+            case 2:
+                return new syntaxtree.Type(new syntaxtree.NodeChoice(new syntaxtree.IntegerType(), 2));
+            default:
+                return getNewMicroType(getIdentifierName((syntaxtree.Identifier) type.f0.choice));
+        }
+    }
+
+    public static syntaxtree.FormalParameter getCopy(
+        syntaxtree.FormalParameter parameter){
+
+        return new syntaxtree.FormalParameter(getCopy(parameter.f0), getCopy(parameter.f1));
+    }
+
+
+    public static syntaxtree.FormalParameterList getCopy(
+        syntaxtree.FormalParameterList paramList){
+        
+        syntaxtree.NodeListOptional restParams = new syntaxtree.NodeListOptional();
+        for (syntaxtree.Node node : paramList.f1.nodes){
+            restParams.addNode(new syntaxtree.FormalParameterRest(getCopy(((syntaxtree.FormalParameterRest) node).f1)));
+        }
+
+        return new syntaxtree.FormalParameterList(getCopy(paramList.f0), restParams);
+    }
+
 }

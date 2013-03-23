@@ -26,6 +26,7 @@ class Fac{
       ____1234ComputeFac4321____ = num_aux;
    }
 }
+
 class ____NewMainClass____{
 
    public void ____Main____(int ____arg_length____){

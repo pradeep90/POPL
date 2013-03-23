@@ -235,10 +235,11 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         Identifier f1 = (Identifier) n.f1.accept(this);
         currClassName = CPSHelper.getIdentifierName(f1);
         NodeListOptional f3 = (NodeListOptional) n.f3.accept(this);
+        currentClassContinuationMethods.clear();
         NodeListOptional f4 = (NodeListOptional) n.f4.accept(this);
-        // for (MethodDeclaration method : currentClassContinuationMethods){
-        //     f4.addNode(method);
-        // }
+        for (MethodDeclaration method : currentClassContinuationMethods){
+            f4.addNode(method);
+        }
         _ret = new ClassDeclaration(f1, f3, f4);
         return _ret;
     }
@@ -259,10 +260,11 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         currClassName = CPSHelper.getIdentifierName(f1);
         Identifier f3 = (Identifier) n.f3.accept(this);
         NodeListOptional f5 = (NodeListOptional) n.f3.accept(this);
+        currentClassContinuationMethods.clear();
         NodeListOptional f6 = (NodeListOptional) n.f4.accept(this);
-        // for (MethodDeclaration method : currentClassContinuationMethods){
-        //     f6.addNode(method);
-        // }
+        for (MethodDeclaration method : currentClassContinuationMethods){
+            f6.addNode(method);
+        }
 
         _ret = new ClassExtendsDeclaration(f1, f3, f5, f6);
         return _ret;
@@ -306,7 +308,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
             ((FormalParameterList) f4.node).f1.addNode(restParam);
         }
         else{
-            f4 = new NodeOptional(new FormalParameterList(kParam, new NodeListOptional()));
+            f4 = new NodeOptional(
+                new FormalParameterList(kParam, new NodeListOptional()));
         }
 
         NodeListOptional f7 = (NodeListOptional) n.f7.accept(this);
@@ -427,8 +430,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.Block n) {
         Node _ret=null;
-        System.out.println("Block n"); 
-        System.out.println("CPSHelper.getMicroFormattedString(n): " + CPSHelper.getMicroFormattedString(n));
+        // System.out.println("Block n"); 
+        // System.out.println("CPSHelper.getMicroFormattedString(n): " + CPSHelper.getMicroFormattedString(n));
 
         NodeListOptional finalStatementList = new NodeListOptional();
         JumpPoint jumpPoint = null;
@@ -451,13 +454,13 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
                 // If there are statements after currMethod, make a
                 // continuation out of them
                 if (remainingStatements.present()){
-                    System.out.println("CPSHelper.getMicroFormattedString(remainingStatements): " + CPSHelper.getMicroFormattedString(remainingStatements));
+                    // System.out.println("CPSHelper.getMicroFormattedString(remainingStatements): " + CPSHelper.getMicroFormattedString(remainingStatements));
                     ContinuationMaker newContinuationMaker = new ContinuationMaker(
                         remainingStatements,
                         currMethod,
                         this,
                         "k2",
-                        CPSHelper.getMicroIdentifierName(currMethod.f2) + "Continuation");
+                        CPSHelper.getIdentifierName(currMethod.f2) + "Continuation");
 
                     currentClassContinuationMethods.add(
                         newContinuationMaker.continuationMethod);
@@ -466,12 +469,12 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
                     // TODO: See if you need to abstract this more
                     currentContinuationName = "k2";
 
-                    System.out.println("CPSHelper.getFormattedString(newContinuationMaker.initStatements): " + CPSHelper.getFormattedString(newContinuationMaker.initStatements));
+                    // System.out.println("CPSHelper.getFormattedString(newContinuationMaker.initStatements): " + CPSHelper.getFormattedString(newContinuationMaker.initStatements));
 
                     finalStatementList.nodes.addAll(newContinuationMaker.initStatements.nodes);
 
-                    System.out.println("In block"); 
-                    System.out.println("CPSHelper.getMicroFormattedString(currNode): " + CPSHelper.getMicroFormattedString(currNode));
+                    // System.out.println("In block"); 
+                    // System.out.println("CPSHelper.getMicroFormattedString(currNode): " + CPSHelper.getMicroFormattedString(currNode));
                 } 
 
                 // VVIP: Assuming that the node isn't a nested block
@@ -485,6 +488,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         }
 
         _ret = new Block(finalStatementList, jumpPoint);
+        // System.out.println("CPSHelper.getFormattedString(_ret): " + CPSHelper.getFormattedString(_ret));
         return _ret;
     }
 
@@ -777,7 +781,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.Identifier n) {
         Node _ret=null;
-        _ret = CPSHelper.getNewIdentifier(CPSHelper.getMicroIdentifierName(n));
+        _ret = CPSHelper.getNewIdentifier(CPSHelper.getIdentifierName(n));
         return _ret;
     }
 
