@@ -21,7 +21,6 @@ public class ContinuationMaker {
     String className;
     public static String ORIG_OBJECT_NAME = "object";
     public static String CALL_METHOD_NAME = "call";
-    public static String CONTINUATION_NAME = "k";
 
     public ContinuationMaker(syntaxtree.NodeListOptional trailingStatements,
                              syntaxtree.MethodDeclaration parentMethod,
@@ -83,7 +82,7 @@ public class ContinuationMaker {
 
         // System.out.println("CPSHelper.getMicroFormattedString(tempMethod): " + CPSHelper.getMicroFormattedString(tempMethod));
         continuationMethod = (MethodDeclaration) tempMethod.accept(transformer);
-        System.out.println("CPSHelper.getFormattedString(continuationMethod): " + CPSHelper.getFormattedString(continuationMethod));
+        // System.out.println("CPSHelper.getFormattedString(continuationMethod): " + CPSHelper.getFormattedString(continuationMethod));
     }
 
     public void makeContinuationClass(){

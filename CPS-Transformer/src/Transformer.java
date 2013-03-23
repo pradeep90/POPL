@@ -8,12 +8,16 @@ import java.util.ArrayList;
 public class Transformer extends GJNoArguDepthFirst<Node> {
     public String CONTINUATION_BASE_CLASS_NAME = "Continuation";
 
-    public String currentContinuationName = "k";
+    public static final String CURRENT_CONTINUATION_NAME = "k";
 
     public List<MethodDeclaration> currentClassContinuationMethods =
             new ArrayList<MethodDeclaration>();
     public List<ClassExtendsDeclaration> continuationClasses =
             new ArrayList<ClassExtendsDeclaration>();
+
+    public int counter = 0;
+    public int kNameCounter = 0;
+    public int maxKCounter = 10;
 
     // TODO: 
     public ClassDeclaration baseContinuationClass;
@@ -34,9 +38,16 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
             new NodeListOptional(baseCallMethod));
     }
 
+    public String getCurrentContinuationName(){
+        if (kNameCounter == 0){
+            return CURRENT_CONTINUATION_NAME;
+        }
+        return CURRENT_CONTINUATION_NAME + kNameCounter;
+    }
+
     public MessageSendStatement getDefaultContinuationCall(){
         return new MessageSendStatement(
-            CPSHelper.getNewIdentifier(currentContinuationName),
+            CPSHelper.getNewIdentifier(getCurrentContinuationName()),
             CPSHelper.getNewIdentifier("call"),
             new NodeOptional());
     }
@@ -294,14 +305,18 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      * f9 -> "}"
      */
     public Node visit(syntaxtree.MethodDeclaration n) {
+        syntaxtree.MethodDeclaration prevMethod = currMethod;
         currMethod = n;
+
+        int prevKNameCounter = kNameCounter;
+        kNameCounter = 0;
 
         Node _ret=null;
         Identifier f2 = (Identifier) n.f2.accept(this);
         NodeOptional f4 = new NodeOptional(n.f4.accept(this));
         FormalParameter kParam = new FormalParameter(
             CPSHelper.getNewType(CONTINUATION_BASE_CLASS_NAME),
-            CPSHelper.getNewIdentifier(currentContinuationName));
+            CPSHelper.getNewIdentifier(getCurrentContinuationName()));
 
         if (f4.present()){
             FormalParameterRest restParam = new FormalParameterRest(kParam);
@@ -320,6 +335,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
 
         _ret = new MethodDeclaration(f2, f4, f7, tempBlock.f1,
                                      new NodeOptional(tempBlock.f2));
+        currMethod = prevMethod;
+        kNameCounter = prevKNameCounter;
         return _ret;
     }
 
@@ -433,6 +450,12 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         // System.out.println("Block n"); 
         // System.out.println("CPSHelper.getMicroFormattedString(n): " + CPSHelper.getMicroFormattedString(n));
 
+        // String prevContinuationName = getCurrentContinuationName();
+        int prevKNameCounter = kNameCounter;
+
+        System.out.println("Beginning of Block"); 
+        System.out.println("kNameCounter: " + kNameCounter);
+
         NodeListOptional finalStatementList = new NodeListOptional();
         JumpPoint jumpPoint = null;
         int i;
@@ -455,19 +478,30 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
                 // continuation out of them
                 if (remainingStatements.present()){
                     // System.out.println("CPSHelper.getMicroFormattedString(remainingStatements): " + CPSHelper.getMicroFormattedString(remainingStatements));
+                    
+                    // TODO: See if you need to abstract this more
+                    kNameCounter++;
+                    // maxKCounter = maxKCounter < kNameCounter?
+                    //         kNameCounter: maxKCounter;
+                    // System.out.println("maxKCounter: " + maxKCounter);
+                    // prevKNameCounter = kNameCounter;
+
+                    System.out.println("just before newContinuationMaker"); 
+                    System.out.println("kNameCounter: " + kNameCounter);
+
                     ContinuationMaker newContinuationMaker = new ContinuationMaker(
                         remainingStatements,
                         currMethod,
                         this,
-                        "k2",
-                        CPSHelper.getIdentifierName(currMethod.f2) + "Continuation");
+                        getCurrentContinuationName(),
+                        "continuationMethod" + counter++);
 
                     currentClassContinuationMethods.add(
                         newContinuationMaker.continuationMethod);
                     continuationClasses.add(newContinuationMaker.continuationClass);
                     
                     // TODO: See if you need to abstract this more
-                    currentContinuationName = "k2";
+                    // kNameCounter++;
 
                     // System.out.println("CPSHelper.getFormattedString(newContinuationMaker.initStatements): " + CPSHelper.getFormattedString(newContinuationMaker.initStatements));
 
@@ -475,7 +509,11 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
 
                     // System.out.println("In block"); 
                     // System.out.println("CPSHelper.getMicroFormattedString(currNode): " + CPSHelper.getMicroFormattedString(currNode));
+
                 } 
+
+                System.out.println("just before jumpPoint"); 
+                System.out.println("kNameCounter: " + kNameCounter);
 
                 // VVIP: Assuming that the node isn't a nested block
                 jumpPoint = (JumpPoint) currNode.accept(this);
@@ -486,6 +524,10 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         if (jumpPoint == null){
             jumpPoint = new JumpPoint(new NodeChoice(getDefaultContinuationCall(), 1));
         }
+
+        kNameCounter = prevKNameCounter;
+        System.out.println("End of block"); 
+        System.out.println("kNameCounter: " + kNameCounter);
 
         _ret = new Block(finalStatementList, jumpPoint);
         // System.out.println("CPSHelper.getFormattedString(_ret): " + CPSHelper.getFormattedString(_ret));
@@ -595,7 +637,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
                 new NodeChoice(
                     new VarRef(
                         new NodeChoice(CPSHelper.getNewIdentifier(
-                            currentContinuationName), 1)),
+                            getCurrentContinuationName()), 1)),
                     3)), 6));
         if (!f4.present()){
             f4 = new NodeOptional(new ExpressionList(

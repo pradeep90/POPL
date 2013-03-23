@@ -84,5 +84,31 @@ class ____NewMainClass____{
     public void method7(){
         
     }
+
+    public void methodNestedIfs(){
+        if (x < 1){
+            a = 4;
+            if (y < 1){
+                if (z < 2){
+                    x = 101;
+                } else {
+                    x = 102;
+                }
+                b = 5;
+            } else {
+                c = 6;
+            }
+            d = 7;
+        } else {
+            e = 8;
+            if (y < 100){
+                f = 9;
+            } else {
+                g = 10;
+            }
+            h = 11;
+        }
+        i = 12;
+    }
 }
 
