@@ -12,13 +12,27 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
 
     public List<MethodDeclaration> currentClassContinuationMethods =
             new ArrayList<MethodDeclaration>();
-    public List<ClassDeclaration> continuationClasses =
-            new ArrayList<ClassDeclaration>();
+    public List<ClassExtendsDeclaration> continuationClasses =
+            new ArrayList<ClassExtendsDeclaration>();
+
+    // TODO: 
+    public ClassDeclaration baseContinuationClass;
 
     public syntaxtree.MethodDeclaration currMethod;
     public String currClassName;
 
-    public Transformer() {}
+    public Transformer() {
+        MethodDeclaration baseCallMethod = new MethodDeclaration(
+            CPSHelper.getNewIdentifier(ContinuationMaker.CALL_METHOD_NAME),
+            new NodeOptional(),
+            new NodeListOptional(),
+            new NodeListOptional(),
+            new NodeOptional());
+        baseContinuationClass = new ClassDeclaration(
+            CPSHelper.getNewIdentifier(CONTINUATION_BASE_CLASS_NAME),
+            new NodeListOptional(),
+            new NodeListOptional(baseCallMethod));
+    }
 
     public MessageSendStatement getDefaultContinuationCall(){
         return new MessageSendStatement(
@@ -146,6 +160,15 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         Node _ret=null;
         MainClass f0 = (MainClass) n.f0.accept(this);
         NodeListOptional f1 = (NodeListOptional) n.f1.accept(this);
+        if (f1.present()){
+            // Add all the auxiliary Continuation classes 
+            for (ClassExtendsDeclaration currContinuationClass : continuationClasses){
+                f1.addNode(new TypeDeclaration(
+                    new NodeChoice(currContinuationClass, 1)));
+            }
+            f1.addNode(new TypeDeclaration(new NodeChoice(baseContinuationClass, 0)));
+        }
+
         _ret = new Goal(f0, f1);
         return _ret;
     }
@@ -213,6 +236,9 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         currClassName = CPSHelper.getIdentifierName(f1);
         NodeListOptional f3 = (NodeListOptional) n.f3.accept(this);
         NodeListOptional f4 = (NodeListOptional) n.f4.accept(this);
+        // for (MethodDeclaration method : currentClassContinuationMethods){
+        //     f4.addNode(method);
+        // }
         _ret = new ClassDeclaration(f1, f3, f4);
         return _ret;
     }
@@ -234,6 +260,10 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         Identifier f3 = (Identifier) n.f3.accept(this);
         NodeListOptional f5 = (NodeListOptional) n.f3.accept(this);
         NodeListOptional f6 = (NodeListOptional) n.f4.accept(this);
+        // for (MethodDeclaration method : currentClassContinuationMethods){
+        //     f6.addNode(method);
+        // }
+
         _ret = new ClassExtendsDeclaration(f1, f3, f5, f6);
         return _ret;
     }
@@ -429,6 +459,10 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
                         "k2",
                         CPSHelper.getMicroIdentifierName(currMethod.f2) + "Continuation");
 
+                    currentClassContinuationMethods.add(
+                        newContinuationMaker.continuationMethod);
+                    continuationClasses.add(newContinuationMaker.continuationClass);
+                    
                     // TODO: See if you need to abstract this more
                     currentContinuationName = "k2";
 

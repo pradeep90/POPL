@@ -361,6 +361,8 @@ public class TransformerTest{
         Goal goal = (Goal) CPSHelper.getMicroJavaNodeFromFile(
             "Example-Microjava/Factorial.java");
         String output = CPSHelper.getFormattedString(goal.accept(transformer));
+        System.out.println("testGoal"); 
+        System.out.println("output: " + output);
     }
 
     /**
