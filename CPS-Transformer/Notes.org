@@ -167,11 +167,13 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
    CLOCK: [2013-03-23 Sat 12:48]--[2013-03-23 Sat 14:30] =>  1:42
 *** current method name too
 *** current class too for the heck of it
-** TODO Declare new continuation variable at the start of method
+** DONE Declare new continuation variable at the start of method
    CLOCK: [2013-03-23 Sat 15:06]--[2013-03-23 Sat 15:30] =>  0:24
    CLOCK: [2013-03-23 Sat 14:39]--[2013-03-23 Sat 15:06] =>  0:27
-** TODO Have proper types for the local continuation variables
+** DONE Have proper types for the local continuation variables
+   CLOCK: [2013-03-24 Sun 00:46]--[2013-03-24 Sun 01:06] =>  0:20
 ** TODO Only copy into the Continuation those fields that have been initialized
+*** TODO Have a new Visitor UsedVariablesFinder where you recurse and simply note down the +Identifiers+ VarRefs, etc. used.
 ** DONE k2.object = this
 ** TODO Uniquify the class and method names for Continuations, plus the parameter names
 ** TODO While statement

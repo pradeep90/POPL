@@ -15,6 +15,9 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     public List<ClassExtendsDeclaration> continuationClasses =
             new ArrayList<ClassExtendsDeclaration>();
 
+    public List<VarDeclaration> currentMethodContinuationDeclarations =
+            new ArrayList<VarDeclaration>();
+
     public int counter = 0;
     public int kNameCounter = 0;
     public int maxKCounter = 10;
@@ -224,6 +227,15 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         Identifier f15 = (Identifier) n.f15.accept(this);
         Identifier f19 = (Identifier) n.f19.accept(this);
         NodeOptional f21 = new NodeOptional(n.f21.accept(this));
+        if (f21.present()){
+            ((ExpressionList) f21.node).f1.addNode(new ExpressionRest(
+                new Expression(new NodeChoice(new PrimaryExpression(new NodeChoice(new AllocationExpression(CPSHelper.getNewIdentifier(CONTINUATION_BASE_CLASS_NAME)), 6)), 6))));
+        } else {
+            f21 = new NodeOptional(new ExpressionList(new Expression(
+                new NodeChoice(new PrimaryExpression(new NodeChoice(new AllocationExpression(CPSHelper.getNewIdentifier(CONTINUATION_BASE_CLASS_NAME)), 6)), 6)),
+                                                      new NodeListOptional()));
+        }
+
         _ret = new MainClass(f1, f11, f15, f19, f21);
         return _ret;
     }
@@ -310,6 +322,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      * f9 -> "}"
      */
     public Node visit(syntaxtree.MethodDeclaration n) {
+        List<VarDeclaration> prevMethodContinuationDeclarations = currentMethodContinuationDeclarations;
+        currentMethodContinuationDeclarations = new ArrayList<VarDeclaration>();
         syntaxtree.MethodDeclaration prevMethod = currMethod;
         currMethod = n;
 
@@ -333,20 +347,18 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         }
 
         NodeListOptional f7 = (NodeListOptional) n.f7.accept(this);
-        for (int i = 1; i <= maxKCounter; i++){
-            f7.addNode(new VarDeclaration(CPSHelper.getNewType(CONTINUATION_BASE_CLASS_NAME),
-                                          CPSHelper.getNewIdentifier(getContinuationName(i))));
-        }
-
 
         // Make a new block out of the statement list and extract the
         // resultant NanoJava statement list and JumpPoint.
         Block tempBlock = (Block) (new syntaxtree.Block(n.f8)).accept(this);
 
+        f7.nodes.addAll(currentMethodContinuationDeclarations);
+
         _ret = new MethodDeclaration(f2, f4, f7, tempBlock.f1,
                                      new NodeOptional(tempBlock.f2));
         currMethod = prevMethod;
         kNameCounter = prevKNameCounter;
+        currentMethodContinuationDeclarations = prevMethodContinuationDeclarations;
         return _ret;
     }
 
@@ -493,16 +505,20 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
                     // System.out.println("maxKCounter: " + maxKCounter);
                     // prevKNameCounter = kNameCounter;
 
+                    String currKName = getCurrentContinuationName();
                     ContinuationMaker newContinuationMaker = new ContinuationMaker(
                         remainingStatements,
                         currMethod,
                         this,
-                        getCurrentContinuationName(),
+                        currKName,
                         "continuationMethod" + counter++);
 
                     currentClassContinuationMethods.add(
                         newContinuationMaker.continuationMethod);
                     continuationClasses.add(newContinuationMaker.continuationClass);
+                    currentMethodContinuationDeclarations.add(new VarDeclaration(
+                        CPSHelper.getNewType(newContinuationMaker.className),
+                        CPSHelper.getNewIdentifier(currKName)));
                     
                     // TODO: See if you need to abstract this more
                     // kNameCounter++;
