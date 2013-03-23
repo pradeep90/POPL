@@ -141,6 +141,8 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 ** TODO Block => Transformation
    CLOCK: [2013-03-22 Fri 17:05]--[2013-03-22 Fri 17:09] =>  0:04
    CLOCK: [2013-03-22 Fri 13:34]--[2013-03-22 Fri 15:00] =>  1:26
+*** TODO Make IfStatement and MessageSendStatement return JumpPoint
+    CLOCK: [2013-03-23 Sat 09:09]
 ** DONE ContinuationMaker
    CLOCK: [2013-03-22 Fri 21:41]--[2013-03-22 Fri 22:40] =>  0:59
    CLOCK: [2013-03-22 Fri 17:09]--[2013-03-22 Fri 17:44] =>  0:35

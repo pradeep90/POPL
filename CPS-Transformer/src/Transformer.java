@@ -486,7 +486,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         Expression f2 = (Expression) n.f2.accept(this);
         Block f4 = getNanoBlock(n.f4);
         Block f6 = getNanoBlock(n.f6);
-        _ret = new IfStatement(f2, f4, f6);
+        _ret = new JumpPoint(new NodeChoice(new IfStatement(f2, f4, f6), 0));
         return _ret;
     }
 
@@ -536,7 +536,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         Identifier f0 = (Identifier) n.f0.accept(this);
         Identifier f2 = (Identifier) n.f2.accept(this);
         NodeOptional f4 = new NodeOptional(n.f4.accept(this));
-        _ret = new MessageSendStatement(f0, f2, f4);
+        _ret = new JumpPoint(new NodeChoice(new MessageSendStatement(f0, f2, f4), 1));
         return _ret;
     }
 
