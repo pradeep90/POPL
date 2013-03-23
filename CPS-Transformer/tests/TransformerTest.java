@@ -28,6 +28,8 @@ public class TransformerTest{
     nano.syntaxtree.TrueLiteral trueLiteralNano;
     FalseLiteral falseLiteral;
     nano.syntaxtree.FalseLiteral falseLiteralNano;
+
+    nano.syntaxtree.Expression currContinuationVarRef;
     MessageSendStatement messageSendStatement;
     nano.syntaxtree.MessageSendStatement messageSendStatementNano;
 
@@ -82,10 +84,20 @@ public class TransformerTest{
         trueLiteralNano = new nano.syntaxtree.TrueLiteral();
         falseLiteral = new FalseLiteral();
         falseLiteralNano = new nano.syntaxtree.FalseLiteral();
+
+        currContinuationVarRef = new nano.syntaxtree.Expression(new nano.syntaxtree.NodeChoice(
+            new nano.syntaxtree.PrimaryExpression(
+                new nano.syntaxtree.NodeChoice(
+                    new nano.syntaxtree.VarRef(
+                        new nano.syntaxtree.NodeChoice(CPSHelper.getNewIdentifier(
+                            transformer.currentContinuationName), 1)),
+                    3)), 6));
         messageSendStatement = new MessageSendStatement(identifier, identifier2,
                                                         new NodeOptional());
         messageSendStatementNano = new nano.syntaxtree.MessageSendStatement(
-            identifierNano, identifierNano2, new nano.syntaxtree.NodeOptional());
+            identifierNano, identifierNano2, new nano.syntaxtree.NodeOptional(
+                new nano.syntaxtree.ExpressionList(
+                    currContinuationVarRef, new nano.syntaxtree.NodeListOptional())));
 
         primaryExpression = new PrimaryExpression(new NodeChoice(integerLiteral, 0));
         primaryExpressionNano = new nano.syntaxtree.PrimaryExpression(
@@ -137,8 +149,8 @@ public class TransformerTest{
         ifStatementNano = new nano.syntaxtree.IfStatement(
             expressionNano,
             transformer.getNanoBlock(statement),
-            transformer.getNanoBlock(statement2));
-    }
+            transformer.getNanoBlock(statement2));}
+    
     
     @After
     public void tearDown(){
@@ -363,7 +375,7 @@ public class TransformerTest{
                            + CPSHelper.getMicroFormattedString(block));
 
         String expectedBlockString = "{ c = a + b;  k2 = new ContinuationClassmethod2Continuation();  k2.a = a;  k2.b\n"
-                + "   = b;  k2.c = c;  k2.d = d;  k2.foo = foo;  k2.k = k; k2.call(); }";
+                + "   = b;  k2.c = c;  k2.d = d;  k2.foo = foo;  k2.k = k; foo.bar(k2 ); }";
         assertEquals(expectedBlockString, CPSHelper.getFormattedString(block.accept(transformer)));
 
         // TODO: Test the continuation method and class created
@@ -382,7 +394,8 @@ public class TransformerTest{
 
         // TODO: This is WRONG! It should be "foo.bar(k2);" at the end
         String expectedBlockString = "{ c = a + b;  d = 4;  k2 = new ContinuationClassmethod3Continuation();  k2.a =\n"
-                + "   a;  k2.b = b;  k2.c = c;  k2.d = d;  k2.foo = foo;  k2.k = k; k2.call(); }";
+                + "   a;  k2.b = b;  k2.c = c;  k2.d = d;  k2.foo = foo;  k2.k = k; foo.bar(k2 );\n"
+                + "   }";
         assertEquals(expectedBlockString, CPSHelper.getFormattedString(block.accept(transformer)));
     }
 
