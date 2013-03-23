@@ -116,7 +116,6 @@ public class ContinuationMaker {
     // TODO: Damn. You have to make sure the new "Continuation kName" has been
     // declared in the method.
     public void makeInitStatements(){
-        // TODO: Have a Statement to set each field of continuationClass.
         initStatements = new NodeListOptional();
 
         // k2 = new Continuation1();
@@ -132,14 +131,22 @@ public class ContinuationMaker {
 
             // Ignore the "object" variable cos you're gonna set it to "this"
             if (CPSHelper.getIdentifierName(currVarDeclaration.f1).equals(ORIG_OBJECT_NAME)){
-                continue;
+                initStatements.addNode(new Statement(new NodeChoice(
+                    new AssignmentStatement(
+                        new VarRef(new NodeChoice(
+                            new DotExpression(CPSHelper.getNewIdentifier(kName),
+                                              CPSHelper.getCopy(currVarDeclaration.f1)),
+                            0)),
+                        new Expression(new NodeChoice(new PrimaryExpression(
+                            new NodeChoice(
+                                new ThisExpression(), 4)), 6))), 0)));
+            } else {
+                initStatements.addNode(new Statement(new NodeChoice(
+                    new AssignmentStatement(new VarRef(new NodeChoice(
+                        new DotExpression(CPSHelper.getNewIdentifier(kName),
+                                          CPSHelper.getCopy(currVarDeclaration.f1)),
+                        0)), getExpression(currVarDeclaration)), 0)));
             }
-
-            initStatements.addNode(new Statement(new NodeChoice(
-                new AssignmentStatement(new VarRef(new NodeChoice(
-                    new DotExpression(CPSHelper.getNewIdentifier(kName),
-                                      CPSHelper.getCopy(currVarDeclaration.f1)),
-                    0)), getExpression(currVarDeclaration)), 0)));
         }
     }
 

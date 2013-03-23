@@ -58,6 +58,7 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 ** Huge BUG: I never cleared currentClassContinuationMethods when visiting a new class. Damn!
 *** Moral of the Story: Never use Globals when you can pass stuff along as parameters.
 ** I think it was a huge win to have ContinuationMaker as a separate class. Abstraction helps like hell.
+** VVIP Note: ContinuationMaker only puts the parameters and local variables of the MicroJava method into the Continuation class. So, you can add as many local continuation variables as you want later.
 * Actions
 ** DONE Set up basic files
    CLOCK: [2013-03-16 Sat 21:47]--[2013-03-16 Sat 22:05] =>  0:18
@@ -161,12 +162,17 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 ** DONE Fix currentClassContinuationMethods BUG
    CLOCK: [2013-03-23 Sat 10:45]--[2013-03-23 Sat 11:59] =>  1:14
 *** Make makeContinuationMethod deepcopy Nodes
-** TODO Pass current continuation around in an environment
+** DONE Pass current continuation around in an environment
    CLOCK: [2013-03-23 Sat 14:36]--[2013-03-23 Sat 14:37] =>  0:01
    CLOCK: [2013-03-23 Sat 12:48]--[2013-03-23 Sat 14:30] =>  1:42
 *** current method name too
 *** current class too for the heck of it
 ** TODO Declare new continuation variable at the start of method
+   CLOCK: [2013-03-23 Sat 15:06]--[2013-03-23 Sat 15:30] =>  0:24
+   CLOCK: [2013-03-23 Sat 14:39]--[2013-03-23 Sat 15:06] =>  0:27
+** TODO Have proper types for the local continuation variables
+** TODO Only copy into the Continuation those fields that have been initialized
+** DONE k2.object = this
+** TODO Uniquify the class and method names for Continuations, plus the parameter names
 ** TODO While statement
 ** TODO Test for sub classes
-** TODO Uniquify the class and method names for Continuations, plus the parameter names

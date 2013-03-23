@@ -38,11 +38,16 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
             new NodeListOptional(baseCallMethod));
     }
 
-    public String getCurrentContinuationName(){
-        if (kNameCounter == 0){
+    public String getContinuationName(int kNumber){
+        if (kNumber == 0){
             return CURRENT_CONTINUATION_NAME;
         }
-        return CURRENT_CONTINUATION_NAME + kNameCounter;
+        return CURRENT_CONTINUATION_NAME + kNumber;
+    }
+
+
+    public String getCurrentContinuationName(){
+        return getContinuationName(kNameCounter);
     }
 
     public MessageSendStatement getDefaultContinuationCall(){
@@ -328,6 +333,11 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         }
 
         NodeListOptional f7 = (NodeListOptional) n.f7.accept(this);
+        for (int i = 1; i <= maxKCounter; i++){
+            f7.addNode(new VarDeclaration(CPSHelper.getNewType(CONTINUATION_BASE_CLASS_NAME),
+                                          CPSHelper.getNewIdentifier(getContinuationName(i))));
+        }
+
 
         // Make a new block out of the statement list and extract the
         // resultant NanoJava statement list and JumpPoint.
@@ -453,9 +463,6 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         // String prevContinuationName = getCurrentContinuationName();
         int prevKNameCounter = kNameCounter;
 
-        System.out.println("Beginning of Block"); 
-        System.out.println("kNameCounter: " + kNameCounter);
-
         NodeListOptional finalStatementList = new NodeListOptional();
         JumpPoint jumpPoint = null;
         int i;
@@ -486,9 +493,6 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
                     // System.out.println("maxKCounter: " + maxKCounter);
                     // prevKNameCounter = kNameCounter;
 
-                    System.out.println("just before newContinuationMaker"); 
-                    System.out.println("kNameCounter: " + kNameCounter);
-
                     ContinuationMaker newContinuationMaker = new ContinuationMaker(
                         remainingStatements,
                         currMethod,
@@ -512,9 +516,6 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
 
                 } 
 
-                System.out.println("just before jumpPoint"); 
-                System.out.println("kNameCounter: " + kNameCounter);
-
                 // VVIP: Assuming that the node isn't a nested block
                 jumpPoint = (JumpPoint) currNode.accept(this);
                 break;
@@ -526,8 +527,6 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         }
 
         kNameCounter = prevKNameCounter;
-        System.out.println("End of block"); 
-        System.out.println("kNameCounter: " + kNameCounter);
 
         _ret = new Block(finalStatementList, jumpPoint);
         // System.out.println("CPSHelper.getFormattedString(_ret): " + CPSHelper.getFormattedString(_ret));
