@@ -23,6 +23,7 @@ public class ContinuationMaker {
     String className;
     public static String ORIG_OBJECT_NAME = "object";
     public static String CALL_METHOD_NAME = "call";
+    public static final String CONTINUATION_CLASS_NAME_PREFIX = "___ContinuationClass";
 
     int MAX_NUMBER_CONTINUATIONS = 10;
 
@@ -37,7 +38,7 @@ public class ContinuationMaker {
         this.kName = kName;
         this.continuationMethodName = continuationMethodName;
 
-        className = "ContinuationClass" + continuationMethodName;
+        className = CONTINUATION_CLASS_NAME_PREFIX + continuationMethodName;
 
         makeContinuationMethod();
         makeContinuationClass();
