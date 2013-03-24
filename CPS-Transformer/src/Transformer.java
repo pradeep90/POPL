@@ -19,8 +19,6 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
 
     public List<VarDeclaration> currentMethodContinuationDeclarations =
             new ArrayList<VarDeclaration>();
-    public List<Identifier> currentMethodInitializedVariables =
-            new ArrayList<Identifier>();
 
     syntaxtree.NodeListOptional initStatementsMicro = new syntaxtree.NodeListOptional();
 
@@ -336,9 +334,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.MethodDeclaration n) {
         List<VarDeclaration> prevMethodContinuationDeclarations = currentMethodContinuationDeclarations;
-        List<Identifier> prevMethodInitializedVariables = currentMethodInitializedVariables;
         currentMethodContinuationDeclarations = new ArrayList<VarDeclaration>();
-        currentMethodInitializedVariables = new ArrayList<Identifier>();
 
         syntaxtree.MethodDeclaration prevMethod = currMethod;
         currMethod = n;
@@ -376,7 +372,6 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         currMethod = prevMethod;
         kNameCounter = prevKNameCounter;
         currentMethodContinuationDeclarations = prevMethodContinuationDeclarations;
-        currentMethodInitializedVariables = prevMethodInitializedVariables;
         return _ret;
     }
 
@@ -579,11 +574,6 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     public Node visit(syntaxtree.AssignmentStatement n) {
         Node _ret=null;
         VarRef f0 = (VarRef) n.f0.accept(this);
-        if (f0.f0.which == 1){
-            // Add all identifiers which come in "foo = bar;"
-            currentMethodInitializedVariables.add(CPSHelper.getCopy(
-                (Identifier) f0.f0.choice));
-        }
         if (ContinuationMaker.isContinuationAllocation(n.f2)){
             // Assuming that n is of the form "k2 = new
             // ContinuationClass()" i.e., not DotExpression in the LHS
@@ -632,31 +622,16 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         Node _ret=null;
         Expression f2 = (Expression) n.f2.accept(this);
 
-        List<Identifier> prevMethodInitializedVariables = currentMethodInitializedVariables;
-        List<Identifier> ifBlockInitializedVariables = new ArrayList<Identifier>();
-        List<Identifier> elseBlockInitializedVariables = new ArrayList<Identifier>();
-
         syntaxtree.Block ifBlock = getWrappedMicroBlock(n.f4);
         ifBlock.f1.nodes.addAll(CPSHelper.getMicroStatementList(currInitStatements).nodes);
         syntaxtree.Block elseBlock = getWrappedMicroBlock(n.f6);
         elseBlock.f1.nodes.addAll(CPSHelper.getMicroStatementList(currInitStatements).nodes);
         currInitStatements = new NodeListOptional();
 
-        // Get those variables initialized in the if Block
-        currentMethodInitializedVariables = new ArrayList<Identifier>();
         Block f4 = (Block) ifBlock.accept(this);
-        ifBlockInitializedVariables = currentMethodInitializedVariables;
         
         // Get those variables initialized in the else Block
-        currentMethodInitializedVariables = new ArrayList<Identifier>();
         Block f6 = (Block) elseBlock.accept(this);
-        elseBlockInitializedVariables = currentMethodInitializedVariables;
-
-        currentMethodInitializedVariables = prevMethodInitializedVariables;
-
-        currentMethodInitializedVariables.addAll(
-            getIntersection(ifBlockInitializedVariables,
-                            elseBlockInitializedVariables));
 
         currInitStatements = new NodeListOptional();
         _ret = new JumpPoint(new NodeChoice(new IfStatement(f2, f4, f6), 0));
@@ -770,43 +745,6 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         Node _ret=null;
 
         MethodDeclaration whileMethod = makeWhileMethod(currMethod, n.f2, n.f4);
-
-        // Expression f2 = (Expression) n.f2.accept(this);
-
-        // List<Identifier> prevMethodInitializedVariables = currentMethodInitializedVariables;
-        // List<Identifier> ifBlockInitializedVariables = new ArrayList<Identifier>();
-        // List<Identifier> elseBlockInitializedVariables = new ArrayList<Identifier>();
-
-        // syntaxtree.Block ifBlock = getWrappedMicroBlock(n.f4);
-        // ifBlock.f1.nodes.addAll(CPSHelper.getMicroStatementList(currInitStatements).nodes);
-        // syntaxtree.Block elseBlock = getWrappedMicroBlock(n.f6);
-        // elseBlock.f1.nodes.addAll(CPSHelper.getMicroStatementList(currInitStatements).nodes);
-        // currInitStatements = new NodeListOptional();
-
-        // // Get those variables initialized in the if Block
-        // currentMethodInitializedVariables = new ArrayList<Identifier>();
-        // Block f4 = (Block) ifBlock.accept(this);
-        // ifBlockInitializedVariables = currentMethodInitializedVariables;
-        
-        // // Get those variables initialized in the else Block
-        // currentMethodInitializedVariables = new ArrayList<Identifier>();
-        // Block f6 = (Block) elseBlock.accept(this);
-        // elseBlockInitializedVariables = currentMethodInitializedVariables;
-
-        // currentMethodInitializedVariables = prevMethodInitializedVariables;
-
-        // currentMethodInitializedVariables.addAll(
-        //     getIntersection(ifBlockInitializedVariables,
-        //                     elseBlockInitializedVariables));
-
-        // currInitStatements = new NodeListOptional();
-        // _ret = new JumpPoint(new NodeChoice(new IfStatement(f2, f4, f6), 0));
-
-        // n.f0.accept(this);
-        // n.f1.accept(this);
-        // n.f2.accept(this);
-        // n.f3.accept(this);
-        // n.f4.accept(this);
         return _ret;
     }
 
