@@ -110,5 +110,11 @@ class ____NewMainClass____{
         }
         i = 12;
     }
-}
 
+    public void methodFlattenBlock(){
+        { x = y; }
+        { { x = y; } }
+        { x = y; foo.bar(3); }
+        { {x = y; a = 4; } foo.bar(3); }
+    }
+}

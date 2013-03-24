@@ -676,4 +676,20 @@ public class TransformerTest{
         System.out.println("CPSHelper.getMicroFormattedString(statements): " + CPSHelper.getMicroFormattedString(statements));
         statements.nodes.get(2).accept(transformer);
     }
+
+    /**
+     * Test method for {@link Transformer#tryFlattenBlock()}.
+     */
+    @Test
+    public final void testTryFlattenBlock(){
+        System.out.println("testTryFlattenBlock"); 
+        ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/BlockTest1.java"));
+        NodeListOptional statements = ((MethodDeclaration) classDeclaration.f4.nodes.get(8)).f8;
+        System.out.println("CPSHelper.getMicroFormattedString(statements): " + CPSHelper.getMicroFormattedString(statements));
+        
+        for (Node node : statements.nodes){
+            // System.out.println("CPSHelper.getMicroFormattedString(node): " + CPSHelper.getMicroFormattedString(node));
+            // System.out.println("CPSHelper.getMicroFormattedString(Transformer.tryFlattenBlock((Block) ((Statement) node).f0.choice)): " + CPSHelper.getMicroFormattedString(Transformer.tryFlattenBlock((Block) ((Statement) node).f0.choice)));
+        }
+    }
 }

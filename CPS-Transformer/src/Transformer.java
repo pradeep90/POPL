@@ -130,6 +130,34 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         return intersection;
     }
 
+    public static syntaxtree.Statement tryFlattenBlock(syntaxtree.Block block){
+        if (block.f1.nodes.size() == 1){
+            syntaxtree.Statement currStatement = (syntaxtree.Statement) block.f1.nodes.get(0);
+            if (currStatement.f0.which == 0){
+                return tryFlattenBlock((syntaxtree.Block) currStatement.f0.choice);
+            }
+            else {
+                return currStatement;
+            }
+        }
+
+        syntaxtree.NodeListOptional statements = new syntaxtree.NodeListOptional();
+        for (syntaxtree.Node node : block.f1.nodes){
+            syntaxtree.Statement currStatement = (syntaxtree.Statement) node;
+            syntaxtree.Statement innerStatement = tryFlattenBlock(new syntaxtree.Block(
+                new syntaxtree.NodeListOptional(currStatement)));
+            if (innerStatement.f0.which == 0){
+                statements.nodes.addAll(
+                    ((syntaxtree.Block) innerStatement.f0.choice).f1.nodes);
+            }
+            else {
+                statements.addNode(innerStatement);
+            }
+        }
+        return new syntaxtree.Statement(
+            new syntaxtree.NodeChoice(new syntaxtree.Block(statements), 0));
+    }
+
     //
     // Auto class visitors--probably don't need to be overridden.
     //
@@ -643,8 +671,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      * 
      */
     public MethodDeclaration makeWhileMethod(syntaxtree.MethodDeclaration parentMethod,
-                                syntaxtree.Expression whileExpression,
-                                syntaxtree.Statement whileBodyStatement){
+                                             syntaxtree.Expression whileExpression,
+                                             syntaxtree.Statement whileBodyStatement){
         syntaxtree.Statement elseStatement = new syntaxtree.Statement(
             new syntaxtree.NodeChoice(
                 new syntaxtree.Block(
@@ -699,7 +727,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
                 localVars.addNode(new syntaxtree.VarDeclaration(
                     CPSHelper.getNewMicroType(
                         ContinuationMaker.getContinuationTypeName(trailingStatements,
-                                                Transformer.getContinuationName(i))),
+                                                                  Transformer.getContinuationName(i))),
                     CPSHelper.getNewMicroIdentifier(Transformer.getContinuationName(i))));
             }
         }
