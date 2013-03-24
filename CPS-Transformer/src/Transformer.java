@@ -51,12 +51,14 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     }
 
     public static String getContinuationName(int kNumber){
+        String name;
         if (kNumber == 0){
-            return CURRENT_CONTINUATION_NAME;
+            name = CURRENT_CONTINUATION_NAME;
+        } else {
+            name = CURRENT_CONTINUATION_NAME + kNumber;
         }
-        return CURRENT_CONTINUATION_NAME + kNumber;
+        return "___" + name + "___";
     }
-
 
     public String getCurrentContinuationName(){
         return getContinuationName(kNameCounter);
@@ -526,14 +528,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
                 // If there are statements after currMethod, make a
                 // continuation out of them
                 if (remainingStatements.present()){
-                    // System.out.println("CPSHelper.getMicroFormattedString(remainingStatements): " + CPSHelper.getMicroFormattedString(remainingStatements));
-                    
                     // TODO: See if you need to abstract this more
                     kNameCounter++;
-                    // maxKCounter = maxKCounter < kNameCounter?
-                    //         kNameCounter: maxKCounter;
-                    // System.out.println("maxKCounter: " + maxKCounter);
-                    // prevKNameCounter = kNameCounter;
 
                     String currKName = getCurrentContinuationName();
                     ContinuationMaker newContinuationMaker = new ContinuationMaker(
@@ -550,19 +546,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
                         CPSHelper.getNewType(newContinuationMaker.className),
                         CPSHelper.getNewIdentifier(currKName)));
                     
-                    // TODO: See if you need to abstract this more
-                    // kNameCounter++;
-
-                    // System.out.println("CPSHelper.getFormattedString(newContinuationMaker.initStatements): " + CPSHelper.getFormattedString(newContinuationMaker.initStatements));
-
                     currInitStatements = new NodeListOptional();
                     currInitStatements.nodes.addAll(newContinuationMaker.initStatements.nodes);
-
-                    // finalStatementList.nodes.addAll(currInitStatements);
-
-                    // System.out.println("In block"); 
-                    // System.out.println("CPSHelper.getMicroFormattedString(currNode): " + CPSHelper.getMicroFormattedString(currNode));
-
                 } 
 
                 if (currInitStatements.present()){
@@ -575,8 +560,6 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
 
                         // Make currStatement have the initStatements
                         // at the end of the if-else
-
-                        // initStatementsMicro = CPSHelper.getMicroStatementList(currInitStatements);
                     }
 
                     // TODO: else if part for WhileStatement
