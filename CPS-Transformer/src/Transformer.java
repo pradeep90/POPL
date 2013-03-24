@@ -28,9 +28,6 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     public int kNameCounter = 0;
     public int maxKCounter = 10;
 
-    public boolean isInitStatementForIf = false;
-    public int counterIfInitPrint = 0;
-
     // TODO: 
     public ClassDeclaration baseContinuationClass;
 
@@ -367,6 +364,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
 
         // Make a new block out of the statement list and extract the
         // resultant NanoJava statement list and JumpPoint.
+        // TODO: Flatten the inner blocks
         Block tempBlock = (Block) (new syntaxtree.Block(n.f8)).accept(this);
 
         f7.nodes.addAll(currentMethodContinuationDeclarations);
@@ -487,8 +485,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.Block n) {
         Node _ret=null;
-        System.out.println("Block n"); 
-        System.out.println("CPSHelper.getMicroFormattedString(n): " + CPSHelper.getMicroFormattedString(n));
+        // System.out.println("Block n"); 
+        // System.out.println("CPSHelper.getMicroFormattedString(n): " + CPSHelper.getMicroFormattedString(n));
 
         // String prevContinuationName = getCurrentContinuationName();
         int prevKNameCounter = kNameCounter;
@@ -506,20 +504,6 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
                 finalStatementList.addNode(currNode.accept(this));
             }
             else {
-                // Put any earlier currInitStatements here (mainly for
-                // the IfStatement where you must put the
-                // initStatements for the continuation at the end of
-                // the simple statements WITHIN the If-else block)
-                if (isInitStatementForIf && counterIfInitPrint > 0){
-                    finalStatementList.nodes.addAll(
-                        ((NodeListOptional) CPSHelper.getCopyUsingString(currInitStatements)).nodes);
-                    counterIfInitPrint--;
-                    if (counterIfInitPrint == 0){
-                        currInitStatements = new NodeListOptional();
-                        isInitStatementForIf = false;
-                    }
-                }
-
                 // Make a continuation out of the rest of the nodes  
                 syntaxtree.NodeListOptional remainingStatements = new syntaxtree.NodeListOptional();
                 remainingStatements.nodes.addAll(
@@ -575,17 +559,6 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         }
 
         if (jumpPoint == null){
-            // Add currInitStatements inherited from elsewhere
-            if (isInitStatementForIf && counterIfInitPrint > 0){
-                finalStatementList.nodes.addAll(
-                    ((NodeListOptional) CPSHelper.getCopyUsingString(currInitStatements)).nodes);
-                counterIfInitPrint--;
-                if (counterIfInitPrint == 0){
-                    currInitStatements = new NodeListOptional();
-                    isInitStatementForIf = false;
-                }
-            }
-
             jumpPoint = new JumpPoint(new NodeChoice(getDefaultContinuationCall(), 1));
         }
 
@@ -698,6 +671,37 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     // TODO: 
     public Node visit(syntaxtree.WhileStatement n) {
         Node _ret=null;
+        // Expression f2 = (Expression) n.f2.accept(this);
+
+        // List<Identifier> prevMethodInitializedVariables = currentMethodInitializedVariables;
+        // List<Identifier> ifBlockInitializedVariables = new ArrayList<Identifier>();
+        // List<Identifier> elseBlockInitializedVariables = new ArrayList<Identifier>();
+
+        // syntaxtree.Block ifBlock = getWrappedMicroBlock(n.f4);
+        // ifBlock.f1.nodes.addAll(CPSHelper.getMicroStatementList(currInitStatements).nodes);
+        // syntaxtree.Block elseBlock = getWrappedMicroBlock(n.f6);
+        // elseBlock.f1.nodes.addAll(CPSHelper.getMicroStatementList(currInitStatements).nodes);
+        // currInitStatements = new NodeListOptional();
+
+        // // Get those variables initialized in the if Block
+        // currentMethodInitializedVariables = new ArrayList<Identifier>();
+        // Block f4 = (Block) ifBlock.accept(this);
+        // ifBlockInitializedVariables = currentMethodInitializedVariables;
+        
+        // // Get those variables initialized in the else Block
+        // currentMethodInitializedVariables = new ArrayList<Identifier>();
+        // Block f6 = (Block) elseBlock.accept(this);
+        // elseBlockInitializedVariables = currentMethodInitializedVariables;
+
+        // currentMethodInitializedVariables = prevMethodInitializedVariables;
+
+        // currentMethodInitializedVariables.addAll(
+        //     getIntersection(ifBlockInitializedVariables,
+        //                     elseBlockInitializedVariables));
+
+        // currInitStatements = new NodeListOptional();
+        // _ret = new JumpPoint(new NodeChoice(new IfStatement(f2, f4, f6), 0));
+
         n.f0.accept(this);
         n.f1.accept(this);
         n.f2.accept(this);

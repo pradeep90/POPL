@@ -566,8 +566,7 @@ public class LiveVariableFinder extends GJNoArguDepthFirst<Boolean> {
     */
    public Boolean visit(ExpressionRest n) {
       Boolean _ret=null;
-      n.f0.accept(this);
-      n.f1.accept(this);
+      _ret = n.f1.accept(this);
       return _ret;
    }
 

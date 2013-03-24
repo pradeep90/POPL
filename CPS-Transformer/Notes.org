@@ -198,7 +198,7 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 ** Use the live variables idea and ContinuationMaker
    CLOCK: [2013-03-24 Sun 04:59]--[2013-03-24 Sun 05:29] =>  0:30
 *** TODO Remove references to initializedVars
-** TODO Problem with if-else statement is that the trailingStatements might refer to a variable that only gets initialized within the if-else-block, but instantiating the continuation before the block leads to potentially using an uninitialized variable. 
+** DONE Problem with if-else statement is that the trailingStatements might refer to a variable that only gets initialized within the if-else-block, but instantiating the continuation before the block leads to potentially using an uninitialized variable. 
 *** TODO Solution: Move the continuation instantiation to the end of the simple statements in each of the if-else blocks.
     CLOCK: [2013-03-24 Sun 13:20]--[2013-03-24 Sun 13:34] =>  0:14
 **** DONE Be careful about not using the same instances in both blocks
@@ -229,11 +229,19 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 ****** Finally done! I was SO afraid I wouldn't be able to get any test program working! Rationality FUCKING rocks!!!
 ****** A little more faith next time :P
 ***** WhileStatement: append initStatements to the else block of the while method
+** DONE Check out why when you have k1, k2, in "else", it's k2.k = k instead of k2.k1 = k1
 ** TODO Test output for MicroJava examples
-   CLOCK: [2013-03-24 Sun 17:14]
+   CLOCK: [2013-03-24 Sun 17:14]--[2013-03-24 Sun 18:02] =>  0:48
    CLOCK: [2013-03-24 Sun 16:46]--[2013-03-24 Sun 17:00] =>  0:14
-** TODO Check out why when you have k1, k2, in "else", it's k2.k = k instead of k2.k1 = k1
+*** MultilevelInherit, ThisExpr - I think they both have subclassing
+**** I think a base class variable is assigned subclass instances
+**** Plus, they are calling different methods... I don't know yet
+*** Others - They all have WhileStatement. So can't say anything else without implementing WhileStatement.
+*** TODO Plus, some of them have a block inside the WhileStatement block
 ** DONE k2.object = this
-** TODO Uniquify the class and method names for Continuations, plus the parameter names
-** TODO While statement
+** DONE Uniquify the class and method names for Continuations, plus the parameter names
+** TODO WhileStatement
+   CLOCK: [2013-03-24 Sun 18:06]
+** TODO Handle nested blocks
+*** have a recursive function flattenBlock (Block -> Statement List) to flattenBlock the inner statements from the Block and return the list of statements
 ** TODO Test for sub classes
