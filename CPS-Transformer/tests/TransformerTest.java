@@ -663,4 +663,16 @@ public class TransformerTest{
 
     //     }
     // }
+
+    /**
+     * Test method for {@link Transformer#WhileStatement()}.
+     */
+    @Test
+    public final void testWhileStatement(){
+        System.out.println("testWhileStatement"); 
+        ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/WhileTest1.java"));
+        transformer.currMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(1);
+        NodeListOptional statements = ((MethodDeclaration) classDeclaration.f4.nodes.get(1)).f8;
+        System.out.println("CPSHelper.getMicroFormattedString(statements): " + CPSHelper.getMicroFormattedString(statements));
+    }
 }
