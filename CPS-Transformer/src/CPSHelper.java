@@ -11,6 +11,16 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.io.PrintStream;
+import java.io.FileOutputStream;
+
+// import java.io.FileInputStream;
+// import java.io.FileNotFoundException;
+// import java.io.ByteArrayInputStream;
+// import java.io.IOException;
+// import java.io.InputStream;
+// import java.io.StringWriter;
+// import java.io.File;
 
 public class CPSHelper {
     
@@ -291,5 +301,18 @@ public class CPSHelper {
         syntaxtree.MethodDeclaration methodDeclaration = (syntaxtree.MethodDeclaration)
                 classDeclaration.f4.nodes.get(1);
         return (syntaxtree.NodeListOptional) methodDeclaration.f8;
+    }
+
+    public static void writeCodeToFile(String code, String filename){
+        PrintStream out = null;
+        try {
+            out = new PrintStream(new FileOutputStream(filename));
+            out.print(code);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (out != null) out.close();
+        }
     }
 }

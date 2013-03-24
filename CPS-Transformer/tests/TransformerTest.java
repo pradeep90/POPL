@@ -386,7 +386,7 @@ public class TransformerTest{
         System.out.println("CPSHelper.getMicroFormattedString(block): "
                            + CPSHelper.getMicroFormattedString(block));
 
-        String expectedBlockString = "{ c = a + b;  ___k1___ = new ___ContinuationClasscontinuationMethod0();  ___k1___.a = a;  ___k1___.b = b; ___k1___.___k___ = ___k___; ___k1___.object = this; foo.bar(___k1___ ); }";
+        String expectedBlockString = "{ c = a + b;  ___k1 = new ___ContinuationClasscontinuationMethod0();  ___k1.a = a;  ___k1.b = b; ___k1.___k = ___k; ___k1.object = this; foo.bar(___k1 ); }";
         assertBigStringEquals(expectedBlockString,
                               CPSHelper.getFormattedString(block.accept(transformer)));
     }
@@ -404,10 +404,10 @@ public class TransformerTest{
         System.out.println("CPSHelper.getMicroFormattedString(block): "
                            + CPSHelper.getMicroFormattedString(block));
 
-        String expectedBlockString = "{ c = a + b;  d = 4;  ___k1___ = new ___ContinuationClasscontinuationMethod0();  ___k1___.a = a;  ___k1___.b = b; ___k1___.foo = foo;  ___k1___.___k___ = ___k___; ___k1___.object = this; foo.bar(___k1___ ); }";
+        String expectedBlockString = "{ c = a + b;  d = 4;  ___k1 = new ___ContinuationClasscontinuationMethod0();  ___k1.a = a;  ___k1.b = b; ___k1.foo = foo;  ___k1.___k = ___k; ___k1.object = this; foo.bar(___k1 ); }";
         assertBigStringEquals(expectedBlockString, CPSHelper.getFormattedString(block.accept(transformer)));
 
-        String expectedDeclaration = "___ContinuationClasscontinuationMethod0  ___k1___ ;";
+        String expectedDeclaration = "___ContinuationClasscontinuationMethod0  ___k1 ;";
         assertBigStringEquals(expectedDeclaration,
                               CPSHelper.getFormattedString(transformer.currentMethodContinuationDeclarations.get(0)));
     }
@@ -425,9 +425,9 @@ public class TransformerTest{
             new NodeListOptional(),
             parentMethod,
             transformer,
-            "___k___",
+            "___k",
             "fooContinuation");
-        String expected = "public void fooContinuation (Continuation  ___k___  ) { int x; boolean y;   ___k___.call(); }";
+        String expected = "public void fooContinuation (Continuation  ___k  ) { int x; boolean y;   ___k.call(); }";
 
         assertBigStringEquals(expected,
                               CPSHelper.getFormattedString(continuationMaker.continuationMethod));
@@ -446,10 +446,10 @@ public class TransformerTest{
             new NodeListOptional(),
             parentMethod,
             transformer,
-            "___k___",
+            "___k",
             "fooContinuation");
 
-        String expected = "public void fooContinuation (int  m , int  n   , Continuation  ___k___  ) { ___k___.call();   }";
+        String expected = "public void fooContinuation (int  m , int  n   , Continuation  ___k  ) { ___k.call();   }";
         assertBigStringEquals(expected,
                      CPSHelper.getFormattedString(continuationMaker.continuationMethod));
     }
@@ -469,10 +469,10 @@ public class TransformerTest{
             new NodeListOptional(),
             parentMethod,
             transformer,
-            "___k___",
+            "___k",
             "fooContinuation");
 
-        String expected = "public void fooContinuation (int  a , int  b, Continuation  ___k___  ) { int c; boolean d;  ___k___.call(); }";
+        String expected = "public void fooContinuation (int  a , int  b, Continuation  ___k  ) { int c; boolean d;  ___k.call(); }";
 
         assertBigStringEquals(expected,
                               CPSHelper.getFormattedString(continuationMaker.continuationMethod));
@@ -489,10 +489,10 @@ public class TransformerTest{
             new NodeListOptional(),
             parentMethod,
             transformer,
-            "___k___",
+            "___k",
             "fooContinuation");
         // System.out.println("CPSHelper.getFormattedString(continuationMaker.continuationMethod): " + CPSHelper.getFormattedString(continuationMaker.continuationMethod));
-        String expected = "public void fooContinuation (Continuation  ___k___ ) { ___k___.call(); }";
+        String expected = "public void fooContinuation (Continuation  ___k ) { ___k.call(); }";
 
         assertBigStringEquals(expected,
                               CPSHelper.getFormattedString(continuationMaker.continuationMethod));
@@ -517,10 +517,10 @@ public class TransformerTest{
             // new NodeListOptional(),
             parentMethod,
             transformer,
-            "___k___",
+            "___k",
             "fooContinuation");
         // System.out.println("CPSHelper.getFormattedString(continuationMaker.continuationMethod): " + CPSHelper.getFormattedString(continuationMaker.continuationMethod));
-        String expected = "public void fooContinuation (int  a , int  b   , Continuation  ___k___  ) { int c; boolean d; foo = 81;  foo2 = 32; ___k___.call(); }";
+        String expected = "public void fooContinuation (int  a , int  b   , Continuation  ___k  ) { int c; boolean d; foo = 81;  foo2 = 32; ___k.call(); }";
 
         assertBigStringEquals(expected,
                               CPSHelper.getFormattedString(continuationMaker.continuationMethod));
@@ -544,11 +544,11 @@ public class TransformerTest{
             // new NodeListOptional(),
             parentMethod,
             transformer,
-            "___k2___",
+            "___k2",
             "fooContinuation");
         // System.out.println("CPSHelper.getFormattedString(continuationMaker.continuationMethod): " + CPSHelper.getFormattedString(continuationMaker.continuationMethod));
 
-        String expected = "class ___ContinuationClassfooContinuation extends Continuation { Continuation  ___k___ ; ____NewMainClass____  object ; public void call () { object.fooContinuation(___k___); }}";
+        String expected = "class ___ContinuationClassfooContinuation extends Continuation { Continuation  ___k ; ____NewMainClass____  object ; public void call () { object.fooContinuation(___k); }}";
         assertBigStringEquals(expected,
                               CPSHelper.getFormattedString(continuationMaker.continuationClass));
     }
@@ -569,10 +569,10 @@ public class TransformerTest{
             statementList,
             parentMethod,
             transformer,
-            "___k2___",
+            "___k2",
             "fooContinuation");
 
-        String expected = "___k2___ = new ___ContinuationClassfooContinuation(); ___k2___.___k___ = ___k___; ___k2___.object = this;";
+        String expected = "___k2 = new ___ContinuationClassfooContinuation(); ___k2.___k = ___k; ___k2.object = this;";
         assertBigStringEquals(expected,
                      CPSHelper.getFormattedString(continuationMaker.initStatements));
     }
@@ -587,12 +587,12 @@ public class TransformerTest{
         // methodLiveVariables
         MethodDeclaration parentMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(1);
 
-        String expectedMethodString = "public void methodLiveVariables (int  a , int  b   , Continuation  ___k___  ) {int x ; int  y ; int  z ; ___ContinuationClasscontinuationMethod0  ___k1___ ; x = 3; y = 4; ___k1___ = new ___ContinuationClasscontinuationMethod0(); ___k1___.a = a; ___k1___.b = b; ___k1___.___k___ = ___k___; ___k1___.object = this; foo.bar(___k1___ );}";
+        String expectedMethodString = "public void methodLiveVariables (int  a , int  b   , Continuation  ___k  ) {int x ; int  y ; int  z ; ___ContinuationClasscontinuationMethod0  ___k1 ; x = 3; y = 4; ___k1 = new ___ContinuationClasscontinuationMethod0(); ___k1.a = a; ___k1.b = b; ___k1.___k = ___k; ___k1.object = this; foo.bar(___k1 );}";
         // System.out.println("CPSHelper.getFormattedString(parentMethod.accept(transformer)): " + CPSHelper.getFormattedString(parentMethod.accept(transformer)));
 
         // TODO: 
-        // assertBigStringEquals(expectedMethodString,
-        //                       CPSHelper.getFormattedString(parentMethod.accept(transformer)));
+        assertBigStringEquals(expectedMethodString,
+                              CPSHelper.getFormattedString(parentMethod.accept(transformer)));
     }
 
     /**
@@ -615,4 +615,52 @@ public class TransformerTest{
     }
     
     // TODO: Test if else block for live variables
+
+    public void doConversionForMicroJavaFile(String fileName){
+        Transformer transformer = new Transformer();
+        Goal goal = (Goal) CPSHelper.getMicroJavaNodeFromFile(
+            "Example-Microjava/" + fileName);
+        String output = CPSHelper.getFormattedString(goal.accept(transformer));
+        CPSHelper.writeCodeToFile(output, "Generated-Nanojava/" + fileName);
+    }
+
+    @Test
+    public final void testOutputForFiles(){
+        // String fileName = "Factorial.java";
+        String[] fileNameList = {
+            "BinarySearch.java",
+            "BinaryTree.java",
+            "BubbleSort.java",
+            "Factorial.java",
+            "LinearSearch.java",
+            "LinkedList.java",
+            "QuickSort.java",
+            "TreeVisitor.java",
+
+            "TA-MicroJava-Test-Cases/ComplexAssignments.java",
+            "TA-MicroJava-Test-Cases/DotTest.java",
+            "TA-MicroJava-Test-Cases/IfCheck.java",
+            "TA-MicroJava-Test-Cases/MainArguments.java",
+            "TA-MicroJava-Test-Cases/MethodArgs.java",
+            "TA-MicroJava-Test-Cases/MethodReturn.java",
+            "TA-MicroJava-Test-Cases/MultilevelInherit.java",
+            "TA-MicroJava-Test-Cases/NestedIfCheck.java",
+            "TA-MicroJava-Test-Cases/NextedWhile.java",
+            "TA-MicroJava-Test-Cases/PrintTest.java",
+            "TA-MicroJava-Test-Cases/SimpleAssignments.java",
+            "TA-MicroJava-Test-Cases/SimpleMain.java",
+            "TA-MicroJava-Test-Cases/ThisExpr.java",
+            "TA-MicroJava-Test-Cases/WhileCheck.java",
+
+        };
+        for (String fileName : fileNameList){
+            System.out.println("fileName: " + fileName);
+            try {
+                doConversionForMicroJavaFile(fileName);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
 }

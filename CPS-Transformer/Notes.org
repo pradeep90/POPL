@@ -219,13 +219,19 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 ***** Debug Factorial
       CLOCK: [2013-03-24 Sun 14:59]--[2013-03-24 Sun 15:24] =>  0:25
 ***** TODO when adding initStatementsMicro at the end, if it there is no JumpPoint at the end, do k1.call() instead of k.call()
-****** TODO i.e., make k1 the currentContinuation name when instantiating a new continuation inside a continuation method
+****** DONE i.e., make k1 the currentContinuation name when instantiating a new continuation inside a continuation method
+       CLOCK: [2013-03-24 Sun 16:00]--[2013-03-24 Sun 16:46] =>  0:46
        CLOCK: [2013-03-24 Sun 15:24]--[2013-03-24 Sun 15:28] =>  0:04
-******* Maybe whenever you see "k1 = new ContinuationClasscontinuationMethod0 ()" set currentContinuation name = k1
+******* DONE Maybe whenever you see "k1 = new ContinuationClasscontinuationMethod0 ()" set currentContinuation name = k1
 ******* That is the behaviour you want
-******* Whenever you instantiate a continuation you intend to make it the current continuation. It's just that for IfStatement, you are defering the insertion of the initStatementsMicro, so the information about kNameCounter++ is lost
-******* TODO In fact, make this the default way kNameCounter is updated
+******* DONE Whenever you instantiate a continuation you intend to make it the current continuation. It's just that for IfStatement, you are defering the insertion of the initStatementsMicro, so the information about kNameCounter++ is lost
+******* DONE In fact, make this the default way kNameCounter is updated (but I still need to do the kNameCounter++ when calling ContinuationMaker anyway)
+****** Finally done! I was SO afraid I wouldn't be able to get any test program working! Rationality FUCKING rocks!!!
+****** A little more faith next time :P
 ***** WhileStatement: append initStatements to the else block of the while method
+** TODO Test output for MicroJava examples
+   CLOCK: [2013-03-24 Sun 17:14]
+   CLOCK: [2013-03-24 Sun 16:46]--[2013-03-24 Sun 17:00] =>  0:14
 ** TODO Check out why when you have k1, k2, in "else", it's k2.k = k instead of k2.k1 = k1
 ** DONE k2.object = this
 ** TODO Uniquify the class and method names for Continuations, plus the parameter names

@@ -46,7 +46,6 @@ public class ContinuationMaker {
     }
 
     public void makeContinuationMethod(){
-        System.out.println("CPSHelper.getMicroFormattedString(trailingStatements): " + CPSHelper.getMicroFormattedString(trailingStatements));
         // Add parameters
         syntaxtree.FormalParameterList parameterList = null;
         if (parentMethod.f4.present()){
@@ -59,8 +58,6 @@ public class ContinuationMaker {
         syntaxtree.NodeListOptional restParameters = new syntaxtree.NodeListOptional();
         // Local variables which are not live in trailingStatements
         syntaxtree.NodeListOptional localVars = new syntaxtree.NodeListOptional();
-
-        System.out.println("CPSHelper.getMicroFormattedString(trailingStatements): " + CPSHelper.getMicroFormattedString(trailingStatements));
 
         for (syntaxtree.Node node : parentMethod.f7.nodes){
             syntaxtree.VarDeclaration currVarDeclaration = (syntaxtree.VarDeclaration) node;
@@ -284,4 +281,21 @@ public class ContinuationMaker {
         return null;
     }
 
+    /** 
+     * @return true iff expression if of the form "new ContinuationClass()"
+     */
+    public static boolean isContinuationAllocation(
+        syntaxtree.Expression expression){
+
+        if (expression.f0.which == 6){
+            syntaxtree.PrimaryExpression primaryExpression =
+                    (syntaxtree.PrimaryExpression) expression.f0.choice;
+            if (primaryExpression.f0.which == 6){
+                String allocationClassString = CPSHelper.getIdentifierName(
+                    ((syntaxtree.AllocationExpression) primaryExpression.f0.choice).f1);
+                return allocationClassString.startsWith(CONTINUATION_CLASS_NAME_PREFIX);
+            }
+        }
+        return false;
+    }
 }

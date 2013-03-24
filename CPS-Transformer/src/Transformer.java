@@ -57,7 +57,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         } else {
             name = CURRENT_CONTINUATION_NAME + kNumber;
         }
-        return "___" + name + "___";
+        return "___" + name;
     }
 
     public String getCurrentContinuationName(){
@@ -609,6 +609,18 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
             currentMethodInitializedVariables.add(CPSHelper.getCopy(
                 (Identifier) f0.f0.choice));
         }
+        if (ContinuationMaker.isContinuationAllocation(n.f2)){
+            // Assuming that n is of the form "k2 = new
+            // ContinuationClass()" i.e., not DotExpression in the LHS
+            String varName = CPSHelper.getMicroFormattedString(n.f0);
+            String numString = varName.substring(("___" + CURRENT_CONTINUATION_NAME).length(), varName.length());
+            if (numString.isEmpty()){
+                kNameCounter = 0;
+            } else {
+                kNameCounter = Integer.parseInt(numString);
+            }
+        }
+
         Expression f2 = (Expression) n.f2.accept(this);
         _ret = new AssignmentStatement(f0, f2);
         return _ret;
