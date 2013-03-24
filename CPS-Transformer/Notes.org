@@ -241,10 +241,13 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 ** DONE k2.object = this
 ** DONE Uniquify the class and method names for Continuations, plus the parameter names
 ** TODO WhileStatement
+   CLOCK: [2013-03-25 Mon 00:46]
    CLOCK: [2013-03-24 Sun 18:06]--[2013-03-24 Sun 18:48] =>  0:42
 *** Reuse makeContinuationMethod - Only, instead of trailingStatements, give it if(exp){body; recursive-call();}else{initStatements}
+**** TODO initStatements
 *** Put that method in the class
 *** In the original location, put "tmp=this; tmp.whileMethod(arguments)" [see code in makeContinuationClass]
+*** Also put "Currclass tmp;" at the beginning of the method
 ** TODO Handle nested blocks
 *** have a recursive function flattenBlock (Block -> Statement List) to flattenBlock the inner statements from the Block and return the list of statements
 ** TODO Test for sub classes

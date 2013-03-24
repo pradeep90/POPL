@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 public class Transformer extends GJNoArguDepthFirst<Node> {
     public String CONTINUATION_BASE_CLASS_NAME = "Continuation";
+    public String CONTINUATION_METHOD_PREFIX = "continuationMethod";
+    public String WHILE_METHOD_PREFIX = "whileMethod";
 
     public static final String CURRENT_CONTINUATION_NAME = "k";
 
@@ -521,7 +523,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
                         currMethod,
                         this,
                         currKName,
-                        "continuationMethod" + counter++);
+                        CONTINUATION_METHOD_PREFIX + counter++);
 
                     currentClassContinuationMethods.add(
                         newContinuationMaker.continuationMethod);
@@ -661,6 +663,101 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         return _ret;
     }
 
+    /** 
+     * Create a recursive method representing a While loop.
+     * 
+     */
+    public MethodDeclaration makeWhileMethod(syntaxtree.MethodDeclaration parentMethod,
+                                syntaxtree.Expression whileExpression,
+                                syntaxtree.Statement whileBodyStatement){
+        syntaxtree.Statement elseStatement = new syntaxtree.Statement(
+            new syntaxtree.NodeChoice(
+                new syntaxtree.Block(
+                    CPSHelper.getMicroStatementList(
+                        currInitStatements)), 0));
+        syntaxtree.Statement ifStatement = new syntaxtree.Statement(
+            new syntaxtree.NodeChoice(new syntaxtree.IfStatement(
+                whileExpression, whileBodyStatement, elseStatement), 3));
+
+        syntaxtree.NodeListOptional trailingStatements = new syntaxtree.NodeListOptional();
+        trailingStatements.addNode(ifStatement);
+        
+        // Add parameters
+        syntaxtree.FormalParameterList parameterList = null;
+        if (parentMethod.f4.present()){
+            syntaxtree.FormalParameterList parentParameterList =
+                    (syntaxtree.FormalParameterList) parentMethod.f4.node;
+            parameterList = CPSHelper.getCopy(parentParameterList);
+        }
+
+        // Local VarDeclarations which are live in trailingStatements
+        syntaxtree.NodeListOptional restParameters = new syntaxtree.NodeListOptional();
+        // Local variables which are not live in trailingStatements
+        syntaxtree.NodeListOptional localVars = new syntaxtree.NodeListOptional();
+
+        for (syntaxtree.Node node : parentMethod.f7.nodes){
+            syntaxtree.VarDeclaration currVarDeclaration = (syntaxtree.VarDeclaration) node;
+            LiveVariableFinder currFinder = new LiveVariableFinder(
+                CPSHelper.getIdentifierName(currVarDeclaration.f1));
+
+            if (trailingStatements.accept(currFinder) && currFinder.isLive){
+                restParameters.addNode(new syntaxtree.FormalParameterRest(
+                    CPSHelper.getFormalParameter(currVarDeclaration)));
+                    
+            } else {
+                localVars.addNode(CPSHelper.getCopy(currVarDeclaration));
+            }
+        }
+
+        // VVIP: MAJOR HACK ahead: I need to know which continuation
+        // variables have been instantiated in trailingStatements. But
+        // they won't be declared in parentMethod. So, just running
+        // over possible continuation variable names and seeing if
+        // they are instantiated in trailingStatements.
+        for (int i = 0; i < ContinuationMaker.MAX_NUMBER_CONTINUATIONS; i++){
+            LiveVariableFinder currFinder = new LiveVariableFinder(
+                Transformer.getContinuationName(i));
+
+            // If it is found in trailingStatements and is
+            // instantiated only inside trailingStatements
+            if (trailingStatements.accept(currFinder) && !currFinder.isLive){
+                localVars.addNode(new syntaxtree.VarDeclaration(
+                    CPSHelper.getNewMicroType(
+                        ContinuationMaker.getContinuationTypeName(trailingStatements,
+                                                Transformer.getContinuationName(i))),
+                    CPSHelper.getNewMicroIdentifier(Transformer.getContinuationName(i))));
+            }
+        }
+
+        // Add initialized local variables to the parameters
+        if (parameterList != null){
+            parameterList.f1.nodes.addAll(restParameters.nodes);
+        } else {
+            if (restParameters.present()){
+                syntaxtree.NodeListOptional remainingRestParameters =
+                        new syntaxtree.NodeListOptional();
+                remainingRestParameters.nodes.addAll(
+                    restParameters.nodes.subList(1, restParameters.nodes.size()));
+                parameterList = new syntaxtree.FormalParameterList(
+                    ((syntaxtree.FormalParameterRest) restParameters.nodes.get(0)).f1,
+                    remainingRestParameters);
+            }
+        }
+        
+        syntaxtree.NodeOptional parameters = new syntaxtree.NodeOptional(parameterList);
+
+        syntaxtree.MethodDeclaration tempMethod = new syntaxtree.MethodDeclaration(
+            CPSHelper.getNewMicroIdentifier(WHILE_METHOD_PREFIX + counter++),
+            parameters,
+            localVars,
+            trailingStatements);
+
+        System.out.println("CPSHelper.getMicroFormattedString(tempMethod): " + CPSHelper.getMicroFormattedString(tempMethod));
+        MethodDeclaration continuationMethod = (MethodDeclaration) tempMethod.accept(this);
+        System.out.println("CPSHelper.getFormattedString(continuationMethod): " + CPSHelper.getFormattedString(continuationMethod));
+        return continuationMethod;
+    }
+
     /**
      * f0 -> "while"
      * f1 -> "("
@@ -671,6 +768,9 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     // TODO: 
     public Node visit(syntaxtree.WhileStatement n) {
         Node _ret=null;
+
+        MethodDeclaration whileMethod = makeWhileMethod(currMethod, n.f2, n.f4);
+
         // Expression f2 = (Expression) n.f2.accept(this);
 
         // List<Identifier> prevMethodInitializedVariables = currentMethodInitializedVariables;
@@ -702,11 +802,11 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         // currInitStatements = new NodeListOptional();
         // _ret = new JumpPoint(new NodeChoice(new IfStatement(f2, f4, f6), 0));
 
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
-        n.f3.accept(this);
-        n.f4.accept(this);
+        // n.f0.accept(this);
+        // n.f1.accept(this);
+        // n.f2.accept(this);
+        // n.f3.accept(this);
+        // n.f4.accept(this);
         return _ret;
     }
 

@@ -674,5 +674,6 @@ public class TransformerTest{
         transformer.currMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(1);
         NodeListOptional statements = ((MethodDeclaration) classDeclaration.f4.nodes.get(1)).f8;
         System.out.println("CPSHelper.getMicroFormattedString(statements): " + CPSHelper.getMicroFormattedString(statements));
+        statements.nodes.get(2).accept(transformer);
     }
 }

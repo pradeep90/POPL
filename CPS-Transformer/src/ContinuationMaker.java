@@ -25,7 +25,7 @@ public class ContinuationMaker {
     public static String CALL_METHOD_NAME = "call";
     public static final String CONTINUATION_CLASS_NAME_PREFIX = "___ContinuationClass";
 
-    int MAX_NUMBER_CONTINUATIONS = 10;
+    public static final int MAX_NUMBER_CONTINUATIONS = 10;
 
     public ContinuationMaker(syntaxtree.NodeListOptional trailingStatements,
                              syntaxtree.MethodDeclaration parentMethod,
@@ -66,7 +66,7 @@ public class ContinuationMaker {
 
             if (trailingStatements.accept(currFinder) && currFinder.isLive){
                 restParameters.addNode(new syntaxtree.FormalParameterRest(
-                    getFormalParameter(currVarDeclaration)));
+                    CPSHelper.getFormalParameter(currVarDeclaration)));
                     
             } else {
                 localVars.addNode(CPSHelper.getCopy(currVarDeclaration));
@@ -123,7 +123,7 @@ public class ContinuationMaker {
     }
 
     public void makeContinuationClass(){
-        NodeListOptional varDeclarations = getVarDeclarationsFromParameterList(
+        NodeListOptional varDeclarations = CPSHelper.getVarDeclarationsFromParameterList(
             continuationMethod.f4.node);
 
         // Object to hold the reference to original class
@@ -141,7 +141,7 @@ public class ContinuationMaker {
             new NodeOptional(new JumpPoint(new NodeChoice(
                 new MessageSendStatement(CPSHelper.getNewIdentifier(ORIG_OBJECT_NAME),
                                          CPSHelper.getCopy(continuationMethod.f2),
-                                         getArgs(continuationMethod.f4.node)), 1))));
+                                         CPSHelper.getArgs(continuationMethod.f4.node)), 1))));
         
         continuationClass = new ClassExtendsDeclaration(
             CPSHelper.getNewIdentifier(className),
@@ -182,73 +182,9 @@ public class ContinuationMaker {
                     new AssignmentStatement(new VarRef(new NodeChoice(
                         new DotExpression(CPSHelper.getNewIdentifier(kName),
                                           CPSHelper.getCopy(currVarDeclaration.f1)),
-                        0)), getExpression(currVarDeclaration)), 0)));
+                        0)), CPSHelper.getExpression(currVarDeclaration)), 0)));
             }
         }
-    }
-
-    public NodeListOptional getVarDeclarationsFromParameterList(
-        Node parameters){
-
-        NodeListOptional varDeclarations = new NodeListOptional();
-        if (parameters == null){
-            return varDeclarations;
-        }
-
-        FormalParameterList actualParams = (FormalParameterList) parameters;
-        varDeclarations.addNode(getVarDeclaration(actualParams.f0));
-        for (Node node : actualParams.f1.nodes){
-            varDeclarations.addNode(getVarDeclaration(((FormalParameterRest) node).f1));
-        }
-
-        return varDeclarations;
-    }
-
-    public VarDeclaration getVarDeclaration(FormalParameter parameter){
-        return new VarDeclaration(CPSHelper.getCopy(parameter.f0),
-                                  CPSHelper.getCopy(parameter.f1));
-    }
-
-    /** 
-     * @return Expression for VarRef of parameter's identifier
-     */
-    public Expression getExpression(FormalParameter parameter){
-        return new Expression(new NodeChoice(new PrimaryExpression(
-            new NodeChoice(new VarRef(new NodeChoice(CPSHelper.getCopy(parameter.f1), 1)),
-                           3)), 6));
-    }
-
-    /** 
-     * @return Expression for Identifier of currVarDeclaration.
-     */
-    public Expression getExpression(VarDeclaration currVarDeclaration){
-        return new Expression(new NodeChoice(
-            new PrimaryExpression(new NodeChoice(
-                new VarRef(new NodeChoice(CPSHelper.getCopy(currVarDeclaration.f1), 1)),
-                3)), 6));
-    }
-
-    /** 
-     * Return the arguments for the call() method of the continuation class.
-     *
-     * Note: Guaranteed that parameters has at least one parameter (i.e., k).
-     */
-    public NodeOptional getArgs(Node parameters){
-        FormalParameterList actualParams = (FormalParameterList) parameters;
-        NodeListOptional restExpressions = new NodeListOptional();
-        for (Node node : actualParams.f1.nodes){
-            restExpressions.addNode(new ExpressionRest(
-                getExpression(((FormalParameterRest) node).f1)));
-        }
-        return new NodeOptional(new ExpressionList(getExpression(actualParams.f0),
-                                                   restExpressions));
-    }
-
-    public syntaxtree.FormalParameter getFormalParameter(
-        syntaxtree.VarDeclaration varDeclaration){
-
-        return new syntaxtree.FormalParameter(CPSHelper.getCopy(varDeclaration.f0),
-                                              CPSHelper.getCopy(varDeclaration.f1));
     }
 
     /** 
@@ -256,7 +192,7 @@ public class ContinuationMaker {
      *
      * e.g., "k2 = new FooContinuation()" -> "FooContinuation"
      */
-    public String getContinuationTypeName(syntaxtree.NodeListOptional statementList,
+    public static String getContinuationTypeName(syntaxtree.NodeListOptional statementList,
                                           String continuationVarName){
         for (syntaxtree.Node node : statementList.nodes){
             syntaxtree.Statement currStatement = (syntaxtree.Statement) node;

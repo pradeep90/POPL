@@ -315,4 +315,68 @@ public class CPSHelper {
             if (out != null) out.close();
         }
     }
+
+    public static NodeListOptional getVarDeclarationsFromParameterList(
+        Node parameters){
+
+        NodeListOptional varDeclarations = new NodeListOptional();
+        if (parameters == null){
+            return varDeclarations;
+        }
+
+        FormalParameterList actualParams = (FormalParameterList) parameters;
+        varDeclarations.addNode(getVarDeclaration(actualParams.f0));
+        for (Node node : actualParams.f1.nodes){
+            varDeclarations.addNode(getVarDeclaration(((FormalParameterRest) node).f1));
+        }
+
+        return varDeclarations;
+    }
+
+    public static VarDeclaration getVarDeclaration(FormalParameter parameter){
+        return new VarDeclaration(CPSHelper.getCopy(parameter.f0),
+                                  CPSHelper.getCopy(parameter.f1));
+    }
+
+    /** 
+     * @return Expression for VarRef of parameter's identifier
+     */
+    public static Expression getExpression(FormalParameter parameter){
+        return new Expression(new NodeChoice(new PrimaryExpression(
+            new NodeChoice(new VarRef(new NodeChoice(CPSHelper.getCopy(parameter.f1), 1)),
+                           3)), 6));
+    }
+
+    /** 
+     * @return Expression for Identifier of currVarDeclaration.
+     */
+    public static Expression getExpression(VarDeclaration currVarDeclaration){
+        return new Expression(new NodeChoice(
+            new PrimaryExpression(new NodeChoice(
+                new VarRef(new NodeChoice(CPSHelper.getCopy(currVarDeclaration.f1), 1)),
+                3)), 6));
+    }
+
+    /** 
+     * Return the arguments for the call() method of the continuation class.
+     *
+     * Note: Guaranteed that parameters has at least one parameter (i.e., k).
+     */
+    public static NodeOptional getArgs(Node parameters){
+        FormalParameterList actualParams = (FormalParameterList) parameters;
+        NodeListOptional restExpressions = new NodeListOptional();
+        for (Node node : actualParams.f1.nodes){
+            restExpressions.addNode(new ExpressionRest(
+                getExpression(((FormalParameterRest) node).f1)));
+        }
+        return new NodeOptional(new ExpressionList(getExpression(actualParams.f0),
+                                                   restExpressions));
+    }
+
+    public static syntaxtree.FormalParameter getFormalParameter(
+        syntaxtree.VarDeclaration varDeclaration){
+
+        return new syntaxtree.FormalParameter(CPSHelper.getCopy(varDeclaration.f0),
+                                              CPSHelper.getCopy(varDeclaration.f1));
+    }
 }
