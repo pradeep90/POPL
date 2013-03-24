@@ -200,6 +200,33 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 *** TODO Remove references to initializedVars
 ** TODO Problem with if-else statement is that the trailingStatements might refer to a variable that only gets initialized within the if-else-block, but instantiating the continuation before the block leads to potentially using an uninitialized variable. 
 *** TODO Solution: Move the continuation instantiation to the end of the simple statements in each of the if-else blocks.
+    CLOCK: [2013-03-24 Sun 13:20]--[2013-03-24 Sun 13:34] =>  0:14
+**** DONE Be careful about not using the same instances in both blocks
+**** DONE Make sure that currInitStatements can't get overwritten by recursive calls to ContinuationMaker
+**** DONE Problem: the currInitStatements are being included even in the continuation method cos I'm not clearing it, I guess.
+***** TODO Thing is I need to clear it after using it in BOTH the if block AND the else block.
+*** TODO The previous "Solution" is wrong cos logically you need to put the remainingStatements at the END of each of the if and else blocks, not just at the end of the simple statements in those blocks.
+**** But you can't just copy-paste the remainingStatements in both the blocks cos that might lead to you making duplicate continuation methods
+**** So, create a continuation for remainingStatements, and add the initStatements for that continuation at the end of both the blocks
+**** There are only 3 types of tail-form statements you'll come across in Block
+***** TODO IfStatement: append initStatements to both the if and else blocks
+    CLOCK: [2013-03-24 Sun 14:00]--[2013-03-24 Sun 14:30] =>  0:30
+****** I've got the initStatementsMicro
+****** DONE Where to put them?
+****** TODO Only problem is that I use the parameters and local variables of parentMethod to determine the local variables of the continuation - but the initStatementsMicro would refer to k1 which is not really declared in the parentMethod.
+****** TODO Solution: Use LiveVariableFinder: if visit () == true && isLive == false, it means it is a local variable (not a parameter)
+       CLOCK: [2013-03-24 Sun 14:32]--[2013-03-24 Sun 14:59] =>  0:27
+***** Debug Factorial
+      CLOCK: [2013-03-24 Sun 14:59]--[2013-03-24 Sun 15:24] =>  0:25
+***** TODO when adding initStatementsMicro at the end, if it there is no JumpPoint at the end, do k1.call() instead of k.call()
+****** TODO i.e., make k1 the currentContinuation name when instantiating a new continuation inside a continuation method
+       CLOCK: [2013-03-24 Sun 15:24]--[2013-03-24 Sun 15:28] =>  0:04
+******* Maybe whenever you see "k1 = new ContinuationClasscontinuationMethod0 ()" set currentContinuation name = k1
+******* That is the behaviour you want
+******* Whenever you instantiate a continuation you intend to make it the current continuation. It's just that for IfStatement, you are defering the insertion of the initStatementsMicro, so the information about kNameCounter++ is lost
+******* TODO In fact, make this the default way kNameCounter is updated
+***** WhileStatement: append initStatements to the else block of the while method
+** TODO Check out why when you have k1, k2, in "else", it's k2.k = k instead of k2.k1 = k1
 ** DONE k2.object = this
 ** TODO Uniquify the class and method names for Continuations, plus the parameter names
 ** TODO While statement

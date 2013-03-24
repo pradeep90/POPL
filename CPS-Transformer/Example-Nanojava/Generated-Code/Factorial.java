@@ -1,6 +1,6 @@
 class Factorial {
     public static void main ( String [ ] a ) {
-        new ____NewMainClass____ ( ) . ____Main____ ( 0 , new Continuation() ) ;
+        new ____NewMainClass____ ( ) . ____Main____ ( 5 , new Continuation() ) ;
     }
 }
 class Fac {
@@ -16,21 +16,24 @@ class Fac {
         ContinuationClasscontinuationMethod0  k1 ;
         ContinuationClasscontinuationMethod1  k2 ;
         ____writeable____num = num;
-        k1 =
-                new ContinuationClasscontinuationMethod0();
-        k1.num = num;
-        k1.num_aux =
-                num_aux;
-        k1.k = k;
-        k1.object = this;
-        if ( ____writeable____num < 1 ) {
+        System.out.println("ComputeFac method"); 
+        System.out.println("____writeable____num: " + ____writeable____num);
+        if (
+                ____writeable____num < 1 ) {
             num_aux = 1;
+            k1 = new
+                    ContinuationClasscontinuationMethod0();
+            k1.num = num;
+            k1.num_aux = num_aux
+                    ;
+            k1.k = k;
+            k1.object = this;
             k1.call();
         }
         else {
             ___tmp4 = this;
-            k2 = new
-                    ContinuationClasscontinuationMethod1();
+            k2 =
+                    new ContinuationClasscontinuationMethod1();
             k2.num = num;
             k2.
                     ____writeable____num = ____writeable____num;
@@ -48,6 +51,8 @@ class Fac {
         Fac  ___tmp4 ;
         int
                 ___tmp3 ;
+        System.out.println("continuationMethod0"); 
+        System.out.println("____1234ComputeFac4321____: " + ____1234ComputeFac4321____);
         ____1234ComputeFac4321____ = num_aux;
         k.call();
     }
@@ -57,10 +62,24 @@ class Fac {
         int  num_aux ;
         int  ____tmp0 ;
         int  ___tmp3 ;
-        ___tmp3 = ___tmp4.____1234ComputeFac4321____;
+        ContinuationClasscontinuationMethod0  k1 ;
+
+        System.out.println("continuationMethod1"); 
+        System.out.println("____writeable____num: " + ____writeable____num);
+
+        ___tmp3 = ___tmp4.
+                ____1234ComputeFac4321____;
         ____tmp0 = ___tmp3;
-        num_aux
-                = ____writeable____num * ____tmp0;
+        num_aux =
+                ____writeable____num * ____tmp0;
+        System.out.println("num_aux: " + num_aux);
+        k1 = new
+                ContinuationClasscontinuationMethod0();
+        k1.num = num;
+        k1.num_aux = num_aux
+                ;
+        k1.k = k;
+        k1.object = this;
         k.call();
     }
 }
@@ -80,7 +99,7 @@ class ____NewMainClass____ {
         k1.___tmp6 = ___tmp6;
         k1.k = k;
         k1.object = this;
-        ___tmp6.ComputeFac(10 , k1);
+        ___tmp6.ComputeFac(2 , k1);
     }
     public void continuationMethod2 (int
                                      ____arg_length____ , Fac  ___tmp6   , Continuation  k  ) {
@@ -89,9 +108,10 @@ class ____NewMainClass____ {
         int  ___tmp5 ;
         ___tmp5 = ___tmp6.
                 ____1234ComputeFac4321____;
+        System.out.println("continuationMethod2"); 
+        System.out.println("___tmp5: " + ___tmp5);
         ____printMe____ = ___tmp5;
-        System.out.println
-                ( ____printMe____ ) ;
+        System.out.println ( ____printMe____ ) ;
         k.call();
     }
 }

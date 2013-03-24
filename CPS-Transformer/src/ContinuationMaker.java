@@ -24,6 +24,8 @@ public class ContinuationMaker {
     public static String ORIG_OBJECT_NAME = "object";
     public static String CALL_METHOD_NAME = "call";
 
+    int MAX_NUMBER_CONTINUATIONS = 10;
+
     public ContinuationMaker(syntaxtree.NodeListOptional trailingStatements,
                              syntaxtree.MethodDeclaration parentMethod,
                              Transformer transformer,
@@ -43,6 +45,7 @@ public class ContinuationMaker {
     }
 
     public void makeContinuationMethod(){
+        System.out.println("CPSHelper.getMicroFormattedString(trailingStatements): " + CPSHelper.getMicroFormattedString(trailingStatements));
         // Add parameters
         syntaxtree.FormalParameterList parameterList = null;
         if (parentMethod.f4.present()){
@@ -69,6 +72,26 @@ public class ContinuationMaker {
                     
             } else {
                 localVars.addNode(CPSHelper.getCopy(currVarDeclaration));
+            }
+        }
+
+        // VVIP: MAJOR HACK ahead: I need to know which continuation
+        // variables have been instantiated in trailingStatements. But
+        // they won't be declared in parentMethod. So, just running
+        // over possible continuation variable names and seeing if
+        // they are instantiated in trailingStatements.
+        for (int i = 0; i < MAX_NUMBER_CONTINUATIONS; i++){
+            LiveVariableFinder currFinder = new LiveVariableFinder(
+                Transformer.getContinuationName(i));
+
+            // If it is found in trailingStatements and is
+            // instantiated only inside trailingStatements
+            if (trailingStatements.accept(currFinder) && !currFinder.isLive){
+                localVars.addNode(new syntaxtree.VarDeclaration(
+                    CPSHelper.getNewMicroType(
+                        getContinuationTypeName(trailingStatements,
+                                            Transformer.getContinuationName(i))),
+                    CPSHelper.getNewMicroIdentifier(Transformer.getContinuationName(i))));
             }
         }
 
@@ -229,4 +252,35 @@ public class ContinuationMaker {
         return new syntaxtree.FormalParameter(CPSHelper.getCopy(varDeclaration.f0),
                                               CPSHelper.getCopy(varDeclaration.f1));
     }
+
+    /** 
+     * Get the type of continuation being instantiated within statementList.
+     *
+     * e.g., "k2 = new FooContinuation()" -> "FooContinuation"
+     */
+    public String getContinuationTypeName(syntaxtree.NodeListOptional statementList,
+                                          String continuationVarName){
+        for (syntaxtree.Node node : statementList.nodes){
+            syntaxtree.Statement currStatement = (syntaxtree.Statement) node;
+            if (currStatement.f0.which == 1){
+                // AssignmentStatement
+                syntaxtree.AssignmentStatement assignmentStatement =
+                        (syntaxtree.AssignmentStatement) currStatement.f0.choice;
+                if (CPSHelper.getMicroFormattedString(
+                        assignmentStatement.f0).equals(continuationVarName)){
+                    syntaxtree.Expression expression = assignmentStatement.f2;
+                    if (expression.f0.which == 6){
+                        syntaxtree.PrimaryExpression primaryExpression =
+                                (syntaxtree.PrimaryExpression) expression.f0.choice;
+                        if (primaryExpression.f0.which == 6){
+                            return CPSHelper.getIdentifierName(
+                                ((syntaxtree.AllocationExpression) primaryExpression.f0.choice).f1);
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
 }
