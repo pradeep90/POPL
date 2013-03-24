@@ -184,8 +184,22 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 *** VVIP So, take (parameters + local variables) for the original method. Those that have been initialized before current statement will be fields of the continuation. The rest are local variables in the continuation method.
 *** TODO Make Block save and restore currentMethodInitializedVariables so that "if (b) {x = 1} else{foo.bar();}" does not lead to "else" thinking that x has been initialized.
     CLOCK: [2013-03-24 Sun 02:33]--[2013-03-24 Sun 02:50] =>  0:17
-**** My idea: get the initializedVars list for the if and else block separately and then say method's initializedVars list = intersection of those two
+*** My idea: get the initializedVars list for the if and else block separately and then say method's initializedVars list = intersection of those two
+    CLOCK: [2013-03-24 Sun 02:50]--[2013-03-24 Sun 03:39] =>  0:49
 **** Note: If some variable gets initialized in only one of the blocks, then it is illegal to refer to it after the if-else statement cos it could be undefined.
+** Another idea: Instead of looking for variables that have been initialized so far (which can be difficult), look at variables that are being referenced in the given bunch of statements
+   CLOCK: [2013-03-24 Sun 03:59]--[2013-03-24 Sun 04:58] =>  0:59
+*** visit (node) -> true iff we have come to a decision about whether variable is initialized in node or it is live in node.
+*** isLive -> true iff the variable is live in the entire node under consideration
+*** So, visit () == true && isLive == true: live variable
+*** So, visit () == true && isLive == false: non-live variable
+*** So, visit () == false: non-live variable
+*** Note: Statements must short-circuit - if 
+** Use the live variables idea and ContinuationMaker
+   CLOCK: [2013-03-24 Sun 04:59]--[2013-03-24 Sun 05:29] =>  0:30
+*** TODO Remove references to initializedVars
+** TODO Problem with if-else statement is that the trailingStatements might refer to a variable that only gets initialized within the if-else-block, but instantiating the continuation before the block leads to potentially using an uninitialized variable. 
+*** TODO Solution: Move the continuation instantiation to the end of the simple statements in each of the if-else blocks.
 ** DONE k2.object = this
 ** TODO Uniquify the class and method names for Continuations, plus the parameter names
 ** TODO While statement

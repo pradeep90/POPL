@@ -19,8 +19,8 @@ class Fac {
         k1 =
                 new ContinuationClasscontinuationMethod0();
         k1.num = num;
-        k1.
-                ____writeable____num = ____writeable____num;
+        k1.num_aux =
+                num_aux;
         k1.k = k;
         k1.object = this;
         if ( ____writeable____num < 1 ) {
@@ -28,39 +28,39 @@ class Fac {
             k1.call();
         }
         else {
-            ___tmp4
-                    = this;
-            k2 = new ContinuationClasscontinuationMethod1();
+            ___tmp4 = this;
+            k2 = new
+                    ContinuationClasscontinuationMethod1();
             k2.num = num;
-            k2
-                    .___tmp4 = ___tmp4;
-            k2.k = k;
+            k2.
+                    ____writeable____num = ____writeable____num;
+            k2.___tmp4 = ___tmp4;
+            k2.k =
+                    k;
             k2.object = this;
-            ___tmp4.ComputeFac(
-                ____writeable____num - 1 , k2);
+            ___tmp4.ComputeFac(____writeable____num - 1 , k2);
         }
     }
-    public void continuationMethod0 (int
-                                     num , int  ____writeable____num   , Continuation  k  ) {
-        int  num_aux ;
-        int
-                ____tmp0 ;
-        Fac  ___tmp4 ;
-        int  ___tmp3 ;
-        ____1234ComputeFac4321____ =
-                num_aux;
-        k.call();
-    }
-    public void continuationMethod1 (int  num , Fac
-                                     ___tmp4   , Continuation  k  ) {
-        int  num_aux ;
+    public void continuationMethod0 (int  num , int  num_aux   , Continuation
+                                     k  ) {
         int  ____writeable____num ;
         int  ____tmp0 ;
+        Fac  ___tmp4 ;
+        int
+                ___tmp3 ;
+        ____1234ComputeFac4321____ = num_aux;
+        k.call();
+    }
+    public void
+    continuationMethod1 (int  num , int  ____writeable____num   , Fac  ___tmp4
+                         , Continuation  k  ) {
+        int  num_aux ;
+        int  ____tmp0 ;
         int  ___tmp3 ;
-        ___tmp3 = ___tmp4.____1234ComputeFac4321____
-                ;
+        ___tmp3 = ___tmp4.____1234ComputeFac4321____;
         ____tmp0 = ___tmp3;
-        num_aux = ____writeable____num * ____tmp0;
+        num_aux
+                = ____writeable____num * ____tmp0;
         k.call();
     }
 }
@@ -97,22 +97,23 @@ class ____NewMainClass____ {
 }
 class ContinuationClasscontinuationMethod0 extends Continuation {
     int  num ;
-    int  ____writeable____num ;
-    Continuation  k ;
-    Fac  object ;
-    public void call
-    () {
-        object.continuationMethod0(num , ____writeable____num , k);
-    }
-}
-class ContinuationClasscontinuationMethod1 extends Continuation {
-    int  num ;
-    Fac  ___tmp4 ;
+    int  num_aux ;
     Continuation  k ;
     Fac  object ;
     public void call () {
         object.
-                continuationMethod1(num , ___tmp4 , k);
+                continuationMethod0(num , num_aux , k);
+    }
+}
+class ContinuationClasscontinuationMethod1 extends Continuation {
+    int  num ;
+    int  ____writeable____num ;
+    Fac  ___tmp4 ;
+    Continuation  k ;
+    Fac  object ;
+    public void call () {
+        object.continuationMethod1(num , ____writeable____num
+                                   , ___tmp4 , k);
     }
 }
 class ContinuationClasscontinuationMethod2 extends Continuation {

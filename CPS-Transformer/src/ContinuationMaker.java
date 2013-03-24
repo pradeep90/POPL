@@ -18,9 +18,6 @@ public class ContinuationMaker {
     ClassExtendsDeclaration continuationClass;
     NodeListOptional initStatements;
 
-    List<Identifier> initializedVars;
-    Set<String> initializedVarNameSet;
-
     String kName;
     String continuationMethodName;
     String className;
@@ -31,19 +28,12 @@ public class ContinuationMaker {
                              syntaxtree.MethodDeclaration parentMethod,
                              Transformer transformer,
                              String kName,
-                             String continuationMethodName,
-                             List<Identifier> initializedVars) {
+                             String continuationMethodName) {
         this.trailingStatements = trailingStatements;
         this.parentMethod = parentMethod;
         this.transformer = transformer;
         this.kName = kName;
         this.continuationMethodName = continuationMethodName;
-        this.initializedVars = initializedVars;
-
-        initializedVarNameSet = new HashSet<String>();
-        for (Identifier currIdentifier : initializedVars){
-            initializedVarNameSet.add(CPSHelper.getIdentifierName(currIdentifier));
-        }
 
         className = "ContinuationClass" + continuationMethodName;
 
@@ -61,19 +51,23 @@ public class ContinuationMaker {
             parameterList = CPSHelper.getCopy(parentParameterList);
         }
 
-        // Local VarDeclarations which have been initialized before current statement
+        // Local VarDeclarations which are live in trailingStatements
         syntaxtree.NodeListOptional restParameters = new syntaxtree.NodeListOptional();
-        // Uninitialized local variables
+        // Local variables which are not live in trailingStatements
         syntaxtree.NodeListOptional localVars = new syntaxtree.NodeListOptional();
+
+        System.out.println("CPSHelper.getMicroFormattedString(trailingStatements): " + CPSHelper.getMicroFormattedString(trailingStatements));
 
         for (syntaxtree.Node node : parentMethod.f7.nodes){
             syntaxtree.VarDeclaration currVarDeclaration = (syntaxtree.VarDeclaration) node;
-            if (initializedVarNameSet.contains(
-                    CPSHelper.getIdentifierName(currVarDeclaration.f1))){
+            LiveVariableFinder currFinder = new LiveVariableFinder(
+                CPSHelper.getIdentifierName(currVarDeclaration.f1));
+
+            if (trailingStatements.accept(currFinder) && currFinder.isLive){
                 restParameters.addNode(new syntaxtree.FormalParameterRest(
                     getFormalParameter(currVarDeclaration)));
-            }
-            else {
+                    
+            } else {
                 localVars.addNode(CPSHelper.getCopy(currVarDeclaration));
             }
         }

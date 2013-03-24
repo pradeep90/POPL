@@ -510,8 +510,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
                         currMethod,
                         this,
                         currKName,
-                        "continuationMethod" + counter++,
-                        currentMethodInitializedVariables);
+                        "continuationMethod" + counter++);
 
                     currentClassContinuationMethods.add(
                         newContinuationMaker.continuationMethod);
