@@ -348,6 +348,19 @@ public class CPSHelper {
     }
 
     /** 
+     * @return Expression for VarRef of parameter's identifier
+     */
+    public static syntaxtree.Expression getExpression(syntaxtree.FormalParameter parameter){
+        return new syntaxtree.Expression(
+            new syntaxtree.NodeChoice(
+                new syntaxtree.PrimaryExpression(
+                    new syntaxtree.NodeChoice(
+                        new syntaxtree.VarRef(
+                            new syntaxtree.NodeChoice(CPSHelper.getCopy(parameter.f1), 1)),
+                        3)), 6));
+    }
+
+    /** 
      * @return Expression for Identifier of currVarDeclaration.
      */
     public static Expression getExpression(VarDeclaration currVarDeclaration){
@@ -371,6 +384,32 @@ public class CPSHelper {
         }
         return new NodeOptional(new ExpressionList(getExpression(actualParams.f0),
                                                    restExpressions));
+    }
+
+    /**
+     * If parameters is an empty NodeOptional (i.e., no parameters at
+     * all), return empty NodeOptional.
+     * 
+     * @return the arguments for a call to a MicroJava method given its parameters.
+     */
+    public static syntaxtree.NodeOptional getArgs(syntaxtree.Node parameters){
+        syntaxtree.NodeOptional givenParams = (syntaxtree.NodeOptional) parameters;
+        if (!givenParams.present()){
+            return new syntaxtree.NodeOptional();
+        }
+
+        syntaxtree.FormalParameterList actualParams =
+                (syntaxtree.FormalParameterList) givenParams.node;
+        syntaxtree.NodeListOptional restExpressions = new syntaxtree.NodeListOptional();
+        for (syntaxtree.Node node : actualParams.f1.nodes){
+            System.out.println("CPSHelper.getMicroFormattedString(getExpression(((syntaxtree.FormalParameterRest) node).f1)): " + CPSHelper.getMicroFormattedString(getExpression(((syntaxtree.FormalParameterRest) node).f1)));
+            restExpressions.addNode(new syntaxtree.ExpressionRest(
+                getExpression(((syntaxtree.FormalParameterRest) node).f1)));
+        }
+        return new syntaxtree.NodeOptional(
+            new syntaxtree.ExpressionList(
+                getExpression(actualParams.f0),
+                restExpressions));
     }
 
     public static syntaxtree.FormalParameter getFormalParameter(

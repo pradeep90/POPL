@@ -19,7 +19,8 @@ class ____NewMainClass____{
         int z;
         x = 3;
         y = 4;
-        while(x < 3){
+        z = 8;
+        while(y < 3){
             a = b;
             x = 7;
             foo.bar();

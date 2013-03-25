@@ -665,19 +665,6 @@ public class TransformerTest{
     // }
 
     /**
-     * Test method for {@link Transformer#WhileStatement()}.
-     */
-    @Test
-    public final void testWhileStatement(){
-        System.out.println("testWhileStatement"); 
-        ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/WhileTest1.java"));
-        transformer.currMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(1);
-        NodeListOptional statements = ((MethodDeclaration) classDeclaration.f4.nodes.get(1)).f8;
-        System.out.println("CPSHelper.getMicroFormattedString(statements): " + CPSHelper.getMicroFormattedString(statements));
-        statements.nodes.get(2).accept(transformer);
-    }
-
-    /**
      * Test method for {@link Transformer#tryFlattenBlock()}.
      */
     @Test
@@ -691,5 +678,27 @@ public class TransformerTest{
             // System.out.println("CPSHelper.getMicroFormattedString(node): " + CPSHelper.getMicroFormattedString(node));
             // System.out.println("CPSHelper.getMicroFormattedString(Transformer.tryFlattenBlock((Block) ((Statement) node).f0.choice)): " + CPSHelper.getMicroFormattedString(Transformer.tryFlattenBlock((Block) ((Statement) node).f0.choice)));
         }
+    }
+
+    /**
+     * Test method for {@link Transformer#WhileStatement()}.
+     */
+    @Test
+    public final void testWhileStatement(){
+        System.out.println("testWhileStatement"); 
+        ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/WhileTest1.java"));
+        transformer.currMethod = (MethodDeclaration) classDeclaration.f4.nodes.get(1);
+        NodeListOptional statements = ((MethodDeclaration) classDeclaration.f4.nodes.get(1)).f8;
+        System.out.println("CPSHelper.getMicroFormattedString(statements): " + CPSHelper.getMicroFormattedString(statements));
+        String actual = CPSHelper.getFormattedString(statements.nodes.get(3).accept(transformer));
+        String expected = "public void whileMethod0 (int  a , int  b   , int  y   , Continuation  ___k  ) { int  x ;  int  z ; if ( y < 3 ) { a = b;  x = 7; foo.bar(___k ); }  else {___k.call(); }  }";
+
+        System.out.println("actual: " + actual);
+        // assertBigStringEquals(expected, actual);
+
+        // Goal goal = (Goal) CPSHelper.getMicroJavaNodeFromFile(
+        //     "Example-Microjava/My-Basic-Test-Cases/WhileTest1.java");
+        // String output = CPSHelper.getFormattedString(goal.accept(transformer));
+        // System.out.println("output: " + output);
     }
 }
