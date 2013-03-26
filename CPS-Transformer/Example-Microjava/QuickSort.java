@@ -44,6 +44,7 @@ class QS{
       aux01 = ___tmp6;
       ____1234Start4321____ = 0;
    }
+
    public void Sort(int left,
       int right){
       int v;
@@ -72,7 +73,8 @@ class QS{
             i = ____writeable____left-1;
             j = ____writeable____right;
             cont01 = true;
-            while ( cont01 ){{
+            while ( cont01 ){
+                {
                      cont02 = true;
                      while ( cont02 ){{
                               i = i+1;
@@ -106,13 +108,17 @@ class QS{
                      } else {
                         cont01 = true;
                      }
+
                   }
                }
+
             number[j] = number[i];
             number[i] = number[____writeable____right];
             number[____writeable____right] = t;
             ___tmp12 = this;
-            ___tmp12.Sort(____writeable____left,i-1);
+
+            ___tmp12.SortFoo(____writeable____left,i-1);
+
             ___tmp11 = ___tmp12.____1234Sort4321____;
             nt = ___tmp11;
             ___tmp14 = this;

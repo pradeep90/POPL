@@ -1,4 +1,4 @@
-class BlockTest1 {
+class WhileTest1 {
     public static void main(String [] a){
         new ____NewMainClass____().____Main____(0);
     }

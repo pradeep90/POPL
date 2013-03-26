@@ -13,106 +13,108 @@ class BS{
    int ____1234Print4321____;
    int ____1234Init4321____;
 
-   public void Start(int sz){
-      int aux01;
-      int aux02;
-      int ____writeable____sz;
-      BS ___tmp1;
-      int ___tmp0;
-      BS ___tmp3;
-      int ___tmp2;
-      BS ___tmp5;
-      boolean ___tmp4;
-      BS ___tmp7;
-      boolean ___tmp6;
-      BS ___tmp9;
-      boolean ___tmp8;
-      BS ___tmp11;
-      boolean ___tmp10;
-      BS ___tmp13;
-      boolean ___tmp12;
-      BS ___tmp15;
-      boolean ___tmp14;
-      BS ___tmp17;
-      boolean ___tmp16;
-      BS ___tmp19;
-      boolean ___tmp18;
+    public void Start(int sz){
+        int aux01;
+        int aux02;
+        int ____writeable____sz;
+        BS ___tmp1;
+        int ___tmp0;
+        BS ___tmp3;
+        int ___tmp2;
+        BS ___tmp5;
+        boolean ___tmp4;
+        BS ___tmp7;
+        boolean ___tmp6;
+        BS ___tmp9;
+        boolean ___tmp8;
+        BS ___tmp11;
+        boolean ___tmp10;
+        BS ___tmp13;
+        boolean ___tmp12;
+        BS ___tmp15;
+        boolean ___tmp14;
+        BS ___tmp17;
+        boolean ___tmp16;
+        BS ___tmp19;
+        boolean ___tmp18;
 
-      ____writeable____sz = sz;
-      ___tmp1 = this;
-      ___tmp1.Init(____writeable____sz);
-      ___tmp0 = ___tmp1.____1234Init4321____;
-      aux01 = ___tmp0;
-      ___tmp3 = this;
-      ___tmp3.Print();
-      ___tmp2 = ___tmp3.____1234Print4321____;
-      aux02 = ___tmp2;
-      ___tmp5 = this;
-      ___tmp5.Search(8);
-      ___tmp4 = ___tmp5.____1234Search4321____;
-      if( ___tmp4 ){
-         System.out.println(1);
-      } else {
-         System.out.println(0);
-      }
-      ___tmp7 = this;
-      ___tmp7.Search(19);
-      ___tmp6 = ___tmp7.____1234Search4321____;
-      if( ___tmp6 ){
-         System.out.println(1);
-      } else {
-         System.out.println(0);
-      }
-      ___tmp9 = this;
-      ___tmp9.Search(20);
-      ___tmp8 = ___tmp9.____1234Search4321____;
-      if( ___tmp8 ){
-         System.out.println(1);
-      } else {
-         System.out.println(0);
-      }
-      ___tmp11 = this;
-      ___tmp11.Search(21);
-      ___tmp10 = ___tmp11.____1234Search4321____;
-      if( ___tmp10 ){
-         System.out.println(1);
-      } else {
-         System.out.println(0);
-      }
-      ___tmp13 = this;
-      ___tmp13.Search(37);
-      ___tmp12 = ___tmp13.____1234Search4321____;
-      if( ___tmp12 ){
-         System.out.println(1);
-      } else {
-         System.out.println(0);
-      }
-      ___tmp15 = this;
-      ___tmp15.Search(38);
-      ___tmp14 = ___tmp15.____1234Search4321____;
-      if( ___tmp14 ){
-         System.out.println(1);
-      } else {
-         System.out.println(0);
-      }
-      ___tmp17 = this;
-      ___tmp17.Search(39);
-      ___tmp16 = ___tmp17.____1234Search4321____;
-      if( ___tmp16 ){
-         System.out.println(1);
-      } else {
-         System.out.println(0);
-      }
-      ___tmp19 = this;
-      ___tmp19.Search(50);
-      ___tmp18 = ___tmp19.____1234Search4321____;
-      if( ___tmp18 ){
-         System.out.println(1);
-      } else {
-         System.out.println(0);
-      }
-      ____1234Start4321____ = 999;
-   }
+        ____writeable____sz = sz;
+        ___tmp1 = this;
+        ___tmp1.Init(____writeable____sz);
+        ___tmp0 = ___tmp1.____1234Init4321____;
+        aux01 = ___tmp0;
+        ___tmp3 = this;
+        ___tmp3.Print();
+        ___tmp2 = ___tmp3.____1234Print4321____;
+        aux02 = ___tmp2;
+        ___tmp5 = this;
+        ___tmp5.Search(8);
+        ___tmp4 = ___tmp5.____1234Search4321____;
+        if( ___tmp4 ){
+            aux02 = 0;
+            // System.out.println(1);
+        } else {
+            aux02 = 1;
+            // System.out.println(0);
+        }
+        ___tmp7 = this;
+        ___tmp7.Search(19);
+        ___tmp6 = ___tmp7.____1234Search4321____;
+        if( ___tmp6 ){
+            System.out.println(1);
+        } else {
+            System.out.println(0);
+        }
+        ___tmp9 = this;
+        ___tmp9.Search(20);
+        ___tmp8 = ___tmp9.____1234Search4321____;
+        if( ___tmp8 ){
+            System.out.println(1);
+        } else {
+            System.out.println(0);
+        }
+        ___tmp11 = this;
+        ___tmp11.Search(21);
+        ___tmp10 = ___tmp11.____1234Search4321____;
+        if( ___tmp10 ){
+            System.out.println(1);
+        } else {
+            System.out.println(0);
+        }
+        ___tmp13 = this;
+        ___tmp13.Search(37);
+        ___tmp12 = ___tmp13.____1234Search4321____;
+        if( ___tmp12 ){
+            System.out.println(1);
+        } else {
+            System.out.println(0);
+        }
+        ___tmp15 = this;
+        ___tmp15.Search(38);
+        ___tmp14 = ___tmp15.____1234Search4321____;
+        if( ___tmp14 ){
+            System.out.println(1);
+        } else {
+            System.out.println(0);
+        }
+        ___tmp17 = this;
+        ___tmp17.Search(39);
+        ___tmp16 = ___tmp17.____1234Search4321____;
+        if( ___tmp16 ){
+            System.out.println(1);
+        } else {
+            System.out.println(0);
+        }
+        ___tmp19 = this;
+        ___tmp19.Search(50);
+        ___tmp18 = ___tmp19.____1234Search4321____;
+        if( ___tmp18 ){
+            System.out.println(1);
+        } else {
+            System.out.println(0);
+        }
+        ____1234Start4321____ = 999;
+    }
    public void Search(int num){
       boolean bs01;
       int right;
