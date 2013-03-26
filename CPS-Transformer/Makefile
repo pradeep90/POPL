@@ -141,7 +141,8 @@ javadoc: $(all_src_files)
         echo $(JAVADOC) $(JDFLAGS) @$<
 
 execute: compile
-	$(JAVA) $(RUN_FLAGS) P5 < Example-Microjava/Factorial.java
+	$(JAVA) $(RUN_FLAGS) P5 < Example-Microjava/My-Basic-Test-Cases/NestedTest.java > Example-Nanojava/NestedTest.java
+	cd Example-Nanojava && javac NestedTest.java && java NestedTest
 
 $(all_generated_microjava_files):
 	$(MKDIR) $(GEN_MICROJAVA_OUTPUT_DIR)

@@ -4,6 +4,8 @@ import nano.syntaxtree.*;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 
 public class Transformer extends GJNoArguDepthFirst<Node> {
     public String CONTINUATION_BASE_CLASS_NAME = "Continuation";
@@ -11,6 +13,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     public String WHILE_METHOD_PREFIX = "whileMethod";
 
     public static final String CURRENT_CONTINUATION_NAME = "k";
+    public static final String pseudoThisPointerName = "___pseudoThis";
 
     public List<MethodDeclaration> currentClassContinuationMethods =
             new ArrayList<MethodDeclaration>();
@@ -25,6 +28,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     public NodeListOptional currInitStatements = new NodeListOptional();
     
     public int counter = 0;
+    public int whileCounter = 0;
     public int tempCounter = 0;
     public int kNameCounter = 0;
     public int maxKCounter = 10;
@@ -59,12 +63,22 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     }
 
     public String getNextTempVarName(){
-        return "___temp" + tempCounter++;
+        return "___temp" + ++tempCounter;
     }
 
-    public String getNextWhileMethodName(){
-        return WHILE_METHOD_PREFIX + counter++;
+    public String getCurrentTempVarName(){
+        return "___temp" + tempCounter;
     }
+
+
+    public String getNextWhileMethodName(){
+        return WHILE_METHOD_PREFIX + ++whileCounter;
+    }
+
+    public String getCurrentWhileMethodName(){
+        return WHILE_METHOD_PREFIX + whileCounter;
+    }
+
 
     public String getCurrentContinuationName(){
         return getContinuationName(kNameCounter);
@@ -75,6 +89,15 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
             CPSHelper.getNewIdentifier(getCurrentContinuationName()),
             CPSHelper.getNewIdentifier("call"),
             new NodeOptional());
+    }
+
+    /** 
+     * @return NodeListOptional containing node.
+     */
+    public syntaxtree.NodeListOptional makeNodeListOptional(syntaxtree.Node node){
+        syntaxtree.NodeListOptional temp = new syntaxtree.NodeListOptional();
+        temp.addNode(node);
+        return temp;
     }
 
     /** 
@@ -395,16 +418,71 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
                 new FormalParameterList(kParam, new NodeListOptional()));
         }
 
-        NodeListOptional f7 = (NodeListOptional) n.f7.accept(this);
+        syntaxtree.NodeListOptional varDeclarations = new syntaxtree.NodeListOptional();
+        varDeclarations.nodes.addAll(n.f7.nodes);
+
+        syntaxtree.VarDeclaration pseudoThisVarDeclaration = new syntaxtree.VarDeclaration(
+            CPSHelper.getNewMicroType(currClassName),
+            CPSHelper.getNewMicroIdentifier(pseudoThisPointerName));
+
+        varDeclarations.addNode(pseudoThisVarDeclaration);
+
+        NodeListOptional f7 = (NodeListOptional) varDeclarations.accept(this);
+
+        syntaxtree.NodeListOptional bodyStatements = new syntaxtree.NodeListOptional();
+        bodyStatements.nodes.addAll(n.f8.nodes);
+
+        syntaxtree.Statement pseudoThisEqualsThis =
+                new syntaxtree.Statement(
+                    new syntaxtree.NodeChoice(new syntaxtree.AssignmentStatement(
+                        new syntaxtree.VarRef(
+                            new syntaxtree.NodeChoice(
+                                CPSHelper.getNewMicroIdentifier(pseudoThisPointerName), 1)),
+                        new syntaxtree.Expression(
+                            new syntaxtree.NodeChoice(
+                                new syntaxtree.PrimaryExpression(
+                                    new syntaxtree.NodeChoice(
+                                        new syntaxtree.ThisExpression(), 4)), 6))), 1));
+
+        bodyStatements.nodes.add(0, pseudoThisEqualsThis);
 
         // Make a new block out of the statement list and extract the
         // resultant NanoJava statement list and JumpPoint.
         // TODO: Flatten the inner blocks
-        Block tempBlock = (Block) (new syntaxtree.Block(n.f8)).accept(this);
+        Block tempBlock = (Block) (new syntaxtree.Block(bodyStatements)).accept(this);
 
-        f7.nodes.addAll(currentMethodContinuationDeclarations);
+        // f7.nodes.addAll(currentMethodContinuationDeclarations);
 
-        _ret = new MethodDeclaration(f2, f4, f7, tempBlock.f1,
+        String tempBlockString = CPSHelper.getFormattedString(tempBlock);
+
+        System.out.println("CPSHelper.getMicroFormattedString(CPSHelper.getMicroMethodDeclaration(tempBlockString)): " + CPSHelper.getMicroFormattedString(CPSHelper.getMicroMethodDeclaration(tempBlockString)));
+
+        System.out.println("CPSHelper.getMicroFormattedString(ContinuationMaker.getContinuationVarDeclarations(CPSHelper.getMicroMethodDeclaration(tempBlockString).f8)): " + CPSHelper.getMicroFormattedString(ContinuationMaker.getContinuationVarDeclarations(CPSHelper.getMicroMethodDeclaration(tempBlockString).f8)));
+
+        // Hack to get local continuation variables 
+        NodeListOptional continuationVars = CPSHelper.getNanoVarDeclarations(
+            ContinuationMaker.getContinuationVarDeclarations(
+                CPSHelper.getMicroMethodDeclaration(tempBlockString).f8));
+
+        // f7.nodes.addAll(continuationVars.nodes);
+
+        Set<String> currVars = new HashSet<String>();
+        for (Node node : f7.nodes){
+            currVars.add(CPSHelper.getFormattedString(node));
+        }
+        System.out.println("currVars: " + currVars);
+
+        for (Node node : continuationVars.nodes){
+            System.out.println("CPSHelper.getFormattedString(node): "
+                               + CPSHelper.getFormattedString(node));
+            if (!currVars.contains(CPSHelper.getFormattedString(node))){
+                System.out.println("Chosen node"); 
+                f7.addNode(node);
+            }
+        }
+
+        _ret = new MethodDeclaration(f2, f4, f7,
+                                     tempBlock.f1,
                                      new NodeOptional(tempBlock.f2));
         currMethod = prevMethod;
         kNameCounter = prevKNameCounter;
@@ -519,8 +597,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.Block n) {
         Node _ret=null;
-        // System.out.println("Block n"); 
-        // System.out.println("CPSHelper.getMicroFormattedString(n): " + CPSHelper.getMicroFormattedString(n));
+        System.out.println("Block:"); 
+        System.out.println("CPSHelper.getMicroFormattedString(n): " + CPSHelper.getMicroFormattedString(n));
 
         // String prevContinuationName = getCurrentContinuationName();
         int prevKNameCounter = kNameCounter;
@@ -619,7 +697,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
             if (numString.isEmpty()){
                 kNameCounter = 0;
             } else {
-                kNameCounter = Integer.parseInt(numString);
+                // kNameCounter = Integer.parseInt(numString);
             }
         }
 
@@ -659,9 +737,14 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         Node _ret=null;
         Expression f2 = (Expression) n.f2.accept(this);
 
-        syntaxtree.Block ifBlock = getWrappedMicroBlock(n.f4);
+        syntaxtree.Statement flattenedIfStatement = tryFlattenBlock(
+            new syntaxtree.Block(makeNodeListOptional(n.f4)));
+        syntaxtree.Block ifBlock = getWrappedMicroBlock(flattenedIfStatement);
         ifBlock.f1.nodes.addAll(CPSHelper.getMicroStatementList(currInitStatements).nodes);
-        syntaxtree.Block elseBlock = getWrappedMicroBlock(n.f6);
+
+        syntaxtree.Statement flattenedElseStatement = tryFlattenBlock(
+            new syntaxtree.Block(makeNodeListOptional(n.f6)));
+        syntaxtree.Block elseBlock = getWrappedMicroBlock(flattenedElseStatement);
         elseBlock.f1.nodes.addAll(CPSHelper.getMicroStatementList(currInitStatements).nodes);
         currInitStatements = new NodeListOptional();
 
@@ -687,9 +770,19 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
                 new syntaxtree.Block(
                     CPSHelper.getMicroStatementList(
                         currInitStatements)), 0));
+
+        // TODO: 
+        // syntaxtree.Statement elseStatement = tryFlattenBlock(new syntaxtree.Block(
+        //     CPSHelper.getMicroStatementList(
+        //         currInitStatements)));
+
+        syntaxtree.NodeListOptional tempWhileBody = new syntaxtree.NodeListOptional();
+        tempWhileBody.addNode(whileBodyStatement);
+        syntaxtree.Statement cleanedUpWhileBodyStatement = tryFlattenBlock(new syntaxtree.Block(tempWhileBody));
         syntaxtree.Statement ifStatement = new syntaxtree.Statement(
             new syntaxtree.NodeChoice(new syntaxtree.IfStatement(
                 whileExpression, whileBodyStatement, elseStatement), 3));
+                // whileExpression, cleanedUpWhileBodyStatement, elseStatement), 3));
 
         syntaxtree.NodeListOptional trailingStatements = new syntaxtree.NodeListOptional();
         trailingStatements.addNode(ifStatement);
@@ -729,14 +822,13 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         for (int i = 0; i < ContinuationMaker.MAX_NUMBER_CONTINUATIONS; i++){
             LiveVariableFinder currFinder = new LiveVariableFinder(
                 Transformer.getContinuationName(i));
+            currFinder.isContinuationVar = true;
 
             // If it is found in trailingStatements and is
             // instantiated only inside trailingStatements
             if (trailingStatements.accept(currFinder) && !currFinder.isLive){
                 localVars.addNode(new syntaxtree.VarDeclaration(
-                    CPSHelper.getNewMicroType(
-                        ContinuationMaker.getContinuationTypeName(trailingStatements,
-                                                                  Transformer.getContinuationName(i))),
+                    CPSHelper.getNewMicroType(currFinder.continuationClassName),
                     CPSHelper.getNewMicroIdentifier(Transformer.getContinuationName(i))));
             }
         }
@@ -759,11 +851,11 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         syntaxtree.NodeOptional parameters = new syntaxtree.NodeOptional(parameterList);
 
         String currWhileMethodName = getNextWhileMethodName();
-        String tempVarName = getNextTempVarName();
+        // String tempVarName = getNextTempVarName();
 
         syntaxtree.MessageSendStatement recursiveWhileCall =
                 new syntaxtree.MessageSendStatement(
-                    CPSHelper.getNewMicroIdentifier(tempVarName),
+                    CPSHelper.getNewMicroIdentifier(pseudoThisPointerName),
                     CPSHelper.getNewMicroIdentifier(currWhileMethodName),
                     CPSHelper.getArgs(parameters));
 
@@ -781,24 +873,6 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         ((syntaxtree.IfStatement) ifStatement.f0.choice).f4 =
                 tryFlattenBlock(new syntaxtree.Block(newIfBlockStatements));
 
-        syntaxtree.VarDeclaration tempVarDeclaration = new syntaxtree.VarDeclaration(
-            CPSHelper.getNewMicroType(currClassName),
-            CPSHelper.getNewMicroIdentifier(tempVarName));
-
-        syntaxtree.Statement tempEqualsThis =
-                new syntaxtree.Statement(
-                    new syntaxtree.NodeChoice(new syntaxtree.AssignmentStatement(
-                        new syntaxtree.VarRef(
-                            new syntaxtree.NodeChoice(
-                                CPSHelper.getNewMicroIdentifier(tempVarName), 1)),
-                        new syntaxtree.Expression(
-                            new syntaxtree.NodeChoice(
-                                new syntaxtree.PrimaryExpression(
-                                    new syntaxtree.NodeChoice(
-                                        new syntaxtree.ThisExpression(), 4)), 6))), 1));
-        localVars.addNode(tempVarDeclaration);
-        trailingStatements.nodes.add(0, tempEqualsThis);
-
         syntaxtree.MethodDeclaration tempMethod = new syntaxtree.MethodDeclaration(
             CPSHelper.getNewMicroIdentifier(currWhileMethodName),
             parameters,
@@ -808,14 +882,6 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         System.out.println("CPSHelper.getMicroFormattedString(tempMethod): " + CPSHelper.getMicroFormattedString(tempMethod));
         MethodDeclaration continuationMethod = (MethodDeclaration) tempMethod.accept(this);
         System.out.println("CPSHelper.getFormattedString(continuationMethod): " + CPSHelper.getFormattedString(continuationMethod));
-
-        System.out.println("CPSHelper.getMicroFormattedString(tempVarDeclaration): " + CPSHelper.getMicroFormattedString(tempVarDeclaration));
-        System.out.println("CPSHelper.getMicroFormattedString(tempEqualsThis): " + CPSHelper.getMicroFormattedString(tempEqualsThis));
-
-        // System.out.println("Printing all continuations"); 
-        // for (MethodDeclaration methodDeclaration : currentClassContinuationMethods){
-        //     System.out.println("CPSHelper.getFormattedString(methodDeclaration): " + CPSHelper.getFormattedString(methodDeclaration));
-        // }
 
         return continuationMethod;
     }
@@ -832,9 +898,31 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         Node _ret=null;
 
         MethodDeclaration whileMethod = makeWhileMethod(currMethod, n.f2, n.f4);
-        // TODO: 
-        // _ret = new JumpPoint(new NodeChoice(new IfStatement(f2, f4, f6), 0));
-        return whileMethod;
+
+        // TODO: HACK - putting whileMethod in
+        // currentClassContinuationMethods cos putting it in a new
+        // global list would mean saving and restoring it in
+        // MethodDeclaration... n-pain
+        currentClassContinuationMethods.add(whileMethod);
+
+        System.out.println("WhileStatement"); 
+        // String args = CPSHelper.getMicroFormattedString(CPSHelper.getArgs(currMethod.f4));
+        // System.out.println("getArgs:" + args);
+        System.out.println("CPSHelper.getMicroFormattedString(CPSHelper.getMicroArgs(CPSHelper.getArgs(whileMethod.f4.node))): " + CPSHelper.getMicroFormattedString(CPSHelper.getMicroArgs(CPSHelper.getArgs(whileMethod.f4.node))));
+        System.out.println("CPSHelper.getFormattedString(whileMethod.f4): " + CPSHelper.getFormattedString(whileMethod.f4));
+
+        syntaxtree.MessageSendStatement recursiveWhileCall =
+                new syntaxtree.MessageSendStatement(
+                    CPSHelper.getNewMicroIdentifier(pseudoThisPointerName),
+                    CPSHelper.getNewMicroIdentifier(getCurrentWhileMethodName()),
+                    CPSHelper.getMicroArgs(CPSHelper.getArgs(whileMethod.f4.node)));
+
+        // Doing this instead of directly constructing a NanoJava
+        // MessageSendStatement cos we want to use the
+        // currentContinuation instead of blindly __k which
+        // getArgs(nanoJavaMethod.parameters) would give us
+        _ret = recursiveWhileCall.accept(this);
+        return _ret;
     }
 
     /**

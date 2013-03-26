@@ -13,181 +13,183 @@ import java.util.ArrayList;
  */
 public class LiveVariableFinder extends GJNoArguDepthFirst<Boolean> {
     String varName;
-
     Boolean isLive = false;
 
+    Boolean isContinuationVar = false;
+    String continuationClassName;
+    
     public LiveVariableFinder(String varName) {
         this.varName = varName;
     }
 
-   //
-   // Auto class visitors--probably don't need to be overridden.
-   //
-   // public Boolean visit(NodeList n) {
-   //    Boolean _ret=null;
-   //    int _count=0;
-   //    for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
-   //       e.nextElement().accept(this);
-   //       _count++;
-   //    }
-   //    return _ret;
-   // }
+    //
+    // Auto class visitors--probably don't need to be overridden.
+    //
+    // public Boolean visit(NodeList n) {
+    //    Boolean _ret=null;
+    //    int _count=0;
+    //    for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
+    //       e.nextElement().accept(this);
+    //       _count++;
+    //    }
+    //    return _ret;
+    // }
 
-   public Boolean visit(NodeListOptional n) {
-      if ( n.present() ) {
-         Boolean _ret = false;
-         for (Node node : n.nodes){
-             if (node.accept(this)){
-                 _ret = true;
-                 break;
-             }
-         }
-         return _ret;
-      }
-      else
-         return false;
-   }
+    public Boolean visit(NodeListOptional n) {
+        if ( n.present() ) {
+            Boolean _ret = false;
+            for (Node node : n.nodes){
+                if (node.accept(this)){
+                    _ret = true;
+                    break;
+                }
+            }
+            return _ret;
+        }
+        else
+            return false;
+    }
 
-   public Boolean visit(NodeOptional n) {
-      if ( n.present() )
-         return n.node.accept(this);
-      else
-         return false;
-   }
+    public Boolean visit(NodeOptional n) {
+        if ( n.present() )
+            return n.node.accept(this);
+        else
+            return false;
+    }
 
-   // public Boolean visit(NodeSequence n) {
-   //    Boolean _ret=null;
-   //    int _count=0;
-   //    for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
-   //       e.nextElement().accept(this);
-   //       _count++;
-   //    }
-   //    return _ret;
-   // }
+    // public Boolean visit(NodeSequence n) {
+    //    Boolean _ret=null;
+    //    int _count=0;
+    //    for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
+    //       e.nextElement().accept(this);
+    //       _count++;
+    //    }
+    //    return _ret;
+    // }
 
-   // public Boolean visit(NodeToken n) { return null; }
+    // public Boolean visit(NodeToken n) { return null; }
 
-   //
-   // User-generated visitor methods below
-   //
+    //
+    // User-generated visitor methods below
+    //
 
-   // /**
-   //  * f0 -> MainClass()
-   //  * f1 -> ( TypeDeclaration() )*
-   //  * f2 -> <EOF>
-   //  */
-   // public Boolean visit(Goal n) {
-   //    Boolean _ret=null;
-   //    n.f0.accept(this);
-   //    n.f1.accept(this);
-   //    n.f2.accept(this);
-   //    return _ret;
-   // }
+    // /**
+    //  * f0 -> MainClass()
+    //  * f1 -> ( TypeDeclaration() )*
+    //  * f2 -> <EOF>
+    //  */
+    // public Boolean visit(Goal n) {
+    //    Boolean _ret=null;
+    //    n.f0.accept(this);
+    //    n.f1.accept(this);
+    //    n.f2.accept(this);
+    //    return _ret;
+    // }
 
-   // /**
-   //  * f0 -> "class"
-   //  * f1 -> Identifier()
-   //  * f2 -> "{"
-   //  * f3 -> "public"
-   //  * f4 -> "static"
-   //  * f5 -> "void"
-   //  * f6 -> "main"
-   //  * f7 -> "("
-   //  * f8 -> "String"
-   //  * f9 -> "["
-   //  * f10 -> "]"
-   //  * f11 -> Identifier()
-   //  * f12 -> ")"
-   //  * f13 -> "{"
-   //  * f14 -> "new"
-   //  * f15 -> Identifier()
-   //  * f16 -> "("
-   //  * f17 -> ")"
-   //  * f18 -> "."
-   //  * f19 -> Identifier()
-   //  * f20 -> "("
-   //  * f21 -> ( ExpressionList() )?
-   //  * f22 -> ")"
-   //  * f23 -> ";"
-   //  * f24 -> "}"
-   //  * f25 -> "}"
-   //  */
-   // public Boolean visit(MainClass n) {
-   //    Boolean _ret=null;
-   //    n.f0.accept(this);
-   //    n.f1.accept(this);
-   //    n.f2.accept(this);
-   //    n.f3.accept(this);
-   //    n.f4.accept(this);
-   //    n.f5.accept(this);
-   //    n.f6.accept(this);
-   //    n.f7.accept(this);
-   //    n.f8.accept(this);
-   //    n.f9.accept(this);
-   //    n.f10.accept(this);
-   //    n.f11.accept(this);
-   //    n.f12.accept(this);
-   //    n.f13.accept(this);
-   //    n.f14.accept(this);
-   //    n.f15.accept(this);
-   //    n.f16.accept(this);
-   //    n.f17.accept(this);
-   //    n.f18.accept(this);
-   //    n.f19.accept(this);
-   //    n.f20.accept(this);
-   //    n.f21.accept(this);
-   //    n.f22.accept(this);
-   //    n.f23.accept(this);
-   //    n.f24.accept(this);
-   //    n.f25.accept(this);
-   //    return _ret;
-   // }
+    // /**
+    //  * f0 -> "class"
+    //  * f1 -> Identifier()
+    //  * f2 -> "{"
+    //  * f3 -> "public"
+    //  * f4 -> "static"
+    //  * f5 -> "void"
+    //  * f6 -> "main"
+    //  * f7 -> "("
+    //  * f8 -> "String"
+    //  * f9 -> "["
+    //  * f10 -> "]"
+    //  * f11 -> Identifier()
+    //  * f12 -> ")"
+    //  * f13 -> "{"
+    //  * f14 -> "new"
+    //  * f15 -> Identifier()
+    //  * f16 -> "("
+    //  * f17 -> ")"
+    //  * f18 -> "."
+    //  * f19 -> Identifier()
+    //  * f20 -> "("
+    //  * f21 -> ( ExpressionList() )?
+    //  * f22 -> ")"
+    //  * f23 -> ";"
+    //  * f24 -> "}"
+    //  * f25 -> "}"
+    //  */
+    // public Boolean visit(MainClass n) {
+    //    Boolean _ret=null;
+    //    n.f0.accept(this);
+    //    n.f1.accept(this);
+    //    n.f2.accept(this);
+    //    n.f3.accept(this);
+    //    n.f4.accept(this);
+    //    n.f5.accept(this);
+    //    n.f6.accept(this);
+    //    n.f7.accept(this);
+    //    n.f8.accept(this);
+    //    n.f9.accept(this);
+    //    n.f10.accept(this);
+    //    n.f11.accept(this);
+    //    n.f12.accept(this);
+    //    n.f13.accept(this);
+    //    n.f14.accept(this);
+    //    n.f15.accept(this);
+    //    n.f16.accept(this);
+    //    n.f17.accept(this);
+    //    n.f18.accept(this);
+    //    n.f19.accept(this);
+    //    n.f20.accept(this);
+    //    n.f21.accept(this);
+    //    n.f22.accept(this);
+    //    n.f23.accept(this);
+    //    n.f24.accept(this);
+    //    n.f25.accept(this);
+    //    return _ret;
+    // }
 
-   // /**
-   //  * f0 -> ClassDeclaration()
-   //  *       | ClassExtendsDeclaration()
-   //  */
-   // public Boolean visit(TypeDeclaration n) {
-   //    Boolean _ret=null;
-   //    n.f0.accept(this);
-   //    return _ret;
-   // }
+    // /**
+    //  * f0 -> ClassDeclaration()
+    //  *       | ClassExtendsDeclaration()
+    //  */
+    // public Boolean visit(TypeDeclaration n) {
+    //    Boolean _ret=null;
+    //    n.f0.accept(this);
+    //    return _ret;
+    // }
 
-   // /**
-   //  * f0 -> "class"
-   //  * f1 -> Identifier()
-   //  * f2 -> "{"
-   //  * f3 -> ( VarDeclaration() )*
-   //  * f4 -> ( MethodDeclaration() )*
-   //  * f5 -> "}"
-   //  */
-   // public Boolean visit(ClassDeclaration n) {
-   //    Boolean _ret=null;
-   //    n.f0.accept(this);
-   //    n.f1.accept(this);
-   //    n.f2.accept(this);
-   //    n.f3.accept(this);
-   //    n.f4.accept(this);
-   //    n.f5.accept(this);
-   //    return _ret;
-   // }
+    // /**
+    //  * f0 -> "class"
+    //  * f1 -> Identifier()
+    //  * f2 -> "{"
+    //  * f3 -> ( VarDeclaration() )*
+    //  * f4 -> ( MethodDeclaration() )*
+    //  * f5 -> "}"
+    //  */
+    // public Boolean visit(ClassDeclaration n) {
+    //    Boolean _ret=null;
+    //    n.f0.accept(this);
+    //    n.f1.accept(this);
+    //    n.f2.accept(this);
+    //    n.f3.accept(this);
+    //    n.f4.accept(this);
+    //    n.f5.accept(this);
+    //    return _ret;
+    // }
 
-   // /**
-   //  * f0 -> "class"
-   //  * f1 -> Identifier()
-   //  * f2 -> "extends"
-   //  * f3 -> Identifier()
-   //  * f4 -> "{"
-   //  * f5 -> ( VarDeclaration() )*
-   //  * f6 -> ( MethodDeclaration() )*
-   //  * f7 -> "}"
-   //  */
-   // public Boolean visit(ClassExtendsDeclaration n) {
-   //    Boolean _ret=null;
-   //    n.f0.accept(this);
-   //    n.f1.accept(this);
-   //    n.f2.accept(this);
-   //    n.f3.accept(this);
+    // /**
+    //  * f0 -> "class"
+    //  * f1 -> Identifier()
+    //  * f2 -> "extends"
+    //  * f3 -> Identifier()
+    //  * f4 -> "{"
+    //  * f5 -> ( VarDeclaration() )*
+    //  * f6 -> ( MethodDeclaration() )*
+    //  * f7 -> "}"
+    //  */
+    // public Boolean visit(ClassExtendsDeclaration n) {
+    //    Boolean _ret=null;
+    //    n.f0.accept(this);
+    //    n.f1.accept(this);
+    //    n.f2.accept(this);
+    //    n.f3.accept(this);
    //    n.f4.accept(this);
    //    n.f5.accept(this);
    //    n.f6.accept(this);
@@ -349,6 +351,18 @@ public class LiveVariableFinder extends GJNoArguDepthFirst<Boolean> {
       // VVIP:
       if (n.f0.accept(this)){
           isLive = false;
+
+          if (isContinuationVar){
+              if (n.f2.f0.which == 6){
+                  syntaxtree.PrimaryExpression primaryExpression =
+                          (syntaxtree.PrimaryExpression) n.f2.f0.choice;
+                  if (primaryExpression.f0.which == 6){
+                      continuationClassName = CPSHelper.getIdentifierName(
+                          ((syntaxtree.AllocationExpression) primaryExpression.f0.choice).f1);
+                  }
+              }
+          }
+
           return true;
       }
       _ret = false;

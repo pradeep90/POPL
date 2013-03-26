@@ -172,7 +172,7 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
    CLOCK: [2013-03-23 Sat 14:39]--[2013-03-23 Sat 15:06] =>  0:27
 ** DONE Have proper types for the local continuation variables
    CLOCK: [2013-03-24 Sun 00:46]--[2013-03-24 Sun 01:06] =>  0:20
-** TODO Only copy into the Continuation those fields that have been initialized
+** DONE Only copy into the Continuation those fields that have been initialized
    CLOCK: [2013-03-24 Sun 01:06]--[2013-03-24 Sun 02:32] =>  1:26
 *** There are two things here:
 **** setting fields of the new continuation instance so that the values of the variables are carried forward
@@ -187,7 +187,7 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 *** My idea: get the initializedVars list for the if and else block separately and then say method's initializedVars list = intersection of those two
     CLOCK: [2013-03-24 Sun 02:50]--[2013-03-24 Sun 03:39] =>  0:49
 **** Note: If some variable gets initialized in only one of the blocks, then it is illegal to refer to it after the if-else statement cos it could be undefined.
-** Another idea: Instead of looking for variables that have been initialized so far (which can be difficult), look at variables that are being referenced in the given bunch of statements
+** DONE Another idea: Instead of looking for variables that have been initialized so far (which can be difficult), look at variables that are being referenced in the given bunch of statements
    CLOCK: [2013-03-24 Sun 03:59]--[2013-03-24 Sun 04:58] =>  0:59
 *** visit (node) -> true iff we have come to a decision about whether variable is initialized in node or it is live in node.
 *** isLive -> true iff the variable is live in the entire node under consideration
@@ -195,9 +195,9 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 *** So, visit () == true && isLive == false: non-live variable
 *** So, visit () == false: non-live variable
 *** Note: Statements must short-circuit - if 
-** Use the live variables idea and ContinuationMaker
+** DONE Use the live variables idea and ContinuationMaker
    CLOCK: [2013-03-24 Sun 04:59]--[2013-03-24 Sun 05:29] =>  0:30
-*** TODO Remove references to initializedVars
+*** DONE Remove references to initializedVars
 ** DONE Problem with if-else statement is that the trailingStatements might refer to a variable that only gets initialized within the if-else-block, but instantiating the continuation before the block leads to potentially using an uninitialized variable. 
 *** TODO Solution: Move the continuation instantiation to the end of the simple statements in each of the if-else blocks.
     CLOCK: [2013-03-24 Sun 13:20]--[2013-03-24 Sun 13:34] =>  0:14
@@ -230,20 +230,17 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 ****** A little more faith next time :P
 ***** WhileStatement: append initStatements to the else block of the while method
 ** DONE Check out why when you have k1, k2, in "else", it's k2.k = k instead of k2.k1 = k1
-** TODO Test output for MicroJava examples
+** DONE Test output for MicroJava examples
    CLOCK: [2013-03-24 Sun 17:14]--[2013-03-24 Sun 18:02] =>  0:48
    CLOCK: [2013-03-24 Sun 16:46]--[2013-03-24 Sun 17:00] =>  0:14
-*** MultilevelInherit, ThisExpr - I think they both have subclassing
-**** I think a base class variable is assigned subclass instances
-**** Plus, they are calling different methods... I don't know yet
 *** Others - They all have WhileStatement. So can't say anything else without implementing WhileStatement.
 *** TODO Plus, some of them have a block inside the WhileStatement block
 ** DONE k2.object = this
 ** DONE Uniquify the class and method names for Continuations, plus the parameter names
-** TODO WhileStatement
+** DONE WhileStatement
    CLOCK: [2013-03-25 Mon 00:46]--[2013-03-25 Mon 01:19] =>  0:33
    CLOCK: [2013-03-24 Sun 18:06]--[2013-03-24 Sun 18:48] =>  0:42
-*** Reuse makeContinuationMethod - Only, instead of trailingStatements, give it if(exp){body; recursive-call();}else{initStatements}
+*** DONE Reuse makeContinuationMethod - Only, instead of trailingStatements, give it if(exp){body; recursive-call();}else{initStatements}
 **** TODO initStatements
 **** TODO recursive-call
      CLOCK: [2013-03-25 Mon 20:18]--[2013-03-25 Mon 21:18] =>  1:00
@@ -254,7 +251,12 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
       CLOCK: [2013-03-25 Mon 21:18]--[2013-03-25 Mon 21:39] =>  0:21
 **** DONE Add the tmp VarDeclaration and tmp = this statement to the method
      CLOCK: [2013-03-25 Mon 21:40]--[2013-03-25 Mon 21:44] =>  0:04
-**** TODO Add tmp.whileMethod (args) call in the original location
+**** DONE Add tmp.whileMethod (args) call in the original location
+     CLOCK: [2013-03-25 Mon 21:46]--[2013-03-25 Mon 22:02] =>  0:16
+***** DONE Add ___pseudoThis to all methods
+      CLOCK: [2013-03-25 Mon 22:02]--[2013-03-25 Mon 22:27] =>  0:25
+****** DONE Make the recursive call in While method use ___pseudoThis
+       CLOCK: [2013-03-25 Mon 22:27]--[2013-03-25 Mon 22:29] =>  0:02
 ** DONE Handle nested blocks
 *** have a recursive function flattenBlock (Block -> Statement List) to flattenBlock the inner statements from the Block and return the list of statements
 *** Or tryFlattenBlock (Block -> Statement)
@@ -262,4 +264,58 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 **** Block (block) -> tryFlattenBlock (block)
 **** Block (non-block statement) -> statement
 **** Block (statements) -> Do tryFlattenBlock (Block (statement)) and extract the body of the Block
+** DONE Test MicroJava examples
+   CLOCK: [2013-03-25 Mon 23:13]--[2013-03-25 Mon 23:16] =>  0:03
+   CLOCK: [2013-03-25 Mon 22:31]--[2013-03-25 Mon 22:36] =>  0:05
+*** Score: 11 Right, 11 Wrong
+** DONE Make the while method call in the original location have proper arguments
+   CLOCK: [2013-03-25 Mon 22:36]--[2013-03-25 Mon 23:13] =>  0:37
+** TODO Take care of nested blocks (??)
+   CLOCK: [2013-03-25 Mon 23:16]--[2013-03-25 Mon 23:59] =>  0:43
+*** Init: # ClassCastException = 8
+*** DONE tryFlattenBlock in WhileStatement
+*** DONE tryFlattenBlock in IfStatement
+*** #ClassCastException = 3
+*** Even without doing tryFlattenBlock in WhileStatement, it works (I think because I did tryFlattenBlock in IfStatement which is called indirectly by WhileStatement)
+*** So, 3 ClassCastException
+*** However, I still get 11 NOT MATCHING
+** TODO k1 is already defined => Check where you add Continuation1 k1; declaration in the continuation method
+   CLOCK: [2013-03-26 Tue 01:17]--[2013-03-26 Tue 02:59] =>  1:42
+*** VVIP Note: while{{ stuff }} doesn't give the above error. it only gives the incorrect arguments error
+*** I think it's when you have if{ blah; foo (); blah} else {blah;} where k1 is initialized in else, but is deferred to another continuation where it is presumably added twice
+*** TODO I think it's when you have if{while{ stuff } foo.bar(); blah;}else {}
+**** It doesn't come for if{while{ stuff } non-tail-form;}
+**** Nor for normal if-while-stuff-foobar()-blah
+**** DONE Got it: if{while{} foo.bar ();}else{} baz;
+***** Basically, cont0 is for baz
+***** cont2 is for setting up and calling cont0.call cos those initStatements will come just after foo.bar()
+***** cont1 is for setting up cont2 and calling foo.bar (..., cont2)
+**** Also, if{if{}else{} foo.bar();} else {} baz;
+*** TODO In cont1, both cont0 and cont2 have the same variable name (I think I've added the cont0 variable without thinking somewhere)
+*** TODO In cont2, cont0 comes twice. Again, I think I must have put cont0's declaration in all subsequent continuation method definitions without thinking
+*** Basically, when you have to create a new continuation holding the initStatements of a previous continuation (e.g., cont2 containing "cont0 k1 = new cont0();"), the declaration of the previous continuation is included in your method, but you go ahead and add another in your Major HACK in ContinuationMaker
+*** Note: The declaration of the previous continuation is included in your method cos it was a local variable in the previous method and so you inherited it.
+*** So, I think what's happening is that cont1 sees that cont0 is found in trailingStatements AND it is initialized in trailingStatements and so it considers it to be a local variable. However, cont0 is eaten up by cont2, so cont1 never actually sees it.
+*** VVIP That's the problem with checking for which continuations are local variables in the MicroJava version of the code. You should do it AFTER your children have returned and you have the final body of your method ready.
+*** Test for prior presence in makeContinuationMethod
+    CLOCK: [2013-03-26 Tue 02:59]--[2013-03-26 Tue 03:03] =>  0:04
+*** Move the checks for continuation local variables to AFTER you have the NanoJava continuation method
+    CLOCK: [2013-03-26 Tue 03:04]--[2013-03-26 Tue 03:44] =>  0:40
+*** Problem was that I was doing LiveVariableFinder on the parentMethod's body and some continuations were getting read right there.
+*** Question: WHY am I doing LiveVariableFinder on parentMethod's body? => To find out live variables. But I'm also using the information saying that if you're a variable in the parentMethod and are not live, then you are a local variable here. Which is WRONG! you could not at all be used here.
+*** Add local variables only AFTER you've got the final method body
+    CLOCK: [2013-03-26 Tue 03:48]
+**** Take the list of parentMethod's local variables and see which of them are live in the final method body
+** TODO But still, I get the same number of errors cos I think the call to the while method in the original location doesn't have the correct arguments.
+*** DONE Simple nested if test - works fine
+    CLOCK: [2013-03-25 Mon 23:59]--[2013-03-26 Tue 00:21] =>  0:22
+*** TODO Maybe copy the while call that is within the while method
+*** TODO Test for while{{ stuff }}
+** TODO NextedWhile isn't working
 ** TODO Test for sub classes
+** TODO I'm getting StackOverflowError for BinarySearch. I think it keeps re cursing on whileMethod2
+*** It gives correct output upto 99999, then it cups.
+** TODO MultilevelInherit, ThisExpr - I think they both have subclassing
+*** I think a base class variable is assigned subclass instances
+*** Plus, they are calling different methods... I don't know yet
+

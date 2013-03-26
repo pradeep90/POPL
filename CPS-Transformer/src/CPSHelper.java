@@ -249,26 +249,7 @@ public class CPSHelper {
      */
     public static Node getCopyUsingString(Node node){
         String nodeString = getFormattedString(node);
-        String codeString = ""
-                + "class DummyClass {"
-                + "    public static void main(String [] a){"
-                + "        new ____NewMainClass____().____Main____(0);"
-                + "    }"
-                + "}"
-                + ""
-                + "class ____NewMainClass____{"
-                + "    public void ____Main____(int ____arg_length____){"
-                + "    }"
-                + "    public void fooMethod(){"
-                + nodeString
-                + "    }"
-                + "}";
-        Goal goal = (Goal) getNanoJavaNodeFromString(codeString);
-        ClassDeclaration classDeclaration = (ClassDeclaration)
-                ((TypeDeclaration) goal.f1.nodes.get(0)).f0.choice;
-        MethodDeclaration methodDeclaration = (MethodDeclaration)
-                classDeclaration.f4.nodes.get(1);
-        return methodDeclaration.f8;
+        return getNanoMethodDeclaration(nodeString).f8;
     }
 
     /** 
@@ -280,27 +261,7 @@ public class CPSHelper {
      */
     public static syntaxtree.NodeListOptional getMicroStatementList(NodeListOptional nanoStatementList){
         String nodeString = getFormattedString(nanoStatementList);
-        String codeString = ""
-                + "class DummyClass {"
-                + "    public static void main(String [] a){"
-                + "        new ____NewMainClass____().____Main____(0);"
-                + "    }"
-                + "}"
-                + ""
-                + "class ____NewMainClass____{"
-                + "    public void ____Main____(int ____arg_length____){"
-                + "    }"
-                + "    public void fooMethod(){"
-                + nodeString
-                + "    }"
-                + "}";
-
-        syntaxtree.Goal goal = (syntaxtree.Goal) getMicroJavaNodeFromString(codeString);
-        syntaxtree.ClassDeclaration classDeclaration = (syntaxtree.ClassDeclaration)
-                ((syntaxtree.TypeDeclaration) goal.f1.nodes.get(0)).f0.choice;
-        syntaxtree.MethodDeclaration methodDeclaration = (syntaxtree.MethodDeclaration)
-                classDeclaration.f4.nodes.get(1);
-        return (syntaxtree.NodeListOptional) methodDeclaration.f8;
+        return getMicroMethodDeclaration(nodeString).f8;
     }
 
     public static void writeCodeToFile(String code, String filename){
@@ -386,6 +347,43 @@ public class CPSHelper {
                                                    restExpressions));
     }
 
+    /** 
+     * Return the MicroJava arguments that would correspond to
+     * nanoArgs for a method. Basically, just remove the last
+     * argument, which is the current continuation.
+     * 
+     * Note: nanoArgs has at least one argument: the current continuation k
+     */
+    public static syntaxtree.NodeOptional getMicroArgs(NodeOptional nanoArgs){
+        ExpressionList nanoArgList = (ExpressionList) nanoArgs.node;
+
+        MessageSendStatement tempMessageSend = new MessageSendStatement(
+            getNewIdentifier("foo"),
+            getNewIdentifier("bar"),
+            nanoArgs);
+        
+        NodeListOptional tempStatements = new NodeListOptional();
+        tempStatements.addNode(new Statement(new NodeChoice(tempMessageSend, 6)));
+
+        syntaxtree.Statement microMessageStatement = (syntaxtree.Statement) getMicroStatementList(
+            tempStatements).nodes.get(0);
+
+        // Guaranteed microArgs is non-empty
+        syntaxtree.ExpressionList microArgs =
+                (syntaxtree.ExpressionList) ((syntaxtree.MessageSendStatement) microMessageStatement.f0.choice).f4.node;
+
+        // More than one NanoJava argument was present
+        if (microArgs.f1.present()){
+            // Remove the last argument
+            microArgs.f1.nodes.remove(microArgs.f1.nodes.size() - 1);
+            return new syntaxtree.NodeOptional(microArgs);
+        }
+        else {
+            // Only one NanoJava argument: the current continuation
+            return new syntaxtree.NodeOptional();
+        }
+    }
+
     /**
      * If parameters is an empty NodeOptional (i.e., no parameters at
      * all), return empty NodeOptional.
@@ -417,5 +415,62 @@ public class CPSHelper {
 
         return new syntaxtree.FormalParameter(CPSHelper.getCopy(varDeclaration.f0),
                                               CPSHelper.getCopy(varDeclaration.f1));
+    }
+
+    public static MethodDeclaration getNanoMethodDeclaration(String nodeString){
+        String codeString = ""
+                + "class DummyClass {"
+                + "    public static void main(String [] a){"
+                + "        new ____NewMainClass____().____Main____(0);"
+                + "    }"
+                + "}"
+                + ""
+                + "class ____NewMainClass____{"
+                + "    public void ____Main____(int ____arg_length____){"
+                + "    }"
+                + "    public void fooMethod(){"
+                + nodeString
+                + "    }"
+                + "}";
+
+        Goal goal = (Goal) getNanoJavaNodeFromString(codeString);
+        ClassDeclaration classDeclaration = (ClassDeclaration)
+                ((TypeDeclaration) goal.f1.nodes.get(0)).f0.choice;
+        MethodDeclaration methodDeclaration = (MethodDeclaration)
+                classDeclaration.f4.nodes.get(1);
+        return methodDeclaration;
+    }
+
+    public static NodeListOptional getNanoVarDeclarations(syntaxtree.NodeListOptional microVars){
+        String nodeString = getMicroFormattedString(microVars);
+
+        if (nodeString.trim().isEmpty()){
+            return new NodeListOptional();
+        }
+        return getNanoMethodDeclaration(nodeString).f7;
+    }
+
+    public static syntaxtree.MethodDeclaration getMicroMethodDeclaration(String nodeString){
+        String codeString = ""
+                + "class DummyClass {"
+                + "    public static void main(String [] a){"
+                + "        new ____NewMainClass____().____Main____(0);"
+                + "    }"
+                + "}"
+                + ""
+                + "class ____NewMainClass____{"
+                + "    public void ____Main____(int ____arg_length____){"
+                + "    }"
+                + "    public void fooMethod(){"
+                + nodeString
+                + "    }"
+                + "}";
+
+        syntaxtree.Goal goal = (syntaxtree.Goal) getMicroJavaNodeFromString(codeString);
+        syntaxtree.ClassDeclaration classDeclaration = (syntaxtree.ClassDeclaration)
+                ((syntaxtree.TypeDeclaration) goal.f1.nodes.get(0)).f0.choice;
+        syntaxtree.MethodDeclaration methodDeclaration = (syntaxtree.MethodDeclaration)
+                classDeclaration.f4.nodes.get(1);
+        return methodDeclaration;
     }
 }
