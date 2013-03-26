@@ -25,7 +25,7 @@ public class ContinuationMaker {
     public static String CALL_METHOD_NAME = "call";
     public static final String CONTINUATION_CLASS_NAME_PREFIX = "___ContinuationClass";
 
-    public static final int MAX_NUMBER_CONTINUATIONS = 20;
+    public static final int MAX_NUMBER_CONTINUATIONS = 50;
 
     public ContinuationMaker(syntaxtree.NodeListOptional trailingStatements,
                              syntaxtree.MethodDeclaration parentMethod,
@@ -57,8 +57,10 @@ public class ContinuationMaker {
         // Local VarDeclarations which are live in trailingStatements
         syntaxtree.NodeListOptional restParameters = new syntaxtree.NodeListOptional();
 
-        System.out.println("makeContinuationMethod:"); 
-        System.out.println("CPSHelper.getMicroFormattedString(parentMethod): " + CPSHelper.getMicroFormattedString(parentMethod));
+        // System.out.println("makeContinuationMethod:"); 
+        // System.out.println("CPSHelper.getMicroFormattedString(parentMethod): " + CPSHelper.getMicroFormattedString(parentMethod));
+
+        syntaxtree.NodeListOptional localVars = new syntaxtree.NodeListOptional();
 
         for (syntaxtree.Node node : parentMethod.f7.nodes){
             syntaxtree.VarDeclaration currVarDeclaration = (syntaxtree.VarDeclaration) node;
@@ -67,10 +69,14 @@ public class ContinuationMaker {
 
             // Variables that are found in trailingStatements and
             // whose initial value is being used
-            if (trailingStatements.accept(currFinder) && currFinder.isLive){
-                restParameters.addNode(new syntaxtree.FormalParameterRest(
-                    CPSHelper.getFormalParameter(currVarDeclaration)));
-                    
+            if (trailingStatements.accept(currFinder)){
+                if (currFinder.isLive){
+                    restParameters.addNode(new syntaxtree.FormalParameterRest(
+                        CPSHelper.getFormalParameter(currVarDeclaration)));
+                }
+                else{
+                    localVars.addNode(CPSHelper.getCopy(currVarDeclaration));
+                }
             }
         }
 
@@ -91,28 +97,31 @@ public class ContinuationMaker {
         
         syntaxtree.NodeOptional parameters = new syntaxtree.NodeOptional(parameterList);
 
-        System.out.println("CPSHelper.getMicroFormattedString(parameters): " + CPSHelper.getMicroFormattedString(parameters));
-
         syntaxtree.MethodDeclaration tempMethod = new syntaxtree.MethodDeclaration(
             CPSHelper.getNewMicroIdentifier(continuationMethodName),
             parameters,
-            new syntaxtree.NodeListOptional(),
+            localVars,
+            // new syntaxtree.NodeListOptional(),
             trailingStatements);
 
         // System.out.println("CPSHelper.getMicroFormattedString(tempMethod): " + CPSHelper.getMicroFormattedString(tempMethod));
         continuationMethod = (MethodDeclaration) tempMethod.accept(transformer);
         // System.out.println("CPSHelper.getFormattedString(continuationMethod): " + CPSHelper.getFormattedString(continuationMethod));
 
-        System.out.println("Before adding normal local vars"); 
-        System.out.println("CPSHelper.getFormattedString(continuationMethod.f7): "
-                           + CPSHelper.getFormattedString(continuationMethod.f7));
+        // System.out.println("Before adding normal local vars"); 
+        // System.out.println("CPSHelper.getFormattedString(continuationMethod.f7): "
+        //                    + CPSHelper.getFormattedString(continuationMethod.f7));
 
-        syntaxtree.NodeListOptional localVars = new syntaxtree.NodeListOptional();
-        syntaxtree.NodeListOptional methodMicroBody =
-                CPSHelper.getMicroStatementList(continuationMethod.f8);
+        // VVIP: you need to include the code in the JumpPoint of the
+        // Nano method too.
+        syntaxtree.NodeListOptional methodMicroBody = CPSHelper.getMicroMethodDeclaration(
+            CPSHelper.getFormattedString(continuationMethod.f8)
+            + CPSHelper.getFormattedString(continuationMethod.f9)).f8;
 
-        for (syntaxtree.Node node : parentMethod.f7.nodes){
-            syntaxtree.VarDeclaration currVarDeclaration = (syntaxtree.VarDeclaration) node;
+        NodeListOptional actualLocalVars = new NodeListOptional();
+        
+        for (Node node : continuationMethod.f7.nodes){
+            VarDeclaration currVarDeclaration = (VarDeclaration) node;
             LiveVariableFinder currFinder = new LiveVariableFinder(
                 CPSHelper.getIdentifierName(currVarDeclaration.f1));
 
@@ -120,21 +129,50 @@ public class ContinuationMaker {
             // whose initial value is NOT being used
             if (methodMicroBody.accept(currFinder) && !currFinder.isLive){
                 // We'll deal with continuation variables separately
-                if (CPSHelper.getMicroFormattedString(currVarDeclaration.f0).startsWith(
+                if (CPSHelper.getFormattedString(currVarDeclaration.f0).startsWith(
                         CONTINUATION_CLASS_NAME_PREFIX)){
                     continue;
                 }
 
-                localVars.addNode(currVarDeclaration);
+                actualLocalVars.addNode(currVarDeclaration);
             }
         }
+
+        // System.out.println("CPSHelper.getFormattedString(actualLocalVars): " + CPSHelper.getFormattedString(actualLocalVars));
+
+        // System.out.println("CPSHelper.getMicroFormattedString(methodMicroBody): " + CPSHelper.getMicroFormattedString(methodMicroBody));
+        // Hack to get local continuation variables 
+        NodeListOptional continuationVars = CPSHelper.getNanoVarDeclarations(
+            ContinuationMaker.getContinuationVarDeclarations(methodMicroBody));
+
+        // f7.nodes.addAll(continuationVars.nodes);
+
+        Set<String> currVarSet = new HashSet<String>();
+        for (Node node : actualLocalVars.nodes){
+            currVarSet.add(CPSHelper.getFormattedString(node));
+        }
+        // System.out.println("currVarSet: " + currVarSet);
+
+        // Remove elements of continuationVars that are already in currVarSet
+        for (Node node : continuationVars.nodes){
+            // System.out.println("CPSHelper.getFormattedString(node): "
+                               // + CPSHelper.getFormattedString(node));
+            if (!currVarSet.contains(CPSHelper.getFormattedString(node))){
+                // System.out.println("Chosen node"); 
+                // TODO: Should I update currVarSet too?? Assuming
+                // that there are no duplicates in continuationVars
+                actualLocalVars.addNode(node);
+            }
+        }
+
+        continuationMethod.f7 = actualLocalVars;
 
         // continuationMethod.f7.nodes.addAll(
         //     CPSHelper.getNanoVarDeclarations(localVars).nodes);
 
-        System.out.println("Before adding Continuations local vars"); 
-        System.out.println("CPSHelper.getFormattedString(continuationMethod.f7): "
-                           + CPSHelper.getFormattedString(continuationMethod.f7));
+        // System.out.println("Before adding Continuations local vars"); 
+        // System.out.println("CPSHelper.getFormattedString(continuationMethod.f7): "
+        //                    + CPSHelper.getFormattedString(continuationMethod.f7));
 
         // // Hack to get local continuation variables 
         // NodeListOptional continuationVars = CPSHelper.getNanoVarDeclarations(
@@ -247,17 +285,19 @@ public class ContinuationMaker {
             // If it is found in bodyStatements and is
             // instantiated only inside bodyStatements
             if (bodyStatements.accept(currFinder) && !currFinder.isLive){
-                System.out.println("Yoboyz"); 
                 syntaxtree.VarDeclaration localVar = new syntaxtree.VarDeclaration(
                     CPSHelper.getNewMicroType(
                         currFinder.continuationClassName),
                     CPSHelper.getNewMicroIdentifier(Transformer.getContinuationName(i)));
                 continuationLocalVars.addNode(localVar);
+
+                // System.out.println("Yoboyz"); 
+                // System.out.println("CPSHelper.getMicroFormattedString(localVar): " + CPSHelper.getMicroFormattedString(localVar));
             }
         }
 
-        System.out.println("After adding Continuations local vars"); 
-        System.out.println("CPSHelper.getMicroFormattedString(continuationLocalVars): " + CPSHelper.getMicroFormattedString(continuationLocalVars));
+        // System.out.println("After adding Continuations local vars"); 
+        // System.out.println("CPSHelper.getMicroFormattedString(continuationLocalVars): " + CPSHelper.getMicroFormattedString(continuationLocalVars));
 
         return continuationLocalVars;
     }

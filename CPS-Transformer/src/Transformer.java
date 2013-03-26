@@ -30,8 +30,11 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
     public int counter = 0;
     public int whileCounter = 0;
     public int tempCounter = 0;
-    public int kNameCounter = 0;
     public int maxKCounter = 10;
+
+    public int kNameCounter = 0;
+    public int initKNameCounter = 0;
+    public int elseStartKNameCounter = -1;
 
     // TODO: 
     public ClassDeclaration baseContinuationClass;
@@ -81,7 +84,11 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
 
 
     public String getCurrentContinuationName(){
-        return getContinuationName(kNameCounter);
+        if (kNameCounter == elseStartKNameCounter){
+            return getContinuationName(initKNameCounter);
+        } else{
+            return getContinuationName(kNameCounter);
+        }
     }
 
     public MessageSendStatement getDefaultContinuationCall(){
@@ -455,31 +462,31 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
 
         String tempBlockString = CPSHelper.getFormattedString(tempBlock);
 
-        System.out.println("CPSHelper.getMicroFormattedString(CPSHelper.getMicroMethodDeclaration(tempBlockString)): " + CPSHelper.getMicroFormattedString(CPSHelper.getMicroMethodDeclaration(tempBlockString)));
+        // System.out.println("CPSHelper.getMicroFormattedString(CPSHelper.getMicroMethodDeclaration(tempBlockString)): " + CPSHelper.getMicroFormattedString(CPSHelper.getMicroMethodDeclaration(tempBlockString)));
 
-        System.out.println("CPSHelper.getMicroFormattedString(ContinuationMaker.getContinuationVarDeclarations(CPSHelper.getMicroMethodDeclaration(tempBlockString).f8)): " + CPSHelper.getMicroFormattedString(ContinuationMaker.getContinuationVarDeclarations(CPSHelper.getMicroMethodDeclaration(tempBlockString).f8)));
+        // System.out.println("CPSHelper.getMicroFormattedString(ContinuationMaker.getContinuationVarDeclarations(CPSHelper.getMicroMethodDeclaration(tempBlockString).f8)): " + CPSHelper.getMicroFormattedString(ContinuationMaker.getContinuationVarDeclarations(CPSHelper.getMicroMethodDeclaration(tempBlockString).f8)));
 
         // Hack to get local continuation variables 
+        // Note: tempBlockString contains the ENTIRE representation of
+        // the block cos you converted it to a string
         NodeListOptional continuationVars = CPSHelper.getNanoVarDeclarations(
             ContinuationMaker.getContinuationVarDeclarations(
                 CPSHelper.getMicroMethodDeclaration(tempBlockString).f8));
 
-        // f7.nodes.addAll(continuationVars.nodes);
+        // System.out.println("CPSHelper.getFormattedString(continuationVars): " + CPSHelper.getFormattedString(continuationVars));
 
-        Set<String> currVars = new HashSet<String>();
+        // Take only those continuationVars that don't already occur in f7
+        Set<String> currVarSet = new HashSet<String>();
         for (Node node : f7.nodes){
-            currVars.add(CPSHelper.getFormattedString(node));
+            currVarSet.add(CPSHelper.getFormattedString(node));
         }
-        System.out.println("currVars: " + currVars);
 
         for (Node node : continuationVars.nodes){
-            System.out.println("CPSHelper.getFormattedString(node): "
-                               + CPSHelper.getFormattedString(node));
-            if (!currVars.contains(CPSHelper.getFormattedString(node))){
-                System.out.println("Chosen node"); 
+            if (!currVarSet.contains(CPSHelper.getFormattedString(node))){
                 f7.addNode(node);
             }
         }
+        // System.out.println("CPSHelper.getFormattedString(f7): " + CPSHelper.getFormattedString(f7));
 
         _ret = new MethodDeclaration(f2, f4, f7,
                                      tempBlock.f1,
@@ -597,11 +604,12 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(syntaxtree.Block n) {
         Node _ret=null;
-        System.out.println("Block:"); 
-        System.out.println("CPSHelper.getMicroFormattedString(n): " + CPSHelper.getMicroFormattedString(n));
+        // System.out.println("Block:"); 
+        // System.out.println("CPSHelper.getMicroFormattedString(n): " + CPSHelper.getMicroFormattedString(n));
 
         // String prevContinuationName = getCurrentContinuationName();
-        int prevKNameCounter = kNameCounter;
+
+        // int prevKNameCounter = kNameCounter;
 
         NodeListOptional finalStatementList = new NodeListOptional();
         JumpPoint jumpPoint = null;
@@ -674,7 +682,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
             jumpPoint = new JumpPoint(new NodeChoice(getDefaultContinuationCall(), 1));
         }
 
-        kNameCounter = prevKNameCounter;
+        // kNameCounter = prevKNameCounter;
 
         _ret = new Block(finalStatementList, jumpPoint);
         return _ret;
@@ -697,7 +705,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
             if (numString.isEmpty()){
                 kNameCounter = 0;
             } else {
-                // kNameCounter = Integer.parseInt(numString);
+                kNameCounter = Integer.parseInt(numString);
             }
         }
 
@@ -748,10 +756,18 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         elseBlock.f1.nodes.addAll(CPSHelper.getMicroStatementList(currInitStatements).nodes);
         currInitStatements = new NodeListOptional();
 
+        initKNameCounter = kNameCounter;
+        elseStartKNameCounter = -1;
+        
         Block f4 = (Block) ifBlock.accept(this);
+
+        elseStartKNameCounter = kNameCounter;
         
         // Get those variables initialized in the else Block
         Block f6 = (Block) elseBlock.accept(this);
+
+        elseStartKNameCounter = -1;
+        initKNameCounter = 0;
 
         currInitStatements = new NodeListOptional();
         _ret = new JumpPoint(new NodeChoice(new IfStatement(f2, f4, f6), 0));
@@ -782,7 +798,7 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         syntaxtree.Statement ifStatement = new syntaxtree.Statement(
             new syntaxtree.NodeChoice(new syntaxtree.IfStatement(
                 whileExpression, whileBodyStatement, elseStatement), 3));
-                // whileExpression, cleanedUpWhileBodyStatement, elseStatement), 3));
+        // whileExpression, cleanedUpWhileBodyStatement, elseStatement), 3));
 
         syntaxtree.NodeListOptional trailingStatements = new syntaxtree.NodeListOptional();
         trailingStatements.addNode(ifStatement);
@@ -859,7 +875,8 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
                     CPSHelper.getNewMicroIdentifier(currWhileMethodName),
                     CPSHelper.getArgs(parameters));
 
-        System.out.println("CPSHelper.getMicroFormattedString(recursiveWhileCall): " + CPSHelper.getMicroFormattedString(recursiveWhileCall));
+        // System.out.println("CPSHelper.getMicroFormattedString(recursiveWhileCall): " + CPSHelper.getMicroFormattedString(recursiveWhileCall));
+
         // trailingStatements.addNode(new syntaxtree.Statement(
         //     new syntaxtree.NodeChoice(recursiveWhileCall, 6)));
 
@@ -879,9 +896,9 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
             localVars,
             trailingStatements);
 
-        System.out.println("CPSHelper.getMicroFormattedString(tempMethod): " + CPSHelper.getMicroFormattedString(tempMethod));
+        // System.out.println("CPSHelper.getMicroFormattedString(tempMethod): " + CPSHelper.getMicroFormattedString(tempMethod));
         MethodDeclaration continuationMethod = (MethodDeclaration) tempMethod.accept(this);
-        System.out.println("CPSHelper.getFormattedString(continuationMethod): " + CPSHelper.getFormattedString(continuationMethod));
+        // System.out.println("CPSHelper.getFormattedString(continuationMethod): " + CPSHelper.getFormattedString(continuationMethod));
 
         return continuationMethod;
     }
@@ -905,11 +922,11 @@ public class Transformer extends GJNoArguDepthFirst<Node> {
         // MethodDeclaration... n-pain
         currentClassContinuationMethods.add(whileMethod);
 
-        System.out.println("WhileStatement"); 
+        // System.out.println("WhileStatement"); 
         // String args = CPSHelper.getMicroFormattedString(CPSHelper.getArgs(currMethod.f4));
         // System.out.println("getArgs:" + args);
-        System.out.println("CPSHelper.getMicroFormattedString(CPSHelper.getMicroArgs(CPSHelper.getArgs(whileMethod.f4.node))): " + CPSHelper.getMicroFormattedString(CPSHelper.getMicroArgs(CPSHelper.getArgs(whileMethod.f4.node))));
-        System.out.println("CPSHelper.getFormattedString(whileMethod.f4): " + CPSHelper.getFormattedString(whileMethod.f4));
+        // System.out.println("CPSHelper.getMicroFormattedString(CPSHelper.getMicroArgs(CPSHelper.getArgs(whileMethod.f4.node))): " + CPSHelper.getMicroFormattedString(CPSHelper.getMicroArgs(CPSHelper.getArgs(whileMethod.f4.node))));
+        // System.out.println("CPSHelper.getFormattedString(whileMethod.f4): " + CPSHelper.getFormattedString(whileMethod.f4));
 
         syntaxtree.MessageSendStatement recursiveWhileCall =
                 new syntaxtree.MessageSendStatement(

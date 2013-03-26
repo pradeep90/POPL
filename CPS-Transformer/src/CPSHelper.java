@@ -400,7 +400,6 @@ public class CPSHelper {
                 (syntaxtree.FormalParameterList) givenParams.node;
         syntaxtree.NodeListOptional restExpressions = new syntaxtree.NodeListOptional();
         for (syntaxtree.Node node : actualParams.f1.nodes){
-            System.out.println("CPSHelper.getMicroFormattedString(getExpression(((syntaxtree.FormalParameterRest) node).f1)): " + CPSHelper.getMicroFormattedString(getExpression(((syntaxtree.FormalParameterRest) node).f1)));
             restExpressions.addNode(new syntaxtree.ExpressionRest(
                 getExpression(((syntaxtree.FormalParameterRest) node).f1)));
         }

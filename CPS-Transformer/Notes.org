@@ -270,7 +270,7 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 *** Score: 11 Right, 11 Wrong
 ** DONE Make the while method call in the original location have proper arguments
    CLOCK: [2013-03-25 Mon 22:36]--[2013-03-25 Mon 23:13] =>  0:37
-** TODO Take care of nested blocks (??)
+** DONE Take care of nested blocks (??)
    CLOCK: [2013-03-25 Mon 23:16]--[2013-03-25 Mon 23:59] =>  0:43
 *** Init: # ClassCastException = 8
 *** DONE tryFlattenBlock in WhileStatement
@@ -279,7 +279,7 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
 *** Even without doing tryFlattenBlock in WhileStatement, it works (I think because I did tryFlattenBlock in IfStatement which is called indirectly by WhileStatement)
 *** So, 3 ClassCastException
 *** However, I still get 11 NOT MATCHING
-** TODO k1 is already defined => Check where you add Continuation1 k1; declaration in the continuation method
+** DONE k1 is already defined => Check where you add Continuation1 k1; declaration in the continuation method
    CLOCK: [2013-03-26 Tue 01:17]--[2013-03-26 Tue 02:59] =>  1:42
 *** VVIP Note: while{{ stuff }} doesn't give the above error. it only gives the incorrect arguments error
 *** I think it's when you have if{ blah; foo (); blah} else {blah;} where k1 is initialized in else, but is deferred to another continuation where it is presumably added twice
@@ -303,14 +303,52 @@ http://en.wikipedia.org/wiki/Continuation-passing_style#Examples
     CLOCK: [2013-03-26 Tue 03:04]--[2013-03-26 Tue 03:44] =>  0:40
 *** Problem was that I was doing LiveVariableFinder on the parentMethod's body and some continuations were getting read right there.
 *** Question: WHY am I doing LiveVariableFinder on parentMethod's body? => To find out live variables. But I'm also using the information saying that if you're a variable in the parentMethod and are not live, then you are a local variable here. Which is WRONG! you could not at all be used here.
-*** Add local variables only AFTER you've got the final method body
-    CLOCK: [2013-03-26 Tue 03:48]
+*** TODO Add local variables only AFTER you've got the final method body
+    CLOCK: [2013-03-26 Tue 03:48]--[2013-03-26 Tue 05:41] =>  1:53
 **** Take the list of parentMethod's local variables and see which of them are live in the final method body
+*** DONE Test why initialization after tailform leads to the variable not being declared in the continuation method
+    CLOCK: [2013-03-26 Tue 12:29]--[2013-03-26 Tue 13:06] =>  0:37
+**** DONE Also, is it just initialization or any assignment? Answer: Any assignment (Dude! Assignment is like initialization in the eyes of the continuation method)
+**** DONE Usage of a variable is fine foo.bar (x) will have x as a parameter in the continuation method.
+**** Why I think we should add all local variables of parentMethod to the new method (except those that are parameters): cos the continuation methods that break off from inside you will look at you for your parameters and local variables (but now you don't have any!)
+*** Basically, the whole problem is because we are using the local variable list of parentMethod as a base and filtering out those variables that aren't used in the body.
+**** The RIGHT approach would be to collect all variables used in the method and determine whether they are parameters or local variables
+**** VVIP But you can't do that cos you wouldn't know how to get the types for each of those variables
+**** VVIP So, temporary stop-gap measure: let each method inherit parentMethod's local variables. 
+**** DONE At the beginning, parameters are, of course, parentMethod's parameters and local variables that are being USED HERE && are live variables
+     CLOCK: [2013-03-26 Tue 13:12]--[2013-03-26 Tue 13:16] =>  0:04
+***** DONE MethodDeclaration
+      CLOCK: [2013-03-26 Tue 13:16]--[2013-03-26 Tue 13:18] =>  0:02
+***** DONE makeContinuationMethod
+      CLOCK: [2013-03-26 Tue 13:18]--[2013-03-26 Tue 13:41] =>  0:23
+**** DONE So, you go ahead. When all is said and done, filter out local variables that don't occur at all in the final body
+     CLOCK: [2013-03-26 Tue 13:41]--[2013-03-26 Tue 13:43] =>  0:02
+** DONE cannot find symbol k1
+*** Main culprit methods
+    continuationMethod16 (int  sz , BS  ___tmp1   , BS  ___tmp3   , BS  ___tmp5 , BS  ___tmp7   , BS  ___tmp9   , BS  ___tmp11   , BS  ___tmp13   , BS ___tmp15   , BS  ___tmp17   , BS  ___tmp19   , Continuation  ___k  )
+*** It seems that if{print 1;} else {print 0} blah leads to k1 in "k1 = continuation-for-blah()" not being declared
+    CLOCK: [2013-03-26 Tue 13:43]--[2013-03-26 Tue 14:26] =>  0:43
+**** TODO Is this true for non-continuation variables as well? (Is this relevant?)
+**** Seems being after print wasn't really a problem
+*** DONE Factorial cups too! Fix it
+    CLOCK: [2013-03-26 Tue 14:30]--[2013-03-26 Tue 14:41] =>  0:11
+**** It has k1 = new cont0; k1._ = _, etc. and then k.call() at the end
+**** doing "kNameCounter = Integer.parseInt(numString);" fixes it
+*** DONE debug make continuation
+    CLOCK: [2013-03-26 Tue 14:41]--[2013-03-26 Tue 15:16] =>  0:35
+**** VVIP I had forgotten to use the JumpPoint too when looking for possible continuation instantiations
+** DONE Error: incompatible types - contx and contz
+*** I think it is because if and else blocks think they're using the current continuation k2 but they are of different types
+*** DONE Solution: have kNameCounter be different for the if and else parts
+    CLOCK: [2013-03-26 Tue 15:20]--[2013-03-26 Tue 15:24] =>  0:04
+**** Declare the variable you have in the else part
 ** TODO But still, I get the same number of errors cos I think the call to the while method in the original location doesn't have the correct arguments.
 *** DONE Simple nested if test - works fine
     CLOCK: [2013-03-25 Mon 23:59]--[2013-03-26 Tue 00:21] =>  0:22
 *** TODO Maybe copy the while call that is within the while method
 *** TODO Test for while{{ stuff }}
+** TODO Variable foo might not have been initialized. I think I should prune parameters??? Or local variables???
+** TODO Cannot find symbol (variable)
 ** TODO NextedWhile isn't working
 ** TODO Test for sub classes
 ** TODO I'm getting StackOverflowError for BinarySearch. I think it keeps re cursing on whileMethod2
