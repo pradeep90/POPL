@@ -31,6 +31,8 @@ public class IdentityVisitorTest{
     public final void testIdentityVisitor(){
         Node expectedNode = InlinerHelper.getMicroJavaNodeFromFile(
             "Example-Microjava/Factorial.java");
-        assertEqualMicroJavaNodes(new ThisExpression(), new ThisExpression());
+        assertEqualMicroJavaNodes(
+            expectedNode,
+            expectedNode.accept(identityVisitor));
     }
 }
