@@ -90,55 +90,6 @@ public class InlinerHelper {
         return root;
     }
 
-    public static String getIdentifierName(Identifier identifier){
-        return identifier.f0.tokenImage;
-    }
-
-    public static Identifier getNewIdentifier(String name){
-        return new Identifier(new NodeToken(name));
-    }
-
-    public static Identifier getCopy(Identifier identifier){
-        return getNewIdentifier(getIdentifierName(identifier));
-    }
-
-    
-    
-    public static Type getNewType(String typeName){
-        return new Type(new NodeChoice(getNewIdentifier(typeName), 3));
-    }
-
-    
-    /** 
-     * @param type is of Identifier Type
-     */
-    public static Type getCopy(Type type){
-        switch(type.f0.which){
-            case 0:
-                return new Type(new NodeChoice(new ArrayType(), 0));
-            case 1:
-                return new Type(new NodeChoice(new BooleanType(), 1));
-            case 2:
-                return new Type(new NodeChoice(new IntegerType(), 2));
-            default:
-                return getNewType(getIdentifierName((Identifier) type.f0.choice));
-        }
-    }
-    
-    /** 
-     * Wrap node in a trivial class string, convert the string to a
-     * MicroJava node, and extract the new node corresponding to the
-     * given node.
-     *
-     * @param node is NodeListOptional of Statements
-     * 
-     * @return a deep copy of node
-     */
-    public static Node getCopyUsingString(Node node){
-        String nodeString = getFormattedString(node);
-        return getMicroMethodDeclaration(nodeString).f8;
-    }
-
     public static void writeCodeToFile(String code, String filename){
         PrintStream out = null;
         try {
@@ -193,6 +144,7 @@ public class InlinerHelper {
                 3)), 6));
     }
 
+    // TODO: 
     /** 
      * Return the arguments for the call() method of the continuation class.
      *
@@ -208,8 +160,11 @@ public class InlinerHelper {
         return new NodeOptional(new ExpressionList(getExpression(actualParams.f0),
                                                    restExpressions));
     }
-    
-    public static MethodDeclaration getMicroMethodDeclaration(String nodeString){
+
+    /** 
+     * @return MethodDeclaration containing nodeString as its body
+     */
+    public static MethodDeclaration getMethodDeclaration(String nodeString){
         String codeString = ""
                 + "class DummyClass {"
                 + "    public static void main(String [] a){"
@@ -232,5 +187,53 @@ public class InlinerHelper {
                 classDeclaration.f4.nodes.get(1);
         return methodDeclaration;
     }
+
+    public static String getIdentifierName(Identifier identifier){
+        return identifier.f0.tokenImage;
+    }
+
+    public static Identifier getNewIdentifier(String name){
+        return new Identifier(new NodeToken(name));
+    }
+
+    public static Identifier getCopy(Identifier identifier){
+        return getNewIdentifier(getIdentifierName(identifier));
+    }
+
     
+    
+    public static Type getNewType(String typeName){
+        return new Type(new NodeChoice(getNewIdentifier(typeName), 3));
+    }
+
+    
+    /** 
+     * @param type is of Identifier Type
+     */
+    public static Type getCopy(Type type){
+        switch(type.f0.which){
+            case 0:
+                return new Type(new NodeChoice(new ArrayType(), 0));
+            case 1:
+                return new Type(new NodeChoice(new BooleanType(), 1));
+            case 2:
+                return new Type(new NodeChoice(new IntegerType(), 2));
+            default:
+                return getNewType(getIdentifierName((Identifier) type.f0.choice));
+        }
+    }
+    
+    /** 
+     * Wrap node in a trivial class string, convert the string to a
+     * MicroJava node, and extract the new node corresponding to the
+     * given node.
+     *
+     * @param node is NodeListOptional of Statements
+     * 
+     * @return a deep copy of node
+     */
+    public static Node getCopyUsingString(Node node){
+        String nodeString = getFormattedString(node);
+        return getMethodDeclaration(nodeString).f8;
+    }
 }

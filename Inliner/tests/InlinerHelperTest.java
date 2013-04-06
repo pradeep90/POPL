@@ -29,10 +29,10 @@ public class InlinerHelperTest{
     }
 
     /**
-     * Test method for {@link InlinerHelper#getMicroFormattedString()}.
+     * Test method for {@link InlinerHelper#getFormattedString()}.
      */
     @Test
-    public final void testGetMicroFormattedString()
+    public final void testGetFormattedString()
             throws FileNotFoundException, ParseException{
         InputStream in1 = new FileInputStream(
             "Example-Microjava/Factorial.java");
@@ -62,25 +62,6 @@ public class InlinerHelperTest{
     @Test
     public final void testGetMicroJavaNodeFromFileNoException(){
         InlinerHelper.getMicroJavaNodeFromFile("Example-Microjava/Factorial.java");
-    }
-
-    /**
-     * Test method for {@link InlinerHelper#getFormattedString()}.
-     */
-    @Test
-    public final void testGetFormattedString()
-            throws FileNotFoundException, ParseException{
-        InputStream in1 = new FileInputStream(
-            "Example-Microjava/Factorial.java");
-        InputStream in2 = new FileInputStream(
-            "Example-Microjava/Factorial.java");
-        syntaxtree.Node root1 = new MicroJavaParser(in1).Goal();
-        syntaxtree.Node root2 = new MicroJavaParser(in2).Goal();
-
-        String code1 = InlinerHelper.getFormattedString(root1);
-        String code2 = InlinerHelper.getFormattedString(root2);
-        
-        assertEquals(code1, code2);
     }
 
     // /**
