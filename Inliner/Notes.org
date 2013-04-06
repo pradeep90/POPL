@@ -88,8 +88,15 @@
    CLOCK: [2013-04-06 Sat 09:43]--[2013-04-06 Sat 09:50] =>  0:07
 ** DONE InlinerHelper
    CLOCK: [2013-04-06 Sat 10:31]--[2013-04-06 Sat 10:48] =>  0:17
-** TODO Refactor
+** DONE Refactor
    CLOCK: [2013-04-06 Sat 11:14]--[2013-04-06 Sat 11:14] =>  0:00
    CLOCK: [2013-04-06 Sat 11:11]--[2013-04-06 Sat 11:12] =>  0:01
    CLOCK: [2013-04-06 Sat 10:51]--[2013-04-06 Sat 11:11] =>  0:20
+** IdentityVisitor
+   CLOCK: [2013-04-06 Sat 12:10]--[2013-04-06 Sat 12:20] =>  0:10
 ** Variable Name Uniquifier
+   CLOCK: [2013-04-06 Sat 11:56]--[2013-04-06 Sat 12:10] =>  0:14
+   CLOCK: [2013-04-06 Sat 11:50]--[2013-04-06 Sat 11:51] =>  0:01
+** DONE Put them all under inliner package
+   CLOCK: [2013-04-06 Sat 12:20]--[2013-04-06 Sat 12:42] =>  0:22
+

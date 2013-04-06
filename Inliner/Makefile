@@ -82,7 +82,7 @@ tests := $(OUTPUT_DIR)/tests.txt
 all_generated_microjava_files	:= $(GEN_MICROJAVA_OUTPUT_DIR)/all-gen-microjava-files.txt
 
 jtb_stuff:
-	cd $(SOURCE_DIR) && $(JTB) -printer microjava.jj
+	cd $(SOURCE_DIR) && $(JTB) -printer microjava.jj -p inliner
 
 javacc_stuff:
 	cd $(SOURCE_DIR) && $(JAVACC) $(JAVACC_FLAGS) jtb.out.jj
