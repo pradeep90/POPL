@@ -1,7 +1,92 @@
 				Notes
 
+* VVIP How I'm gonna avoid the mistakes I made during the CPS assignment
+** Write honest unit test for each feature I add 
+** Have absolutely NO global variables
+** VVIP Refactor after every git commit. Let's do it right this time.
+** Take breaks when Workrave tells me to
+* Theory - 0-CFA (Control Flow Analysis)
+** Flow-insensitive context-insensitive flow analysis
+** For EACH expression e, there is a flow variable [e]
+** Assumption: All program variable names and argument names are unique
+** Generate constraints
+*** Types of constraints
+**** c \in X - Beginning
+**** X \sube Y - Propagation
+**** c \in X => Y \sube Z - conditional
+*** Rules
+**** Beginning
+***** "this" in class C
+****** C \in [this-C]
+***** new C()
+****** C \in [new C()]
+**** Propagation
+***** id = expression
+****** [expression] \sube [id]
+**** Conditional
+***** method call: exp.method(exp1, exp2, ...) where method in class C is like "(param1, param2, ...) { ... return exp0;}"
+****** C \in [exp] => [exp1] \sube [param1]
+****** C \in [exp] => [exp0] \sube [exp.method(exp1, exp2, ...)]
+** Solve constraints = Computing Flow Sets
+*** U - Maximal set of classes
+*** [e] \in P(U)
+*** DONE What is a Lattice? Poset which has a supremum (least upper bound) and an infinum (greatest lower bound)
+*** Property of Conservative Flow Analysis
+**** Minimal solution is above the optimal information
+** Constraint Solver
+*** At any point in time it maintains the minimal solution
+*** Constraints are represented as a graph (N, E)
+**** N: Set of flow variables
+**** VVIP E: (v -> w \in E) => v \sube w
+*** Value of a flow variable X is stored in a bit vector B(X)
+*** Each bit i has an associated set of pending constraints corresponding to the conditional constraints - K(X, i)
+**** e.g., C \in X => Y \sube Z: Y \sube Z \in K(X, i) where i corresponds to C
+** TODO Algorithm
+*** Propagate (v: flow variable, i: class)
+**** if i is already in v, no need to do anything
+**** Beginning: put i in v
+**** Propagation: if v -> w, then we know v \sube w, so propagate i to w as well
+**** Conditional: insert all the consequents of conditionals with (i \in v)
+*** Insert (i \in X)
+**** simply Propagate (i \in X)
+*** Insert (X \sube Y)
+**** VVIP Insert an edge X -> Y
+***** I think this is more than necessary. You only ever use this information to infer that X \sube Y, so you could as well have stored just that much.
+**** for each class i in X, Propagate (Y, i)
+*** Insert (c \in X => Y \sube Z)
+**** If the antecedent is true, then Insert(Y \sube Z)
+**** Else, Add the consequent to K(X, i) where i corresponds to c
+** Code duplication
+*** Polymorphic function - Method Duplication
+*** Polymorphic data item - Class Duplication
+** For each expression e, there is a flow variable [e]
+* Design
+** Constraint
+*** Beginning Constraint
+*** Propagation Constraint
+*** Conditional Constraint
+** Variable Name Uniquifier: Microjava -> Microjava with unique identifier names
+*** Use a hash table with a counter for each distinct identifier
+** Collect Flow Variables: Microjava (with unique identifier names) -> [X]
+** Collect Class names: Microjava (with unique identifier names) -> [C]
+** Constraint Generator: Microjava, Flow Variables, Class Names -> {Beginning Constraint}, {Propagation Constraint}, {Conditional Constraint}
+** Constraint Solver: [Constraints, _ , _ ], Flow Variables, Class Names -> {Flow variable: Flow Set}
+** TODO Polymorphic Method Handler
+** TODO Polymorphic Class Handler
+** Code Optimizer: Final Microjava code, {Flow variable: Flow Set} -> Microjava with Inlined Methods
+** Method Inliner: Method Declaration * Method Invocation -> Variable Declarations, Statement List, Return Value Variable
 * Plan
 ** DONE Set up the basic files
    CLOCK: [2013-04-05 Fri 20:45]--[2013-04-05 Fri 20:52] =>  0:07
-* TODO How I'm gonna avoid the mistakes I made during the CPS assignment
-** 
+** DONE Note down basic theory
+   CLOCK: [2013-04-06 Sat 00:02]--[2013-04-06 Sat 00:38] =>  0:36
+   CLOCK: [2013-04-05 Fri 20:53]--[2013-04-05 Fri 21:27] =>  0:34
+** DONE Hand-simulate example 2
+   CLOCK: [2013-04-06 Sat 00:39]--[2013-04-06 Sat 01:33] =>  0:54
+** DONE Flesh out the Design
+   CLOCK: [2013-04-06 Sat 10:09]--[2013-04-06 Sat 10:31] =>  0:22
+   CLOCK: [2013-04-06 Sat 09:43]--[2013-04-06 Sat 09:50] =>  0:07
+** DONE InlinerHelper
+   CLOCK: [2013-04-06 Sat 10:31]--[2013-04-06 Sat 10:48] =>  0:17
+** Variable Name Uniquifier
+
