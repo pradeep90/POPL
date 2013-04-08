@@ -10,6 +10,8 @@ import static inliner.InlinerHelper.getFormattedString;
  * Microjava parse tree.
  */
 public class FlowVariableCollector extends IdentityVisitor {
+    
+    
     public FlowVariableCollector() {
     }
 
@@ -26,7 +28,8 @@ public class FlowVariableCollector extends IdentityVisitor {
     public Node visit(Expression n) {
         Node _ret=null;
         _ret = new Expression(new NodeChoice(n.f0.accept(this), n.f0.which));
-        System.out.println("getFormattedString(_ret): " + getFormattedString(_ret));
+        System.out.println("getFormattedString(_ret): "
+                           + getFormattedString(_ret));
         return _ret;
     }
 }

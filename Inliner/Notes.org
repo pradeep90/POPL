@@ -109,6 +109,13 @@
 ** FlowVariableCollector
    CLOCK: [2013-04-09 Tue 00:55]--[2013-04-09 Tue 00:55] =>  0:00
    CLOCK: [2013-04-09 Tue 00:36]--[2013-04-09 Tue 00:54] =>  0:18
-** Add my customized TreeFormatter
+*** I think I can collect all the variables trivially after the Constraint Generation step
+** DONE Add my customized TreeFormatter
    CLOCK: [2013-04-09 Tue 00:57]--[2013-04-09 Tue 01:04] =>  0:07
+
+** DONE Constraint Class
+   CLOCK: [2013-04-09 Tue 01:26]--[2013-04-09 Tue 01:51] =>  0:25
+** ConstraintGenerator
+*** Beginning Constraints
+    CLOCK: [2013-04-09 Tue 01:22]--[2013-04-09 Tue 01:26] =>  0:04
 
