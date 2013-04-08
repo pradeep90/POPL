@@ -92,13 +92,21 @@
    CLOCK: [2013-04-06 Sat 11:14]--[2013-04-06 Sat 11:14] =>  0:00
    CLOCK: [2013-04-06 Sat 11:11]--[2013-04-06 Sat 11:12] =>  0:01
    CLOCK: [2013-04-06 Sat 10:51]--[2013-04-06 Sat 11:11] =>  0:20
-** IdentityVisitor
+** DONE IdentityVisitor
    CLOCK: [2013-04-06 Sat 16:41]--[2013-04-06 Sat 16:45] =>  0:04
    CLOCK: [2013-04-06 Sat 12:43]--[2013-04-06 Sat 13:29] =>  0:46
    CLOCK: [2013-04-06 Sat 12:10]--[2013-04-06 Sat 12:20] =>  0:10
-** Variable Name Uniquifier
-   CLOCK: [2013-04-06 Sat 11:56]--[2013-04-06 Sat 12:10] =>  0:14
-   CLOCK: [2013-04-06 Sat 11:50]--[2013-04-06 Sat 11:51] =>  0:01
 ** DONE Put them all under inliner package
    CLOCK: [2013-04-06 Sat 12:20]--[2013-04-06 Sat 12:42] =>  0:22
+
+** Variable Name Uniquifier
+   CLOCK: [2013-04-06 Sat 16:45]--[2013-04-06 Sat 16:56] =>  0:11
+   CLOCK: [2013-04-06 Sat 11:56]--[2013-04-06 Sat 12:10] =>  0:14
+   CLOCK: [2013-04-06 Sat 11:50]--[2013-04-06 Sat 11:51] =>  0:01
+*** Note that Class + Method + variable name is unique
+*** Note that foo(int x) { Type x; } is not valid
+*** So, maybe just have a class called FlowVar which has class, method, and name fields
+** FlowVariableCollector
+   CLOCK: [2013-04-09 Tue 00:55]--[2013-04-09 Tue 00:55] =>  0:00
+   CLOCK: [2013-04-09 Tue 00:36]--[2013-04-09 Tue 00:54] =>  0:18
 

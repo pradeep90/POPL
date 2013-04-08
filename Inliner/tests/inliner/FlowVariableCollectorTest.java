@@ -12,31 +12,24 @@ import java.util.*;
 import inliner.syntaxtree.*;
 import static inliner.InlinerHelperTest.assertEqualMicroJavaNodes;
 
-public class VarNameUniquifierTest{
-    VarNameUniquifier varNameUniquifier;
-
+public class FlowVariableCollectorTest{
+    FlowVariableCollector flowVariableCollector;
+    
     @Before
     public void setUp(){
-        varNameUniquifier = new VarNameUniquifier();
+        flowVariableCollector = new FlowVariableCollector();
     }
     
     @After
     public void tearDown(){
     }
-
-    /**
-     * Test method for {@link VarNameUniquifier#foo()}.
-     */
-    @Test
-    public final void testFoo(){
-    }
-
+    
     @Test
     public final void testIdentityVisitor(){
         Node expectedNode = InlinerHelper.getMicroJavaNodeFromFile(
-            "Example-Microjava/My-Basic-Test-Cases/SameVarName.java");
+            "Example-Microjava/Factorial.java");
         assertEqualMicroJavaNodes(
             expectedNode,
-            expectedNode.accept(varNameUniquifier));
+            expectedNode.accept(flowVariableCollector));
     }
 }

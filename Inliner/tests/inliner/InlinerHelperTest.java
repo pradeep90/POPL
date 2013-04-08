@@ -6,6 +6,8 @@ import inliner.syntaxtree.*;
 import inliner.visitor.TreeFormatter;
 import inliner.visitor.TreeDumper;
 
+import static inliner.InlinerHelper.getFormattedString;
+
 // import java.text.ParseException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -44,8 +46,8 @@ public class InlinerHelperTest{
         Node root1 = new MicroJavaParser(in1).Goal();
         Node root2 = new MicroJavaParser(in2).Goal();
 
-        String code1 = InlinerHelper.getFormattedString(root1);
-        String code2 = InlinerHelper.getFormattedString(root2);
+        String code1 = getFormattedString(root1);
+        String code2 = getFormattedString(root2);
         
         assertEquals(code1, code2);
     }
@@ -72,7 +74,7 @@ public class InlinerHelperTest{
      */
     public static void assertEqualMicroJavaNodes(Node expected,
                                           Node actual){
-        assertEquals(InlinerHelper.getFormattedString(expected),
-                     InlinerHelper.getFormattedString(actual));
+        assertEquals(getFormattedString(expected),
+                     getFormattedString(actual));
     }
 }
