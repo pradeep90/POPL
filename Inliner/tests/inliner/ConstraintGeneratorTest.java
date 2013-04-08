@@ -66,10 +66,28 @@ public class ConstraintGeneratorTest{
         //     new FlowVar("Fac",
         //                 "ComputeFac",
         //                 "this")));
-        // assertEquals(1, expected.size());
+        assertEquals(2, constraintGenerator.beginningConstraints.size());
 
         // TODO: Test the actual value of the set
         // assertEquals(expected, constraintGenerator.beginningConstraints);
         // System.out.println("constraintGenerator.beginningConstraints: " + constraintGenerator.beginningConstraints);
+    }
+
+    /**
+     * Test method for {@link ConstraintGenerator#AssignmentStatement()}.
+     */
+    @Test
+    public final void testAssignmentStatement(){
+        Node node = InlinerHelper.getMicroJavaNodeFromFile(
+            "Example-Microjava/Factorial.java");
+
+        node.accept(constraintGenerator);
+        // System.out.println("constraintGenerator.propagationConstraints: " + constraintGenerator.propagationConstraints);
+
+        assertEquals(10, constraintGenerator.propagationConstraints.size());
+
+        HashSet<PropagationConstraint> expected =
+                new HashSet<PropagationConstraint>();
+        // TODO: 
     }
 }

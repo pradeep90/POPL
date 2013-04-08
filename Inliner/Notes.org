@@ -120,5 +120,6 @@
     CLOCK: [2013-04-09 Tue 01:51]--[2013-04-09 Tue 02:22] =>  0:31
     CLOCK: [2013-04-09 Tue 01:22]--[2013-04-09 Tue 01:26] =>  0:04
 *** Propagation constraints
+    CLOCK: [2013-04-09 Tue 02:35]--[2013-04-09 Tue 02:50] =>  0:15
     CLOCK: [2013-04-09 Tue 02:22]--[2013-04-09 Tue 02:25] =>  0:03
 **** Assuming that foo.bar identifier within a method is still a FlowVar <Class, Method, "foo.bar"> not <Foo, null, "bar">
