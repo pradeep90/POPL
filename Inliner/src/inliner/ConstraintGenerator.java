@@ -16,18 +16,22 @@ public class ConstraintGenerator extends IdentityVisitor {
         beginningConstraints = new HashSet<BeginningConstraint>();
     }
 
+    public void addBeginningConstraint(String expressionString){
+        BeginningConstraint currConstraint = new BeginningConstraint(
+            this.currClassName,
+            new FlowVar(this.currClassName,
+                        this.currMethodName,
+                        expressionString));
+        beginningConstraints.add(currConstraint);
+    }
+
     /**
      * f0 -> "this"
      */
     @Override
     public Node visit(ThisExpression n) {
         Node _ret=null;
-        BeginningConstraint currConstraint = new BeginningConstraint(
-            this.currClassName,
-            new FlowVar(this.currClassName,
-                        this.currMethodName,
-                        "this"));
-        beginningConstraints.add(currConstraint);
+        addBeginningConstraint("this");
         _ret = new ThisExpression();
         return _ret;
     }
@@ -41,13 +45,7 @@ public class ConstraintGenerator extends IdentityVisitor {
     @Override
     public Node visit(AllocationExpression n) {
         Node _ret=null;
-
-        BeginningConstraint currConstraint = new BeginningConstraint(
-            this.currClassName,
-            new FlowVar(this.currClassName,
-                        this.currMethodName,
-                        InlinerHelper.getFormattedString(n)));
-        beginningConstraints.add(currConstraint);
+        addBeginningConstraint(InlinerHelper.getFormattedString(n));
         _ret = new AllocationExpression((Identifier) n.f1.accept(this));
         return _ret;
     }

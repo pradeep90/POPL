@@ -70,6 +70,6 @@ public class ConstraintGeneratorTest{
 
         // TODO: Test the actual value of the set
         // assertEquals(expected, constraintGenerator.beginningConstraints);
-        System.out.println("constraintGenerator.beginningConstraints: " + constraintGenerator.beginningConstraints);
+        // System.out.println("constraintGenerator.beginningConstraints: " + constraintGenerator.beginningConstraints);
     }
 }
