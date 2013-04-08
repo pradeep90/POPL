@@ -11,4 +11,13 @@ public class PropagationConstraint extends Constraint{
         this.lhs = lhs;
         this.rhs = rhs;
     }
+
+    public String toString(){
+        String result = "<PropagationConstraint: ";
+        result += lhs;
+        result += ", ";
+        result += rhs;
+        result += ">";
+        return result;
+    }
 }

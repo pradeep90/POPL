@@ -16,4 +16,14 @@ public class ConditionalConstraint extends Constraint{
         this.antecedent = antecedent;
         this.consequent = consequent;
     }
+
+    public String toString(){
+        String result = "<ConditionalConstraint: ";
+        result += className;
+        result += mainFlowVar;
+        result += antecedent;
+        result += consequent;
+        result += ">";
+        return result;
+    }
 }

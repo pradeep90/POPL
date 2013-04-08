@@ -10,4 +10,21 @@ public class FlowVar {
         this.methodName = methodName;
         this.expressionString = expressionString;
     }
+
+    public String toString(){
+        String result = "<FlowVar: ";
+        if (className != null){
+            result += className;
+            result += ", ";
+        }
+        if (methodName != null){
+            result += methodName;
+            result += ", ";
+        }
+        if (expressionString != null){
+            result += expressionString;
+        }
+        result += ">";
+        return result;
+    }
 }

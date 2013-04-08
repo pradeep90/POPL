@@ -10,6 +10,9 @@ import inliner.visitor.*;
  * this Visitor.
  */
 public class IdentityVisitor extends GJNoArguDepthFirst<Node> {
+    String currClassName;
+    String currMethodName;
+    
     public IdentityVisitor() {
         
     }
@@ -108,6 +111,7 @@ public class IdentityVisitor extends GJNoArguDepthFirst<Node> {
     public Node visit(MainClass n) {
         Node _ret=null;
         Identifier f1 = (Identifier) n.f1.accept(this);
+        currClassName = InlinerHelper.getIdentifierName(f1);
         Identifier f11 = (Identifier) n.f11.accept(this);
         Identifier f15 = (Identifier) n.f15.accept(this);
         Identifier f19 = (Identifier) n.f19.accept(this);
@@ -137,6 +141,7 @@ public class IdentityVisitor extends GJNoArguDepthFirst<Node> {
     public Node visit(ClassDeclaration n) {
         Node _ret=null;
         Identifier f1 = (Identifier) n.f1.accept(this);
+        currClassName = InlinerHelper.getIdentifierName(f1);
         NodeListOptional f3 = (NodeListOptional) n.f3.accept(this);
         NodeListOptional f4 = (NodeListOptional) n.f4.accept(this);
         _ret = new ClassDeclaration(f1, f3, f4);
@@ -156,6 +161,7 @@ public class IdentityVisitor extends GJNoArguDepthFirst<Node> {
     public Node visit(ClassExtendsDeclaration n) {
         Node _ret=null;
         Identifier f1 = (Identifier) n.f1.accept(this);
+        currClassName = InlinerHelper.getIdentifierName(f1);
         Identifier f3 = (Identifier) n.f3.accept(this);
         NodeListOptional f5 = (NodeListOptional) n.f5.accept(this);
         NodeListOptional f6 = (NodeListOptional) n.f6.accept(this);
@@ -190,6 +196,7 @@ public class IdentityVisitor extends GJNoArguDepthFirst<Node> {
     public Node visit(MethodDeclaration n) {
         Node _ret=null;
         Identifier f2 = (Identifier) n.f2.accept(this);
+        currMethodName = InlinerHelper.getIdentifierName(f2);
         NodeOptional f4 = (NodeOptional) n.f4.accept(this);
         NodeListOptional f7 = (NodeListOptional) n.f7.accept(this);
         NodeListOptional f8 = (NodeListOptional) n.f8.accept(this);

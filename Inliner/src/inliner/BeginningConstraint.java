@@ -8,4 +8,13 @@ public class BeginningConstraint extends Constraint {
         this.className = className;
         this.var = var;
     }
+
+    public String toString(){
+        String result = "<BeginningConstraint: ";
+        result += className;
+        result += ", ";
+        result += var;
+        result += ">";
+        return result;
+    }
 }
