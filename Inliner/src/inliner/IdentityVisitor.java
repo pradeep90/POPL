@@ -111,7 +111,7 @@ public class IdentityVisitor extends GJNoArguDepthFirst<Node> {
         Identifier f11 = (Identifier) n.f11.accept(this);
         Identifier f15 = (Identifier) n.f15.accept(this);
         Identifier f19 = (Identifier) n.f19.accept(this);
-        NodeOptional f21 = new NodeOptional(n.f21.accept(this));
+        NodeOptional f21 = (NodeOptional) n.f21.accept(this);
         _ret = new MainClass(f1, f11, f15, f19, f21);
         return _ret;
     }
@@ -190,7 +190,7 @@ public class IdentityVisitor extends GJNoArguDepthFirst<Node> {
     public Node visit(MethodDeclaration n) {
         Node _ret=null;
         Identifier f2 = (Identifier) n.f2.accept(this);
-        NodeOptional f4 = new NodeOptional(n.f4.accept(this));
+        NodeOptional f4 = (NodeOptional) n.f4.accept(this);
         NodeListOptional f7 = (NodeListOptional) n.f7.accept(this);
         NodeListOptional f8 = (NodeListOptional) n.f8.accept(this);
         _ret = new MethodDeclaration(f2, f4, f7, f8);
@@ -392,7 +392,7 @@ public class IdentityVisitor extends GJNoArguDepthFirst<Node> {
         Node _ret=null;
         Identifier f0 = (Identifier) n.f0.accept(this);
         Identifier f2 = (Identifier) n.f2.accept(this);
-        NodeOptional f4 = new NodeOptional(n.f4.accept(this));
+        NodeOptional f4 = (NodeOptional) n.f4.accept(this);
         _ret = new MessageSendStatement(f0, f2, f4);
         return _ret;
     }

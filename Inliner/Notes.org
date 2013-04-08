@@ -109,4 +109,6 @@
 ** FlowVariableCollector
    CLOCK: [2013-04-09 Tue 00:55]--[2013-04-09 Tue 00:55] =>  0:00
    CLOCK: [2013-04-09 Tue 00:36]--[2013-04-09 Tue 00:54] =>  0:18
+** Add my customized TreeFormatter
+   CLOCK: [2013-04-09 Tue 00:57]--[2013-04-09 Tue 01:04] =>  0:07
 
