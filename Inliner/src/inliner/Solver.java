@@ -23,8 +23,8 @@ public class Solver extends IdentityVisitor {
     List<FlowVar> flowVars;
 
     HashMap<String, Integer> classIndexMap;
-    ArrayList<ArrayList<Boolean>> flowBitVector;
-    ArrayList<ArrayList<ConditionalConstraint>> flowConstraints;
+    HashMap<FlowVar, ArrayList<Boolean>> flowBitVector;
+    HashMap<FlowVar, ArrayList<ConditionalConstraint>> flowConstraints;
     
     public HashMap<FlowVar, List<String>> flowSetMap;
 
@@ -34,18 +34,20 @@ public class Solver extends IdentityVisitor {
                   Set<PropagationConstraint> propagationConstraints,
                   Set<ConditionalConstraint> conditionalConstraints) {
 
-        this.beginningConstraints = new ArrayList<BeginningConstraint>(beginningConstraints);
-        this.propagationConstraints = new ArrayList<PropagationConstraint>(propagationConstraints);
-        this.conditionalConstraints = new ArrayList<ConditionalConstraint>(conditionalConstraints);
+        this.beginningConstraints = new ArrayList<BeginningConstraint>(
+            beginningConstraints);
+        this.propagationConstraints = new ArrayList<PropagationConstraint>(
+            propagationConstraints);
+        this.conditionalConstraints = new ArrayList<ConditionalConstraint>(
+            conditionalConstraints);
 
         classNames = getClassNames();
+        flowVars = getFlowVars();
 
-        // TODO: Initialize these after you know the number of flow
-        // variables and number of classes
-        // classIndexMap = new HashMap<String, Integer>();
-        // flowBitVector = new ArrayList<ArrayList<Boolean>>();
-        // flowConstraints = new ArrayList<ArrayList<ConditionalConstraint>>();
-        // flowSetMap = new HashMap<FlowVar, List<String>>();
+        classIndexMap = new HashMap<String, Integer>();
+        flowBitVector = new HashMap<FlowVar, ArrayList<Boolean>>();
+        flowConstraints = new HashMap<FlowVar, ArrayList<ConditionalConstraint>>();
+        flowSetMap = new HashMap<FlowVar, List<String>>();
     }
 
     public List<String> getClassNames(){
@@ -58,5 +60,31 @@ public class Solver extends IdentityVisitor {
             classNames.add(conditionalConstraint.className);
         }
         return new ArrayList<String>(classNames);
+    }
+
+    public List<FlowVar> getFlowVars(){
+        Set<FlowVar> flowVars = new HashSet<FlowVar>();
+        for (BeginningConstraint beginningConstraint : beginningConstraints){
+            flowVars.add(beginningConstraint.var);
+        }
+
+        for (PropagationConstraint propagationConstraint : propagationConstraints){
+            flowVars.add(propagationConstraint.lhs);
+            flowVars.add(propagationConstraint.rhs);
+        }
+
+        for (ConditionalConstraint conditionalConstraint : conditionalConstraints){
+            flowVars.add(conditionalConstraint.mainFlowVar);
+            flowVars.add(conditionalConstraint.antecedent);
+            flowVars.add(conditionalConstraint.consequent);
+        }
+        return new ArrayList<FlowVar>(flowVars);
+    }
+
+    public void propagate(FlowVar v, int classIndex){
+        // if (flowBitVector.get(v).get(classIndex)){
+        //     return;
+        // }
+        // flowBitVector.get(v).get(classIndex).
     }
 }

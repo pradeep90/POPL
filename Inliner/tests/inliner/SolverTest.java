@@ -14,11 +14,13 @@ import static inliner.InlinerHelperTest.assertEqualMicroJavaNodes;
 import static inliner.InlinerHelperTest.assertBigStringEquals;
 
 public class SolverTest{
-    ConstraintGenerator constraintGenerator = new ConstraintGenerator();
-    Solver solver = new Solver();
+    ConstraintGenerator constraintGenerator;
+    Solver solver;
     
     @Before
     public void setUp(){
+        constraintGenerator = new ConstraintGenerator();
+        solver = new Solver();
     }
     
     @After
@@ -67,5 +69,26 @@ public class SolverTest{
         String expected = "[Visitor, Tree, MyVisitor, ____NewMainClass____, TV]";
         assertBigStringEquals(expected,
                               solver.getClassNames().toString());
+    }
+
+    /**
+     * Test method for {@link Solver#getFlowVars()}.
+     */
+    @Test
+    public final void testGetFlowVars_Simple(){
+        Node node = InlinerHelper.getMicroJavaNodeFromFile(
+            "Example-Microjava/Factorial.java");
+
+        node.accept(constraintGenerator);
+
+        solver.beginningConstraints = new ArrayList<BeginningConstraint>(
+            constraintGenerator.beginningConstraints);
+        solver.propagationConstraints = new ArrayList<PropagationConstraint>(
+            constraintGenerator.propagationConstraints);
+        solver.conditionalConstraints = new ArrayList<ConditionalConstraint>(
+            constraintGenerator.conditionalConstraints);
+        String expected = "[<FlowVar: ____NewMainClass____, ____Main____, ____printMe____>, <FlowVar: Fac, ComputeFac, ____tmp0>, <FlowVar: ____NewMainClass____, ____Main____, ___tmp6 . ____1234ComputeFac4321____>, <FlowVar: Fac, ComputeFac, num>, <FlowVar: ____NewMainClass____, ____Main____, ___tmp6>, <FlowVar: Fac, ComputeFac, ____1234ComputeFac4321____>, <FlowVar: Fac, ComputeFac, ____writeable____num>, <FlowVar: ____NewMainClass____, ____Main____, ___tmp5>, <FlowVar: ____NewMainClass____, ____Main____, 10>, <FlowVar: Fac, ComputeFac, this>, <FlowVar: Fac, ComputeFac, ____writeable____num - 1>, <FlowVar: Fac, ComputeFac, ___tmp4 . ____1234ComputeFac4321____>, <FlowVar: ____NewMainClass____, ____Main____, new Fac ( )>, <FlowVar: Fac, ComputeFac, ___tmp3>, <FlowVar: Fac, ComputeFac, ___tmp4>, <FlowVar: Fac, ComputeFac, num_aux>, <FlowVar: Fac, ComputeFac, ____writeable____num * ____tmp0>, <FlowVar: Fac, ComputeFac, 1>]";
+        assertBigStringEquals(expected,
+                              solver.getFlowVars().toString());
     }
 }

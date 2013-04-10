@@ -41,4 +41,15 @@ public class FlowVar {
         }
         return hash;
     }
+
+    public boolean equals(Object o) {
+        if (o instanceof FlowVar) {
+            FlowVar other = (FlowVar) o;
+            return this.className.equals(other.className)
+                    && this.methodName.equals(other.methodName)
+                    && this.expressionString.equals(other.expressionString);
+        }
+        return false;
+    }
+
 }
