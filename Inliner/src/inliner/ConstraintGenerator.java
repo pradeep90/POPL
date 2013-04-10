@@ -18,7 +18,7 @@ public class ConstraintGenerator extends IdentityVisitor {
     Set<PropagationConstraint> propagationConstraints;
     Set<ConditionalConstraint> conditionalConstraints;
 
-    Goal originalGoal;
+    Goal originalParseTree;
     
     public ConstraintGenerator() {
         beginningConstraints = new HashSet<BeginningConstraint>();
@@ -45,13 +45,8 @@ public class ConstraintGenerator extends IdentityVisitor {
      * f2 -> <EOF>
      */
     public Node visit(Goal n) {
-        Node _ret=null;
-        originalGoal = n;
-
-        MainClass f0 = (MainClass) n.f0.accept(this);
-        NodeListOptional f1 = (NodeListOptional) n.f1.accept(this);
-        _ret = new Goal(f0, f1);
-        return _ret;
+        originalParseTree = n;
+        return super.visit(n);
     }
 
     /**
@@ -59,10 +54,8 @@ public class ConstraintGenerator extends IdentityVisitor {
      */
     @Override
     public Node visit(ThisExpression n) {
-        Node _ret=null;
         addBeginningConstraint("this");
-        _ret = new ThisExpression();
-        return _ret;
+        return super.visit(n);
     }
 
     /**
@@ -73,10 +66,8 @@ public class ConstraintGenerator extends IdentityVisitor {
      */
     @Override
     public Node visit(AllocationExpression n) {
-        Node _ret=null;
-        _ret = new AllocationExpression((Identifier) n.f1.accept(this));
-        addBeginningConstraint(getFormattedString(_ret));
-        return _ret;
+        addBeginningConstraint(getFormattedString(n));
+        return super.visit(n);
     }
 
     /**
@@ -87,24 +78,20 @@ public class ConstraintGenerator extends IdentityVisitor {
      */
     @Override
     public Node visit(AssignmentStatement n) {
-        Node _ret=null;
-        VarRef f0 = (VarRef) n.f0.accept(this);
-        Expression f2 = (Expression) n.f2.accept(this);
-        _ret = new AssignmentStatement(f0, f2);
-
         PropagationConstraint currConstraint = new PropagationConstraint(
             // TODO: Make sure that it IS actually a method-local
             // variable. Else, it is a class variable, so,
             // currMethodName should actually be null.
             new FlowVar(this.currClassName, this.currMethodName,
-                        getFormattedString(f0)),
+                        getFormattedString(n.f0)),
             // TODO: Make sure that it IS actually a method-local
             // variable. Else, it is a class variable, so,
             // currMethodName should actually be null.
             new FlowVar(this.currClassName, this.currMethodName,
-                        getFormattedString(f2)));
+                        getFormattedString(n.f2)));
         propagationConstraints.add(currConstraint);
-        return _ret;
+
+        return super.visit(n);
     }
 
     /**
@@ -118,28 +105,29 @@ public class ConstraintGenerator extends IdentityVisitor {
      */
     @Override
     public Node visit(MessageSendStatement n) {
-        Node _ret=null;
-        Identifier f0 = (Identifier) n.f0.accept(this);
-        Identifier f2 = (Identifier) n.f2.accept(this);
-        NodeOptional f4 = (NodeOptional) n.f4.accept(this);
-        _ret = new MessageSendStatement(f0, f2, f4);
+        ConditionalVisitor conditionalVisitor = new ConditionalVisitor(
+            new FlowVar(this.currClassName,
+                        this.currMethodName,
+                        getIdentifierName(n.f0)),
+            getIdentifierName(n.f2),
+            getFlowArgs(getSaneExpressionList(n.f4)));
+        originalParseTree.accept(conditionalVisitor);
+        conditionalConstraints.addAll(conditionalVisitor.constraints);
 
+        return super.visit(n);
+    }
+
+    /** 
+     * @return a FlowVar for each Expression in arguments.
+     */
+    public List<FlowVar> getFlowArgs(List<Expression> arguments){
         List<FlowVar> flowArgs = new ArrayList<FlowVar>();
-        for (Expression expression : getSaneExpressionList(n.f4)){
+        for (Expression expression : arguments){
             flowArgs.add(new FlowVar(this.currClassName,
                                      this.currMethodName,
                                      getFormattedString(expression)));
         }
-
-        ConditionalVisitor conditionalVisitor = new ConditionalVisitor(
-            new FlowVar(this.currClassName,
-                        this.currMethodName,
-                        getIdentifierName(f0)),
-            getIdentifierName(f2),
-            flowArgs);
-        originalGoal.accept(conditionalVisitor);
-        conditionalConstraints.addAll(conditionalVisitor.constraints);
-        return _ret;
+        return flowArgs;
     }
 
 }

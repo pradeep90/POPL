@@ -8,6 +8,8 @@ import inliner.visitor.*;
  *
  * Other Visitors that only modify a few visit() functions can extend
  * this Visitor.
+ *
+ * Keep track of the currClassName and currMethodName along the way.
  */
 public class IdentityVisitor extends GJNoArguDepthFirst<Node> {
     String currClassName;

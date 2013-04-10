@@ -8,20 +8,25 @@ import java.util.ArrayList;
 import static inliner.InlinerHelper.*;
 
 /** 
- * Visitor to get a list of ConditionalConstraints given a
- * MessageSendStatement.
+ * Visitor to get a list of ConditionalConstraints given details about
+ * a MessageSendStatement.
  *
- * Look at MethodDeclarations whose signature matches the message and
- * generate the RHS of all the conditional constraints.
+ * Look at MethodDeclarations whose signature matches
+ * messageMethodName and generate the RHS of all the conditional
+ * constraints.
  *
  * i.e., the RHS of (c \in X) => (Y \sub Z)
  */
 public class ConditionalVisitor extends IdentityVisitor {
     // The X part of (c \in X) in each ConditionalConstraint
     FlowVar mainFlowVar;
+
+    // Details about the method
     String messageMethodName;
     List<FlowVar> arguments;
-    List<ConditionalConstraint> constraints;
+
+    // Result
+    public List<ConditionalConstraint> constraints;
     
     public ConditionalVisitor(FlowVar mainFlowVar,
                               String messageMethodName,
@@ -33,6 +38,9 @@ public class ConditionalVisitor extends IdentityVisitor {
         constraints = new ArrayList<ConditionalConstraint>();
     }
 
+    /** 
+     * Add a ConditionalConstraint for each of the flowParameters.
+     */
     public void addConstraints(String currClassName,
                                List<FlowVar> flowParameters){
 
@@ -64,26 +72,34 @@ public class ConditionalVisitor extends IdentityVisitor {
      */
     @Override
     public Node visit(MethodDeclaration n) {
-        Node _ret=null;
-        Identifier f2 = (Identifier) n.f2.accept(this);
-        currMethodName = InlinerHelper.getIdentifierName(f2);
-        NodeOptional f4 = (NodeOptional) n.f4.accept(this);
-        NodeListOptional f7 = (NodeListOptional) n.f7.accept(this);
-        NodeListOptional f8 = (NodeListOptional) n.f8.accept(this);
-        _ret = new MethodDeclaration(f2, f4, f7, f8);
-
-        if (currMethodName.equals(messageMethodName)
-            && getSaneFormalParameterList(n.f4).size() == arguments.size()){
-
-            List<FlowVar> flowParameters = new ArrayList<FlowVar>();
-            for (FormalParameter param : getSaneFormalParameterList(n.f4)){
-                flowParameters.add(new FlowVar(this.currClassName,
-                                               this.currMethodName,
-                                               getFormattedString(param.f1)));
-            }
-            
-            addConstraints(this.currClassName, flowParameters);
+        Node _ret = super.visit(n);
+        if (isMatchingMethodSignature(n)){
+            addConstraints(this.currClassName,
+                           getFlowParameters(getSaneFormalParameterList(n.f4)));
         }
         return _ret;
+    }
+
+    /** 
+     * @return true iff the method name of n matches messageMethodName
+     * and it has the same number of parameters as the arguments
+     * given.
+     */
+    public boolean isMatchingMethodSignature(MethodDeclaration n){
+        return this.currMethodName.equals(this.messageMethodName)
+                && getSaneFormalParameterList(n.f4).size() == arguments.size();
+    }
+
+    /** 
+     * @return a FlowVar for each parameter in parameters.
+     */
+    public List<FlowVar> getFlowParameters(List<FormalParameter> parameters){
+        List<FlowVar> flowParameters = new ArrayList<FlowVar>();
+        for (FormalParameter param : parameters){
+            flowParameters.add(new FlowVar(this.currClassName,
+                                           this.currMethodName,
+                                           getFormattedString(param.f1)));
+        }
+        return flowParameters;
     }
 }

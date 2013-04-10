@@ -100,7 +100,7 @@
 ** DONE Put them all under inliner package
    CLOCK: [2013-04-06 Sat 12:20]--[2013-04-06 Sat 12:42] =>  0:22
 
-** Variable Name Uniquifier
+** TODO Variable Name Uniquifier
    CLOCK: [2013-04-06 Sat 16:45]--[2013-04-06 Sat 16:56] =>  0:11
    CLOCK: [2013-04-06 Sat 11:56]--[2013-04-06 Sat 12:10] =>  0:14
    CLOCK: [2013-04-06 Sat 11:50]--[2013-04-06 Sat 11:51] =>  0:01
@@ -116,7 +116,7 @@
 
 ** DONE Constraint Class
    CLOCK: [2013-04-09 Tue 01:26]--[2013-04-09 Tue 01:51] =>  0:25
-** ConstraintGenerator
+** DONE ConstraintGenerator
 *** DONE Beginning Constraints
     CLOCK: [2013-04-09 Tue 01:51]--[2013-04-09 Tue 02:22] =>  0:31
     CLOCK: [2013-04-09 Tue 01:22]--[2013-04-09 Tue 01:26] =>  0:04
@@ -124,7 +124,7 @@
     CLOCK: [2013-04-09 Tue 02:35]--[2013-04-09 Tue 02:50] =>  0:15
     CLOCK: [2013-04-09 Tue 02:22]--[2013-04-09 Tue 02:25] =>  0:03
 **** Assuming that foo.bar identifier within a method is still a FlowVar <Class, Method, "foo.bar"> not <Foo, null, "bar">
-*** TODO Conditional constraints
+*** DONE Conditional constraints
     CLOCK: [2013-04-09 Tue 02:50]--[2013-04-09 Tue 02:53] =>  0:03
 **** Get all classes which have a method with that name and that many number of arguments
 ***** DONE What if it has multiple methods with the same name?
@@ -138,3 +138,14 @@
      :Effort:   10
      :END:
 ** TODO I think I SHOULD uniquify the names cos now I can't blindly create FlowVar using the currClassName and currMethodName.
+** DONE Refactor
+   CLOCK: [2013-04-10 Wed 23:59]--[2013-04-11 Thu 00:33] =>  0:34
+*** DONE Check if I have Java 7 (I do... I knooooow!... WAIT! Turns out I don't!)
+*** DONE Check out whether Java 7 has an equivalent of map (Nope, it doesn't)
+** Constraint Solver
+*** Fields
+    CLOCK: [2013-04-10 Wed 23:55]--[2013-04-10 Wed 23:59] =>  0:04
+    :PROPERTIES:
+    :Effort:   10
+    :END:
+**** TODO Constructor
