@@ -20,8 +20,11 @@ public class ConditionalConstraint extends Constraint{
     public String toString(){
         String result = "<ConditionalConstraint: ";
         result += className;
+        result += ", ";
         result += mainFlowVar;
+        result += ", ";
         result += antecedent;
+        result += ", ";
         result += consequent;
         result += ">";
         return result;

@@ -77,4 +77,13 @@ public class InlinerHelperTest{
         assertEquals(getFormattedString(expected),
                      getFormattedString(actual));
     }
+
+    /** 
+     * Assert that expected and actual are identical strings when we
+     * remove all the whitespace.
+     */
+    public static void assertBigStringEquals(String expected, String actual){
+        assertEquals(expected.replaceAll("(\n|\\s)+", ""),
+                     actual.replaceAll("(\n|\\s)+", ""));
+    }
 }

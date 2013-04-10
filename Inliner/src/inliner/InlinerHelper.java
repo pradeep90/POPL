@@ -229,4 +229,34 @@ public class InlinerHelper {
         String nodeString = getFormattedString(node);
         return getMethodDeclaration(nodeString).f8;
     }
+
+    public static List<Expression> getSaneExpressionList(NodeOptional n){
+        List<Expression> list = new ArrayList<Expression>();
+        if (!n.present()){
+            return list;
+        }
+
+        ExpressionList expressions = (ExpressionList) n.node;
+        list.add(expressions.f0);
+        for (Node expression : expressions.f1.nodes){
+            list.add((Expression) expression);
+        }
+
+        return list;
+    }
+    
+    public static List<FormalParameter> getSaneFormalParameterList(NodeOptional n){
+        List<FormalParameter> list = new ArrayList<FormalParameter>();
+        if (!n.present()){
+            return list;
+        }
+
+        FormalParameterList parameters = (FormalParameterList) n.node;
+        list.add(parameters.f0);
+        for (Node param : parameters.f1.nodes){
+            list.add((FormalParameter) param);
+        }
+
+        return list;
+    }
 }

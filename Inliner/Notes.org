@@ -68,7 +68,8 @@
 ** Variable Name Uniquifier: Microjava -> Microjava with unique identifier names
 *** Use a hash table with a counter for each distinct identifier
 ** Collect Flow Variables: Microjava (with unique identifier names) -> [X]
-** Collect Class names: Microjava (with unique identifier names) -> [C]
+** TODO Collect Class names: Microjava (with unique identifier names) -> [C]
+*** Note: Also collect the basic types like int, boolean, etc.
 ** Constraint Generator: Microjava, Flow Variables, Class Names -> {Beginning Constraint}, {Propagation Constraint}, {Conditional Constraint}
 ** Constraint Solver: [Constraints, _ , _ ], Flow Variables, Class Names -> {Flow variable: Flow Set}
 ** TODO Polymorphic Method Handler
@@ -119,7 +120,21 @@
 *** DONE Beginning Constraints
     CLOCK: [2013-04-09 Tue 01:51]--[2013-04-09 Tue 02:22] =>  0:31
     CLOCK: [2013-04-09 Tue 01:22]--[2013-04-09 Tue 01:26] =>  0:04
-*** Propagation constraints
+*** DONE Propagation constraints
     CLOCK: [2013-04-09 Tue 02:35]--[2013-04-09 Tue 02:50] =>  0:15
     CLOCK: [2013-04-09 Tue 02:22]--[2013-04-09 Tue 02:25] =>  0:03
 **** Assuming that foo.bar identifier within a method is still a FlowVar <Class, Method, "foo.bar"> not <Foo, null, "bar">
+*** TODO Conditional constraints
+    CLOCK: [2013-04-09 Tue 02:50]--[2013-04-09 Tue 02:53] =>  0:03
+**** Get all classes which have a method with that name and that many number of arguments
+***** DONE What if it has multiple methods with the same name?
+****** Boy am I glad that I used a separate visitor for generating conditional constraints. Made it effortless.
+**** Extract the matching method(s??)
+**** DONE Generate constraints
+     CLOCK: [2013-04-10 Wed 19:58]--[2013-04-10 Wed 20:22] =>  0:24
+**** DONE Conditional Constraint Visitor
+     CLOCK: [2013-04-10 Wed 18:57]--[2013-04-10 Wed 19:58] =>  1:01
+     :PROPERTIES:
+     :Effort:   10
+     :END:
+** TODO I think I SHOULD uniquify the names cos now I can't blindly create FlowVar using the currClassName and currMethodName.
