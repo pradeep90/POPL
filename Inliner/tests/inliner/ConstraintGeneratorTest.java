@@ -14,11 +14,10 @@ import static inliner.InlinerHelperTest.assertEqualMicroJavaNodes;
 import static inliner.InlinerHelperTest.assertBigStringEquals;
 
 public class ConstraintGeneratorTest{
-    ConstraintGenerator constraintGenerator;
+    ConstraintGenerator constraintGenerator = new ConstraintGenerator();
     
     @Before
     public void setUp(){
-        constraintGenerator = new ConstraintGenerator();
     }
     
     @After

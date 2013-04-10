@@ -27,4 +27,18 @@ public class FlowVar {
         result += ">";
         return result;
     }
+
+    public int hashCode(){
+        int hash = 0;
+        if (className != null){
+            hash += className.hashCode();
+        }
+        if (methodName != null){
+            hash += methodName.hashCode();
+        }
+        if (expressionString != null){
+            hash += expressionString.hashCode();
+        }
+        return hash;
+    }
 }

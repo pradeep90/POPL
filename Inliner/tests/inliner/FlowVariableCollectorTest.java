@@ -13,11 +13,10 @@ import inliner.syntaxtree.*;
 import static inliner.InlinerHelperTest.assertEqualMicroJavaNodes;
 
 public class FlowVariableCollectorTest{
-    FlowVariableCollector flowVariableCollector;
+    FlowVariableCollector flowVariableCollector = new FlowVariableCollector();
     
     @Before
     public void setUp(){
-        flowVariableCollector = new FlowVariableCollector();
     }
     
     @After

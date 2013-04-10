@@ -239,7 +239,7 @@ public class InlinerHelper {
         ExpressionList expressions = (ExpressionList) n.node;
         list.add(expressions.f0);
         for (Node expression : expressions.f1.nodes){
-            list.add((Expression) expression);
+            list.add(((ExpressionRest) expression).f1);
         }
 
         return list;
@@ -254,7 +254,7 @@ public class InlinerHelper {
         FormalParameterList parameters = (FormalParameterList) n.node;
         list.add(parameters.f0);
         for (Node param : parameters.f1.nodes){
-            list.add((FormalParameter) param);
+            list.add(((FormalParameterRest) param).f1);
         }
 
         return list;

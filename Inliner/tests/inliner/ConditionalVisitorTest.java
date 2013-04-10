@@ -13,13 +13,11 @@ import inliner.syntaxtree.*;
 import static inliner.InlinerHelperTest.assertEqualMicroJavaNodes;
 
 public class ConditionalVisitorTest{
-    ConditionalVisitor conditionalVisitor;
-    FlowVar argFlowVar;
+    FlowVar argFlowVar = new FlowVar("Foo", "bar", "yoBoyzInt");
+    ConditionalVisitor conditionalVisitor = new ConditionalVisitor(null, "ComputeFac", Arrays.<FlowVar>asList(argFlowVar));
     
     @Before
     public void setUp(){
-        argFlowVar = new FlowVar("Foo", "bar", "yoBoyzInt");
-        conditionalVisitor = new ConditionalVisitor(null, "ComputeFac", Arrays.<FlowVar>asList(argFlowVar));
     }
     
     @After

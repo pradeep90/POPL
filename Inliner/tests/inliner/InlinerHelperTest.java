@@ -6,7 +6,7 @@ import inliner.syntaxtree.*;
 import inliner.visitor.TreeFormatter;
 import inliner.visitor.TreeDumper;
 
-import static inliner.InlinerHelper.getFormattedString;
+import static inliner.InlinerHelper.*;
 
 // import java.text.ParseException;
 import java.io.FileInputStream;
@@ -31,6 +31,24 @@ public class InlinerHelperTest{
     
     @After
     public void tearDown(){
+    }
+
+    /** 
+     * Assert that node1 and node2 are equal MicroJava nodes.
+     */
+    public static void assertEqualMicroJavaNodes(Node expected,
+                                          Node actual){
+        assertEquals(getFormattedString(expected),
+                     getFormattedString(actual));
+    }
+
+    /** 
+     * Assert that expected and actual are identical strings when we
+     * remove all the whitespace.
+     */
+    public static void assertBigStringEquals(String expected, String actual){
+        assertEquals(expected.replaceAll("(\n|\\s)+", ""),
+                     actual.replaceAll("(\n|\\s)+", ""));
     }
 
     /**
@@ -69,21 +87,31 @@ public class InlinerHelperTest{
     //         "Example-Microjava/Factorial.java");
     // }
 
-    /** 
-     * Assert that node1 and node2 are equal MicroJava nodes.
+    /**
+     * Test method for {@link InlinerHelper#getSaneExpressionList()}.
      */
-    public static void assertEqualMicroJavaNodes(Node expected,
-                                          Node actual){
-        assertEquals(getFormattedString(expected),
-                     getFormattedString(actual));
-    }
-
-    /** 
-     * Assert that expected and actual are identical strings when we
-     * remove all the whitespace.
-     */
-    public static void assertBigStringEquals(String expected, String actual){
-        assertEquals(expected.replaceAll("(\n|\\s)+", ""),
-                     actual.replaceAll("(\n|\\s)+", ""));
+    @Test
+    public final void testGetSaneExpressionList(){
+        IntegerLiteral integerLiteral = new IntegerLiteral(new NodeToken("81"));
+        IntegerLiteral integerLiteral2 = new IntegerLiteral(new NodeToken("32"));
+        PrimaryExpression primaryExpression = new PrimaryExpression(new NodeChoice(integerLiteral, 0));
+        PrimaryExpression primaryExpression2 = new PrimaryExpression(new NodeChoice(integerLiteral2, 0));
+        Expression expression = new Expression(new NodeChoice(primaryExpression, 6));
+        Expression expression2 = new Expression(new NodeChoice(primaryExpression2, 6));
+        assertEquals(new ArrayList<Expression>(), getSaneExpressionList(new NodeOptional()));
+        assertEquals(
+            Arrays.<Expression>asList(expression),
+            getSaneExpressionList(
+                new NodeOptional(
+                    new ExpressionList(
+                        expression,
+                        new NodeListOptional()))));
+        assertEquals(
+            Arrays.<Expression>asList(expression, expression2),
+            getSaneExpressionList(
+                new NodeOptional(
+                    new ExpressionList(
+                        expression,
+                        new NodeListOptional(new ExpressionRest(expression2))))));
     }
 }

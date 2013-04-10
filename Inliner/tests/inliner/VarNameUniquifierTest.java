@@ -13,11 +13,10 @@ import inliner.syntaxtree.*;
 import static inliner.InlinerHelperTest.assertEqualMicroJavaNodes;
 
 public class VarNameUniquifierTest{
-    VarNameUniquifier varNameUniquifier;
+    VarNameUniquifier varNameUniquifier = new VarNameUniquifier();
 
     @Before
     public void setUp(){
-        varNameUniquifier = new VarNameUniquifier();
     }
     
     @After

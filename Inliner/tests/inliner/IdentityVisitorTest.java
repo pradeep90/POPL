@@ -13,11 +13,10 @@ import inliner.syntaxtree.*;
 import static inliner.InlinerHelperTest.assertEqualMicroJavaNodes;
 
 public class IdentityVisitorTest{
-    IdentityVisitor identityVisitor;
+    IdentityVisitor identityVisitor = new IdentityVisitor();
     
     @Before
     public void setUp(){
-        identityVisitor = new IdentityVisitor();
     }
     
     @After

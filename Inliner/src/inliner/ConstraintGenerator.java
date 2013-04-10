@@ -111,6 +111,7 @@ public class ConstraintGenerator extends IdentityVisitor {
                         getIdentifierName(n.f0)),
             getIdentifierName(n.f2),
             getFlowArgs(getSaneExpressionList(n.f4)));
+
         originalParseTree.accept(conditionalVisitor);
         conditionalConstraints.addAll(conditionalVisitor.constraints);
 
