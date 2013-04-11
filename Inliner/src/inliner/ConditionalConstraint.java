@@ -6,15 +6,13 @@ package inliner;
 public class ConditionalConstraint extends Constraint{
     String className;
     FlowVar mainFlowVar;
-    FlowVar antecedent;
-    FlowVar consequent;
+    PropagationConstraint propagationConstraint;
     
     public ConditionalConstraint(String className, FlowVar mainFlowVar,
-                                 FlowVar antecedent, FlowVar consequent) {
+                                 PropagationConstraint propagationConstraint) {
         this.className = className;
         this.mainFlowVar = mainFlowVar;
-        this.antecedent = antecedent;
-        this.consequent = consequent;
+        this.propagationConstraint = propagationConstraint;
     }
 
     public String toString(){
@@ -23,9 +21,7 @@ public class ConditionalConstraint extends Constraint{
         result += ", ";
         result += mainFlowVar;
         result += ", ";
-        result += antecedent;
-        result += ", ";
-        result += consequent;
+        result += propagationConstraint;
         result += ">";
         return result;
     }

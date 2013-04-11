@@ -23,10 +23,11 @@ public class Solver extends IdentityVisitor {
     List<FlowVar> flowVars;
 
     HashMap<String, Integer> classIndexMap;
-    HashMap<FlowVar, ArrayList<Boolean>> flowBitVector;
-    HashMap<FlowVar, ArrayList<ConditionalConstraint>> flowConstraints;
+    HashMap<FlowVar, HashMap<String, HashSet<PropagationConstraint>>> flowConstraints;
     
-    public HashMap<FlowVar, List<String>> flowSetMap;
+    HashMap<FlowVar, HashSet<FlowVar>> edges;
+
+    public HashMap<FlowVar, HashSet<String>> flowSetMap;
 
     public Solver(){}
 
@@ -44,10 +45,26 @@ public class Solver extends IdentityVisitor {
         classNames = getClassNames();
         flowVars = getFlowVars();
 
-        classIndexMap = new HashMap<String, Integer>();
-        flowBitVector = new HashMap<FlowVar, ArrayList<Boolean>>();
-        flowConstraints = new HashMap<FlowVar, ArrayList<ConditionalConstraint>>();
-        flowSetMap = new HashMap<FlowVar, List<String>>();
+        classIndexMap = getClassIndexMap(classNames);
+
+        flowConstraints = new HashMap<FlowVar, HashMap<String, HashSet<PropagationConstraint>>>();
+        for (FlowVar var : flowVars){
+            flowConstraints.put(var, new HashMap<String, HashSet<PropagationConstraint>>());
+            for (String className : classNames){
+                flowConstraints.get(var).put(className, new HashSet<PropagationConstraint>());
+            }
+        }
+
+        edges = new HashMap<FlowVar, HashSet<FlowVar>>();
+        for (FlowVar var : flowVars){
+            edges.put(var, new HashSet<FlowVar>());
+        }
+
+        flowSetMap = new HashMap<FlowVar, HashSet<String>>();
+
+        for (FlowVar var : flowVars){
+            flowSetMap.put(var, new HashSet<String>());
+        }
     }
 
     public List<String> getClassNames(){
@@ -60,6 +77,16 @@ public class Solver extends IdentityVisitor {
             classNames.add(conditionalConstraint.className);
         }
         return new ArrayList<String>(classNames);
+    }
+
+    public static HashMap<String, Integer> getClassIndexMap(
+        List<String> classNames){
+
+        HashMap map = new HashMap<String, Integer>();
+        for (int i = 0; i < classNames.size(); i++){
+            map.put(classNames.get(i), i);
+        }
+        return map;
     }
 
     public List<FlowVar> getFlowVars(){
@@ -75,16 +102,89 @@ public class Solver extends IdentityVisitor {
 
         for (ConditionalConstraint conditionalConstraint : conditionalConstraints){
             flowVars.add(conditionalConstraint.mainFlowVar);
-            flowVars.add(conditionalConstraint.antecedent);
-            flowVars.add(conditionalConstraint.consequent);
+            flowVars.add(conditionalConstraint.propagationConstraint.lhs);
+            flowVars.add(conditionalConstraint.propagationConstraint.rhs);
         }
         return new ArrayList<FlowVar>(flowVars);
     }
 
-    public void propagate(FlowVar v, int classIndex){
-        // if (flowBitVector.get(v).get(classIndex)){
-        //     return;
+    public void computeFlowSets(){
+        for (BeginningConstraint beginningConstraint : beginningConstraints){
+            insert(beginningConstraint);
+        }
+
+        for (PropagationConstraint propagationConstraint : propagationConstraints){
+            insert(propagationConstraint);
+        }
+
+        for (ConditionalConstraint conditionalConstraint : conditionalConstraints){
+            insert(conditionalConstraint);
+        }
+
+        // for (FlowVar var : flowSetMap.keySet()){
+        //     for (int i = 0; i < flowSetMap.get(var).size(); i++){
+        //         if (flowSetMap.get(var).get(i)){
+        //             addClassName(var, classNames.get(i));
+        //         }
+        //     }
         // }
-        // flowBitVector.get(v).get(classIndex).
+    }
+
+    public void addClassName(FlowVar var, String className){
+        if (!flowSetMap.containsKey(var)){
+            flowSetMap.put(var, new HashSet<String>());
+        }
+
+        flowSetMap.get(var).add(className);
+    }
+
+    public void propagate(FlowVar v, String className){
+        if (flowSetMap.get(v).contains(className)){
+            return;
+        }
+
+        flowSetMap.get(v).add(className);
+        
+        for (FlowVar neighbour : edges.get(v)){
+            propagate(neighbour, className);
+        }
+        
+        for (PropagationConstraint propagationConstraint :
+                     flowConstraints.get(v).get(className)){
+            insert(propagationConstraint);
+        }
+
+        flowConstraints.get(v).get(className).clear();
+    }
+
+    public void insert(BeginningConstraint beginningConstraint){
+        propagate(beginningConstraint.var,
+                  beginningConstraint.className);
+    }
+
+    public void insert(PropagationConstraint propagationConstraint){
+        addEdge(propagationConstraint.lhs, propagationConstraint.rhs);
+        for (String className : flowSetMap.get(propagationConstraint.lhs)){
+            propagate(propagationConstraint.rhs, className);
+        }
+    }
+
+    public void insert(ConditionalConstraint conditionalConstraint){
+        if (flowSetMap.get(conditionalConstraint.mainFlowVar).contains(
+                conditionalConstraint.className)){
+
+            insert(conditionalConstraint.propagationConstraint);
+        } else {
+            flowConstraints.get(conditionalConstraint.mainFlowVar).get(conditionalConstraint.className).add(conditionalConstraint.propagationConstraint);
+        }
+       
+    }
+
+    public void addEdge(FlowVar from, FlowVar to){
+        if (!edges.containsKey(from)){
+            edges.put(from, new HashSet<FlowVar>());
+        }
+
+        edges.get(from).add(to);
     }
 }

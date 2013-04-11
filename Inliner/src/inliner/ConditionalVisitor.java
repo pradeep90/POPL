@@ -51,8 +51,8 @@ public class ConditionalVisitor extends IdentityVisitor {
             currConstraints.add(new ConditionalConstraint(
                 currClassName,
                 mainFlowVar,
-                arguments.get(i),
-                flowParameters.get(i)));
+                new PropagationConstraint(arguments.get(i),
+                                          flowParameters.get(i))));
         }
 
         constraints.addAll(currConstraints);

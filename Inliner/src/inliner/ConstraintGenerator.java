@@ -26,10 +26,9 @@ public class ConstraintGenerator extends IdentityVisitor {
         conditionalConstraints = new HashSet<ConditionalConstraint>();
     }
 
-    public void addBeginningConstraint(String expressionString){
+    public void addBeginningConstraint(String className, String expressionString){
         BeginningConstraint currConstraint = new BeginningConstraint(
-            this.currClassName,
-
+            className,
             // TODO: Make sure that it IS actually a method-local
             // variable. Else, it is a class variable, so,
             // currMethodName should actually be null.
@@ -54,7 +53,7 @@ public class ConstraintGenerator extends IdentityVisitor {
      */
     @Override
     public Node visit(ThisExpression n) {
-        addBeginningConstraint("this");
+        addBeginningConstraint(this.currClassName, "this");
         return super.visit(n);
     }
 
@@ -66,7 +65,7 @@ public class ConstraintGenerator extends IdentityVisitor {
      */
     @Override
     public Node visit(AllocationExpression n) {
-        addBeginningConstraint(getFormattedString(n));
+        addBeginningConstraint(getIdentifierName(n.f1), getFormattedString(n));
         return super.visit(n);
     }
 
@@ -83,12 +82,12 @@ public class ConstraintGenerator extends IdentityVisitor {
             // variable. Else, it is a class variable, so,
             // currMethodName should actually be null.
             new FlowVar(this.currClassName, this.currMethodName,
-                        getFormattedString(n.f0)),
+                        getFormattedString(n.f2)),
             // TODO: Make sure that it IS actually a method-local
             // variable. Else, it is a class variable, so,
             // currMethodName should actually be null.
             new FlowVar(this.currClassName, this.currMethodName,
-                        getFormattedString(n.f2)));
+                        getFormattedString(n.f0)));
         propagationConstraints.add(currConstraint);
 
         return super.visit(n);

@@ -33,10 +33,11 @@ public class ConditionalVisitorTest{
             "Example-Microjava/Factorial.java");
 
         node.accept(conditionalVisitor);
-        ConditionalConstraint expected = new ConditionalConstraint("Fac",
-                                                                   null,
-                                                                   argFlowVar,
-                                                                   new FlowVar("Fac", "ComputeFac", "num"));
+        ConditionalConstraint expected = new ConditionalConstraint(
+            "Fac",
+            null,
+            new PropagationConstraint(argFlowVar,
+                                      new FlowVar("Fac", "ComputeFac", "num")));
         assertEquals(1, conditionalVisitor.constraints.size());
         assertEquals(expected.toString(),
                      conditionalVisitor.constraints.get(0).toString());
@@ -56,10 +57,10 @@ public class ConditionalVisitorTest{
         ConditionalConstraint expected = new ConditionalConstraint(
             "____NewMainClass____",
             null,
-            argFlowVar,
-            new FlowVar("____NewMainClass____",
-                        "____Main____",
-                        "____arg_length____"));
+            new PropagationConstraint(argFlowVar,
+                                      new FlowVar("____NewMainClass____",
+                                                  "____Main____",
+                                                  "____arg_length____")));
 
         assertEquals(1, conditionalVisitor.constraints.size());
         assertEquals(expected.toString(),
