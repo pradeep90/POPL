@@ -43,6 +43,7 @@ public class ConstraintGenerator extends IdentityVisitor {
      * f1 -> ( TypeDeclaration() )*
      * f2 -> <EOF>
      */
+    @Override
     public Node visit(Goal n) {
         originalParseTree = n;
         return super.visit(n);

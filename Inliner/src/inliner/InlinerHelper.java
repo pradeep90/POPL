@@ -230,6 +230,29 @@ public class InlinerHelper {
         return getMethodDeclaration(nodeString).f8;
     }
 
+    /** 
+     * @return deep copy of MethodDeclaration
+     */
+    public static MethodDeclaration getCopy(MethodDeclaration methodDeclaration){
+        String codeString = ""
+                + "class DummyClass {"
+                + "    public static void main(String [] a){"
+                + "        new ____NewMainClass____().____Main____(0);"
+                + "    }"
+                + "}"
+                + ""
+                + "class ____NewMainClass____{"
+                + "    public void ____Main____(int ____arg_length____){"
+                + "    }"
+                + getFormattedString(methodDeclaration)
+                + "}";
+
+        Goal goal = (Goal) getMicroJavaNodeFromString(codeString);
+        ClassDeclaration classDeclaration = (ClassDeclaration)
+                ((TypeDeclaration) goal.f1.nodes.get(0)).f0.choice;
+        return (MethodDeclaration) classDeclaration.f4.nodes.get(1);
+    }
+
     public static List<Expression> getSaneExpressionList(NodeOptional n){
         List<Expression> list = new ArrayList<Expression>();
         if (!n.present()){

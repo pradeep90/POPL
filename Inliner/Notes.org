@@ -116,6 +116,15 @@
 
 ** DONE Constraint Class
    CLOCK: [2013-04-09 Tue 01:26]--[2013-04-09 Tue 01:51] =>  0:25
+** DONE Try moving all allocations out of setUp and see if it speeds up Unit tests (and preserves correctness)
+   CLOCK: [2013-04-11 Thu 01:17]--[2013-04-11 Thu 01:21] =>  0:04
+*** Before
+**** 0.158
+**** 0.165
+*** After
+**** 0.177
+**** 0.159
+*** Nope. Not a huge difference.
 ** DONE ConstraintGenerator
 *** DONE Beginning Constraints
     CLOCK: [2013-04-09 Tue 01:51]--[2013-04-09 Tue 02:22] =>  0:31
@@ -142,7 +151,7 @@
    CLOCK: [2013-04-10 Wed 23:59]--[2013-04-11 Thu 00:33] =>  0:34
 *** DONE Check if I have Java 7 (I do... I knooooow!... WAIT! Turns out I don't!)
 *** DONE Check out whether Java 7 has an equivalent of map (Nope, it doesn't)
-** Constraint Solver
+** DONE Constraint Solver
 *** DONE Fields
     CLOCK: [2013-04-10 Wed 23:55]--[2013-04-10 Wed 23:59] =>  0:04
     :PROPERTIES:
@@ -185,17 +194,37 @@
 *** DONE Make flowBitVector an array of sets. Just use flowSetMap.
     CLOCK: [2013-04-11 Thu 19:22]--[2013-04-11 Thu 19:58] =>  0:36
     CLOCK: [2013-04-11 Thu 19:19]--[2013-04-11 Thu 19:20] =>  0:01
-** Method Inlining
-** foo.bar = new A()
-*** I think it should be if ClassC \in [foo] => [new A()] \sube [ClassC, null, bar]
+** VVIP Unique names
+   CLOCK: [2013-04-11 Thu 20:51]--[2013-04-11 Thu 20:59] =>  0:08
+   CLOCK: [2013-04-11 Thu 20:31]--[2013-04-11 Thu 20:40] =>  0:09
+*** TODO Environment
+**** Binding <OldName, NewName>
+** DONE Method Transforming [(method, "object", arguments, uniquifier) -> (variable declarations, statement list)]
+   CLOCK: [2013-04-12 Fri 00:18]--[2013-04-12 Fri 00:43] =>  0:25
+   CLOCK: [2013-04-11 Thu 23:48]--[2013-04-12 Fri 00:18] =>  0:30
+   :PROPERTIES:
+   :Effort:   60
+   :END:
+*** (object.method(arguments))
+*** Replace "this" with "object"
+*** VVIP Replace all non-local variables with object.variable
+*** Uniquely rename the local variables + parameters
+*** TODO Basically, uniquify the entire method 
+*** NOW, make the parameters into local variables
+*** initialize the erstwhile parameters to arguments (do this as a separate step to avoid confusion)
+** DONE Method Inliner
+   CLOCK: [2013-04-12 Fri 00:43]--[2013-04-12 Fri 01:37] =>  0:54
+*** Take each MessageSendStatement. If the object has a Singleton flow set, inline the method
+*** Assume there is only one matching method
+*** Make MessageSendStatement return a Block sometimes
+*** In Statement, when it is a MessageSendStatement, set the NodeChoice (to Block or MessageSendStatement) according to the return value 
+** DONE Debug MethodInliner
+   CLOCK: [2013-04-12 Fri 01:37]--[2013-04-12 Fri 02:22] =>  0:45
+*** I wasn't using the className found in the flow set of the object in the MessageSendStatement
+*** I had accidentally put return = old_stuff in visit(MessageSendStatement) in MethodInliner
+** TODO Uniquify method in MethodTransformer
+** foo.bar = expression
+*** I think it should be if ClassC \in [foo] => [expression] \sube [ClassC, null, bar]
+**** for all classes that have a class variable foo
 ** Class duplication
 ** Method duplication
-** DONE Try moving all allocations out of setUp and see if it speeds up Unit tests (and preserves correctness)
-   CLOCK: [2013-04-11 Thu 01:17]--[2013-04-11 Thu 01:21] =>  0:04
-*** Before
-**** 0.158
-**** 0.165
-*** After
-**** 0.177
-**** 0.159
-*** Nope. Not a huge difference.
