@@ -283,6 +283,8 @@ java.lang.ClassCastException: inliner.syntaxtree.ClassDeclaration cannot be cast
 *** DONE Handled the null case in FlowVar.equals()
 *** DONE Handle arr[foo]
 *** TODO Handle derived methods
+**** I can't do it right now.
+**** There may be a chain of inheritance so you can't just solve it by looking in your superclass' method list
 ** ClassExtendsDeclaration
 *** Hash: className => Environment (contng)
 *** DONE BUG: I simply wasn't setting "_return = new ClassExtendsDeclaration()"
