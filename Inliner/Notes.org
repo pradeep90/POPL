@@ -194,11 +194,6 @@
 *** DONE Make flowBitVector an array of sets. Just use flowSetMap.
     CLOCK: [2013-04-11 Thu 19:22]--[2013-04-11 Thu 19:58] =>  0:36
     CLOCK: [2013-04-11 Thu 19:19]--[2013-04-11 Thu 19:20] =>  0:01
-** VVIP Unique names
-   CLOCK: [2013-04-11 Thu 20:51]--[2013-04-11 Thu 20:59] =>  0:08
-   CLOCK: [2013-04-11 Thu 20:31]--[2013-04-11 Thu 20:40] =>  0:09
-*** TODO Environment
-**** Binding <OldName, NewName>
 ** DONE Method Transforming [(method, "object", arguments, uniquifier) -> (variable declarations, statement list)]
    CLOCK: [2013-04-12 Fri 00:18]--[2013-04-12 Fri 00:43] =>  0:25
    CLOCK: [2013-04-11 Thu 23:48]--[2013-04-12 Fri 00:18] =>  0:30
@@ -222,9 +217,39 @@
    CLOCK: [2013-04-12 Fri 01:37]--[2013-04-12 Fri 02:22] =>  0:45
 *** I wasn't using the className found in the flow set of the object in the MessageSendStatement
 *** I had accidentally put return = old_stuff in visit(MessageSendStatement) in MethodInliner
-** TODO Uniquify method in MethodTransformer
-** foo.bar = expression
+** DONE foo.bar = expression
+   CLOCK: [2013-04-12 Fri 04:02]--[2013-04-12 Fri 04:24] =>  0:22
+   :PROPERTIES:
+   :Effort:   15
+   :END:
 *** I think it should be if ClassC \in [foo] => [expression] \sube [ClassC, null, bar]
-**** for all classes that have a class variable foo
+*** for all classes that have a class variable foo
+** DONE Test foo.bar
+   CLOCK: [2013-04-12 Fri 04:24]--[2013-04-12 Fri 04:35] =>  0:11
+*** I was matching classes using "foo" instead of the field "bar"
+** VVIP Unique names
+   CLOCK: [2013-04-11 Thu 20:51]--[2013-04-11 Thu 20:59] =>  0:08
+   CLOCK: [2013-04-11 Thu 20:31]--[2013-04-11 Thu 20:40] =>  0:09
+*** DONE Environment
+    CLOCK: [2013-04-12 Fri 04:48]--[2013-04-12 Fri 04:58] =>  0:10
+**** Binding <OldName, NewName>
+*** DONE Identity with Argument Visitor
+    CLOCK: [2013-04-12 Fri 04:37]--[2013-04-12 Fri 04:48] =>  0:11
+    :PROPERTIES:
+    :Effort:   10
+    :END:
+*** TODO one pass, have an environment for each class: go through its class-level variable declarations and add bindings to its environment
+    :PROPERTIES:
+    :Effort:   10
+    :END:
+*** For VarDeclaration or FormalParameter, extend the env
+    CLOCK: [2013-04-12 Fri 05:29]--[2013-04-12 Fri 05:33] =>  0:04
+*** for method local variable bar, lookup and replace
+    CLOCK: [2013-04-12 Fri 05:11]--[2013-04-12 Fri 05:29] =>  0:18
+*** TODO for foo.bar (in some other method), lookup bar's newName in foo's Class' environment
+**** HashMap<String, HashMap<String, String>> classRenamerMap;
+**** build this
+**** then, just lookup bar's newName
+** TODO Uniquify method in MethodTransformer
 ** Class duplication
 ** Method duplication

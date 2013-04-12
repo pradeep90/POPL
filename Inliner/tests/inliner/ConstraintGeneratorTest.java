@@ -80,6 +80,23 @@ public class ConstraintGeneratorTest{
     }
 
     /**
+     * Test method for {@link ConstraintGenerator#AssignmentStatement()}.
+     */
+    @Test
+    public final void testAssignmentStatement_dotExpression(){
+        Node node = InlinerHelper.getMicroJavaNodeFromFile(
+            "Example-Microjava/My-Basic-Test-Cases/DotExpression.java");
+
+        node.accept(constraintGenerator);
+
+        assertEquals(1, constraintGenerator.conditionalConstraints.size());
+        String expected = "[<ConditionalConstraint: Bar, <FlowVar: Foo, method1, a>, <PropagationConstraint: <FlowVar: Foo, method1, new Foo ( )>, <FlowVar: Bar, x>>>]";
+        assertBigStringEquals(
+            expected,
+            constraintGenerator.conditionalConstraints.toString());
+    }
+
+    /**
      * Test method for {@link ConstraintGenerator#MessageSendStatement()}.
      */
     @Test

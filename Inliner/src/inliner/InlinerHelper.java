@@ -282,4 +282,19 @@ public class InlinerHelper {
 
         return list;
     }
+
+    public static String getClassName(TypeDeclaration typeDeclaration){
+        return getIdentifierName(
+            typeDeclaration.f0.which == 0?
+            ((ClassDeclaration) typeDeclaration.f0.choice).f1:
+            ((ClassExtendsDeclaration) typeDeclaration.f0.choice).f1);
+    }
+
+    public static NodeListOptional getVarDeclarationList(
+        TypeDeclaration typeDeclaration){
+
+        return typeDeclaration.f0.which == 0?
+                ((ClassDeclaration) typeDeclaration.f0.choice).f3:
+                ((ClassExtendsDeclaration) typeDeclaration.f0.choice).f5;
+    }
 }

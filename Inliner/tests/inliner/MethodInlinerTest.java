@@ -61,8 +61,9 @@ public class MethodInlinerTest{
         methodInliner = new MethodInliner((Goal) node,
                                                         new VarNameUniquifier(),
                                                         solver.flowSetMap);
+        // TODO: 
         // node.accept(methodInliner);
         
-        System.out.println("getFormattedString(node.accept(methodInliner)): " + getFormattedString(node.accept(methodInliner)));
+        // System.out.println("getFormattedString(node.accept(methodInliner)): " + getFormattedString(node.accept(methodInliner)));
     }
 }

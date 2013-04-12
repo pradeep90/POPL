@@ -82,7 +82,7 @@ public class Solver extends IdentityVisitor {
     public static HashMap<String, Integer> getClassIndexMap(
         List<String> classNames){
 
-        HashMap map = new HashMap<String, Integer>();
+        HashMap<String, Integer> map = new HashMap<String, Integer>();
         for (int i = 0; i < classNames.size(); i++){
             map.put(classNames.get(i), i);
         }

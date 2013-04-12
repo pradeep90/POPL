@@ -152,13 +152,6 @@ public class MethodInliner extends IdentityVisitor {
         return null;
     }
 
-    public static String getClassName(TypeDeclaration typeDeclaration){
-        return getIdentifierName(
-            typeDeclaration.f0.which == 0?
-            ((ClassDeclaration) typeDeclaration.f0.choice).f1:
-            ((ClassExtendsDeclaration) typeDeclaration.f0.choice).f1);
-    }
-
     public static NodeListOptional getMethodList(TypeDeclaration typeDeclaration){
         return typeDeclaration.f0.which == 0?
                 ((ClassDeclaration) typeDeclaration.f0.choice).f4:

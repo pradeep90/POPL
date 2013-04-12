@@ -78,20 +78,64 @@ public class ConstraintGenerator extends IdentityVisitor {
      */
     @Override
     public Node visit(AssignmentStatement n) {
-        PropagationConstraint currConstraint = new PropagationConstraint(
-            // TODO: Make sure that it IS actually a method-local
-            // variable. Else, it is a class variable, so,
-            // currMethodName should actually be null.
-            new FlowVar(this.currClassName, this.currMethodName,
-                        getFormattedString(n.f2)),
-            // TODO: Make sure that it IS actually a method-local
-            // variable. Else, it is a class variable, so,
-            // currMethodName should actually be null.
-            new FlowVar(this.currClassName, this.currMethodName,
-                        getFormattedString(n.f0)));
-        propagationConstraints.add(currConstraint);
-
+        if (n.f0.f0.which == 1){
+            PropagationConstraint currConstraint = new PropagationConstraint(
+                // TODO: Make sure that it IS actually a method-local
+                // variable. Else, it is a class variable, so,
+                // currMethodName should actually be null.
+                new FlowVar(this.currClassName, this.currMethodName,
+                            getFormattedString(n.f2)),
+                // TODO: Make sure that it IS actually a method-local
+                // variable. Else, it is a class variable, so,
+                // currMethodName should actually be null.
+                new FlowVar(this.currClassName, this.currMethodName,
+                            getFormattedString(n.f0)));
+            propagationConstraints.add(currConstraint);
+        } else {
+            for (String className : getMatchingClasses(
+                     getIdentifierName(((DotExpression) n.f0.f0.choice).f2),
+                     originalParseTree)){
+                
+                conditionalConstraints.add(new ConditionalConstraint(
+                    className,
+                    new FlowVar(this.currClassName,
+                                this.currMethodName,
+                                getIdentifierName(
+                                    ((DotExpression) n.f0.f0.choice).f0)),
+                    new PropagationConstraint(
+                        new FlowVar(this.currClassName, this.currMethodName,
+                                    getFormattedString(n.f2)),
+                        new FlowVar(className, null,
+                                    getIdentifierName(
+                                        ((DotExpression) n.f0.f0.choice).f2)))));
+            }
+        }
         return super.visit(n);
+    }
+
+    /** 
+     * @return names of all classes that have a field called fieldName.
+     */
+    public List<String> getMatchingClasses(String fieldName, Goal goal){
+        List<String> classNames = new ArrayList<String>();
+        for (Node node : goal.f1.nodes){
+            TypeDeclaration typeDeclaration = (TypeDeclaration) node;
+            if (getClassVarSet(typeDeclaration).contains(fieldName)){
+                classNames.add(getClassName(typeDeclaration));
+            }
+        }
+        return classNames;
+    }
+
+    /** 
+     * @return names of all fields for the class.
+     */
+    public HashSet<String> getClassVarSet(TypeDeclaration typeDeclaration){
+        HashSet<String> result = new HashSet<String>();
+        for (Node varDeclaration : getVarDeclarationList(typeDeclaration).nodes){
+            result.add(getIdentifierName(((VarDeclaration) varDeclaration).f1));
+        }
+        return result;
     }
 
     /**
