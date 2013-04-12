@@ -140,6 +140,31 @@ public class VarNameUniquifier extends IdentityWithArgVisitor {
     }
 
     /**
+     * f0 -> Identifier()
+     * f1 -> "["
+     * f2 -> Expression()
+     * f3 -> "]"
+     * f4 -> "="
+     * f5 -> Expression()
+     * f6 -> ";"
+     */
+    @Override
+    public Node visit(ArrayAssignmentStatement n, Environment env) {
+        Node _ret=null;
+        if (env.lookup(getIdentifierName(n.f0)) == null){
+            _ret = super.visit(n, env);
+        } else {
+            Identifier f0 = getNewIdentifier(env.lookup(
+                getIdentifierName(n.f0)));
+            Expression f2 = (Expression) n.f2.accept(this, env);
+            Expression f5 = (Expression) n.f5.accept(this, env);
+            _ret = new ArrayAssignmentStatement(f0, f2, f5);
+        }
+
+        return _ret;
+    }
+
+    /**
      * f0 -> FormalParameter()
      * f1 -> ( FormalParameterRest() )*
      */

@@ -278,6 +278,11 @@ java.lang.ClassCastException: inliner.syntaxtree.ClassDeclaration cannot be cast
 ** DONE Integration Tests
 *** 16 correct, 6 NullPointerExceptions
 *** I'll take that
+** Bug fixing
+*** DONE Removed the extraneous "Foo" from SortFoo 
+*** DONE Handled the null case in FlowVar.equals()
+*** DONE Handle arr[foo]
+*** TODO Handle derived methods
 ** ClassExtendsDeclaration
 *** Hash: className => Environment (contng)
 *** DONE BUG: I simply wasn't setting "_return = new ClassExtendsDeclaration()"

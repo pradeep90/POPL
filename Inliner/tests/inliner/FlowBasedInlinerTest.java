@@ -36,8 +36,6 @@ public class FlowBasedInlinerTest{
         flowBasedInliner = new FlowBasedInliner((Goal) node);
 
         flowBasedInliner.compute();
-
-        System.out.println("getFormattedString(flowBasedInliner.finalParseTree): " + getFormattedString(flowBasedInliner.finalParseTree));
     }
     
     public String getOutputForFile(String fileName){
@@ -50,10 +48,11 @@ public class FlowBasedInlinerTest{
     }
 
     public void doConversionForMicroJavaFile(String fileName){
-        getOutputForFile(fileName);
+        // String result = getOutputForFile(fileName);
+        // System.out.println("result: " + result);
         
-        // writeCodeToFile(getOutputForFile(fileName),
-        //                 "Generated-Microjava/" + fileName);
+        writeCodeToFile(getOutputForFile(fileName),
+                        "Generated-Microjava/" + fileName);
     }
 
     @Test

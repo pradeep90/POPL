@@ -42,12 +42,17 @@ public class FlowVar {
         return hash;
     }
 
+    public boolean areEqualStrings(String s1, String s2){
+        return s1 == null? s2 == null: s1.equals(s2);
+    }
+
     public boolean equals(Object o) {
         if (o instanceof FlowVar) {
             FlowVar other = (FlowVar) o;
-            return this.className.equals(other.className)
-                    && this.methodName.equals(other.methodName)
-                    && this.expressionString.equals(other.expressionString);
+            return (areEqualStrings(this.className, other.className))
+                    && (areEqualStrings(this.methodName, other.methodName))
+                    && (areEqualStrings(this.expressionString,
+                                        other.expressionString));
         }
         return false;
     }

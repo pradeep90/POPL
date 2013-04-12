@@ -117,7 +117,7 @@ class QS{
             number[____writeable____right] = t;
             ___tmp12 = this;
 
-            ___tmp12.SortFoo(____writeable____left,i-1);
+            ___tmp12.Sort(____writeable____left,i-1);
 
             ___tmp11 = ___tmp12.____1234Sort4321____;
             nt = ___tmp11;
