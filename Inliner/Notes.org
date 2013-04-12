@@ -226,7 +226,7 @@
 ** DONE Test foo.bar
    CLOCK: [2013-04-12 Fri 04:24]--[2013-04-12 Fri 04:35] =>  0:11
 *** I was matching classes using "foo" instead of the field "bar"
-** TODO Unique names
+** DONE Unique names
    CLOCK: [2013-04-12 Fri 13:00]--[2013-04-12 Fri 13:57] =>  0:57
    CLOCK: [2013-04-11 Thu 20:51]--[2013-04-11 Thu 20:59] =>  0:08
    CLOCK: [2013-04-11 Thu 20:31]--[2013-04-11 Thu 20:40] =>  0:09
@@ -260,16 +260,21 @@
 **** DONE I was creating a copy of the parent environment, and so none of the extends were having an effect on the parent environment
 **** DONE Plus, you need to make sure VarDeclaration and FormalParameter DO have an effect 
 **** DONE Plus, a copy of the environment for each method
-** FlowBasedInliner
+** DONE FlowBasedInliner
 *** putting everything together
+    CLOCK: [2013-04-12 Fri 21:58]--[2013-04-12 Fri 22:09] =>  0:11
 *** DONE error 
     CLOCK: [2013-04-12 Fri 14:37]--[2013-04-12 Fri 14:42] =>  0:05
 1) testFlowBasedInliner(inliner.FlowBasedInlinerTest)
 java.lang.ClassCastException: inliner.syntaxtree.ClassDeclaration cannot be cast to inliner.syntaxtree.TypeDeclaration
 	at inliner.MethodInliner.getMethod(MethodInliner.java:136)
 **** I hadn't wrapped TypeDeclaration's node
-** TODO Uniquify method in MethodTransformer
+** DONE Uniquify method in MethodTransformer
+   CLOCK: [2013-04-12 Fri 22:10]--[2013-04-12 Fri 22:29] =>  0:19
+*** DONE int VARIABLE for the parameter
+**** I was using the old parameters
 ** TODO P6
+   CLOCK: [2013-04-12 Fri 22:29]--[2013-04-12 Fri 22:33] =>  0:04
 ** TODO Remove method name from FlowVar.
 *** For class variables, put [Class, variable]
 *** For local variables (i.e., ___VAR), put [null, variable] - they're unique

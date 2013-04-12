@@ -18,6 +18,7 @@ public class MethodTransformer extends IdentityVisitor {
     VarNameUniquifier varNameUniquifier;
 
     MethodDeclaration transformedMethod;
+    MethodDeclaration uniquifiedTransformedMethod;
     
     // Result
     public NodeListOptional varDeclarations;
@@ -63,9 +64,14 @@ public class MethodTransformer extends IdentityVisitor {
         transformedMethod = (MethodDeclaration) visit(methodDeclaration);
 
         // TODO: Uniquify transformedMethod
-        
+        uniquifiedTransformedMethod =
+                (MethodDeclaration) transformedMethod.accept(varNameUniquifier,
+                                                             new Environment());
         initStatements = new NodeListOptional();
 
+        paramVars = getVarDeclarationsFromParameterList(
+            uniquifiedTransformedMethod.f4.node);
+        
         // paramVar = arg
         for (int i = 0; i < paramVars.nodes.size(); i++){
             VarDeclaration currVarDeclaration =
@@ -79,11 +85,11 @@ public class MethodTransformer extends IdentityVisitor {
                     0)));
         }
 
-        varDeclarations = transformedMethod.f7;
+        varDeclarations = uniquifiedTransformedMethod.f7;
         varDeclarations.nodes.addAll(paramVars.nodes);
         
         statementList = initStatements;
-        statementList.nodes.addAll(transformedMethod.f8.nodes);
+        statementList.nodes.addAll(uniquifiedTransformedMethod.f8.nodes);
     }
 
     /**

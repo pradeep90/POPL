@@ -142,7 +142,7 @@ javadoc: $(all_src_files)
 
 execute: compile
 	$(JAVA) $(RUN_FLAGS) P6 < Example-Microjava/Factorial.java > Generated-Microjava/Factorial.java
-	# cd Generated-Microjava && javac Factorial.java && java Factorial
+	cd Generated-Microjava && javac Factorial.java && java Factorial
 
 $(all_generated_microjava_files):
 	$(MKDIR) $(GEN_MICROJAVA_OUTPUT_DIR)

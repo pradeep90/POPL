@@ -105,7 +105,9 @@ public class MethodInliner extends IdentityVisitor {
         // NodeOptional f4 = (NodeOptional) n.f4.accept(this);
         // _ret = new MessageSendStatement(f0, f2, f4);
 
-        if (isSingleton(getIdentifierName(n.f0))){
+        if (isSingleton(getIdentifierName(n.f0))
+            // Non-recursive call
+            && !this.currMethodName.equals(getIdentifierName(n.f2))){
             MethodTransformer methodTransformer = new MethodTransformer(
                 getMethod(getIdentifierName(n.f0),
                           getIdentifierName(n.f2),
