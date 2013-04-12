@@ -275,9 +275,12 @@ java.lang.ClassCastException: inliner.syntaxtree.ClassDeclaration cannot be cast
 **** I was using the old parameters
 ** DONE P6
    CLOCK: [2013-04-12 Fri 22:29]--[2013-04-12 Fri 22:33] =>  0:04
-** Integration Tests
+** DONE Integration Tests
 *** 16 correct, 6 NullPointerExceptions
 *** I'll take that
+** ClassExtendsDeclaration
+*** Hash: className => Environment (contng)
+*** DONE BUG: I simply wasn't setting "_return = new ClassExtendsDeclaration()"
 ** TODO Remove method name from FlowVar.
 *** For class variables, put [Class, variable]
 *** For local variables (i.e., ___VAR), put [null, variable] - they're unique

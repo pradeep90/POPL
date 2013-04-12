@@ -50,8 +50,10 @@ public class FlowBasedInlinerTest{
     }
 
     public void doConversionForMicroJavaFile(String fileName){
-        writeCodeToFile(getOutputForFile(fileName),
-                        "Generated-Microjava/" + fileName);
+        getOutputForFile(fileName);
+        
+        // writeCodeToFile(getOutputForFile(fileName),
+        //                 "Generated-Microjava/" + fileName);
     }
 
     @Test

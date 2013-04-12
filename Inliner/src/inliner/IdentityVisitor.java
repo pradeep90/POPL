@@ -168,6 +168,7 @@ public class IdentityVisitor extends GJNoArguDepthFirst<Node> {
         Identifier f3 = (Identifier) n.f3.accept(this);
         NodeListOptional f5 = (NodeListOptional) n.f5.accept(this);
         NodeListOptional f6 = (NodeListOptional) n.f6.accept(this);
+        _ret = new ClassExtendsDeclaration(f1, f3, f5, f6);
         return _ret;
     }
 

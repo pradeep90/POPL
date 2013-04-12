@@ -187,6 +187,7 @@ public class IdentityWithArgVisitor extends GJDepthFirst<Node, Environment> {
             }
         }
         // NodeListOptional f6 = (NodeListOptional) n.f6.accept(this, env);
+        _ret = new ClassExtendsDeclaration(f1, f3, f5, f6);
         return _ret;
     }
 
