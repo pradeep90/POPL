@@ -36,14 +36,14 @@ public class VarNameUniquifierTest{
     public final void testVarNameUniquifier(){
         Node expectedNode = InlinerHelper.getMicroJavaNodeFromFile(
             "Example-Microjava/My-Basic-Test-Cases/SameVarName.java");
-        System.out.println("getFormattedString(expectedNode.accept(varNameUniquifier, new Environment())): " + getFormattedString(expectedNode.accept(varNameUniquifier, new Environment())));
-        String expected = "class SameVarName {public static void main ( String [ ] a ) {new Foo ( ) . method1 ( 0  ) ; } }  class Bar { bool  x ; public void method1 (int  ___VAR0 , int  ___VAR1   ) { }   public void method2 ( ) { ___VAR0 = true ; } } class Foo { public void method1 ( bool  ___VAR2  ) { }   public void method2 (SameVarName  ___VAR3 , SameVarName  ___VAR4   , bool  ___VAR5   ) { } } ";
+        // System.out.println("getFormattedString(expectedNode.accept(varNameUniquifier, new Environment())): " + getFormattedString(expectedNode.accept(varNameUniquifier, new Environment())));
+        String expected = "class SameVarName {public static void main ( String [ ] a ) {new Foo ( ) . method1 ( 0  ) ; } }  class Bar { bool  x ; public void method1 (int  ___VAR0 , int  ___VAR1   ) { }   public void method2 ( ) { x = true ; } } class Foo { public void method1 ( bool  ___VAR2  ) { }   public void method2 (SameVarName  ___VAR3 , SameVarName  ___VAR4   , bool  ___VAR5   ) { } } ";
 
-        // assertBigStringEquals(
-        //     expected,
-        //     getFormattedString(
-        //         expectedNode.accept(
-        //             varNameUniquifier, new Environment())));
+        assertBigStringEquals(
+            expected,
+            getFormattedString(
+                expectedNode.accept(
+                    varNameUniquifier, new Environment())));
     }
 
     @Test

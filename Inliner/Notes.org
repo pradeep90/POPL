@@ -146,7 +146,6 @@
      :PROPERTIES:
      :Effort:   10
      :END:
-** TODO I think I SHOULD uniquify the names cos now I can't blindly create FlowVar using the currClassName and currMethodName.
 ** DONE Refactor
    CLOCK: [2013-04-10 Wed 23:59]--[2013-04-11 Thu 00:33] =>  0:34
 *** DONE Check if I have Java 7 (I do... I knooooow!... WAIT! Turns out I don't!)
@@ -227,7 +226,7 @@
 ** DONE Test foo.bar
    CLOCK: [2013-04-12 Fri 04:24]--[2013-04-12 Fri 04:35] =>  0:11
 *** I was matching classes using "foo" instead of the field "bar"
-** DONE Unique names
+** TODO Unique names
    CLOCK: [2013-04-12 Fri 13:00]--[2013-04-12 Fri 13:57] =>  0:57
    CLOCK: [2013-04-11 Thu 20:51]--[2013-04-11 Thu 20:59] =>  0:08
    CLOCK: [2013-04-11 Thu 20:31]--[2013-04-11 Thu 20:40] =>  0:09
@@ -243,10 +242,10 @@
     :PROPERTIES:
     :Effort:   10
     :END:
-*** For VarDeclaration or FormalParameter, extend the env
+*** DONE For VarDeclaration or FormalParameter, extend the env
     CLOCK: [2013-04-12 Fri 05:29]--[2013-04-12 Fri 05:33] =>  0:04
 *** VVIP Do NOT rename class variables
-*** for method local variable bar, lookup and replace
+*** DONE for method local variable bar, lookup and replace
     CLOCK: [2013-04-12 Fri 05:11]--[2013-04-12 Fri 05:29] =>  0:18
 *** OUTDATED for foo.bar (in some other method), lookup bar's newName in foo's Class' environment :ARCHIVE:
 **** HashMap<String, HashMap<String, String>> classRenamerMap;
@@ -254,9 +253,13 @@
 **** then, just lookup bar's newName
 *** for foo.bar, you just need to rename foo
 *** DONE foo.baz() => rename foo
-*** TODO Pass the Environment in Environment-passing style, i.e., create a copy every time you dive in
+*** DONE Pass the Environment in Environment-passing style, i.e., create a copy every time you dive in
+    CLOCK: [2013-04-12 Fri 21:06]--[2013-04-12 Fri 21:53] =>  0:47
     CLOCK: [2013-04-12 Fri 17:23]--[2013-04-12 Fri 17:24] =>  0:01
     CLOCK: [2013-04-12 Fri 14:57]--[2013-04-12 Fri 14:57] =>  0:00
+**** DONE I was creating a copy of the parent environment, and so none of the extends were having an effect on the parent environment
+**** DONE Plus, you need to make sure VarDeclaration and FormalParameter DO have an effect 
+**** DONE Plus, a copy of the environment for each method
 ** FlowBasedInliner
 *** putting everything together
 *** DONE error 
@@ -265,9 +268,10 @@
 java.lang.ClassCastException: inliner.syntaxtree.ClassDeclaration cannot be cast to inliner.syntaxtree.TypeDeclaration
 	at inliner.MethodInliner.getMethod(MethodInliner.java:136)
 **** I hadn't wrapped TypeDeclaration's node
+** TODO Uniquify method in MethodTransformer
+** TODO P6
 ** TODO Remove method name from FlowVar.
 *** For class variables, put [Class, variable]
 *** For local variables (i.e., ___VAR), put [null, variable] - they're unique
-** TODO Uniquify method in MethodTransformer
 ** Class duplication
 ** Method duplication

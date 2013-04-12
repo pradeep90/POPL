@@ -35,7 +35,15 @@ public class VarNameUniquifier extends IdentityWithArgVisitor {
     @Override
     public Node visit(MethodDeclaration n, Environment env) {
         inMethod = true;
-        Node _ret = super.visit(n, env);
+
+        Node _ret = null;
+        Identifier f2 = (Identifier) n.f2.accept(this, env);
+        currMethodName = InlinerHelper.getIdentifierName(f2);
+        NodeOptional f4 = (NodeOptional) n.f4.accept(this, env);
+        NodeListOptional f7 = (NodeListOptional) n.f7.accept(this, env);
+        NodeListOptional f8 = (NodeListOptional) n.f8.accept(this, env);
+        _ret = new MethodDeclaration(f2, f4, f7, f8);
+
         inMethod = false;
         return _ret;
     }
@@ -132,6 +140,19 @@ public class VarNameUniquifier extends IdentityWithArgVisitor {
     }
 
     /**
+     * f0 -> FormalParameter()
+     * f1 -> ( FormalParameterRest() )*
+     */
+    @Override
+    public Node visit(FormalParameterList n, Environment env) {
+        Node _ret=null;
+        FormalParameter f0 = (FormalParameter) n.f0.accept(this, env);
+        NodeListOptional f1 = (NodeListOptional) n.f1.accept(this, env);
+        _ret = new FormalParameterList(f0, f1);
+        return _ret;
+    }
+
+    /**
      * f0 -> Type()
      * f1 -> Identifier()
      */
@@ -157,9 +178,6 @@ public class VarNameUniquifier extends IdentityWithArgVisitor {
      * Extend the env and return the newName just inserted.
      */
     public String insertAndLookup(String oldName, Environment env){
-        System.out.println("insertAndLookup"); 
-        System.out.println("oldName: " + oldName);
-        System.out.println("env: " + env);
         env.extend(oldName, getVarName(counter++));
         return env.lookup(oldName);
     }

@@ -2,6 +2,10 @@ package inliner;
 
 import inliner.syntaxtree.*;
 import inliner.visitor.*;
+import java.util.List;
+import java.util.ArrayList;
+
+import static inliner.InlinerHelper.*;
 
 /** 
  * Visitor to simply build up a copy of the original Microjava tree.
@@ -52,7 +56,7 @@ public class IdentityWithArgVisitor extends GJDepthFirst<Node, Environment> {
             return new NodeOptional();
     }
 
-    // public Node visit(NodeSequence n, Environment env) {
+    // public Node visit(NodeSequence n, Environment arg) {
     //     Node _ret=null;
     //     int _count=0;
     //     for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
@@ -129,7 +133,6 @@ public class IdentityWithArgVisitor extends GJDepthFirst<Node, Environment> {
      */
     public Node visit(TypeDeclaration n, Environment env) {
         Node _ret=null;
-        _ret = n.f0.accept(this, env);
         _ret = new TypeDeclaration(new NodeChoice(
             n.f0.accept(this, env),
             n.f0.which));
@@ -149,7 +152,14 @@ public class IdentityWithArgVisitor extends GJDepthFirst<Node, Environment> {
         Identifier f1 = (Identifier) n.f1.accept(this, env);
         currClassName = InlinerHelper.getIdentifierName(f1);
         NodeListOptional f3 = (NodeListOptional) n.f3.accept(this, env);
-        NodeListOptional f4 = (NodeListOptional) n.f4.accept(this, env);
+
+        NodeListOptional f4 = new NodeListOptional();
+        if ( n.f4.present() ) {
+            for (Node node : n.f4.nodes){
+                f4.addNode(node.accept(this, new Environment(env)));
+            }
+        }
+        // NodeListOptional f4 = (NodeListOptional) n.f4.accept(this, env);
         _ret = new ClassDeclaration(f1, f3, f4);
         return _ret;
     }
@@ -170,7 +180,13 @@ public class IdentityWithArgVisitor extends GJDepthFirst<Node, Environment> {
         currClassName = InlinerHelper.getIdentifierName(f1);
         Identifier f3 = (Identifier) n.f3.accept(this, env);
         NodeListOptional f5 = (NodeListOptional) n.f5.accept(this, env);
-        NodeListOptional f6 = (NodeListOptional) n.f6.accept(this, env);
+        NodeListOptional f6 = new NodeListOptional();
+        if ( n.f6.present() ) {
+            for (Node node : n.f6.nodes){
+                f6.addNode(node.accept(this, new Environment(env)));
+            }
+        }
+        // NodeListOptional f6 = (NodeListOptional) n.f6.accept(this, env);
         return _ret;
     }
 
