@@ -131,7 +131,7 @@ public class MethodInliner extends IdentityVisitor {
                                             objectName);
         String className = flowSetMap.get(objectFlowVar).iterator().next();
         TypeDeclaration typeDeclaration = null;
-        
+
         for (Node node : goal.f1.nodes){
             typeDeclaration = (TypeDeclaration) node;
             if (getClassName(typeDeclaration).equals(className)){

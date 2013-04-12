@@ -128,7 +128,8 @@ public class IdentityVisitor extends GJNoArguDepthFirst<Node> {
      */
     public Node visit(TypeDeclaration n) {
         Node _ret=null;
-        _ret = n.f0.accept(this);
+        _ret = new TypeDeclaration(new NodeChoice(n.f0.accept(this),
+                                                  n.f0.which));
         return _ret;
     }
 

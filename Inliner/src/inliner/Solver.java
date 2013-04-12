@@ -31,6 +31,12 @@ public class Solver extends IdentityVisitor {
 
     public Solver(){}
 
+    public Solver(ConstraintGenerator constraintGenerator){
+        this(constraintGenerator.beginningConstraints,
+             constraintGenerator.propagationConstraints,
+             constraintGenerator.conditionalConstraints);
+    }
+
     public Solver(Set<BeginningConstraint> beginningConstraints,
                   Set<PropagationConstraint> propagationConstraints,
                   Set<ConditionalConstraint> conditionalConstraints) {

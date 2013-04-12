@@ -130,6 +130,9 @@ public class IdentityWithArgVisitor extends GJDepthFirst<Node, Environment> {
     public Node visit(TypeDeclaration n, Environment env) {
         Node _ret=null;
         _ret = n.f0.accept(this, env);
+        _ret = new TypeDeclaration(new NodeChoice(
+            n.f0.accept(this, env),
+            n.f0.which));
         return _ret;
     }
 

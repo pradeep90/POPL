@@ -25,7 +25,7 @@ public class ConstraintGenerator extends IdentityVisitor {
         propagationConstraints = new HashSet<PropagationConstraint>();
         conditionalConstraints = new HashSet<ConditionalConstraint>();
     }
-
+    
     public void addBeginningConstraint(String className, String expressionString){
         BeginningConstraint currConstraint = new BeginningConstraint(
             className,

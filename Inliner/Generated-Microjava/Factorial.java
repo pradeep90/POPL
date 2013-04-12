@@ -7,12 +7,13 @@ class Fac {
     int
     ____1234ComputeFac4321____ ;
     public void ComputeFac ( int  num  ) {
-        int  num_aux ;
+        int
+                num_aux ;
         int  ____writeable____num ;
         int  ____tmp0 ;
-        Fac
-                ___tmp4 ;
-        int  ___tmp3 ;
+        Fac  ___tmp4 ;
+        int
+                ___tmp3 ;
         ____writeable____num = num ;
         if (
                 ____writeable____num < 1 ) {
