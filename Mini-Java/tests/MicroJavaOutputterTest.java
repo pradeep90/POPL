@@ -19,7 +19,7 @@ import java.io.PrintStream;
 import java.io.FileOutputStream;
 import java.io.File;
 import java.net.URL;
- 
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 public class MicroJavaOutputterTest {
     MicroJavaOutputter outputter;
 
-    final String BASE_DIR = "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests";
+    final String BASE_DIR = "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/";
     final String GEN_MICROJAVA_DIR =  "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/gen_microjava";
     final String MICRO_JAVA_DIR = "Micro-Java-Test-Code";
     final String MINI_JAVA_DIR = "Mini-Java-Test-Code";
@@ -181,7 +181,7 @@ public class MicroJavaOutputterTest {
         // Nodes out of simpler Node instances cos you might end up
         // using the same simple Node instance twice and will then get
         // an error from TreeFormatter.
-        
+
         outputter = new MicroJavaOutputter();
 
         // MiniJava test fixtures
@@ -473,7 +473,7 @@ public class MicroJavaOutputterTest {
             methodStatements);
 
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -487,7 +487,7 @@ public class MicroJavaOutputterTest {
         return s.hasNext() ? s.next() : "";
     }
 
-    /** 
+    /**
      * Assert that MicroJava transformation of miniJavaNode is the
      * same as expectedMicroJavaNode.
      */
@@ -500,7 +500,7 @@ public class MicroJavaOutputterTest {
                          outputter.getMicroJavaParseTree(miniJavaNode)));
     }
 
-    /** 
+    /**
      * Assert that node1 and node2 are equal MicroJava nodes.
      */
     public void assertEqualMicroJavaNodes(microjavaparser.syntaxtree.Node expected,
@@ -526,16 +526,16 @@ public class MicroJavaOutputterTest {
     public final void testGetFormattedString()
             throws FileNotFoundException, microjavaparser.ParseException{
         InputStream in1 = new FileInputStream(
-            "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.microjava");
+            BASE_DIR + "Micro-Java-Test-Code/MainOnly.microjava");
         InputStream in2 = new FileInputStream(
-            "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.WithWhitespace.microjava");
+            BASE_DIR + "Micro-Java-Test-Code/MainOnly.WithWhitespace.microjava");
         microjavaparser.syntaxtree.Node root1 = new MicroJavaParser(in1).Goal();
 
         microjavaparser.syntaxtree.Node root2 = new MicroJavaParser(in2).Goal();
 
         String code1 = MicroJavaOutputter.getFormattedString(root1);
         String code2 = MicroJavaOutputter.getFormattedString(root2);
-        
+
         assertEquals(code1, code2);
         System.out.println("code1: " + code1);
         System.out.println("code2: " + code2);
@@ -546,7 +546,8 @@ public class MicroJavaOutputterTest {
      */
     @Test
     public final void testGetMicroJavaNodeFromFileNoException(){
-        MicroJavaOutputter.getMicroJavaNodeFromFile("/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.microjava");
+        MicroJavaOutputter.getMicroJavaNodeFromFile(
+            BASE_DIR + "Micro-Java-Test-Code/MainOnly.microjava");
     }
 
     /**
@@ -554,14 +555,15 @@ public class MicroJavaOutputterTest {
      */
     @Test
     public final void testGetMiniJavaNodeFromFileNoException(){
-        MicroJavaOutputter.getMiniJavaNodeFromFile("/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Mini-Java-Test-Code/Factorial.minijava");
+        MicroJavaOutputter.getMiniJavaNodeFromFile(
+            BASE_DIR + "Mini-Java-Test-Code/Factorial.minijava");
     }
 
-    /** 
+    /**
      * Wrap body in the method of a trivial Main Class so that
      * MicroJavaParser can parse it and return the body of the method
      * as an ExpansionNode.
-     * 
+     *
      * @return ExpansionNode corresponding to the body.
      */
     public static ExpansionNode convertToExpansionNode(String body){
@@ -659,7 +661,7 @@ public class MicroJavaOutputterTest {
      */
     @Test
     public final void testArrayAllocationExpression(){
-        // TODO(spradeep): Test the actual expression node usage
+        // TODO(sspradeep): Test the actual expression node usage
 
         assertEqualAfterTransform(arrayAllocationExpression,
                                   arrayAllocationExpressionMini);
@@ -820,7 +822,7 @@ public class MicroJavaOutputterTest {
     public final void testArrayType(){
         assertEqualAfterTransform(arrayType, arrayTypeMini);
     }
-    
+
     /**
      * Test method for {@link MicroJavaOutputter#Type()}.
      */
@@ -1050,10 +1052,10 @@ public class MicroJavaOutputterTest {
         Expression expressionMini4 = new Expression(new NodeChoice(timesExpressionMini, 4));
         Expression expressionMini5 = new Expression(new NodeChoice(arrayLookupMini, 5));
 
-        // TODO(spradeep): 
+        // TODO(sspradeep):
         // Expression expressionMini6 = new Expression(new NodeChoice(arrayLengthMini, 6));
 
-        // TODO(spradeep): 
+        // TODO(sspradeep):
         // Expression expressionMini7 = new Expression(new NodeChoice(messageSendMini, 7));
 
         Expression expressionMini8 = new Expression(new NodeChoice(primaryExpressionMini, 8));
@@ -1065,9 +1067,9 @@ public class MicroJavaOutputterTest {
         microjavaparser.syntaxtree.Expression expression4 = new microjavaparser.syntaxtree.Expression(new microjavaparser.syntaxtree.NodeChoice(timesExpression, 4));
         microjavaparser.syntaxtree.Expression expression5 = new microjavaparser.syntaxtree.Expression(new microjavaparser.syntaxtree.NodeChoice(arrayLookup, 5));
 
-        // TODO(spradeep): 
+        // TODO(sspradeep):
         // microjavaparser.syntaxtree.Expression expression6 = new microjavaparser.syntaxtree.Expression(new microjavaparser.syntaxtree.NodeChoice(arrayLength, 6));
-        // TODO(spradeep): 
+        // TODO(sspradeep):
         // microjavaparser.syntaxtree.Expression expression7 = new microjavaparser.syntaxtree.Expression(new microjavaparser.syntaxtree.NodeChoice(messageSend, 7));
 
         microjavaparser.syntaxtree.Expression expression8 = new microjavaparser.syntaxtree.Expression(new microjavaparser.syntaxtree.NodeChoice(primaryExpression, 8));
@@ -1116,7 +1118,7 @@ public class MicroJavaOutputterTest {
         assertEqualAfterTransform(primaryExpression5, primaryExpressionMini5);
         assertEqualAfterTransform(primaryExpression6, primaryExpressionMini6);
         assertEqualAfterTransform(primaryExpression7, primaryExpressionMini7);
-        assertEqualAfterTransform(primaryExpression8, primaryExpressionMini8);   
+        assertEqualAfterTransform(primaryExpression8, primaryExpressionMini8);
     }
 
     /**
@@ -1132,7 +1134,7 @@ public class MicroJavaOutputterTest {
      */
     @Test
     public final void testArrayLength_ArrayAllocationExpression(){
-        // TODO(spradeep): Test the usage of the actual array length
+        // TODO(sspradeep): Test the usage of the actual array length
         // expression node
 
         String expectedArrayLengthString =
@@ -1160,7 +1162,7 @@ public class MicroJavaOutputterTest {
      */
     @Test
     public final void testArrayLength_Identifier(){
-        // TODO(spradeep): Test the usage of the actual array length
+        // TODO(sspradeep): Test the usage of the actual array length
         // expression node
 
         String expectedArrayLengthString =
@@ -1191,6 +1193,11 @@ public class MicroJavaOutputterTest {
         microjavaparser.syntaxtree.NodeListOptional list2 = nodeListOptional;
 
         assertEqualMicroJavaNodes(nodeListOptional, MicroJavaOutputter.concatenateNodeLists(list1, list2));
+
+
+        // microjavaparser.syntaxtree.NodeListOptional list3 = null;
+        // assertEqualMicroJavaNodes(nodeListOptional, MicroJavaOutputter.concatenateNodeLists(list2, list3));
+        // assertEqualMicroJavaNodes(nodeListOptional, MicroJavaOutputter.concatenateNodeLists(list3, list2));
     }
 
     /**
@@ -1421,10 +1428,10 @@ public class MicroJavaOutputterTest {
     // Integration Tests //
     ///////////////////////
 
-    /** 
+    /**
      * Run test to see if MicroJava translation of MiniJava filename
      * is the same as the MicroJava filename.
-     * 
+     *
      * @param basename filename (without extension) for both MicroJava
      * and MiniJava test code files.
      */
@@ -1435,7 +1442,7 @@ public class MicroJavaOutputterTest {
         // InputStream in = this.getClass().getResourceAsStream("Mini-Java-Test-Code/MainOnly.minijava");
         // System.out.println("convertStreamToString(in): " + convertStreamToString(in));
 
-        System.out.println(basename); 
+        System.out.println(basename);
         // microjavaparser.syntaxtree.Node expectedMicroParseTree = MicroJavaOutputter.getMicroJavaNodeFromFile(BASE_DIR + File.separator + MICRO_JAVA_DIR + File.separator + basename + MICRO_JAVA_EXTENSION);
         // System.out.println("MicroJavaOutputter.getFormattedString(expectedMicroParseTree): " + MicroJavaOutputter.getFormattedString(expectedMicroParseTree));
 
@@ -1449,11 +1456,11 @@ public class MicroJavaOutputterTest {
 
         writeCodeToFile(MicroJavaOutputter.getFormattedString(actualMicroParseTree),
                         GEN_MICROJAVA_DIR + File.separator + basename + ".java");
-        
+
         // assertEquals(MicroJavaOutputter.getFormattedString(expectedMicroParseTree),
         //              MicroJavaOutputter.getFormattedString(actualMicroParseTree));
     }
-    
+
     public void writeCodeToFile(String code, String filename){
         PrintStream out = null;
         try {

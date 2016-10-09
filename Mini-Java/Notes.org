@@ -192,7 +192,7 @@
 ** DONE (foo.bar()).baz() => Have a global stack of VarDeclarations
    CLOCK: [2013-02-07 Thu 04:14]--[2013-02-07 Thu 05:38] =>  1:24
    CLOCK: [2013-02-07 Thu 03:30]--[2013-02-07 Thu 04:12] =>  0:42
-** TODO Get faulty programs working
+** DONE Get faulty programs working
 *** TODO BinaryTree
 *** TODO LinearSearch
 *** TODO LinkedList
