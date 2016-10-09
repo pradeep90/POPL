@@ -426,4 +426,14 @@ public class TypeEquationCollectorTest{
         // System.out.println("typeInferrer.allEquations: " + typeInferrer.allEquations);
     }
 
+    /**
+     * Test method for {@link TypeEquationCollector#pub1()}.
+     */
+    @Test
+    public final void testTypeAnnotation(){
+        System.out.println("pub1");
+        TypeHelper.getMiniSchemeNodeFromFile(
+            "/home/pradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub1.scm").accept(typeInferrer, typeEnvironment);
+        // System.out.println("typeInferrer.allEquations: " + typeInferrer.allEquations);
+    }
 }

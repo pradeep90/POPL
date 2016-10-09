@@ -3,7 +3,7 @@
 * Test cases
 * My trials
 ** pub1
-*** 
+***
 * Grammar
 ** Goal 	::= 	Expression <EOF>
 ** Expression 	::= 	IntegerLiteral
@@ -60,7 +60,7 @@
 **** type of expr2 = t_k
 ** LetExpression
 *** return t_k
-*** let the declarations do their business (in a copy of the type environment and with a copy of the id-list) 
+*** let the declarations do their business (in a copy of the type environment and with a copy of the id-list)
 *** make sure the declarations can't get at each other or themselves. They can only refer to types in the parent environment
 *** add equation: type of expression = t_k
 ** Identifier - ?
@@ -73,9 +73,9 @@
 *** return t_k
 *** add equation: t_k = return type of function-expression
 *** add equation: argument type of function-expression = (type of expr1, ...)
-** RecExpression - 
+** RecExpression -
 *** return t_k
-*** let the declarations do their business (in a copy of the type environment and with a copy of the id-list) 
+*** let the declarations do their business (in a copy of the type environment and with a copy of the id-list)
 *** However, cos this is letrec, make nominal types for the declarations right at the beginning (and add them to the id list) so that they can refer to themselves and each other.
 **** I think you can do this in RecDeclaration
 *** add equation: type of expression = t_k
@@ -145,7 +145,7 @@
 * Lessons
 ** Note: you won't be able to see the changes made by the declarations in a LetExpression cos they'll happen in an extended letTypeEnvironment.
 ** I'm choosing to return the type of the expression in Declaration instead of extending the environment cos we don't want them to refer to the preceding declarations (which will happen if you let them extend the environment)
-** DONE what is the type of a function 
+** DONE what is the type of a function
 *** (lambda (x y) (+ x y))
 *** Is it int -> int -> int
 *** But then, what is the type of (lambda (x) (lambda (y) (+ x y)))
@@ -282,3 +282,7 @@
 ** DONE Take care of Application and ProcedureExp with no arguments
    CLOCK: [2013-03-12 Tue 22:25]--[2013-03-12 Tue 23:48] =>  1:23
 ** DONE Make sure that "Does not type check" in TypeEquationCollector (for recursive stuff in normal LetExpression) is ok when it usually comes in Unifier
+* ULTIMATE [2016-10-10 Mon] Fresh Attack: Annotate each term with its type
+** visit(Goal n) :: equations from n -> (type signature, types for each variable)
+** what I want :: expression -> type signature
+*** for example, (sum (+ x 1)) should give (Int -> (Int -> a) -> a) because x and sum and unbound.

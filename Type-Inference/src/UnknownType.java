@@ -1,24 +1,29 @@
+import syntaxtree.*;
+
 public class UnknownType extends Type {
     int id;
+    // Node for which this represents the type.
+    Node node = null;
 
     public static int counter = 0;
-    
+
     public UnknownType(int id) {
         this.id = id;
     }
-    
-    public UnknownType() {
+
+    public UnknownType(Node node) {
         this.id = counter++;
+        this.node = node;
     }
-    
+
     public void accept(TripleDVisitor visitor, Type other){
         other.accept(visitor, this);
     }
-    
+
     public void accept(TripleDVisitor visitor, IntType other){
         visitor.visit(this, other);
     }
-    
+
     public void accept(TripleDVisitor visitor, BooleanType other){
         visitor.visit(this, other);
     }
@@ -31,7 +36,7 @@ public class UnknownType extends Type {
         visitor.visit(this, other);
     }
 
-    /** 
+    /**
      * @return true iff `this` occurs in `other`.
      */
     public boolean occursIn(Type other){
@@ -43,6 +48,7 @@ public class UnknownType extends Type {
     @Override
     public Type substitute(TypeEnvironment unification){
         if (unification.lookup("" + id) != null){
+            System.out.println(unification.lookup("" + id));
             return unification.lookup("" + id);
         }
         return this;

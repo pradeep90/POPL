@@ -122,7 +122,7 @@ build_tests: $(all_tests)
 
 test: build_src_and_tests
 	cat $(tests)
-	xargs -a $(tests) $(JAVA) $(TEST_RUN_FLAGS)
+	xargs -a $(tests) $(JAVA) $(TEST_RUN_FLAGS) TypeEquationCollectorTest
 
 # javadoc - Generate the Java doc from sources
 

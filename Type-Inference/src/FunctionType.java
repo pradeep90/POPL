@@ -5,20 +5,20 @@ public class FunctionType extends Type {
     public Type returnType;
 
     public static final Type VOID_TYPE = new UnknownType(10001);
-    
+
     public FunctionType(Type paramType, Type returnType) {
         this.paramType = paramType;
         this.returnType = returnType;
     }
-    
+
     public void accept(TripleDVisitor visitor, Type other){
         other.accept(visitor, this);
     }
-    
+
     public void accept(TripleDVisitor visitor, IntType other){
         visitor.visit(this, other);
     }
-    
+
     public void accept(TripleDVisitor visitor, BooleanType other){
         visitor.visit(this, other);
     }
@@ -31,7 +31,7 @@ public class FunctionType extends Type {
         visitor.visit(this, other);
     }
 
-    /** 
+    /**
      * Construct a FunctionType out of the paramTypes and returnType.
      */
     public static FunctionType getFunctionType(List<Type> paramTypes, Type returnType){
@@ -55,8 +55,10 @@ public class FunctionType extends Type {
 
     @Override
     public Type substitute(TypeEnvironment unification){
-        return new FunctionType(paramType.substitute(unification),
-                                returnType.substitute(unification));
+        Type newParamType = paramType.substitute(unification);
+        Type newReturnType = returnType.substitute(unification);
+        System.out.println(newParamType + " -> " + newReturnType);
+        return new FunctionType(newParamType, newReturnType);
     }
 
     public boolean equals(Object o) {

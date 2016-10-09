@@ -6,12 +6,12 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
     Unifier unifier;
 
     Set<TypeEquation> allEquations = new HashSet<TypeEquation>();
-    
+
     public TypeEquationCollector() {
-        
+
     }
 
-    /** 
+    /**
      * Add a TypeEquation (t1 = t2) to allEquations.
      */
     public void addEquation(Type t1, Type t2){
@@ -78,7 +78,7 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
         try {
             f0 = n.f0.accept(this, arg);
         } catch(RuntimeException e) {
-            System.out.println("Program does not type check"); 
+            System.out.println("Program does not type check");
             return null;
         }
 
@@ -87,7 +87,7 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
         // System.out.println("allEquations: " + allEquations);
         unifier = new Unifier(allEquations);
         if (!unifier.unify()){
-            System.out.println("Program does not type check"); 
+            System.out.println("Program does not type check");
         }
         else {
             // substitute in f0 and write the result
@@ -174,7 +174,7 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
         Type f3 = n.f3.accept(this, arg);
         Type f4 = n.f4.accept(this, arg);
 
-        _ret = new UnknownType();
+        _ret = new UnknownType(n);
         addEquation(f2, new BooleanType());
         addEquation(f3, _ret);
         addEquation(f4, _ret);
@@ -203,7 +203,7 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
 
             if (type == null){
                 // The declaration referred to one of the let identifiers
-                // System.out.println("Program does not type check"); 
+                // System.out.println("Program does not type check");
 
                 // System.exit(0);
                 throw new RuntimeException("Program does not type check");
@@ -257,10 +257,10 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
         Type _ret=null;
         TypeEnvironment lambdaTypeEnvironment = new TypeEnvironment(arg);
         List<Type> paramTypes = new ArrayList<Type>();
-      
+
         for (Node node : n.f3.nodes){
             Identifier currIdentifier = (Identifier) node;
-            Type currType = new UnknownType();
+            Type currType = new UnknownType(node);
             lambdaTypeEnvironment.extend(
                 TypeHelper.getIdentifierName(currIdentifier),
                 currType);
@@ -287,7 +287,7 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
         // multiple parameters (f 3) gives (int -> int) whereas (f 3
         // 4) gives int. So, keep the return type a variable and unify
         // it based on the number of arguments actually given.
-        _ret = new UnknownType();
+        _ret = new UnknownType(n);
         List<Type> paramTypes = new ArrayList<Type>();
         for (Node node : n.f2.nodes){
             paramTypes.add(node.accept(this, arg));
@@ -318,13 +318,16 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
         // that they can refer to each other mutually.
         for (Node node : n.f3.nodes){
             RecDeclaration currRecDeclaration = (RecDeclaration) node;
-            Type identifierType = new UnknownType();
+            Type identifierType = new UnknownType(node);
             recLetTypeEnvironment.extend(TypeHelper.getIdentifierName(currRecDeclaration.f1),
                                          identifierType);
+
+
         }
         n.f3.accept(this, recLetTypeEnvironment);
         Type f5 = n.f5.accept(this, recLetTypeEnvironment);
         _ret = f5;
+
         return _ret;
     }
 
