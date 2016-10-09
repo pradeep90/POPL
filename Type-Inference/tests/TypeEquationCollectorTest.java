@@ -25,7 +25,7 @@ public class TypeEquationCollectorTest{
     Expression boolExpression;
     Identifier identifier;
     Identifier identifier2;
-    
+
     @Before
     public void setUp(){
         typeInferrer = new TypeEquationCollector();
@@ -46,7 +46,7 @@ public class TypeEquationCollectorTest{
         identifier = new Identifier(new NodeToken("a"));
         identifier2 = new Identifier(new NodeToken("b"));
     }
-    
+
     @After
     public void tearDown(){
     }
@@ -156,32 +156,9 @@ public class TypeEquationCollectorTest{
     /**
      * Test method for {@link TypeEquationCollector#LetExpression()}.
      */
-    @Test(expected = RuntimeException.class)
+    @Test
     public final void testLetExpression_RecursiveFullProgram(){
-        String letString = "(let ((high
-	( lambda ( x )
-	  ( let (( q (lambda ( y )
-		       (lambda(z)
-                         (lambda(a)
-			   ( let(
-				 (b (lambda (c)
-				      ( + 1 2 )
-				      )
-				    )
-				 )
-			     (set! b 2)
-			     )
-			   )
-			 )
-		       )
-		     )
-		 )
-	    (q #f)
-	    )
-	  )
-
-	)
-) 3)";
+        String letString = "(let ((high ( lambda ( x ) ( let (( q (lambda ( y ) (lambda(z) (lambda(a) ( let((b (lambda (c) ( + 1 2 )))) (set! b 2))))))) (q #f))))) 3)";
         Goal goal = (Goal) TypeHelper.getMiniSchemeNodeFromString(letString);
         Type type = goal.accept(typeInferrer, typeEnvironment);
     }
@@ -196,7 +173,7 @@ public class TypeEquationCollectorTest{
         assertEquals(new BooleanType(), typeInferrer.visit(letExpression,
                                                            typeEnvironment));
     }
-    
+
     /**
      * Test method for {@link TypeEquationCollector#ProcedureExp()}.
      */
@@ -288,7 +265,7 @@ public class TypeEquationCollectorTest{
                                  new FunctionType(new UnknownType(1),
                                                   new IntType())))));
     }
-    
+
     /**
      * Test method for {@link TypeEquationCollector#ProcedureExp()}.
      */
@@ -398,7 +375,7 @@ public class TypeEquationCollectorTest{
      */
     @Test
     public final void testPub1(){
-        System.out.println("pub1"); 
+        System.out.println("pub1");
         TypeHelper.getMiniSchemeNodeFromFile(
             "/home/pradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub1.scm").accept(typeInferrer, typeEnvironment);
         // System.out.println("typeInferrer.allEquations: " + typeInferrer.allEquations);
@@ -409,10 +386,10 @@ public class TypeEquationCollectorTest{
      */
     @Test
     public final void testPub2(){
-        System.out.println("pub2"); 
+        System.out.println("pub2");
         TypeHelper.getMiniSchemeNodeFromFile(
             "/home/pradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub2.scm").accept(typeInferrer, typeEnvironment);
-        // System.out.println("typeInferrer.allEquations: " + typeInferrer.allEquations); // 
+        // System.out.println("typeInferrer.allEquations: " + typeInferrer.allEquations); //
     }
 
     /**
@@ -420,11 +397,11 @@ public class TypeEquationCollectorTest{
      */
     @Test
     public final void testPub3(){
-        System.out.println("pub3"); 
+        System.out.println("pub3");
         TypeHelper.getMiniSchemeNodeFromFile(
             "/home/pradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub3.scm").accept(typeInferrer, typeEnvironment);
         // System.out.println("typeInferrer.allEquations: " + typeInferrer.allEquations);
-        
+
     }
 
     /**
@@ -432,7 +409,7 @@ public class TypeEquationCollectorTest{
      */
     @Test
     public final void testPub4(){
-        System.out.println("pub4"); 
+        System.out.println("pub4");
         TypeHelper.getMiniSchemeNodeFromFile(
             "/home/pradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub4.scm").accept(typeInferrer, typeEnvironment);
         // System.out.println("typeInferrer.unifier.unification: " + typeInferrer.unifier.unification);
@@ -443,7 +420,7 @@ public class TypeEquationCollectorTest{
      */
     @Test
     public final void testPub5(){
-        System.out.println("pub5"); 
+        System.out.println("pub5");
         TypeHelper.getMiniSchemeNodeFromFile(
             "/home/pradeep/Dropbox/Acads/POPL/Code/Type-Inference/Examples-Scheme/pub5.scm").accept(typeInferrer, typeEnvironment);
         // System.out.println("typeInferrer.allEquations: " + typeInferrer.allEquations);
