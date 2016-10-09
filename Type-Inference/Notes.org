@@ -284,5 +284,25 @@
 ** DONE Make sure that "Does not type check" in TypeEquationCollector (for recursive stuff in normal LetExpression) is ok when it usually comes in Unifier
 * ULTIMATE [2016-10-10 Mon] Fresh Attack: Annotate each term with its type
 ** visit(Goal n) :: equations from n -> (type signature, types for each variable)
-** what I want :: expression -> type signature
+** what I want :: expression -> type signature (including unbound variables)
 *** for example, (sum (+ x 1)) should give (Int -> (Int -> a) -> a) because x and sum and unbound.
+** How I would do it now
+*** One pass: get all the type equations
+*** VVIP Basically, TypeCollector :: Node -> (type, type equations)
+*** To get the most general type for Node, unify the type equations and substitute the values in Node's type.
+*** TODO To get a type signature including unbound variables, you need to know the unbound variables.
+*** Overall, we want
+**** Node -> type
+**** Node -> type equations
+**** Node -> unbound variables
+** Problem: Unification is impure right now.
+*** You need to traverse the types in the type equations and *update* the environment along the way (why?).
+*** What is the type signature of unify?
+*** unify :: [Equation] -> Maybe TypeEnvironment
+*** TODO getEquations :: Equation -> [Equation]
+**** VVIP The only time the set of equations grows is when you have an equation between function types.
+**** But the problem is that it can grow indefinitely.
+**** So, final equations = concatMap getEquations
+*** update :: Equation -> TypeEnvironment -> Maybe TypeEnvironment
+**** total update = foldr (>=>) return $ map update
+*** overall function = total_update . concatMap getEquations

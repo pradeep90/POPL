@@ -5,7 +5,7 @@ public class Unifier {
     public TypeEnvironment unification = new TypeEnvironment();
 
     public Set<TypeEquation> equationSet;
-    
+
     public Unifier(Set<TypeEquation> equationSet) {
         this.equationSet = equationSet;
     }
@@ -19,9 +19,10 @@ public class Unifier {
         return currTypeEquation;
     }
 
-    /** 
+    /**
      * @return true iff you can unify the equations in equationSet.
      */
+    // TODO: Make this pure.
     public boolean unify(){
         while(!equationSet.isEmpty() && !failure){
             TypeEquation currEquation = removeFromSet(equationSet).substitute(unification);

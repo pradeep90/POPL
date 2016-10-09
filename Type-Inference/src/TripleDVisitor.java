@@ -1,11 +1,13 @@
-/** 
+/**
  * Visitor for Triple Dispatch on (Type, Type, Operation).
+ *
+ * TODO: Why isn't this an interface?
  */
 public abstract class TripleDVisitor {
     boolean result;
-    
+
     public TripleDVisitor() {
-        
+
     }
 
     public boolean runMultiMethod(Type type1, Type type2){
@@ -29,5 +31,5 @@ public abstract class TripleDVisitor {
     public void visit(UnknownType param1, BooleanType param2){}
     public void visit(UnknownType param1, FunctionType param2){}
     public void visit(UnknownType param1, UnknownType param2){}
-    
+
 }
