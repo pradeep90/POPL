@@ -153,13 +153,13 @@ public class TransformerTest{
             expressionNano,
             transformer.getNanoBlock(statement),
             transformer.getNanoBlock(statement2));}
-    
-    
+
+
     @After
     public void tearDown(){
     }
-    
-    /** 
+
+    /**
      * Assert that NanoJava transformation of microJavaNode is the
      * same as expectedNanoJavaNode.
      */
@@ -177,7 +177,7 @@ public class TransformerTest{
                      actual.replaceAll("(\n|\\s)+", ""));
     }
 
-    /** 
+    /**
      * Assert that node1 and node2 are equal NanoJava nodes.
      */
     public void assertEqualNanoJavaNodes(nano.syntaxtree.Node expected,
@@ -370,7 +370,7 @@ public class TransformerTest{
      */
     @Test
     public final void testMethodDeclaration(){
-        System.out.println("testMethodDeclaration"); 
+        System.out.println("testMethodDeclaration");
         String output = CPSHelper.getFormattedString(
             getMethodDeclaration().accept(transformer));
     }
@@ -382,7 +382,7 @@ public class TransformerTest{
     public final void testGoal(){
         Goal goal = (Goal) CPSHelper.getMicroJavaNodeFromFile(
             "Example-Microjava/Factorial.java");
-        System.out.println("testGoal"); 
+        System.out.println("testGoal");
         String output = CPSHelper.getFormattedString(goal.accept(transformer));
     }
 
@@ -464,7 +464,7 @@ public class TransformerTest{
 
         String expected = "public void fooContinuation (int  m , int  n   , Continuation  ___k  ) {____NewMainClass____ ___pseudoThis; ___pseudoThis = this; ___k.call();}";
         assertBigStringEquals(expected,
-                     CPSHelper.getFormattedString(continuationMaker.continuationMethod));
+                              CPSHelper.getFormattedString(continuationMaker.continuationMethod));
     }
 
     /**
@@ -630,7 +630,7 @@ public class TransformerTest{
 
         String expected = "___k2 = new ___ContinuationClassfooContinuation(); ___k2.___k = ___k; ___k2.object = this;";
         assertBigStringEquals(expected,
-                     CPSHelper.getFormattedString(continuationMaker.initStatements));
+                              CPSHelper.getFormattedString(continuationMaker.initStatements));
     }
 
     /**
@@ -646,7 +646,7 @@ public class TransformerTest{
         String expectedMethodString = "public void methodLiveVariables (int  a , int  b   , Continuation  ___k  ) {int x ; int  y ; int  z ; ____NewMainClass____ ___pseudoThis; ___ContinuationClasscontinuationMethod0  ___k1 ; ___pseudoThis = this; x = 3; y = 4; ___k1 = new ___ContinuationClasscontinuationMethod0(); ___k1.a = a; ___k1.b = b; ___k1.___k = ___k; ___k1.object = this; foo.bar(___k1 );}";
         // System.out.println("CPSHelper.getFormattedString(parentMethod.accept(transformer)): " + CPSHelper.getFormattedString(parentMethod.accept(transformer)));
 
-        // TODO: 
+        // TODO:
         assertBigStringEquals(expectedMethodString,
                               CPSHelper.getFormattedString(parentMethod.accept(transformer)));
     }
@@ -675,14 +675,14 @@ public class TransformerTest{
      */
     @Test
     public final void testTryFlattenBlock(){
-        System.out.println("testTryFlattenBlock"); 
+        System.out.println("testTryFlattenBlock");
         ClassDeclaration classDeclaration = getClassDeclaration(CPSHelper.getMicroJavaNodeFromFile("Example-Microjava/My-Basic-Test-Cases/BlockTest1.java"));
         NodeListOptional statements = ((MethodDeclaration) classDeclaration.f4.nodes.get(8)).f8;
     }
 
     @Test
     public final void testNestedIfWhile(){
-        System.out.println("testNestedIfWhile"); 
+        System.out.println("testNestedIfWhile");
         doConversionForMicroJavaFile("My-Basic-Test-Cases/NestedIfWhile.java");
     }
 
@@ -705,7 +705,7 @@ public class TransformerTest{
 
     // @Test
     // public final void testFactorial(){
-    //     System.out.println("testFactorial"); 
+    //     System.out.println("testFactorial");
     //     doConversionForMicroJavaFile("Factorial.java");
     // }
 
@@ -720,7 +720,6 @@ public class TransformerTest{
             "LinearSearch.java",
             "LinkedList.java",
             "QuickSort.java",
-            "TreeVisitor.java",
 
             "TA-MicroJava-Test-Cases/ComplexAssignments.java",
             "TA-MicroJava-Test-Cases/DotTest.java",
@@ -728,13 +727,11 @@ public class TransformerTest{
             "TA-MicroJava-Test-Cases/MainArguments.java",
             "TA-MicroJava-Test-Cases/MethodArgs.java",
             "TA-MicroJava-Test-Cases/MethodReturn.java",
-            "TA-MicroJava-Test-Cases/MultilevelInherit.java",
             "TA-MicroJava-Test-Cases/NestedIfCheck.java",
             "TA-MicroJava-Test-Cases/NextedWhile.java",
             "TA-MicroJava-Test-Cases/PrintTest.java",
             "TA-MicroJava-Test-Cases/SimpleAssignments.java",
             "TA-MicroJava-Test-Cases/SimpleMain.java",
-            "TA-MicroJava-Test-Cases/ThisExpr.java",
             "TA-MicroJava-Test-Cases/WhileCheck.java",
 
         };
@@ -747,5 +744,22 @@ public class TransformerTest{
             }
 
         }
+    }
+
+    @Test(expected=ClassCastException.class)
+    public final void testOutputForFiles_TreeVisitor_Bug(){
+        doConversionForMicroJavaFile("TreeVisitor.java");
+    }
+
+    @Test(expected=ClassCastException.class)
+    public final void testOutputForFiles_MultilevelInherit_Bug(){
+        doConversionForMicroJavaFile(
+            "TA-MicroJava-Test-Cases/MultilevelInherit.java");
+    }
+
+    @Test(expected=ClassCastException.class)
+    public final void testOutputForFiles_ThisExpr_Bug(){
+        doConversionForMicroJavaFile(
+            "TA-MicroJava-Test-Cases/ThisExpr.java");
     }
 }

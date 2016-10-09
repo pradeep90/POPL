@@ -5,7 +5,8 @@ public class P5 {
    public static void main(String [] args) {
       try {
          Node root = new MicroJavaParser(System.in).Goal();
-         root.accept(new Transformer());
+         nano.syntaxtree.Node result = root.accept(new Transformer());
+         System.out.println(CPSHelper.getFormattedString(result));
       }
       catch (ParseException e) {
          System.out.println(e.toString());
