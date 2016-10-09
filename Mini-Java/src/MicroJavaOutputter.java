@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 
-/** 
+/**
  * Visitor to build a MicroJava syntax tree from a MiniJava syntax
  * tree.
  */
@@ -51,7 +51,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
     public NodeListOptional currClassVarDeclarations;
     public NodeListOptional currMethodVarDeclarations;
 
-    /** 
+    /**
      * @return Type from VarDeclaration of identifier.
      */
     public Type lookupVarType(Identifier identifier, NodeListOptional tempDeclarations){
@@ -67,8 +67,6 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
             allVarDeclarations = concatenateNodeLists(allVarDeclarations, currClassVarDeclarations);
         for (Node currNode : allVarDeclarations.nodes){
             VarDeclaration currDeclaration = (VarDeclaration) currNode;
-            System.out.println("getMethodName(currDeclaration.f1): "
-                               + getMethodName(currDeclaration.f1));
             if (getMethodName(currDeclaration.f1).equals(getMethodName(identifier))){
                 return VariableSubstituter.getCopyOfType(currDeclaration.f0);
             }
@@ -81,7 +79,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         return lookupVarType(identifier, null);
     }
 
-    /** 
+    /**
      * @return NodeListOptional containing nodes of list1 and list2.
      */
     public static NodeListOptional concatenateNodeLists(NodeListOptional list1,
@@ -98,9 +96,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         return result;
     }
 
-    /** 
+    /**
      * @param expansionNode has node of NodeListOptional type.
-     * 
+     *
      * @return precedingNodes + expansionNode.node
      */
     public static NodeListOptional getSquashedNodeList(ExpansionNode expansionNode){
@@ -119,13 +117,13 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
     /**
      * Make sure the preceding nodes for each statement come
      * IMMEDIATELY before it.
-     * 
+     *
      * @return ExpansionNode containing varDeclarations and list of
      * statements for statementList.
      */
     public ExpansionNode getSquashedStatementList(
         syntaxtree.NodeListOptional statementList){
-        
+
 
         NodeListOptional allVarDeclarations = new NodeListOptional();
         NodeListOptional allStatements = new NodeListOptional();
@@ -150,7 +148,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
     }
 
 
-    /** 
+    /**
      * @return new unique temporary variable name.
      */
     public String getNewTempVarName(){
@@ -174,14 +172,14 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         return getTempIdentifier(getMethodRetVarName(methodIdentifier));
     }
 
-    // /** 
+    // /**
     //  * @return VarDeclaration for varName.
     //  */
     // public VarDeclaration getVarDeclaration(String varName){
     //     return getVarDeclaration(varName, new Type(new NodeChoice(new IntegerType(), 2)));
     // }
 
-    /** 
+    /**
      * @return VarDeclaration for varName given the methodIdentifier.
      */
     public VarDeclaration getVarDeclaration(String varName, Identifier methodIdentifier){
@@ -197,7 +195,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         }
     }
 
-    /** 
+    /**
      * @return VarDeclaration for varName with type.
      */
     public VarDeclaration getVarDeclaration(String varName, Type type){
@@ -214,7 +212,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
     /**
      * Format the source code in the syntax tree using TreeFormatter,
      * then dump it to a string using TreeDumper.
-     * 
+     *
      * @return pretty-printed string version of root.
      */
     public static String getFormattedString(Node root){
@@ -228,9 +226,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         return out.toString();
     }
 
-    /** 
+    /**
      * Parse MicroJava code in codeString and return the syntax tree.
-     * 
+     *
      * @return root Node of the MicroJava syntax tree.
      */
     public static Node getMicroJavaNodeFromString(
@@ -248,9 +246,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         return root;
     }
 
-    /** 
+    /**
      * Parse MicroJava code in file filename and return the syntax tree.
-     * 
+     *
      * @return root Node of the MicroJava syntax tree.
      */
     public static Node getMicroJavaNodeFromFile(String filename){
@@ -271,9 +269,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         return root;
     }
 
-    /** 
+    /**
      * Parse MiniJava code in file filename and return the syntax tree.
-     * 
+     *
      * @return root Node of the MiniJava syntax tree.
      */
     public static syntaxtree.Node getMiniJavaNodeFromFile(String filename){
@@ -291,22 +289,22 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
             e.printStackTrace();
         }
 
-        return root;   
+        return root;
     }
 
     /**
      * Use this visitor to convert miniJavaRoot to a MicroJava syntax
      * tree.
-     * 
+     *
      * @return MicroJava equivalent of miniJavaRoot.
      */
     public Node getMicroJavaParseTree(syntaxtree.Node miniJavaRoot){
         return miniJavaRoot.accept(this);
     }
 
-    /** 
+    /**
      * Wrap printStatement in a "new main class".
-     * 
+     *
      * @return the ClassDeclaration Node typecast to Node.
      */
     public Node getNewMainClass(syntaxtree.PrintStatement printStatement){
@@ -580,9 +578,9 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
      * f12 -> "}"
      */
     public ExpansionNode visit(syntaxtree.MethodDeclaration n) {
-        
+
         // TODO(spradeep): writable_arg variable
-        
+
         ExpansionNode _ret=null;
         currMethodVarDeclarations = new NodeListOptional();
         ExpansionNode f0 = n.f0.accept(this);
@@ -600,7 +598,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         ExpansionNode f10 = n.f10.accept(this);
         ExpansionNode f11 = n.f11.accept(this);
         ExpansionNode f12 = n.f12.accept(this);
-        
+
         NodeListOptional allVarDeclarations = concatenateNodeLists((NodeListOptional) f7.node,
                                                                    f8.varDeclarations);
         NodeListOptional allStatements = f8.precedingNodes;
@@ -842,7 +840,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         else
             elseBody = new Statement(new NodeChoice(f6.node, 3));
 
-        
+
         _ret = new ExpansionNode(new IfStatement(
             (NodeToken) f0.node,
             (NodeToken) f1.node,
@@ -1155,7 +1153,7 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
                     getTempIdentifier(tempVarName),
                     getMethodRetVarIdentifier(methodIdentifier)),
                                           0)), 3)));
-        
+
         _ret = new ExpansionNode(getTempIdentifier(retTempVarName));
 
         _ret.varDeclarations.addNode(tempDeclaration);
@@ -1349,4 +1347,3 @@ public class MicroJavaOutputter extends GJNoArguDepthFirst<ExpansionNode> {
         // return getFormattedString(getMicroJavaNodeFromString(outputCodeString));
     }
 }
-
