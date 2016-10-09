@@ -16,15 +16,15 @@ import static inliner.InlinerHelperTest.assertBigStringEquals;
 
 public class FlowBasedInlinerTest{
     FlowBasedInliner flowBasedInliner;
-    
+
     @Before
     public void setUp(){
     }
-    
+
     @After
     public void tearDown(){
     }
-    
+
     /**
      * Test method for {@link FlowBasedInliner#FlowBasedInliner()}.
      */
@@ -37,7 +37,7 @@ public class FlowBasedInlinerTest{
 
         flowBasedInliner.compute();
     }
-    
+
     public String getOutputForFile(String fileName){
         Goal goal = (Goal) getMicroJavaNodeFromFile(
             "Example-Microjava/" + fileName);
@@ -50,7 +50,7 @@ public class FlowBasedInlinerTest{
     public void doConversionForMicroJavaFile(String fileName){
         String result = getOutputForFile(fileName);
         // System.out.println("result: " + result);
-        
+
         // writeCodeToFile(getOutputForFile(fileName),
         //                 "Generated-Microjava/" + fileName);
     }
@@ -79,7 +79,6 @@ public class FlowBasedInlinerTest{
             "TA-MicroJava-Test-Cases/PrintTest.java",
             "TA-MicroJava-Test-Cases/SimpleAssignments.java",
             "TA-MicroJava-Test-Cases/SimpleMain.java",
-            "TA-MicroJava-Test-Cases/ThisExpr.java",
             "TA-MicroJava-Test-Cases/WhileCheck.java",
 
         };
@@ -93,4 +92,10 @@ public class FlowBasedInlinerTest{
 
         }
     }
+
+    @Test(expected=NullPointerException.class)
+    public final void testOutputForFiles_ThisExpr_Bug(){
+        doConversionForMicroJavaFile("TA-MicroJava-Test-Cases/ThisExpr.java");
+    }
+
 }

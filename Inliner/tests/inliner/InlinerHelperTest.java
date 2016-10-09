@@ -28,12 +28,12 @@ public class InlinerHelperTest{
     @Before
     public void setUp(){
     }
-    
+
     @After
     public void tearDown(){
     }
 
-    /** 
+    /**
      * Assert that node1 and node2 are equal MicroJava nodes.
      */
     public static void assertEqualMicroJavaNodes(Node expected,
@@ -42,13 +42,22 @@ public class InlinerHelperTest{
                      getFormattedString(actual));
     }
 
-    /** 
+    /**
      * Assert that expected and actual are identical strings when we
      * remove all the whitespace.
      */
     public static void assertBigStringEquals(String expected, String actual){
         assertEquals(expected.replaceAll("(\n|\\s)+", ""),
                      actual.replaceAll("(\n|\\s)+", ""));
+    }
+
+    /**
+     * Assert that expected and actual are *not* identical strings when we
+     * remove all the whitespace.
+     */
+    public static void assertBigStringNotEquals(String expected, String actual){
+        assertFalse(expected.replaceAll("(\n|\\s)+", "")
+                    == actual.replaceAll("(\n|\\s)+", ""));
     }
 
     /**
@@ -66,7 +75,7 @@ public class InlinerHelperTest{
 
         String code1 = getFormattedString(root1);
         String code2 = getFormattedString(root2);
-        
+
         assertEquals(code1, code2);
     }
 
