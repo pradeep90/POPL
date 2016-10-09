@@ -24,13 +24,13 @@ SHELL   := /bin/bash
 
 # Path to support tools
 # TODO: Change this to /usr/lib/jvm ??
-JAVA_HOME   := /usr/lib/jvm/java-6-openjdk
+JAVA_HOME   := /usr/lib/jvm/java-8-openjdk-amd64
 AXIS_HOME   := /opt/axis-1_1
 TOMCAT_HOME := /opt/jakarta-tomcat-5.0.18
 XERCES_HOME := /opt/xerces-1_4_4
 JUNIT_HOME  := /usr/share/java
-JUNIT_JAR := $(JUNIT_HOME)/junit4-4.8.2.jar
-HAMCREST_JAR := $(JUNIT_HOME)/hamcrest-core-1.1.jar
+JUNIT_JAR := /usr/share/java/junit4.jar
+HAMCREST_JAR := /usr/share/java/hamcrest-core.jar
 JTB_HOME	:= ~/Downloads/Applications/jtb132.jar
 # JAVACC_HOME	:= ~/Downloads/jtb132.jar
 
@@ -43,7 +43,7 @@ JFLAGS      :=	-sourcepath $(SOURCE_DIR) -d $(OUTPUT_DIR) -source 1.6
 RUN_FLAGS := -cp $(OUTPUT_DIR)
 TEST_BUILD_FLAGS := -g -cp $(OUTPUT_DIR):$(JUNIT_JAR) -d $(TEST_OUTPUT_DIR) -Xlint
 TEST_RUN_FLAGS := -cp $(OUTPUT_DIR):$(TEST_OUTPUT_DIR):$(JUNIT_JAR):$(HAMCREST_JAR) org.junit.runner.JUnitCore
-JAVACC_FLAGS	:= -STATIC=false 
+JAVACC_FLAGS	:= -STATIC=false
 
 # TODO: Add -g??
 JVMFLAGS    := -ea                               	\
@@ -147,4 +147,3 @@ try_compile: $(all_generated_microjava_files)
 
 clean:
 	$(RM) $(OUTPUT_DIR)
-

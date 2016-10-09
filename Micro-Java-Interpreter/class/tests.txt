@@ -1,5 +1,5 @@
 EnvironmentTest
-InterpreterTest
-BooleanValueTest
 ClosureValueTest
 MicroJavaHelperTest
+InterpreterTest
+BooleanValueTest

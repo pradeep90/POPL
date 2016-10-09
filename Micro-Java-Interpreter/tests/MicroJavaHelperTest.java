@@ -19,10 +19,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class MicroJavaHelperTest{
+    final String BASE_DIR = "/home/pradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/";
+
     @Before
     public void setUp(){
     }
-    
+
     @After
     public void tearDown(){
     }
@@ -34,22 +36,22 @@ public class MicroJavaHelperTest{
     public final void testGetFormattedString()
             throws FileNotFoundException, ParseException{
         InputStream in1 = new FileInputStream(
-            "/home/spradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.microjava");
+            BASE_DIR + "Micro-Java-Test-Code/MainOnly.microjava");
         InputStream in2 = new FileInputStream(
-            "/home/spradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.WithWhitespace.microjava");
+            BASE_DIR + "Micro-Java-Test-Code/MainOnly.WithWhitespace.microjava");
         syntaxtree.Node root1 = new MicroJavaParser(in1).Goal();
 
         syntaxtree.Node root2 = new MicroJavaParser(in2).Goal();
 
         String code1 = MicroJavaHelper.getFormattedString(root1);
         String code2 = MicroJavaHelper.getFormattedString(root2);
-        
+
         assertEquals(code1, code2);
         System.out.println("code1: " + code1);
         System.out.println("code2: " + code2);
     }
 
-    /** 
+    /**
      * Assert that node1 and node2 are equal MicroJava nodes.
      */
     public void assertEqualMicroJavaNodes(Node expected,
@@ -63,6 +65,7 @@ public class MicroJavaHelperTest{
      */
     @Test
     public final void testGetMicroJavaNodeFromFileNoException(){
-        MicroJavaHelper.getMicroJavaNodeFromFile("/home/spradeep/Dropbox/Acads/POPL/Code/Mini-Java/tests/Micro-Java-Test-Code/MainOnly.microjava");
+        MicroJavaHelper.getMicroJavaNodeFromFile(
+            BASE_DIR + "Micro-Java-Test-Code/MainOnly.microjava");
     }
 }
