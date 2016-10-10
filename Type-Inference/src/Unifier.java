@@ -1,3 +1,4 @@
+import java.util.HashSet;
 import java.util.Set;
 
 public class Unifier {
@@ -7,7 +8,7 @@ public class Unifier {
     public Set<TypeEquation> equationSet;
 
     public Unifier(Set<TypeEquation> equationSet) {
-        this.equationSet = equationSet;
+        this.equationSet = new HashSet<TypeEquation>(equationSet);
     }
 
     public TypeEquation removeFromSet(Set<TypeEquation> equationSet){
@@ -22,7 +23,6 @@ public class Unifier {
     /**
      * @return true iff you can unify the equations in equationSet.
      */
-    // TODO: Make this pure.
     public boolean unify(){
         while(!equationSet.isEmpty() && !failure){
             TypeEquation currEquation = removeFromSet(equationSet).substitute(unification);

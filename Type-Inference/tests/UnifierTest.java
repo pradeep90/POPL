@@ -15,7 +15,7 @@ public class UnifierTest{
     TypeEquation equation2;
     TypeEquation equation3;
     Unifier unifier;
-    
+
     @Before
     public void setUp(){
         equationSet = new HashSet<TypeEquation>();
@@ -28,11 +28,11 @@ public class UnifierTest{
 
         unifier = new Unifier(equationSet);
     }
-    
+
     @After
     public void tearDown(){
     }
-    
+
     /**
      * Test method for {@link Unifier#removeFromSet()}.
      */
@@ -55,7 +55,7 @@ public class UnifierTest{
         // System.out.println("unifier.unification: " + unifier.unification);
     }
 
-    
+
     /**
      * Test method for {@link Unifier#unify()}.
      */
@@ -65,5 +65,17 @@ public class UnifierTest{
                                                  new UnknownType(3)));
         assertEquals(true, unifier.unify());
         // System.out.println("unifier.unification: " + unifier.unification);
+    }
+
+    /**
+     * Test that unify() doesn't modify its input equation set.
+     */
+    @Test
+    public final void testUnify_pure(){
+        Set<TypeEquation> old = new HashSet<TypeEquation>(equationSet);
+        assertTrue(!old.isEmpty());
+        unifier.unify();
+        assertTrue(!equationSet.isEmpty());
+        assertEquals(old, equationSet);
     }
 }

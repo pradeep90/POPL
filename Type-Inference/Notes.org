@@ -297,7 +297,7 @@
 **** Node -> unbound variables
 ** Problem: Unification is impure right now.
 *** You need to traverse the types in the type equations and *update* the environment along the way (why?).
-*** What is the type signature of unify?
+** VVIP What is the type signature of unify?
 *** unify :: [Equation] -> Maybe TypeEnvironment
 *** TODO getEquations :: Equation -> [Equation]
 **** VVIP The only time the set of equations grows is when you have an equation between function types.
@@ -305,4 +305,11 @@
 **** So, final equations = concatMap getEquations
 *** update :: Equation -> TypeEnvironment -> Maybe TypeEnvironment
 **** total update = foldr (>=>) return $ map update
-*** overall function = total_update . concatMap getEquations
+*** unify = total_update . concatMap getEquations
+**** (applied to an empty TypeEnvironment)
+** VVIP Wait. Why not do the unification part in Haskell?
+*** It doesn't depend on the syntax tree at all!
+*** Hmmm... well, I want to annotate the syntax tree.
+*** Like, (sum :: (Int -> a) (+ :: (Int -> Int -> Int) x :: Int 1 :: Int)) :: (Int -> a)
+** TODO So, just do the unification in Java, and print type signatures for each term.
+*** Then, separately, calculate the unbound variables for each term, and show their types using the unified environment.
