@@ -1,4 +1,4 @@
-/* (t1->(t2->(t3->int))) */
+;;/* (t1->(t2->(t3->int))) */
 (let ( (high
 	( lambda ( x )
 	  ( let (

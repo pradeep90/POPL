@@ -102,6 +102,7 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
     public Type visit(Expression n, TypeEnvironment arg) {
         Type _ret=null;
         _ret = n.f0.accept(this, arg);
+        printType(n, unifiedType(_ret, allEquations));
         return _ret;
     }
 
