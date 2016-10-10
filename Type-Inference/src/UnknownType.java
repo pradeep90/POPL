@@ -48,7 +48,6 @@ public class UnknownType extends Type {
     @Override
     public Type substitute(TypeEnvironment unification){
         if (unification.lookup("" + id) != null){
-            System.out.println(unification.lookup("" + id));
             return unification.lookup("" + id);
         }
         return this;

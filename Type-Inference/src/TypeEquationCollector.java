@@ -82,19 +82,8 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
             return null;
         }
 
-        // System.out.println("f0: " + f0);
-
-        // System.out.println("allEquations: " + allEquations);
-        unifier = new Unifier(allEquations);
-        if (!unifier.unify()){
-            System.out.println("Program does not type check");
-        }
-        else {
-            // substitute in f0 and write the result
-            // System.out.println("f0.substitute(unifier.unification): " + f0.substitute(unifier.unification));
-            System.out.println(f0.substitute(unifier.unification));
-        }
-        return f0.substitute(unifier.unification);
+        printType(n, unifiedType(f0, allEquations));
+        return unifiedType(f0, allEquations);
     }
 
     /**
@@ -360,5 +349,23 @@ public class TypeEquationCollector extends GJDepthFirst<Type, TypeEnvironment> {
         Type f2 = n.f2.accept(this, arg);
         addEquation(arg.lookup(TypeHelper.getIdentifierName(n.f1)), f2);
         return _ret;
+    }
+
+    /**
+     * Get the unified type for a type given the current set of equations.
+     */
+    public Type unifiedType(Type type, Set<TypeEquation> equations){
+        Unifier unifier = new Unifier(equations);
+        if (!unifier.unify()){
+            System.out.println("Program does not type check");
+            return null;
+        }
+        return type.substitute(unifier.unification);
+    }
+
+    public void printType(Node node, Type type){
+        node.accept(new TreeFormatter(4, 50));
+        node.accept(new TreeDumper());
+        System.out.println(" :: " + type);
     }
 }

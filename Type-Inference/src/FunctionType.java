@@ -57,7 +57,6 @@ public class FunctionType extends Type {
     public Type substitute(TypeEnvironment unification){
         Type newParamType = paramType.substitute(unification);
         Type newReturnType = returnType.substitute(unification);
-        System.out.println(newParamType + " -> " + newReturnType);
         return new FunctionType(newParamType, newReturnType);
     }
 
